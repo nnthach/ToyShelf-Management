@@ -35,15 +35,18 @@ const AdminNavbar = () => {
   const { open, toggleSidebar } = useSidebar();
 
   return (
-    <nav className="p-4 flex items-center justify-between">
+    <nav className="p-4 flex items-center justify-between bg-white dark:bg-sidebar">
       {/*left */}
-      <Button variant="outline" size={"sm"} onClick={toggleSidebar}>
-        {open ? <ChevronLeft /> : <Menu />}
-      </Button>
+      <div className="flex items-center">
+        <Button variant="outline" size={"sm"} onClick={toggleSidebar}>
+          {open ? <ChevronLeft /> : <Menu />}
+        </Button>
+        <div className="ml-4">
+          <h1 className="text-xl font-bold">Dashboard</h1>
+        </div>
+      </div>
       {/*right */}
       <div className="flex items-center gap-4">
-        <Link href={"/admin/dashboard"}>Dashboard</Link>
-
         <Button
           variant="outline"
           size="icon"

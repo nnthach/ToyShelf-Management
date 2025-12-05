@@ -20,6 +20,7 @@ import {
   SidebarMenuSubItem,
   SidebarSeparator,
 } from "@/styles/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { CollapsibleTrigger } from "@radix-ui/react-collapsible";
 import {
   Bell,
@@ -27,6 +28,7 @@ import {
   ChevronDown,
   Home,
   Inbox,
+  LayoutDashboard,
   Plus,
   PlusCircle,
   Projector,
@@ -41,9 +43,9 @@ import Link from "next/link";
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
-    icon: Home,
+    title: "Dashboard",
+    url: "/admin/dashboard",
+    icon: LayoutDashboard,
   },
   {
     title: "Notifications",
@@ -68,7 +70,10 @@ const items = [
 ];
 const AdminSidebar = () => {
   return (
-    <Sidebar collapsible="icon" className="overflow-hidden">
+    <Sidebar
+      collapsible="icon"
+      className="[--sidebar:white] dark:[--sidebar:oklch(0.205_0_0)] overflow-hidden"
+    >
       {/* Header */}
       <SidebarHeader>
         <SidebarMenu>
@@ -97,10 +102,10 @@ const AdminSidebar = () => {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                   {item.title === "Notifications" && (
                     <SidebarMenuBadge className="bg-green-100 text-green-700 p-1 rounded-full flex items-center justify-center">
@@ -143,9 +148,22 @@ const AdminSidebar = () => {
                     <SidebarMenuSub>
                       <SidebarMenuSubItem>
                         <SidebarMenuSubButton asChild>
-                          <Link href={"/admin/users"}>
+                          <Link href={"/admin/staffs"}>
                             <User />
                             Staff Accounts
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  </SidebarMenuItem>
+
+                  <SidebarMenuItem>
+                    <SidebarMenuSub>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <Link href={"/admin/partners"}>
+                            <User />
+                            Partner Accounts
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
@@ -165,8 +183,21 @@ const AdminSidebar = () => {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
-              <User2 /> Username
+            <SidebarMenuButton className="flex items-center gap-3 p-2 hover:bg-accent rounded-xl h-11">
+              <Avatar className="h-10 w-10 rounded-full">
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="@shadcn"
+                  className="rounded-full"
+                />
+              </Avatar>
+
+              <div className="flex flex-col text-left">
+                <span className="font-medium text-sm">Alex Johnson</span>
+                <span className="text-xs text-muted-foreground">
+                  Administrator
+                </span>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

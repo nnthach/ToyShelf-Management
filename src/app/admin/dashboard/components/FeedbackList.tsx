@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/styles/components/ui/card";
-import { Checkbox } from "@/styles/components/ui/checkbox";
 import {
   Popover,
   PopoverContent,
@@ -78,7 +77,7 @@ const FeedbackList = () => {
   const [open, setOpen] = useState(false);
   return (
     <div className="">
-      <h1 className="text-lg font-medium mb-4">Currently Feedback</h1>
+      <h1 className="text-lg font-bold mb-4">Currently Feedback</h1>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button className="w-full">
@@ -101,7 +100,10 @@ const FeedbackList = () => {
       <ScrollArea className="h-[300px] mt-4">
         <div className="flex flex-col gap-3">
           {feedbacks.map((f) => (
-            <Card key={f.id} className="p-4 border-0 shadow-sm gap-2">
+            <Card
+              key={f.id}
+              className="p-4 border-0 shadow-sm gap-2 bg-slate-50 dark:bg-neutral-800"
+            >
               <CardHeader className="p-0">
                 <CardTitle className="text-sm font-semibold">
                   {f.storeName}

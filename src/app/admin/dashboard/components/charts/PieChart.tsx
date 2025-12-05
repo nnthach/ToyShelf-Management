@@ -61,9 +61,11 @@ export function PieChartExample() {
   }, []);
 
   return (
-    <Card className="flex flex-col border-0 p-4 h-full ">
+    <Card className="flex flex-col h-full border-none p-0 max-w-sm shadow-none">
       <CardHeader className="items-center pb-0 p-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
+        <CardTitle className="text-lg font-bold">
+          Pie Chart - Donut with Text
+        </CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0 p-0">

@@ -30,7 +30,7 @@ const BadFeedBackStore = () => {
   };
 
   return (
-    <Card className="flex flex-col h-full border-0 shadow-lg p-4 max-w-sm space-y-4">
+    <Card className="flex flex-col h-full border-none p-0 max-w-sm shadow-none">
       <CardHeader className="p-0">
         <CardTitle className="text-lg font-bold">
           Store With Bad Feedback

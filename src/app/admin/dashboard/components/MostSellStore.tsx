@@ -12,14 +12,13 @@ import { ShoppingCart, Users, DollarSign } from "lucide-react";
 
 const MostSellStore = () => {
   return (
-    <Card className="flex flex-col h-full border-0 shadow-lg p-4 max-w-sm space-y-4">
+    <Card className="flex flex-col h-full border-none p-0 max-w-sm shadow-none">
       <CardHeader className="p-0">
         <CardTitle className="text-lg font-bold">Most Sell Store</CardTitle>
         <CardDescription className="text-sm text-muted-foreground">
           The store sells the most products this month
         </CardDescription>
       </CardHeader>
-
       <CardContent className="p-0 flex flex-col gap-2">
         <div className="relative w-full aspect-4/3 rounded-md overflow-hidden">
           <Image
@@ -45,7 +44,6 @@ const MostSellStore = () => {
           </div>
         </div>
       </CardContent>
-
       <CardFooter className="p-0 text-sm text-muted-foreground">
         Trend: 🔺 +5% vs last month
       </CardFooter>
