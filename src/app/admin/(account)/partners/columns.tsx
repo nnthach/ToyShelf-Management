@@ -1,13 +1,13 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
 import { User } from "types";
 import { formatDateTime } from "utils/format";
 import {
   formatUserStatusColor,
   formatUserStatusText,
 } from "utils/formatStatus";
+import ViewDetailSheet from "./components/ViewDetailSheet";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -20,6 +20,20 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "email",
     header: "Email",
+  },
+
+  {
+    accessorKey: "level",
+    header: "Level",
+    cell: ({ row }) => {
+      const level = row.getValue("level") as string;
+
+      return (
+        <span className={`${formatUserStatusColor(level)}`}>
+          {/* {formatUserStatusText(status)} */}1
+        </span>
+      );
+    },
   },
   {
     accessorKey: "status",
@@ -34,6 +48,7 @@ export const columns: ColumnDef<User>[] = [
       );
     },
   },
+
   {
     accessorKey: "createdAt",
     header: "Created At",
@@ -45,12 +60,9 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "action",
     header: "Actions",
-    cell: () => {
-      return (
-        <span title="Detail" className="cursor-pointer text-blue-400">
-          <Eye />
-        </span>
-      );
+    cell: ({ row }) => {
+      const user = row.original;
+      return <ViewDetailSheet user={user} />;
     },
   },
 ];

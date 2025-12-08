@@ -3,7 +3,7 @@
 import { DataTable } from "@/styles/components/ui/data-table";
 import { columns } from "./columns";
 import { Button } from "@/styles/components/ui/button";
-import { ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Plus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "types/SubType";
 import { getAllUsers } from "services/user.service";
@@ -58,8 +58,13 @@ export default function AdminUserManage() {
   return (
     <div>
       {/*Header */}
-      <div>
-        <h1 className="text-4xl font-bold">Users</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl font-bold text-blue-600 dark:text-foreground">
+          Staffs
+        </h1>
+        <Button className="cursor-pointer bg-blue-600 hover:bg-blue-500 dark:bg-primary dark:hover:bg-primary/90 dark:text-primary-foreground">
+          <Plus /> Create Staff
+        </Button>
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
@@ -80,9 +85,14 @@ export default function AdminUserManage() {
               reset={handleResetAllQueryParams}
             />
 
-            <Button className="cursor-pointer">
-              <ArrowUp /> Export
-            </Button>
+            <div className="space-x-3">
+              <Button className="cursor-pointer">
+                <ArrowDown /> Import
+              </Button>
+              <Button variant={"outline"} className="cursor-pointer">
+                <ArrowUp /> Export
+              </Button>
+            </div>
           </div>
         </DataTable>
       </div>

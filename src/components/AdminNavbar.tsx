@@ -41,9 +41,6 @@ const AdminNavbar = () => {
         <Button variant="outline" size={"sm"} onClick={toggleSidebar}>
           {open ? <ChevronLeft /> : <Menu />}
         </Button>
-        <div className="ml-4">
-          <h1 className="text-xl font-bold">Dashboard</h1>
-        </div>
       </div>
       {/*right */}
       <div className="flex items-center gap-4">
