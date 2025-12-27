@@ -29,6 +29,7 @@ import {
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import React from "react";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 const AdminNavbar = () => {
   const { theme, setTheme } = useTheme();
@@ -44,6 +45,7 @@ const AdminNavbar = () => {
       </div>
       {/*right */}
       <div className="flex items-center gap-4">
+        <LocaleSwitcher />
         <Button
           variant="outline"
           size="icon"
