@@ -5,3 +5,9 @@ export interface QueryParams {
   search?: string;
   order?: string;
 }
+
+
+export interface SelectOption {
+  value: string | number;
+  label: string;
+}

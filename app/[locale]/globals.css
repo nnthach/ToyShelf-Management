@@ -125,6 +125,21 @@
   }
 }
 
+@layer components {
+  .btn-primary-gradient {
+    @apply bg-gradient-to-r from-purple-500 to-blue-400
+      hover:from-purple-600 hover:to-blue-600
+      text-white
+      shadow-md hover:shadow-lg
+      transition-all;
+  }
+
+  .dark .btn-primary-gradient {
+    @apply from-purple-400 to-blue-500
+      hover:from-purple-500 hover:to-blue-600;
+  }
+}
+
 /* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;

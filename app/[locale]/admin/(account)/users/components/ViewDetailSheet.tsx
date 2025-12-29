@@ -14,13 +14,17 @@ import {
   SheetTrigger,
 } from "../../../../../../shared/styles/components/ui/sheet";
 import { DollarSign, Eye, Home } from "lucide-react";
-import {../../../../../../utils/formatStatuss";
 import {
   formatUserStatusColor,
   formatUserStatusText,
 } from "@/shared/utils/formatStatus";
+import { User } from "@/shared/types";
+import { useTranslations } from "next-intl";
 
 function ViewDetailSheet({ user }: { user: User }) {
+  const tViewDetailSheet = useTranslations("admin.users.viewDetailSheet");
+  const tColumnTable = useTranslations("admin.tableColumn");
+
   return (
     <Sheet>
       <SheetTrigger>
@@ -30,8 +34,10 @@ function ViewDetailSheet({ user }: { user: User }) {
       </SheetTrigger>
       <SheetContent className="w-full !max-w-[1200px]">
         <SheetHeader>
-          <SheetTitle>User Information</SheetTitle>
-          <SheetDescription>Information about {user.email}</SheetDescription>
+          <SheetTitle>{tViewDetailSheet("header")}</SheetTitle>
+          <SheetDescription>
+            {tViewDetailSheet("subHeader")} {user.email}
+          </SheetDescription>
         </SheetHeader>
         <div className="flex bg-gray-200 dark:bg-muted h-full">
           {/*Left */}
@@ -118,7 +124,7 @@ function ViewDetailSheet({ user }: { user: User }) {
               {/* Full name */}
               <div className="p-4">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Full name
+                  {tColumnTable("fullName")}
                 </p>
                 <p className="text-base font-bold">Nguyen Ngoc Thach</p>
               </div>
@@ -126,7 +132,7 @@ function ViewDetailSheet({ user }: { user: User }) {
               {/* Email */}
               <div className="p-4">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Email
+                  {tColumnTable("email")}
                 </p>
                 <p className="text-base font-bold">
                   nguyenngocthach2301@gmail.com
@@ -136,7 +142,7 @@ function ViewDetailSheet({ user }: { user: User }) {
               {/* Status */}
               <div className="p-4 space-y-2">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Status
+                  {tColumnTable("status")}
                 </p>
                 <span
                   className={`text-base font-medium ${formatUserStatusColor(
@@ -150,7 +156,7 @@ function ViewDetailSheet({ user }: { user: User }) {
               {/* Created At */}
               <div className="p-4">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Created At
+                  {tColumnTable("createdAt")}
                 </p>
                 <p className="text-base font-bold">25/11/2025</p>
               </div>
@@ -160,7 +166,7 @@ function ViewDetailSheet({ user }: { user: User }) {
                 {/* Membership Level */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                   <div>
-                    <p className="text-sm text-gray-500">Membership Level:</p>
+                    <p className="text-sm text-gray-500">{tColumnTable("membershipLevel")}:</p>
                     <p className="text-base font-medium">PREMIUM</p>
                   </div>
                 </div>

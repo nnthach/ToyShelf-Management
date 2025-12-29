@@ -1,19 +1,23 @@
 "use client";
 
-import { DataTable } from "../../../../../shared/styles/components/ui/data-table";
-import { getStaffColumns } from "./columns";
-import { Button } from "../../../../../shared/styles/components/ui/button";
 import { ArrowDown, ArrowUp, Plus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/shared/types/SubType";
-import { getAllUsers } from "../../../../../shared/services/user.service";
-import useQueryParams from "../../../../../shared/hooks/useQueryParams";
-import FilterSearchBar from "../../../../../shared/components/FilterSearchBar";
-import { useFilterSearchBar } from "../../../../../shared/hooks/useFilterSearchBar";
+import { getProductColumns } from "./columns";
 import { useTranslations } from "next-intl";
+import useQueryParams from "@/shared/hooks/useQueryParams";
+import { getAllProducts } from "@/shared/services/product.service";
+import { useFilterSearchBar } from "@/shared/hooks/useFilterSearchBar";
+import FilterSearchBar from "@/shared/components/FilterSearchBar";
+import { DataTable } from "@/shared/styles/components/ui/data-table";
+import { Button } from "@/shared/styles/components/ui/button";
+import { useState } from "react";
+import CreateProduct from "./components/CreateProduct";
+import { useRouter } from "next/navigation";
 
-export default function AdminUserManage() {
-  const t = useTranslations("admin.staffs");
+export default function AdminProductManage() {
+  const router = useRouter();
+  const t = useTranslations("admin.products");
   const tButton = useTranslations("admin.button");
   const tColumnTable = useTranslations("admin.tableColumn");
 
@@ -26,8 +30,8 @@ export default function AdminUserManage() {
   });
 
   const { data, isLoading } = useQuery({
-    queryKey: ["users", query],
-    queryFn: () => getAllUsers(query),
+    queryKey: ["products", query],
+    queryFn: () => getAllProducts(query),
   });
 
   const {
@@ -60,24 +64,27 @@ export default function AdminUserManage() {
     resetQuery();
   };
 
-  const columns = getStaffColumns(tColumnTable);
+  const columns = getProductColumns(tColumnTable);
 
   return (
-    <div>
+    <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold text-blue-600 dark:text-foreground">
+        <h1 className="text-4xl font-bold dark:text-foreground">
           {t("header")}
         </h1>
-        <Button className="cursor-pointer bg-blue-600 hover:bg-blue-500 dark:bg-primary dark:hover:bg-primary/90 dark:text-primary-foreground">
-          <Plus /> {tButton("createStaff")}
+        <Button
+          className="btn-primary-gradient"
+          onClick={() => router.push("/admin/products/create")}
+        >
+          <Plus /> {tButton("createProduct")}
         </Button>
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={data?.users ?? []}
+          data={data?.products ?? []}
           isLoading={isLoading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -91,7 +98,6 @@ export default function AdminUserManage() {
               updateQuery={updateQuery}
               reset={handleResetAllQueryParams}
             />
-
             <div className="space-x-3">
               <Button className="cursor-pointer">
                 <ArrowDown /> {tButton("import")}
@@ -103,6 +109,6 @@ export default function AdminUserManage() {
           </div>
         </DataTable>
       </div>
-    </div>
+    </>
   );
 }

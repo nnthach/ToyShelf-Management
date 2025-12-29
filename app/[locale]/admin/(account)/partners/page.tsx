@@ -9,9 +9,14 @@ import { getAllUsers } from "../../../../../shared/services/user.service";
 import useQueryParams from "../../../../../shared/hooks/useQueryParams";
 import FilterSearchBar from "../../../../../shared/components/FilterSearchBar";
 import { useFilterSearchBar } from "../../../../../shared/hooks/useFilterSearchBar";
-import { columns } from "./columns";
+import { getPartnerColumns } from "./columns";
+import { useTranslations } from "next-intl";
 
 export default function AdminUserManage() {
+  const t = useTranslations("admin.partners");
+  const tButton = useTranslations("admin.button");
+  const tColumnTable = useTranslations("admin.tableColumn");
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
     limit: 10,
@@ -55,15 +60,17 @@ export default function AdminUserManage() {
     resetQuery();
   };
 
+  const columns = getPartnerColumns(tColumnTable);
+
   return (
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold text-blue-600 dark:text-foreground">
-          Partner
+          {t("header")}
         </h1>
         <Button className="cursor-pointer bg-blue-600 hover:bg-blue-500 dark:bg-primary dark:hover:bg-primary/90 dark:text-primary-foreground">
-          <Plus /> Create Partner
+          <Plus /> {tButton("createPartner")}
         </Button>
       </div>
       {/*Table */}
@@ -87,10 +94,10 @@ export default function AdminUserManage() {
 
             <div className="space-x-3">
               <Button className="cursor-pointer">
-                <ArrowDown /> Import
+                <ArrowDown /> {tButton("import")}
               </Button>
               <Button variant={"outline"} className="cursor-pointer">
-                <ArrowUp /> Export
+                <ArrowUp /> {tButton("export")}
               </Button>
             </div>
           </div>

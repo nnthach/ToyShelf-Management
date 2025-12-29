@@ -9,9 +9,13 @@ import { getAllUsers } from "../../../../../shared/services/user.service";
 import useQueryParams from "../../../../../shared/hooks/useQueryParams";
 import FilterSearchBar from "../../../../../shared/components/FilterSearchBar";
 import { useFilterSearchBar } from "../../../../../shared/hooks/useFilterSearchBar";
-import { columns } from "./columns";
+import { getUserColumns } from "./columns";
+import { useTranslations } from "next-intl";
 
 export default function AdminUserManage() {
+  const t = useTranslations("admin.users");
+  const tButton = useTranslations("admin.button");
+  const tColumnTable = useTranslations("admin.tableColumn");
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
     limit: 10,
@@ -55,11 +59,13 @@ export default function AdminUserManage() {
     resetQuery();
   };
 
+  const columns = getUserColumns(tColumnTable);
+
   return (
     <div>
       {/*Header */}
       <div>
-        <h1 className="text-4xl font-bold">Users</h1>
+        <h1 className="text-4xl font-bold">{t("header")}</h1>
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
@@ -81,7 +87,7 @@ export default function AdminUserManage() {
             />
 
             <Button className="cursor-pointer">
-              <ArrowUp /> Export
+              <ArrowUp /> {tButton("export")}
             </Button>
           </div>
         </DataTable>

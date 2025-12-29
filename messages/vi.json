@@ -1,4 +1,101 @@
 {
+  "admin": {
+    "button": {
+      "close": "Đóng",
+      "createPartner": "Thêm Đối tác",
+      "createProduct": "Thêm sản phẩm",
+      "createStaff": "Thêm Nhân viên",
+      "export": "Xuất",
+      "filter": "Bộ lọc",
+      "import": "Nhập",
+      "saveChange": "Lưu thay đổi"
+    },
+    "filter": {
+      "sort": "Sắp xếp",
+      "status": "Trạng thái"
+    },
+    "partners": {
+      "header": "Quản lý Đối tác"
+    },
+    "products": {
+      "createProduct": {
+        "header": "Thêm sản phẩm mới",
+        "leftHeader": "Chi tiết sản phẩm",
+        "rightHeader": "Hình ảnh sản phẩm",
+        "leftSubHeader": "Nhập thông tin chi tiết của sản phẩm mới.",
+        "rightSubHeader": "Tải lên hình ảnh cho sản phẩm mới.",
+        "maxLengthImages": "Tối đa 6 hình ảnh",
+        "add3dFile": "Thêm tệp 3D"
+      },
+      "header": "Quản lý sản phẩm",
+      "viewDetailSheet": {
+        "header": "Thông tin sản phẩm",
+        "subHeader": "Thông tin về"
+      },
+      "fields": {
+        "brand": "Thương hiệu",
+        "productCategory": "Danh mục",
+        "description": "Mô tả",
+        "membershipLevel": "Cấp độ thành viên",
+        "price": "Giá",
+        "productName": "Tên sản phẩm",
+        "sku": "Mã sản phẩm",
+        "status": "Trạng thái",
+        "stock": "Hàng tồn kho",
+        "weight": "Trọng lượng",
+        "unit": "Đơn vị",
+        "productImages": "Hình ảnh sản phẩm",
+        "product3DFile": "Tệp sản phẩm 3D"
+      }
+    },
+    "sidebar": {
+      "item": {
+        "cabinets": "Tủ",
+        "dashboard": "Bảng điều khiển",
+        "notifications": "Thông báo",
+        "partnerAccounts": "Tài khoản Đối tác",
+        "products": "Sản phẩm",
+        "settings": "Cài đặt",
+        "staffAccounts": "Tài khoản nhân viên",
+        "stores": "Cửa hàng",
+        "userAccounts": "Tài khoản người dùng"
+      },
+      "label": {
+        "accountManagement": "Quản lý tài khoản",
+        "application": "Ứng dụng",
+        "products": "Sản phẩm",
+        "storeManagement": "Quản lý cửa hàng"
+      }
+    },
+    "staffs": {
+      "header": "Quản lý nhân viên"
+    },
+    "tableColumn": {
+      "action": "Hành động",
+      "brand": "Thương hiệu",
+      "category": "Danh mục",
+      "createdAt": "Được tạo vào",
+      "description": "Mô tả",
+      "email": "Email",
+      "fullName": "Họ và tên",
+      "level": "Cấp độ",
+      "membership": "Thành viên",
+      "membershipLevel": "Cấp độ thành viên",
+      "price": "Giá",
+      "productName": "Tên sản phẩm",
+      "sku": "Mã sản phẩm",
+      "status": "Trạng thái",
+      "stock": "Hàng tồn kho",
+      "workingArea": "Khu vực làm việc"
+    },
+    "users": {
+      "header": "Quản lý người dùng",
+      "viewDetailSheet": {
+        "header": "Thông tin người dùng",
+        "subHeader": "Thông tin về\n\n"
+      }
+    }
+  },
   "home": {
     "header": "Trang Chủ",
     "subheader": "Táo"

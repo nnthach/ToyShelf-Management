@@ -12,19 +12,21 @@ import ViewDetailSheet from "./components/ViewDetailSheet";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<User>[] = [
+export const getStaffColumns = (
+  t: (key: string) => string
+): ColumnDef<User>[] => [
   {
     accessorKey: "fullName",
-    header: "Full name",
+    header: t("fullName"),
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: t("email"),
   },
 
   {
     accessorKey: "workingArea",
-    header: "Working Area",
+    header: t("workingArea"),
     cell: ({ row }) => {
       const workingArea = row.getValue("workingArea") as string;
 
@@ -37,7 +39,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: t("status"),
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
 
@@ -51,7 +53,7 @@ export const columns: ColumnDef<User>[] = [
 
   {
     accessorKey: "createdAt",
-    header: "Created At",
+    header: t("createdAt"),
     cell: ({ row }) => {
       const value = row.getValue("createdAt") as string;
       return <span>{formatDateTime(value).full}</span>;
@@ -59,7 +61,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "action",
-    header: "Actions",
+    header: t("action"),
     cell: ({ row }) => {
       const user = row.original;
       return <ViewDetailSheet user={user} />;

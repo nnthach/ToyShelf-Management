@@ -13,6 +13,7 @@ import {
 import { Slider } from "../styles/components/ui/slider";
 import { useDebounce } from "../hooks/useDebounce";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { useTranslations } from "next-intl";
 
 interface UserFiltersProps {
   tempFilter: {
@@ -39,6 +40,9 @@ export default function FilterSearchBar({
   updateQuery,
   reset,
 }: UserFiltersProps) {
+  const tButton = useTranslations("admin.button");
+  const tFilter = useTranslations("admin.filter");
+
   const [searchInput, setSearchInput] = useState<string>(
     query.search as string
   );
@@ -66,7 +70,7 @@ export default function FilterSearchBar({
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" className="cursor-pointer">
-            <Filter /> Filter
+            <Filter /> {tButton("filter")}
           </Button>
         </PopoverTrigger>
 
@@ -74,14 +78,14 @@ export default function FilterSearchBar({
           <div className="grid gap-4">
             {/* Sort */}
             <div className="grid gap-2">
-              <Label>Sort by Full Name</Label>
+              <Label>{tFilter("sort")}</Label>
               <select
                 className="border rounded-md h-9 px-2"
                 name="order"
                 value={tempFilter.order}
                 onChange={onFilterChange}
               >
-                <option value="">Sort</option>
+                <option value="">{tFilter("sort")}</option>
                 <option value="asc">A → Z</option>
                 <option value="desc">Z → A</option>
               </select>
@@ -89,7 +93,7 @@ export default function FilterSearchBar({
 
             {/* Status */}
             <div className="grid gap-2">
-              <Label>Status</Label>
+              <Label>{tFilter("status")}</Label>
               <select
                 className="border rounded-md h-9 px-2"
                 name="status"

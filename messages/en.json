@@ -1,4 +1,102 @@
 {
+  "admin": {
+    "button": {
+      "close": "Close",
+      "createPartner": "Add Partner",
+      "createProduct": "Add Product",
+      "createStaff": "Add Staff",
+      "export": "Export",
+      "filter": "Filter",
+      "import": "Import",
+      "saveChange": "Save changes",
+      "publish": "Publish"
+    },
+    "filter": {
+      "sort": "Sort",
+      "status": "Status"
+    },
+    "partners": {
+      "header": "Partner Management"
+    },
+    "products": {
+      "createProduct": {
+        "header": "Add New Product",
+        "leftHeader": "Product Details",
+        "rightHeader": "Product Images",
+        "leftSubHeader": "Enter the details of the new product.",
+        "rightSubHeader": "Upload images for the new product.",
+        "maxLengthImages": "Maximum 6 images",
+        "add3dFile": "Click or drag 3D File"
+      },
+      "header": "Product Management",
+      "viewDetailSheet": {
+        "header": "Product Information",
+        "subHeader": "Information about"
+      },
+      "fields": {
+        "brand": "Brand",
+        "productCategory": "Category",
+        "description": "Description",
+        "membershipLevel": "Membership Level",
+        "price": "Price",
+        "productName": "Product Name",
+        "sku": "SKU",
+        "status": "Status",
+        "stock": "Stock",
+        "weight": "Weight",
+        "unit": "Unit",
+        "productImages": "Product Images",
+        "product3DFile": " 3D Product Files"
+      }
+    },
+    "sidebar": {
+      "item": {
+        "cabinets": "Cabinets",
+        "dashboard": "Dashboard",
+        "notifications": "Notifications",
+        "partnerAccounts": "Partner Accounts",
+        "products": "Products",
+        "settings": "Settings",
+        "staffAccounts": "Staff Accounts",
+        "stores": "Stores",
+        "userAccounts": "User Accounts"
+      },
+      "label": {
+        "accountManagement": "Account Management",
+        "application": "Application",
+        "products": "Products",
+        "storeManagement": "Store Management"
+      }
+    },
+    "staffs": {
+      "header": "Staff Management"
+    },
+    "tableColumn": {
+      "action": "Action",
+      "brand": "Brand",
+      "category": "Category",
+      "createdAt": "Created At",
+      "description": "Description",
+      "email": "Email",
+      "fullName": "Full name",
+      "level": "Level",
+      "membership": "Membership",
+      "membershipLevel": "Membership Level",
+      "price": "Price",
+      "productName": "Product Name",
+      "sku": "SKU",
+      "status": "Status",
+      "stock": "Stock",
+      "workingArea": "Working Area"
+    },
+    "users": {
+      "header": "User Management",
+      "viewDetailSheet": {
+        "header": "User Information",
+        "subHeader": "Information about\n\n"
+      }
+    }
+  },
   "home": {
     "header": "Home Page",
     "subheader": "Apple"

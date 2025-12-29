@@ -1,0 +1,149 @@
+"use client";
+
+import { Eye } from "lucide-react";
+import { Product } from "@/shared/types";
+import { useTranslations } from "next-intl";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/shared/styles/components/ui/sheet";
+
+import { Button } from "@/shared/styles/components/ui/button";
+import { Label } from "@/shared/styles/components/ui/label";
+import { Input } from "@/shared/styles/components/ui/input";
+import { Textarea } from "@/shared/styles/components/ui/textarea";
+import { useMemo, useState } from "react";
+import { TabButton } from "@/shared/styles/components/custom/TabButton";
+import ProductStatistics from "./ProductStatistics";
+import ProductThreeD from "./ProductThreeD";
+import ProductImage from "./ProductImage";
+
+type LeftTab = "stats" | "3d" | "images";
+
+const LEFT_TABS: { key: LeftTab; label: string }[] = [
+  { key: "stats", label: "Statistics" },
+  { key: "3d", label: "3D View" },
+  { key: "images", label: "Images" },
+];
+
+function ViewDetailSheet({ product }: { product: Product }) {
+  const [activeTab, setActiveTab] = useState<LeftTab>("stats");
+
+  const tViewDetailSheet = useTranslations("admin.products.viewDetailSheet");
+  const tColumnTable = useTranslations("admin.tableColumn");
+  const tButton = useTranslations("admin.button");
+
+  const renderLeftContent = useMemo(() => {
+    switch (activeTab) {
+      case "stats":
+        return <ProductStatistics />;
+
+      case "3d":
+        return <ProductThreeD />;
+
+      case "images":
+        return <ProductImage />;
+
+      default:
+        return <ProductStatistics />;
+    }
+  }, [activeTab]);
+
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <span title="Detail" className="cursor-pointer text-blue-400">
+          <Eye />
+        </span>
+      </SheetTrigger>
+      <SheetContent className="w-full !max-w-[1200px]">
+        <SheetHeader className="pb-0">
+          <SheetTitle className="">
+            <h1 className="text-xl">{tViewDetailSheet("header")}</h1>
+
+            {/* Tabs ở header */}
+            <div className="flex gap-1 mt-2">
+              {LEFT_TABS.map((tab) => (
+                <TabButton
+                  key={tab.key}
+                  active={activeTab === tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                >
+                  {tab.label}
+                </TabButton>
+              ))}
+            </div>
+          </SheetTitle>
+        </SheetHeader>
+        <div className="flex bg-gray-200 dark:bg-muted h-full">
+          {/*Left */}
+          <div className="w-[70%] p-4">
+            {/* Tabs content */}
+            {renderLeftContent}
+          </div>
+
+          {/*Right */}
+          <div className="bg-background flex-1 border-t border-border flex flex-col">
+            <div className="grid flex-1 auto-rows-min gap-6 pb-2 px-4 mt-4 max-h-[75%] overflow-y-auto">
+              <div className="grid gap-3">
+                <Label htmlFor="sheet-demo-name">
+                  {tColumnTable("productName")}
+                </Label>
+                <Input id="sheet-demo-name" defaultValue="Pedro Duarte" />
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="sheet-demo-username">
+                  {tColumnTable("description")}
+                </Label>
+                <Textarea
+                  id="sheet-demo-description"
+                  defaultValue="@peduarte"
+                />
+              </div>
+
+              <div className="grid gap-3">
+                <Label htmlFor="sheet-demo-brand">
+                  {tColumnTable("brand")}
+                </Label>
+                <Input id="sheet-demo-brand" defaultValue="@peduarte" />
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="sheet-demo-category">
+                  {tColumnTable("category")}
+                </Label>
+                <Input id="sheet-demo-category" defaultValue="@peduarte" />
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="sheet-demo-price">
+                  {tColumnTable("price")}
+                </Label>
+                <Input id="sheet-demo-price" defaultValue="@peduarte" />
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="sheet-demo-stock">
+                  {tColumnTable("stock")}
+                </Label>
+                <Input id="sheet-demo-stock" defaultValue="@peduarte" />
+              </div>
+            </div>
+
+            <SheetFooter className="mt-2 border-t border-border">
+              <Button type="submit">{tButton("saveChange")}</Button>
+              <SheetClose asChild>
+                <Button variant="outline">{tButton("close")}</Button>
+              </SheetClose>
+            </SheetFooter>
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+export default ViewDetailSheet;

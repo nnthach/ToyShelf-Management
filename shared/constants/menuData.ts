@@ -15,43 +15,33 @@ import {
 
 export const AdminSidebarGroups = [
   {
-    label: "Application",
+    label: "application",
     items: [
-      { title: "Dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
-      { title: "Notifications", url: "#", icon: Bell, badge: true },
-      { title: "Calendar", url: "#", icon: Calendar },
-      { title: "Search", url: "#", icon: Search },
-      { title: "Settings", url: "#", icon: Settings },
+      { title: "dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
+      { title: "notifications", url: "#", icon: Bell, badge: true },
+      { title: "settings", url: "#", icon: Settings },
     ],
   },
   {
-    label: "Products",
-    items: [{ title: "Products", url: "/admin/products", icon: Package }],
+    label: "products",
+    items: [{ title: "products", url: "/admin/products", icon: Package }],
   },
 ];
 
 export const AdminSidebarNested = [
   {
-    label: "Account Management",
+    label: "accountManagement",
     sub: [
-      { title: "User Accounts", url: "/admin/users", icon: User },
-      { title: "Staff Accounts", url: "/admin/staffs", icon: UserStar },
-      { title: "Partner Accounts", url: "/admin/partners", icon: Users },
+      { title: "userAccounts", url: "/admin/users", icon: User },
+      { title: "staffAccounts", url: "/admin/staffs", icon: UserStar },
+      { title: "partnerAccounts", url: "/admin/partners", icon: Users },
     ],
   },
   {
-    label: "Store Management",
+    label: "storeManagement",
     sub: [
-      { title: "Store", url: "/admin/stores", icon: Store },
-      { title: "Cabinet", url: "/admin/staffs", icon: Server },
-    ],
-  },
-
-  {
-    label: "Store Management",
-    sub: [
-      { title: "Store", url: "/admin/stores", icon: Store },
-      { title: "Cabinet", url: "/admin/staffs", icon: Server },
+      { title: "stores", url: "/admin/stores", icon: Store },
+      { title: "cabinets", url: "/admin/cabinets", icon: Server },
     ],
   },
 ];

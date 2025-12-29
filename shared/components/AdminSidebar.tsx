@@ -24,8 +24,12 @@ import { AdminSidebarGroups, AdminSidebarNested } from "../constants/menuData";
 import { Bell, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const AdminSidebar = () => {
+  const tItem = useTranslations("admin.sidebar.item");
+  const tLabel = useTranslations("admin.sidebar.label");
+
   return (
     <Sidebar
       collapsible="icon"
@@ -56,7 +60,7 @@ const AdminSidebar = () => {
         {/* --- Simple groups --- */}
         {AdminSidebarGroups.map((group) => (
           <SidebarGroup key={group.label}>
-            <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+            <SidebarGroupLabel>{tLabel(group.label)}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => (
@@ -64,7 +68,7 @@ const AdminSidebar = () => {
                     <SidebarMenuButton asChild>
                       <Link href={item.url}>
                         <item.icon />
-                        <span>{item.title}</span>
+                        <span>{tItem(item.title)}</span>
                       </Link>
                     </SidebarMenuButton>
 
@@ -86,7 +90,7 @@ const AdminSidebar = () => {
             <SidebarGroup>
               <SidebarGroupLabel asChild className="cursor-pointer">
                 <CollapsibleTrigger>
-                  {group.label}
+                  {tLabel(group.label)}
                   <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
@@ -101,7 +105,7 @@ const AdminSidebar = () => {
                             <SidebarMenuButton asChild>
                               <Link href={item.url}>
                                 <item.icon />
-                                <span>{item.title}</span>
+                                <span>{tItem(item.title)}</span>
                               </Link>
                             </SidebarMenuButton>
                           </SidebarMenuSubItem>
