@@ -20,6 +20,7 @@ export interface Product {
   stock: number;
   brand: string;
   sku: string;
+  images: string[];
 }
 
 export interface ProductCategory {

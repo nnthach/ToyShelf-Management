@@ -20,9 +20,9 @@ import { Input } from "@/shared/styles/components/ui/input";
 import { Textarea } from "@/shared/styles/components/ui/textarea";
 import { useMemo, useState } from "react";
 import { TabButton } from "@/shared/styles/components/custom/TabButton";
-import ProductStatistics from "./ProductStatistics";
-import ProductThreeD from "./ProductThreeD";
-import ProductImage from "./ProductImage";
+import ProductStatistics from "./ViewDetailComponents/ProductStatistics";
+import ProductThreeD from "./ViewDetailComponents/ProductThreeD";
+import ProductImage from "./ViewDetailComponents/ProductImage";
 
 type LeftTab = "stats" | "3d" | "images";
 
@@ -32,7 +32,13 @@ const LEFT_TABS: { key: LeftTab; label: string }[] = [
   { key: "images", label: "Images" },
 ];
 
-function ViewDetailSheet({ product }: { product: Product }) {
+function ViewDetailSheet({
+  product,
+  children,
+}: {
+  product: Product;
+  children: React.ReactNode;
+}) {
   const [activeTab, setActiveTab] = useState<LeftTab>("stats");
 
   const tViewDetailSheet = useTranslations("admin.products.viewDetailSheet");
@@ -57,11 +63,7 @@ function ViewDetailSheet({ product }: { product: Product }) {
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <span title="Detail" className="cursor-pointer text-blue-400">
-          <Eye />
-        </span>
-      </SheetTrigger>
+      <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="w-full !max-w-[1200px]">
         <SheetHeader className="pb-0">
           <SheetTitle className="">

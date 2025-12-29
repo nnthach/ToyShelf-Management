@@ -65,7 +65,7 @@ export default function FilterSearchBar({
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="inline-flex items-center gap-3">
       {/* Filter */}
       <Popover>
         <PopoverTrigger asChild>

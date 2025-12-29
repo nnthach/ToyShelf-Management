@@ -9,6 +9,7 @@ import {
   formatUserStatusText,
 } from "@/shared/utils/formatStatus";
 import { formatDateTime } from "@/shared/utils/format";
+import { Eye } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -16,6 +17,17 @@ import { formatDateTime } from "@/shared/utils/format";
 export const getProductColumns = (
   t: (key: string) => string
 ): ColumnDef<Product>[] => [
+  {
+    accessorFn: (row) => row.images?.[0],
+    id: "image",
+    header: t("image"),
+    cell: ({ getValue }) => (
+      <img
+        src={getValue() as string}
+        className="w-12 h-12 object-cover rounded"
+      />
+    ),
+  },
   {
     accessorKey: "sku",
     header: t("sku"),
@@ -25,10 +37,6 @@ export const getProductColumns = (
     header: t("productName"),
   },
   {
-    accessorKey: "brand",
-    header: t("brand"),
-  },
-  {
     accessorKey: "category",
     header: t("category"),
   },
@@ -36,10 +44,6 @@ export const getProductColumns = (
   {
     accessorKey: "price",
     header: t("price"),
-  },
-  {
-    accessorKey: "stock",
-    header: t("stock"),
   },
   {
     accessorKey: "status",
@@ -59,7 +63,13 @@ export const getProductColumns = (
     header: t("action"),
     cell: ({ row }) => {
       const product = row.original;
-      return <ViewDetailSheet product={product} />;
+      return (
+        <ViewDetailSheet product={product}>
+          <span title="Detail" className="cursor-pointer text-blue-400">
+            <Eye />
+          </span>
+        </ViewDetailSheet>
+      );
     },
   },
 ];

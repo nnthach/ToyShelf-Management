@@ -28,6 +28,9 @@
         "add3dFile": "Thêm tệp 3D"
       },
       "header": "Quản lý sản phẩm",
+      "subheader": "Danh sách sản phẩm",
+      "listView": "Danh sách",
+      "gridView": "Lưới",
       "viewDetailSheet": {
         "header": "Thông tin sản phẩm",
         "subHeader": "Thông tin về"
@@ -86,6 +89,7 @@
       "sku": "Mã sản phẩm",
       "status": "Trạng thái",
       "stock": "Hàng tồn kho",
+      "image": "Hình ảnh",
       "workingArea": "Khu vực làm việc"
     },
     "users": {

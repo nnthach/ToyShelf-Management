@@ -29,6 +29,9 @@
         "add3dFile": "Click or drag 3D File"
       },
       "header": "Product Management",
+      "subheader": "List of products",
+      "listView": "List View",
+      "gridView": "Grid View",
       "viewDetailSheet": {
         "header": "Product Information",
         "subHeader": "Information about"
@@ -87,7 +90,8 @@
       "sku": "SKU",
       "status": "Status",
       "stock": "Stock",
-      "workingArea": "Working Area"
+      "workingArea": "Working Area",
+      "image": "Image"
     },
     "users": {
       "header": "User Management",
