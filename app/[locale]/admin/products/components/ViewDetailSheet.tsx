@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye } from "lucide-react";
+import { Edit, Eye, Trash2 } from "lucide-react";
 import { Product } from "@/shared/types";
 import { useTranslations } from "next-intl";
 import {
@@ -23,6 +23,7 @@ import { TabButton } from "@/shared/styles/components/custom/TabButton";
 import ProductStatistics from "./ViewDetailComponents/ProductStatistics";
 import ProductThreeD from "./ViewDetailComponents/ProductThreeD";
 import ProductImage from "./ViewDetailComponents/ProductImage";
+import { useRouter } from "next/navigation";
 
 type LeftTab = "stats" | "3d" | "images";
 
@@ -39,6 +40,7 @@ function ViewDetailSheet({
   product: Product;
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<LeftTab>("stats");
 
   const tViewDetailSheet = useTranslations("admin.products.viewDetailSheet");
@@ -92,7 +94,7 @@ function ViewDetailSheet({
 
           {/*Right */}
           <div className="bg-background flex-1 border-t border-border flex flex-col">
-            <div className="grid flex-1 auto-rows-min gap-6 pb-2 px-4 mt-4 max-h-[75%] overflow-y-auto">
+            <div className="grid flex-1 auto-rows-min gap-6 pb-2 px-4 mt-4 max-h-[85%] overflow-y-auto">
               <div className="grid gap-3">
                 <Label htmlFor="sheet-demo-name">
                   {tColumnTable("productName")}
@@ -135,12 +137,25 @@ function ViewDetailSheet({
               </div>
             </div>
 
-            <SheetFooter className="mt-2 border-t border-border">
-              <Button type="submit">{tButton("saveChange")}</Button>
-              <SheetClose asChild>
-                <Button variant="outline">{tButton("close")}</Button>
-              </SheetClose>
-            </SheetFooter>
+            {/* FOOTER */}
+            <div className="border-t border-border px-4 py-3 mt-auto">
+              <div className="flex items-center justify-between gap-2">
+                <Button variant="outline" title={tButton("delete")}>
+                  <Trash2 color="red" />
+                </Button>
+                <Button
+                  type="submit"
+                  className="flex-1"
+                  onClick={
+                    () => router.push(`/admin/products/edit/1`)
+                    // router.push(`/admin/products/edit/${product.id}`)
+                  }
+                >
+                  <Edit />
+                  {tButton("edit")}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </SheetContent>

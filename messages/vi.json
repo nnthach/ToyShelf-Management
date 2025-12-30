@@ -1,6 +1,8 @@
 {
   "admin": {
     "button": {
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa",
       "close": "Đóng",
       "createPartner": "Thêm Đối tác",
       "createProduct": "Thêm sản phẩm",
@@ -8,7 +10,8 @@
       "export": "Xuất",
       "filter": "Bộ lọc",
       "import": "Nhập",
-      "saveChange": "Lưu thay đổi"
+      "saveChange": "Lưu thay đổi",
+      "publish": "Thêm"
     },
     "filter": {
       "sort": "Sắp xếp",
@@ -24,6 +27,15 @@
         "rightHeader": "Hình ảnh sản phẩm",
         "leftSubHeader": "Nhập thông tin chi tiết của sản phẩm mới.",
         "rightSubHeader": "Tải lên hình ảnh cho sản phẩm mới.",
+        "maxLengthImages": "Tối đa 6 hình ảnh",
+        "add3dFile": "Thêm tệp 3D"
+      },
+      "editProduct": {
+        "header": "Chỉnh sửa sản phẩm",
+        "leftHeader": "Chi tiết sản phẩm",
+        "rightHeader": "Hình ảnh sản phẩm",
+        "leftSubHeader": "Nhập thông tin chi tiết của sản phẩm.",
+        "rightSubHeader": "Tải lên hình ảnh cho sản phẩm.",
         "maxLengthImages": "Tối đa 6 hình ảnh",
         "add3dFile": "Thêm tệp 3D"
       },

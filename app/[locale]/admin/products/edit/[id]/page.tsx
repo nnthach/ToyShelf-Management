@@ -12,9 +12,17 @@ import { useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 
-export default function CreateProductPage() {
+type EditProductPageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default function EditProductPage({ params }: EditProductPageProps) {
+  const { id } = params;
+
   const router = useRouter();
-  const t = useTranslations("admin.products.createProduct");
+  const t = useTranslations("admin.products.editProduct");
   const tButton = useTranslations("admin.button");
   const tFields = useTranslations("admin.products.fields");
 
@@ -111,7 +119,7 @@ export default function CreateProductPage() {
           form="form-rhf-demo"
           className="btn-primary-gradient"
         >
-          {tButton("publish")}
+          {tButton("saveChange")}
           <Check />
         </Button>
       </div>

@@ -1,6 +1,8 @@
 {
   "admin": {
     "button": {
+      "edit": "Edit",
+      "delete": "Delete",
       "close": "Close",
       "createPartner": "Add Partner",
       "createProduct": "Add Product",
@@ -25,6 +27,15 @@
         "rightHeader": "Product Images",
         "leftSubHeader": "Enter the details of the new product.",
         "rightSubHeader": "Upload images for the new product.",
+        "maxLengthImages": "Maximum 6 images",
+        "add3dFile": "Click or drag 3D File"
+      },
+      "editProduct": {
+        "header": "Edit Product",
+        "leftHeader": "Product Details",
+        "rightHeader": "Product Images",
+        "leftSubHeader": "Enter the details of the product.",
+        "rightSubHeader": "Upload images for the product.",
         "maxLengthImages": "Maximum 6 images",
         "add3dFile": "Click or drag 3D File"
       },
