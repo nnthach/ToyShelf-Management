@@ -1,0 +1,7 @@
+.store-marker {
+  width: 40px;
+  height: 40px;
+  background-image: url("/icons/store.png");
+  background-size: cover;
+  border-radius: 50%;
+}

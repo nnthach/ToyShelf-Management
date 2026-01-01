@@ -9,6 +9,15 @@ export interface User {
   createdAt: string;
 }
 
+export interface Store {
+  id: string;
+  address: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  rating: number;
+}
+
 export interface Product {
   id: number;
   title: string;

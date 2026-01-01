@@ -7,6 +7,7 @@ import { Toaster } from "../../shared/styles/components/ui/sonner";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "../../i18n/routing";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

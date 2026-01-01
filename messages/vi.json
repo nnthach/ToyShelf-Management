@@ -11,7 +11,8 @@
       "filter": "Bộ lọc",
       "import": "Nhập",
       "saveChange": "Lưu thay đổi",
-      "publish": "Thêm"
+      "publish": "Thêm",
+      "viewDetail": "Xem chi tiết"
     },
     "filter": {
       "sort": "Sắp xếp",

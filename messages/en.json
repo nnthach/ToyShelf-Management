@@ -11,7 +11,8 @@
       "filter": "Filter",
       "import": "Import",
       "saveChange": "Save changes",
-      "publish": "Publish"
+      "publish": "Publish",
+      "viewDetail": "View Details"
     },
     "filter": {
       "sort": "Sort",

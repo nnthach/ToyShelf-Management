@@ -138,6 +138,14 @@
     @apply from-purple-400 to-blue-500
       hover:from-purple-500 hover:to-blue-600;
   }
+
+  .btn-secondary-gradient {
+    @apply bg-gradient-to-r from-blue-500 to-indigo-500
+      hover:opacity-90
+      text-white
+      shadow-md hover:shadow-lg
+      transition-all;
+  }
 }
 
 /* Custom Scrollbar */
