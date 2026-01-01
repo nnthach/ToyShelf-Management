@@ -1,4 +1,4 @@
-import { id } from "date-fns/locale";
+import { StoreStatus } from "../enums/store-status.enum";
 
 export const ProductCategoryData = [
   {
@@ -19,6 +19,11 @@ export const StoreFakeData = [
     longitude: 106.7009,
     address: "123 Main St, District 1, HCMC",
     rating: 4.5,
+    images: ["https://picsum.photos/200/300?random=1"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.ACTIVE,
   },
   {
     id: "store2",
@@ -27,6 +32,11 @@ export const StoreFakeData = [
     longitude: 106.6983,
     rating: 4.5,
     address: "65 Le Loi, District 1, HCMC",
+    images: ["https://picsum.photos/200/300?random=2"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.ACTIVE,
   },
   {
     id: "store3",
@@ -35,6 +45,11 @@ export const StoreFakeData = [
     longitude: 106.698,
     rating: 4.5,
     address: "Ben Thanh Market, District 1, HCMC",
+    images: ["https://picsum.photos/200/300?random=3"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.INACTIVE,
   },
   {
     id: "store4",
@@ -43,6 +58,11 @@ export const StoreFakeData = [
     longitude: 106.6786,
     rating: 4.5,
     address: "12 Nguyen Van Troi, Phu Nhuan, HCMC",
+    images: ["https://picsum.photos/200/300?random=4"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.ACTIVE,
   },
   {
     id: "store5",
@@ -51,6 +71,11 @@ export const StoreFakeData = [
     longitude: 106.652,
     rating: 4.5,
     address: "20 Truong Son, Tan Binh, HCMC",
+    images: ["https://picsum.photos/200/300?random=5"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.ACTIVE,
   },
   {
     id: "store6",
@@ -59,6 +84,11 @@ export const StoreFakeData = [
     longitude: 106.6658,
     rating: 4.5,
     address: "45 Quang Trung, Go Vap, HCMC",
+    images: ["https://picsum.photos/200/300?random=6"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.CLOSED,
   },
   {
     id: "store7",
@@ -67,6 +97,11 @@ export const StoreFakeData = [
     longitude: 106.7124,
     rating: 4.5,
     address: "90 Dien Bien Phu, Binh Thanh, HCMC",
+    images: ["https://picsum.photos/200/300?random=7"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.ACTIVE,
   },
   {
     id: "store8",
@@ -75,6 +110,11 @@ export const StoreFakeData = [
     longitude: 106.7217,
     rating: 4.5,
     address: "88 Nguyen Van Linh, District 7, HCMC",
+    images: ["https://picsum.photos/200/300?random=8"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.ACTIVE,
   },
   {
     id: "store9",
@@ -83,6 +123,11 @@ export const StoreFakeData = [
     longitude: 106.7537,
     rating: 4.5,
     address: "15 Vo Van Ngan, Thu Duc, HCMC",
+    images: ["https://picsum.photos/200/300?random=9"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.ACTIVE,
   },
   {
     id: "store10",
@@ -91,6 +136,11 @@ export const StoreFakeData = [
     longitude: 106.6039,
     rating: 4.5,
     address: "200 Kinh Duong Vuong, Binh Tan, HCMC",
+    images: ["https://picsum.photos/200/300?random=10"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.ACTIVE,
   },
   {
     id: "store11",
@@ -99,5 +149,10 @@ export const StoreFakeData = [
     longitude: 106.6285,
     rating: 4.5,
     address: "30 Au Co, Tan Phu, HCMC",
+    images: ["https://picsum.photos/200/300?random=11"],
+    openTime: "08:00",
+    closeTime: "22:00",
+    openDay: "Mon - Sun",
+    status: StoreStatus.ACTIVE,
   },
 ];

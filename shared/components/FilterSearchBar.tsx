@@ -15,10 +15,10 @@ import { useDebounce } from "../hooks/useDebounce";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { useTranslations } from "next-intl";
 
-interface UserFiltersProps {
+interface FiltersSearchProps<TStatus extends string = string> {
   tempFilter: {
     order: string;
-    status: string;
+    status: TStatus | "";
     limit: number;
   };
   onFilterChange: (
@@ -28,10 +28,15 @@ interface UserFiltersProps {
   onApplyFilters: () => void;
   query: { search: string };
   updateQuery: (update: { search?: string }) => void;
+  searchPlaceholder?: string;
   reset: () => void;
+  selectStatusData?: {
+    label: string;
+    value: TStatus;
+  }[];
 }
 
-export default function FilterSearchBar({
+export default function FilterSearchBar<TStatus extends string = string>({
   tempFilter,
   onFilterChange,
   onLimitChange,
@@ -39,9 +44,13 @@ export default function FilterSearchBar({
   query,
   updateQuery,
   reset,
-}: UserFiltersProps) {
+  searchPlaceholder,
+  selectStatusData,
+}: FiltersSearchProps<TStatus>) {
   const tButton = useTranslations("admin.button");
+  const t = useTranslations("admin");
   const tFilter = useTranslations("admin.filter");
+  const tCommon = useTranslations("common");
 
   const [searchInput, setSearchInput] = useState<string>(
     query.search as string
@@ -100,18 +109,23 @@ export default function FilterSearchBar({
                 value={tempFilter.status}
                 onChange={onFilterChange}
               >
-                <option value="">All</option>
-                <option value="VERIFIED">Verified</option>
-                <option value="PENDING_VERIFICATION">
-                  Pending Verification
-                </option>
-                <option value="inactive">Banned</option>
+                <option value="">{tCommon("all")}</option>
+                {selectStatusData?.map((status) => (
+                  <option
+                    key={String(status.value)}
+                    value={String(status.value)}
+                  >
+                    {status.label}
+                  </option>
+                ))}
               </select>
             </div>
 
             {/* Limit */}
             <div className="grid gap-3">
-              <Label>Limit per page: {tempFilter.limit}</Label>
+              <Label>
+                {tFilter("limitPerPage")}: {tempFilter.limit}
+              </Label>
               <Slider
                 value={[tempFilter.limit]}
                 max={50}
@@ -122,7 +136,7 @@ export default function FilterSearchBar({
 
             <PopoverClose asChild>
               <Button className="w-full mt-2" onClick={onApplyFilters}>
-                Apply Filters
+                {tButton("applyFilter")}
               </Button>
             </PopoverClose>
           </div>
@@ -132,7 +146,7 @@ export default function FilterSearchBar({
       {/* Search */}
       <Input
         type="text"
-        placeholder="Search email"
+        placeholder={t("search")}
         className="w-[250px]"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}

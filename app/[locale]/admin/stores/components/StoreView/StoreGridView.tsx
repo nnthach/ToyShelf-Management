@@ -1,6 +1,6 @@
 import FilterSearchBar from "@/shared/components/FilterSearchBar";
 import { Button } from "@/shared/styles/components/ui/button";
-import { Product } from "@/shared/types";
+import { Product, Store } from "@/shared/types";
 import { QueryParams } from "@/shared/types/SubType";
 import { Download, Eye, Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -9,9 +9,10 @@ import ViewDetailSheet from "../ViewDetailSheet";
 import ProductCardSkeleton from "@/shared/components/ProductCardSkeleton";
 import { ProductStatus } from "@/shared/enums/product-status.enum";
 import { PRODUCT_STATUS_OPTIONS } from "@/shared/constants/product-status";
+import { STORE_STATUS_OPTIONS } from "@/shared/constants/store-status";
 
-interface ProductGridViewProps {
-  productList: Product[];
+interface StoreGridViewProps {
+  storeList: Store[];
   isLoading: boolean;
   tempFilter: {
     order: string;
@@ -28,8 +29,8 @@ interface ProductGridViewProps {
   handleResetAllQueryParams: () => void;
 }
 
-function ProductGridView({
-  productList,
+function StoreGridView({
+  storeList,
   isLoading,
   tempFilter,
   handleChangeFilter,
@@ -38,11 +39,11 @@ function ProductGridView({
   query,
   updateQuery,
   handleResetAllQueryParams,
-}: ProductGridViewProps) {
-  const tStatus = useTranslations("status.products");
+}: StoreGridViewProps) {
+  const tStatus = useTranslations("status.stores");
   const tButton = useTranslations("admin.button");
 
-  const statusOptions = PRODUCT_STATUS_OPTIONS.map((status) => ({
+  const statusOptions = STORE_STATUS_OPTIONS.map((status) => ({
     value: status.value,
     label: tStatus(status.label),
   }));
@@ -75,12 +76,12 @@ function ProductGridView({
           ? Array.from({ length: tempFilter.limit || 8 }).map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))
-          : productList.map((product) => {
-              const image = product.images?.[0];
+          : storeList.map((store) => {
+              const image = store.images?.[0];
 
               return (
                 <div
-                  key={product.id}
+                  key={store.id}
                   className="group rounded-xl border border-gray-200 bg-white p-4
                hover:shadow-lg transition-shadow duration-200"
                 >
@@ -97,7 +98,7 @@ function ProductGridView({
                     </div>
 
                     {/* Eye button */}
-                    <ViewDetailSheet product={product}>
+                    <ViewDetailSheet store={store}>
                       <Button
                         variant="outline"
                         size="icon"
@@ -117,21 +118,21 @@ function ProductGridView({
                     >
                       <div className="bg-white/90 backdrop-blur-sm px-3 py-2 text-xs">
                         <div className="flex justify-between">
-                          <span className="text-gray-500">SKU</span>
+                          <span className="text-gray-500">Open day</span>
                           <span className="font-medium text-gray-900">
-                            {product.sku}
+                            {store.openDay}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-500">Price</span>
+                          <span className="text-gray-500">Open time</span>
                           <span className="font-medium text-gray-900">
-                            ${product.price}
+                            {store.openTime} - {store.closeTime}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-500">Category</span>
+                          <span className="text-gray-500">Address</span>
                           <span className="font-medium text-gray-900 truncate">
-                            {product.category}
+                            {store.address}
                           </span>
                         </div>
                       </div>
@@ -145,13 +146,13 @@ function ProductGridView({
                        bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700"
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
-                      Published
+                      {store?.status}
                     </span>
                   </div>
 
                   {/* Title */}
                   <h3 className="text-sm font-semibold text-gray-900 line-clamp-2">
-                    {product.title}
+                    {store?.name}
                   </h3>
                 </div>
               );
@@ -161,4 +162,4 @@ function ProductGridView({
   );
 }
 
-export default ProductGridView;
+export default StoreGridView;

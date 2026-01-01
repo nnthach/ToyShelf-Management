@@ -1,0 +1,5 @@
+export enum CabinetStatus {
+  AVAILABLE = "AVAILABLE",
+  MAINTENANCE = "MAINTENANCE",
+  DISABLED = "DISABLED",
+}

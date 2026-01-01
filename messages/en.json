@@ -1,22 +1,46 @@
 {
+  "common": {
+    "all": "All"
+  },
+  "status": {
+    "products": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published",
+      "OUT_OF_STOCK": "Out of stock"
+    },
+    "stores": {
+      "ACTIVE": "Active",
+      "CLOSED": "Closed",
+      "INACTIVE": "In active"
+    },
+    "user": {
+      "VERIFIED": "Verified",
+      "PENDING_VERIFICATION": "Pending Verification",
+      "INACTIVE": "In Active"
+    }
+  },
   "admin": {
+    "search": "Search...",
     "button": {
       "edit": "Edit",
       "delete": "Delete",
       "close": "Close",
       "createPartner": "Add Partner",
       "createProduct": "Add Product",
+      "createStore": "Add Store",
       "createStaff": "Add Staff",
       "export": "Export",
       "filter": "Filter",
       "import": "Import",
       "saveChange": "Save changes",
       "publish": "Publish",
-      "viewDetail": "View Details"
+      "viewDetail": "View Details",
+      "applyFilter": "Apply Filters"
     },
     "filter": {
       "sort": "Sort",
-      "status": "Status"
+      "status": "Status",
+      "limitPerPage": "Limit Per Page"
     },
     "partners": {
       "header": "Partner Management"
@@ -64,6 +88,44 @@
         "product3DFile": " 3D Product Files"
       }
     },
+
+    "stores": {
+      "createStore": {
+        "header": "Add New Store",
+        "leftHeader": "Store Details",
+        "rightHeader": "Store Location",
+        "leftSubHeader": "Enter the details of the new store.",
+        "rightSubHeader": "Choose store location.",
+        "addImage": "Add image"
+      },
+      "editStore": {
+        "header": "Edit Store",
+        "leftHeader": "Store Details",
+        "rightHeader": "Store Images",
+        "leftSubHeader": "Enter the details of the new store.",
+        "rightSubHeader": "Choose store location.",
+        "addImage": "Add image"
+      },
+      "header": "Store Management",
+      "subheader": "List of stores",
+      "listView": "List View",
+      "gridView": "Grid View",
+      "viewDetailSheet": {
+        "header": "Store Information",
+        "subHeader": "Information about"
+      },
+      "fields": {
+        "address": "Address",
+        "name": "Name",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "rating": "Rating",
+        "image": "Image",
+        "openTime": "Open Time",
+        "closeTime": "Close Time",
+        "openDay": "Open Day"
+      }
+    },
     "sidebar": {
       "item": {
         "cabinets": "Cabinets",
@@ -103,7 +165,11 @@
       "status": "Status",
       "stock": "Stock",
       "workingArea": "Working Area",
-      "image": "Image"
+      "image": "Image",
+      "name": "Name",
+      "address": "Address",
+      "workingTime": "Working Time",
+      "rating": "Rating"
     },
     "users": {
       "header": "User Management",

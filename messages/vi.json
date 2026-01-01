@@ -1,5 +1,26 @@
 {
+  "common": {
+    "all": "Tất cả"
+  },
+  "status": {
+    "products": {
+      "DRAFT": "Bản nháp",
+      "PUBLISHED": "Đang bán",
+      "OUT_OF_STOCK": "Hết hàng"
+    },
+    "stores": {
+      "ACTIVE": "Hoạt động",
+      "CLOSED": "Đóng cửa",
+      "INACTIVE": "Ngưng họat động"
+    },
+    "user": {
+      "VERIFIED": "Đã xác thực",
+      "PENDING_VERIFICATION": "Chờ xác thực",
+      "INACTIVE": "Chưa kích hoạt"
+    }
+  },
   "admin": {
+    "search": "Tìm kiếm...",
     "button": {
       "edit": "Chỉnh sửa",
       "delete": "Xóa",
@@ -7,16 +28,19 @@
       "createPartner": "Thêm Đối tác",
       "createProduct": "Thêm sản phẩm",
       "createStaff": "Thêm Nhân viên",
+      "createStore": "Thêm địa điểm",
       "export": "Xuất",
       "filter": "Bộ lọc",
       "import": "Nhập",
       "saveChange": "Lưu thay đổi",
       "publish": "Thêm",
-      "viewDetail": "Xem chi tiết"
+      "viewDetail": "Xem chi tiết",
+      "applyFilter": "Áp dụng"
     },
     "filter": {
       "sort": "Sắp xếp",
-      "status": "Trạng thái"
+      "status": "Trạng thái",
+      "limitPerPage": "Giới hạn mỗi trang"
     },
     "partners": {
       "header": "Quản lý Đối tác"
@@ -64,6 +88,44 @@
         "product3DFile": "Tệp sản phẩm 3D"
       }
     },
+
+    "stores": {
+      "createStore": {
+        "header": "Thêm mới địa điểm",
+        "leftHeader": "Thông tin địa điểm",
+        "rightHeader": "Vị trí địa điểm",
+        "leftSubHeader": "Nhập thông tin chi tiết cửa hàng.",
+        "rightSubHeader": "Chọn vị trí của cửa hàng",
+        "addImage": "Thêm hình ảnh"
+      },
+      "editStore": {
+        "header": "Chỉnh sửa địa điểm",
+        "leftHeader": "Chi tiết địa điểm",
+        "rightHeader": "Vị trí địa điểm",
+        "leftSubHeader": "Nhập thông tin chi tiết cửa hàng.",
+        "rightSubHeader": "Chọn vị trí của cửa hàng",
+        "addImage": "Thêm hình ảnh"
+      },
+      "header": "Quản lý địa điểm",
+      "subheader": "Danh sách địa điểm",
+      "listView": "Danh sách",
+      "gridView": "Lưới",
+      "viewDetailSheet": {
+        "header": "Thông tin địa điểm",
+        "subHeader": "Thông tin về"
+      },
+      "fields": {
+        "address": "Địa chỉ",
+        "name": "Tên",
+        "latitude": "Vĩ độ",
+        "longitude": "Kinh độ",
+        "rating": "Đánh giá",
+        "image": "Hình ảnh",
+        "openTime": "Giờ mở cửa",
+        "closeTime": "Giờ đóng cửa",
+        "openDay": "Ngày mở cửa"
+      }
+    },
     "sidebar": {
       "item": {
         "cabinets": "Tủ",
@@ -103,7 +165,11 @@
       "status": "Trạng thái",
       "stock": "Hàng tồn kho",
       "image": "Hình ảnh",
-      "workingArea": "Khu vực làm việc"
+      "workingArea": "Khu vực làm việc",
+      "name": "Tên",
+      "address": "Địa chỉ",
+      "workingTime": "Thời gian hoạt động",
+      "rating": "Rating"
     },
     "users": {
       "header": "Quản lý người dùng",

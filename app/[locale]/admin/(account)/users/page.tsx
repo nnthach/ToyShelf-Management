@@ -11,11 +11,14 @@ import FilterSearchBar from "../../../../../shared/components/FilterSearchBar";
 import { useFilterSearchBar } from "../../../../../shared/hooks/useFilterSearchBar";
 import { getUserColumns } from "./columns";
 import { useTranslations } from "next-intl";
+import { USER_STATUS_OPTIONS } from "@/shared/constants/user-status";
 
 export default function AdminUserManage() {
   const t = useTranslations("admin.users");
   const tButton = useTranslations("admin.button");
   const tColumnTable = useTranslations("admin.tableColumn");
+  const tStatus = useTranslations("status.user");
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
     limit: 10,
@@ -61,6 +64,11 @@ export default function AdminUserManage() {
 
   const columns = getUserColumns(tColumnTable);
 
+  const statusOptions = USER_STATUS_OPTIONS.map((status) => ({
+    value: status.value,
+    label: tStatus(status.label),
+  }));
+
   return (
     <div>
       {/*Header */}
@@ -84,6 +92,7 @@ export default function AdminUserManage() {
               query={{ search: query.search || "" }}
               updateQuery={updateQuery}
               reset={handleResetAllQueryParams}
+              selectStatusData={statusOptions}
             />
 
             <Button className="cursor-pointer">

@@ -1,3 +1,7 @@
+import { ProductStatus } from "../enums/product-status.enum";
+import { StoreStatus } from "../enums/store-status.enum";
+import { UserStatus } from "../enums/user-status.enum";
+
 export type UserRole = "ADMIN" | "USER" | "PARTNER" | "STAFF";
 
 export interface User {
@@ -5,7 +9,7 @@ export interface User {
   email: string;
   fullName: string;
   role: UserRole;
-  status: "VERIFIED" | "PENDING_VERIFICATION" | "BANNED";
+  status: UserStatus;
   createdAt: string;
 }
 
@@ -16,6 +20,11 @@ export interface Store {
   latitude: number;
   longitude: number;
   rating: number;
+  images: string[];
+  openTime: string;
+  closeTime: string;
+  openDay: string;
+  status: StoreStatus;
 }
 
 export interface Product {
@@ -30,6 +39,7 @@ export interface Product {
   brand: string;
   sku: string;
   images: string[];
+  status: ProductStatus;
 }
 
 export interface ProductCategory {

@@ -1,17 +1,16 @@
 import { DataTable } from "@/shared/styles/components/ui/data-table";
-import { getProductColumns } from "../../columns";
 import { useTranslations } from "next-intl";
-import { Product } from "@/shared/types";
+import { Product, Store } from "@/shared/types";
 import FilterSearchBar from "@/shared/components/FilterSearchBar";
 import { QueryParams } from "@/shared/types/SubType";
 import { ChangeEvent } from "react";
 import { Button } from "@/shared/styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
-import { ProductStatus } from "@/shared/enums/product-status.enum";
-import { PRODUCT_STATUS_OPTIONS } from "@/shared/constants/product-status";
+import { getStoreColumns } from "../../columns";
+import { STORE_STATUS_OPTIONS } from "@/shared/constants/store-status";
 
-interface ProductListViewProps {
-  productList: Product[];
+interface StoreListViewProps {
+  storeList: Store[];
   isLoading: boolean;
   tempFilter: {
     order: string;
@@ -28,8 +27,8 @@ interface ProductListViewProps {
   handleResetAllQueryParams: () => void;
 }
 
-function ProductListView({
-  productList,
+function StoreListView({
+  storeList,
   isLoading,
   tempFilter,
   handleChangeFilter,
@@ -38,21 +37,21 @@ function ProductListView({
   query,
   updateQuery,
   handleResetAllQueryParams,
-}: ProductListViewProps) {
+}: StoreListViewProps) {
   const tColumnTable = useTranslations("admin.tableColumn");
   const tButton = useTranslations("admin.button");
-  const tStatus = useTranslations("status.products");
+  const tStatus = useTranslations("status.stores");
 
-  const columns = getProductColumns(tColumnTable);
+  const columns = getStoreColumns(tColumnTable);
 
-  const statusOptions = PRODUCT_STATUS_OPTIONS.map((status) => ({
+  const statusOptions = STORE_STATUS_OPTIONS.map((status) => ({
     value: status.value,
     label: tStatus(status.label),
   }));
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={productList} isLoading={isLoading}>
+      <DataTable columns={columns} data={storeList} isLoading={isLoading}>
         <div className="p-4 border-b flex justify-between items-center">
           {/*Filter search */}
           <FilterSearchBar
@@ -79,4 +78,4 @@ function ProductListView({
   );
 }
 
-export default ProductListView;
+export default StoreListView;
