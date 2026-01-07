@@ -2,6 +2,15 @@
   "common": {
     "all": "Tất cả"
   },
+  "form": {
+    "email": "Địa chỉ email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu"
+  },
+  "button": {
+    "signIn": "Đăng nhập",
+    "signUp": "Đăng ký"
+  },
   "status": {
     "products": {
       "DRAFT": "Bản nháp",
@@ -180,7 +189,6 @@
     }
   },
   "home": {
-    "header": "Trang Chủ",
-    "subheader": "Táo"
+    "subheader": "Hệ thống quản lý dành riêng cho nhân sự của Toys Cabin"
   }
 }

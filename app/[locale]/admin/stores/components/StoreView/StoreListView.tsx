@@ -65,10 +65,10 @@ function StoreListView({
             selectStatusData={statusOptions}
           />
           <div className="space-x-3">
-            <Button className="cursor-pointer">
+            <Button>
               <Download /> {tButton("import")}
             </Button>
-            <Button variant={"outline"} className="cursor-pointer">
+            <Button variant={"outline"}>
               <Upload /> {tButton("export")}
             </Button>
           </div>

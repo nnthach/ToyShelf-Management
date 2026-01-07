@@ -2,6 +2,15 @@
   "common": {
     "all": "All"
   },
+  "form": {
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password"
+  },
+  "button": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
   "status": {
     "products": {
       "DRAFT": "Draft",
@@ -180,7 +189,6 @@
     }
   },
   "home": {
-    "header": "Home Page",
-    "subheader": "Apple"
+    "subheader": "An internal management system for Toys Cabin employees."
   }
 }

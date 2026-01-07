@@ -41,3 +41,25 @@ export const formatStoreStatusColor = (status: string) => {
       return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
   }
 };
+
+export const formatCabinetStatusText = (status: string) => {
+  switch (status) {
+    case "MAINTENANCE":
+      return "Maintenance";
+    case "AVAILABLE":
+      return "Active";
+    case "DISABLED":
+      return "Disabled";
+  }
+};
+
+export const formatCabinetStatusColor = (status: string) => {
+  switch (status) {
+    case "MAINTENANCE":
+      return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
+    case "AVAILABLE":
+      return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
+    case "CLOSED":
+      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+  }
+};

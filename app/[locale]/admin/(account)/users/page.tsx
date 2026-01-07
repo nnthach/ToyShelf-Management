@@ -2,7 +2,7 @@
 
 import { DataTable } from "../../../../../shared/styles/components/ui/data-table";
 import { Button } from "../../../../../shared/styles/components/ui/button";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Upload } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/shared/types/SubType";
 import { getAllUsers } from "../../../../../shared/services/user.service";
@@ -95,8 +95,8 @@ export default function AdminUserManage() {
               selectStatusData={statusOptions}
             />
 
-            <Button className="cursor-pointer">
-              <ArrowUp /> {tButton("export")}
+            <Button variant={"outline"}>
+              <Upload /> {tButton("export")}
             </Button>
           </div>
         </DataTable>

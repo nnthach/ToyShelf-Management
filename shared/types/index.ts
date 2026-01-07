@@ -1,3 +1,4 @@
+import { CabinetStatus } from "../enums/cabinet-status.enum";
 import { ProductStatus } from "../enums/product-status.enum";
 import { StoreStatus } from "../enums/store-status.enum";
 import { UserStatus } from "../enums/user-status.enum";
@@ -25,6 +26,17 @@ export interface Store {
   closeTime: string;
   openDay: string;
   status: StoreStatus;
+}
+
+export interface Cabinet {
+  id: string;
+  storeID: string;
+  name: string;
+  numberOfSlot: number;
+  layoutName: string;
+  qrCodeUrl: string;
+  images: string[];
+  status: CabinetStatus;
 }
 
 export interface Product {

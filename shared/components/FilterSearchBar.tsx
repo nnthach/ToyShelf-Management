@@ -78,7 +78,7 @@ export default function FilterSearchBar<TStatus extends string = string>({
       {/* Filter */}
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="cursor-pointer">
+          <Button variant="outline">
             <Filter /> {tButton("filter")}
           </Button>
         </PopoverTrigger>
