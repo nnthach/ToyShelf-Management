@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppDispatch, useAppSelector } from "@/shared/redux/hooks";
 import { Button } from "@/shared/styles/components/ui/button";
 import {
   Card,
@@ -17,6 +18,7 @@ import {
 } from "@/shared/styles/components/ui/field";
 import { Input } from "@/shared/styles/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LogIn } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
@@ -34,6 +36,9 @@ export default function HomePage() {
   const t = useTranslations("home");
   const tForm = useTranslations("form");
   const tButton = useTranslations("button");
+
+  const auth = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -118,14 +123,6 @@ export default function HomePage() {
 
         <CardFooter className="flex justify-between gap-3">
           <Button
-            type="submit"
-            form="form-rhf-demo"
-            className="w-[50%] cursor-pointer"
-          >
-            {tButton("signIn")}
-          </Button>
-
-          <Button
             variant="outline"
             type="button"
             className="w-[50%] cursor-pointer"
@@ -137,6 +134,14 @@ export default function HomePage() {
               alt="Google Icon"
             />
             Google
+          </Button>
+          <Button
+            type="submit"
+            form="form-rhf-demo"
+            className="w-[50%] cursor-pointer"
+          >
+            <LogIn />
+            {tButton("signIn")}
           </Button>
         </CardFooter>
       </Card>

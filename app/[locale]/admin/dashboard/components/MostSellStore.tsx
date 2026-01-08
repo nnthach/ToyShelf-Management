@@ -17,7 +17,7 @@ const MostSellStore = () => {
   return (
     <Card className="flex flex-col h-full border-none p-0 max-w-sm shadow-none">
       <CardHeader className="p-0">
-        <CardTitle className="text-lg font-bold">{t("header")}</CardTitle>
+        <CardTitle className="text-lg font-bold">Most Sell Store</CardTitle>
         <CardDescription className="text-sm text-muted-foreground">
           The store sells the most products this month
         </CardDescription>
