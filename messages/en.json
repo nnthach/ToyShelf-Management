@@ -1,6 +1,8 @@
 {
   "common": {
-    "all": "All"
+    "all": "All",
+    "isRequired": "is required",
+    "select": "Select"
   },
   "form": {
     "email": "Email Address",
@@ -9,7 +11,8 @@
   },
   "button": {
     "signIn": "Sign In",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "submit": "Submit"
   },
   "status": {
     "products": {
@@ -26,9 +29,23 @@
       "VERIFIED": "Verified",
       "PENDING_VERIFICATION": "Pending Verification",
       "INACTIVE": "In Active"
+    },
+    "partner": {
+      "BASIC": "Basic",
+      "MIDDLE": "Middle",
+      "VIP": "Vip"
+    }
+  },
+  "partner": {
+    "headerDashboard": "TOYSCABIN – Partner Admin Management System",
+    "fields": {
+      "fullname": "Full name",
+      "adminOfStore": "Admin Of Store",
+      "partnerLevel": "Partner Level"
     }
   },
   "admin": {
+    "headerDashboard": "TOYSCABIN – Administrator Management System",
     "search": "Search...",
     "button": {
       "edit": "Edit",
@@ -52,6 +69,9 @@
       "limitPerPage": "Limit Per Page"
     },
     "partners": {
+      "createPartner": {
+        "header": "Create Partner Account"
+      },
       "header": "Partner Management"
     },
     "products": {
@@ -145,17 +165,24 @@
         "settings": "Settings",
         "staffAccounts": "Staff Accounts",
         "stores": "Stores",
-        "userAccounts": "User Accounts"
+        "userAccounts": "User Accounts",
+        "partnerLevel": "Partner Level",
+        "productColor": "Product Color",
+        "productType": "Product Type"
       },
       "label": {
         "accountManagement": "Account Management",
         "application": "Application",
         "products": "Products",
-        "storeManagement": "Store Management"
+        "storeManagement": "Store Management",
+        "otherManagement": "Other Management"
       }
     },
     "staffs": {
-      "header": "Staff Management"
+      "header": "Staff Management",
+      "createStaff": {
+        "header": "Create Staff Account"
+      }
     },
     "tableColumn": {
       "action": "Action",

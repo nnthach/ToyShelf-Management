@@ -14,11 +14,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../styles/components/ui/dropdown-menu";
-import { SidebarTrigger, useSidebar } from "../styles/components/ui/sidebar";
-import { Toggle } from "../styles/components/ui/toggle";
+import { useSidebar } from "../styles/components/ui/sidebar";
 import {
   ChevronLeft,
-  ChevronRight,
   LogOut,
   Menu,
   Moon,
@@ -27,13 +25,13 @@ import {
   User,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import Link from "next/link";
-import React from "react";
+
 import LocaleSwitcher from "./LocaleSwitcher";
 import { useTranslations } from "next-intl";
 
-const AdminNavbar = () => {
-  const t = useTranslations("admin");
+const PartnerAdminNavbar = () => {
+  const t = useTranslations("partner");
+
   const { theme, setTheme } = useTheme();
   const { open, toggleSidebar } = useSidebar();
 
@@ -89,4 +87,4 @@ const AdminNavbar = () => {
   );
 };
 
-export default AdminNavbar;
+export default PartnerAdminNavbar;

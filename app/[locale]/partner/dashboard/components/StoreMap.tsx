@@ -5,26 +5,26 @@ import mapboxgl from "mapbox-gl";
 import { StoreFakeData } from "@/shared/constants/fakeData";
 import "./StoreMap.css";
 import { Store } from "@/shared/types";
-import { useTheme } from "next-themes";
+import { set } from "zod";
+import { Button } from "@/shared/styles/components/ui/button";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || "";
 
 function StoreMap() {
-  const { theme } = useTheme();
-
   const [selectStore, setSelectStore] = useState<Store | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const tButton = useTranslations("admin.button");
+  const router = useRouter();
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style:
-        theme === "dark"
-          ? "mapbox://styles/mapbox/navigation-night-v1"
-          : "mapbox://styles/mapbox/standard",
+      style: "mapbox://styles/mapbox/standard",
       center: [106.7009, 10.7769],
       zoom: 10,
     });
@@ -33,18 +33,6 @@ function StoreMap() {
       if (mapRef.current) mapRef.current.remove();
     };
   }, []);
-
-  // map theme
-  useEffect(() => {
-    if (!mapRef.current) return;
-
-    const style =
-      theme === "dark"
-        ? "mapbox://styles/mapbox/navigation-night-v1"
-        : "mapbox://styles/mapbox/standard";
-
-    mapRef.current.setStyle(style);
-  }, [theme]);
 
   // fetch all store
   useEffect(() => {

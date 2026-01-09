@@ -11,6 +11,7 @@ import FilterSearchBar from "../../../../../shared/components/FilterSearchBar";
 import { useFilterSearchBar } from "../../../../../shared/hooks/useFilterSearchBar";
 import { getPartnerColumns } from "./columns";
 import { useTranslations } from "next-intl";
+import CreatePartnerModal from "./components/CreatePartnerModal";
 
 export default function AdminUserManage() {
   const t = useTranslations("admin.partners");
@@ -69,9 +70,7 @@ export default function AdminUserManage() {
         <h1 className="text-4xl font-bold text-blue-600 dark:text-foreground">
           {t("header")}
         </h1>
-        <Button className="cursor-pointer bg-blue-600 hover:bg-blue-500 dark:bg-primary dark:hover:bg-primary/90 dark:text-primary-foreground">
-          <Plus /> {tButton("createPartner")}
-        </Button>
+        <CreatePartnerModal />
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">

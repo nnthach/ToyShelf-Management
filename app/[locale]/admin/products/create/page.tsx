@@ -15,6 +15,7 @@ import z from "zod";
 export default function CreateProductPage() {
   const router = useRouter();
   const t = useTranslations("admin.products.createProduct");
+  const tCommon = useTranslations("common");
   const tButton = useTranslations("admin.button");
   const tFields = useTranslations("admin.products.fields");
 
@@ -27,11 +28,18 @@ export default function CreateProductPage() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   const formSchema = z.object({
-    name: z.string(""),
-    description: z.string(""),
-    categoryId: z.string(""),
+    name: z
+      .string("")
+      .min(1, `${tFields("productName")} ${tCommon("isRequired")}`),
+    description: z
+      .string("")
+      .min(1, `${tFields("description")} ${tCommon("isRequired")}`),
+    categoryId: z
+      .string("")
+      .min(1, `${tFields("productCategory")} ${tCommon("isRequired")}`),
     weight: z.number().optional(),
     unit: z.string().optional(),
+    color: z.array(z.string()).min(1, "Please select at least one color"),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,6 +50,7 @@ export default function CreateProductPage() {
       categoryId: "",
       weight: 0,
       unit: "",
+      color: [],
     },
   });
 
@@ -117,7 +126,7 @@ export default function CreateProductPage() {
       </div>
 
       {/*Content */}
-      <div className="grid grid-cols-2 gap-3 w-full min-h-[80vh] my-4 rounded-xl">
+      <div className="grid grid-cols-2 gap-3 w-full h-[80vh] my-4 rounded-xl overflow-y-auto">
         {/*Field*/}
         <div className="bg-background rounded-lg p-4">
           <div className="mb-4">
@@ -136,7 +145,7 @@ export default function CreateProductPage() {
                 <FormFieldCustom
                   name="name"
                   label={tFields("productName")}
-                  placeholder="Product name"
+                  placeholder={tFields("productName")}
                 />
                 <FormFieldCustom
                   name="categoryId"

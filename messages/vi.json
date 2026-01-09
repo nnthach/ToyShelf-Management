@@ -1,6 +1,8 @@
 {
   "common": {
-    "all": "Tất cả"
+    "all": "Tất cả",
+    "isRequired": "bắt buộc",
+    "select": "Chọn"
   },
   "form": {
     "email": "Địa chỉ email",
@@ -9,7 +11,8 @@
   },
   "button": {
     "signIn": "Đăng nhập",
-    "signUp": "Đăng ký"
+    "signUp": "Đăng ký",
+    "submit": "Xác nhận"
   },
   "status": {
     "products": {
@@ -26,9 +29,25 @@
       "VERIFIED": "Đã xác thực",
       "PENDING_VERIFICATION": "Chờ xác thực",
       "INACTIVE": "Chưa kích hoạt"
+    },
+    "partner": {
+      "BASIC": "Cơ bản",
+      "MIDDLE": "Trung cấp",
+      "VIP": "Cao cấp"
+    }
+  },
+  "partner": {
+    "headerDashboard": "TOYSCABIN – Hệ thống quản lý dành cho Đối Tác Quản Trị",
+
+    "fields": {
+      "fullname": "Tên đầy đủ",
+      "adminOfStore": "Quản lý của cửa hàng",
+      "partnerLevel": "Cấp bậc đối tác"
     }
   },
   "admin": {
+    "headerDashboard": "TOYSCABIN – Hệ thống quản lý dành cho Administrator",
+
     "search": "Tìm kiếm...",
     "button": {
       "edit": "Chỉnh sửa",
@@ -52,6 +71,9 @@
       "limitPerPage": "Giới hạn mỗi trang"
     },
     "partners": {
+      "createPartner": {
+        "header": "Thêm tài khoản đối tác"
+      },
       "header": "Quản lý Đối tác"
     },
     "products": {
@@ -140,22 +162,29 @@
         "cabinets": "Tủ",
         "dashboard": "Bảng điều khiển",
         "notifications": "Thông báo",
-        "partnerAccounts": "Tài khoản Đối tác",
+        "partnerAccounts": "Tài khoản đối tác",
         "products": "Sản phẩm",
         "settings": "Cài đặt",
         "staffAccounts": "Tài khoản nhân viên",
         "stores": "Cửa hàng",
-        "userAccounts": "Tài khoản người dùng"
+        "userAccounts": "Tài khoản người dùng",
+        "partnerLevel": "Cấp bậc đối tác",
+        "productColor": "Màu sắc sản phẩm",
+        "productType": "Loại sản phẩm"
       },
       "label": {
         "accountManagement": "Quản lý tài khoản",
         "application": "Ứng dụng",
         "products": "Sản phẩm",
-        "storeManagement": "Quản lý cửa hàng"
+        "storeManagement": "Quản lý cửa hàng",
+        "otherManagement": "Quản lý khác"
       }
     },
     "staffs": {
-      "header": "Quản lý nhân viên"
+      "header": "Quản lý nhân viên",
+      "createStaff": {
+        "header": "Thêm tài khoản nhân viên"
+      }
     },
     "tableColumn": {
       "action": "Hành động",

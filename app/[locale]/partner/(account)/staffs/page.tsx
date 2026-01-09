@@ -11,7 +11,7 @@ import useQueryParams from "../../../../../shared/hooks/useQueryParams";
 import FilterSearchBar from "../../../../../shared/components/FilterSearchBar";
 import { useFilterSearchBar } from "../../../../../shared/hooks/useFilterSearchBar";
 import { useTranslations } from "next-intl";
-import CreateStaffModal from "./components/CreateShipperModal";
+import CreateStaffModal from "./components/CreateStaffModal";
 
 export default function AdminUserManage() {
   const t = useTranslations("admin.staffs");

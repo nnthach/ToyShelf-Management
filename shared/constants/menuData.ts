@@ -11,8 +11,12 @@ import {
   UserStar,
   Users,
   Server,
+  CircleStar,
+  Palette,
+  Funnel,
 } from "lucide-react";
 
+// Admin
 export const AdminSidebarGroups = [
   {
     label: "application",
@@ -42,6 +46,41 @@ export const AdminSidebarNested = [
     sub: [
       { title: "stores", url: "/admin/stores", icon: Store },
       { title: "cabinets", url: "/admin/cabinets", icon: Server },
+    ],
+  },
+
+  {
+    label: "otherManagement",
+    sub: [
+      { title: "partnerLevel", url: "/admin/partner-level", icon: CircleStar },
+      { title: "productColor", url: "/admin/product-color", icon: Palette },
+      { title: "productType", url: "/admin/product-type", icon: Funnel },
+    ],
+  },
+];
+
+// Partner admin
+export const PartnerAdminSidebarGroups = [
+  {
+    label: "application",
+    items: [
+      { title: "dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
+      { title: "notifications", url: "#", icon: Bell, badge: true },
+      { title: "settings", url: "#", icon: Settings },
+    ],
+  },
+];
+
+export const PartnerAdminSidebarNested = [
+  {
+    label: "accountManagement",
+    sub: [{ title: "staffAccounts", url: "/partner/staffs", icon: UserStar }],
+  },
+  {
+    label: "storeManagement",
+    sub: [
+      { title: "stores", url: "/partner/stores", icon: Store },
+      { title: "cabinets", url: "/partner/cabinets", icon: Server },
     ],
   },
 ];

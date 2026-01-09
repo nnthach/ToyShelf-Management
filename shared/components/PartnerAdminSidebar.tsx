@@ -20,13 +20,18 @@ import {
 } from "../styles/components/ui/sidebar";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { CollapsibleTrigger } from "@radix-ui/react-collapsible";
-import { AdminSidebarGroups, AdminSidebarNested } from "../constants/menuData";
+import {
+  AdminSidebarGroups,
+  AdminSidebarNested,
+  PartnerAdminSidebarGroups,
+  PartnerAdminSidebarNested,
+} from "../constants/menuData";
 import { Bell, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-const AdminSidebar = () => {
+const PartnerAdminSidebar = () => {
   const tItem = useTranslations("admin.sidebar.item");
   const tLabel = useTranslations("admin.sidebar.label");
 
@@ -60,7 +65,7 @@ const AdminSidebar = () => {
       {/* Content */}
       <SidebarContent className="custom-scrollbar">
         {/* --- Simple groups --- */}
-        {AdminSidebarGroups.map((group) => (
+        {PartnerAdminSidebarGroups.map((group) => (
           <SidebarGroup key={group.label}>
             <SidebarGroupLabel>{tLabel(group.label)}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -87,7 +92,7 @@ const AdminSidebar = () => {
         ))}
 
         {/* --- Nested collapsible sub groups --- */}
-        {AdminSidebarNested.map((group) => (
+        {PartnerAdminSidebarNested.map((group) => (
           <Collapsible key={group.label} className="group/collapsible">
             <SidebarGroup>
               <SidebarGroupLabel asChild className="cursor-pointer">
@@ -140,7 +145,7 @@ const AdminSidebar = () => {
               <div className="flex flex-col text-left">
                 <span className="font-medium text-sm">Alex Johnson</span>
                 <span className="text-xs text-muted-foreground">
-                  Administrator
+                  Partner Administrator
                 </span>
               </div>
             </SidebarMenuButton>
@@ -151,4 +156,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default PartnerAdminSidebar;
