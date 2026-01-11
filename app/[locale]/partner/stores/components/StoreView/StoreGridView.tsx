@@ -1,14 +1,11 @@
 import FilterSearchBar from "@/shared/components/FilterSearchBar";
 import { Button } from "@/shared/styles/components/ui/button";
-import { Product, Store } from "@/shared/types";
+import { Store } from "@/shared/types";
 import { QueryParams } from "@/shared/types/SubType";
 import { Download, Eye, Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ChangeEvent } from "react";
-import ViewDetailSheet from "../ViewDetailSheet";
 import ProductCardSkeleton from "@/shared/components/ProductCardSkeleton";
-import { ProductStatus } from "@/shared/enums/product-status.enum";
-import { PRODUCT_STATUS_OPTIONS } from "@/shared/constants/product-status";
 import { STORE_STATUS_OPTIONS } from "@/shared/constants/store-status";
 import { useRouter } from "next/navigation";
 
@@ -41,9 +38,10 @@ function StoreGridView({
   updateQuery,
   handleResetAllQueryParams,
 }: StoreGridViewProps) {
-  const router = useRouter();
   const tStatus = useTranslations("status.stores");
   const tButton = useTranslations("admin.button");
+
+  const router = useRouter();
 
   const statusOptions = STORE_STATUS_OPTIONS.map((status) => ({
     value: status.value,
@@ -100,15 +98,17 @@ function StoreGridView({
                     </div>
 
                     {/* Eye button */}
+                    {/* <ViewDetailSheet store={store}> */}
                     <Button
                       variant="outline"
                       size="icon"
                       className="absolute top-2 right-2 z-20
                opacity-0 group-hover:opacity-100 transition"
-                      onClick={() => router.push(`/admin/stores/${store.id}`)}
+                      onClick={() => router.push(`/partner/stores/${store.id}`)}
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
+                    {/* </ViewDetailSheet> */}
 
                     {/* Hover info */}
                     <div

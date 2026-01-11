@@ -12,7 +12,8 @@
   "button": {
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "submit": "Submit"
+    "submit": "Submit",
+    "edit": "Edit"
   },
   "status": {
     "products": {
@@ -42,6 +43,12 @@
       "fullname": "Full name",
       "adminOfStore": "Admin Of Store",
       "partnerLevel": "Partner Level"
+    },
+    "stores": {
+      "viewStore": {
+        "header": "Detail of Store"
+      },
+      "fields": {}
     }
   },
   "admin": {

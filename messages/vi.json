@@ -12,7 +12,8 @@
   "button": {
     "signIn": "Đăng nhập",
     "signUp": "Đăng ký",
-    "submit": "Xác nhận"
+    "submit": "Xác nhận",
+    "edit": "Chỉnh sửa"
   },
   "status": {
     "products": {
@@ -43,6 +44,13 @@
       "fullname": "Tên đầy đủ",
       "adminOfStore": "Quản lý của cửa hàng",
       "partnerLevel": "Cấp bậc đối tác"
+    },
+
+    "stores": {
+      "viewStore": {
+        "header": "Thông tin cửa hàng"
+      },
+      "fields": {}
     }
   },
   "admin": {
@@ -56,7 +64,7 @@
       "createPartner": "Thêm Đối tác",
       "createProduct": "Thêm sản phẩm",
       "createStaff": "Thêm Nhân viên",
-      "createStore": "Thêm địa điểm",
+      "createStore": "Thêm cửa hàng",
       "export": "Xuất",
       "filter": "Bộ lọc",
       "import": "Nhập",
@@ -122,27 +130,27 @@
 
     "stores": {
       "createStore": {
-        "header": "Thêm mới địa điểm",
-        "leftHeader": "Thông tin địa điểm",
-        "rightHeader": "Vị trí địa điểm",
+        "header": "Thêm mới cửa hàng",
+        "leftHeader": "Thông tin cửa hàng",
+        "rightHeader": "Vị trí cửa hàng",
         "leftSubHeader": "Nhập thông tin chi tiết cửa hàng.",
         "rightSubHeader": "Chọn vị trí của cửa hàng",
         "addImage": "Thêm hình ảnh"
       },
       "editStore": {
-        "header": "Chỉnh sửa địa điểm",
-        "leftHeader": "Chi tiết địa điểm",
-        "rightHeader": "Vị trí địa điểm",
+        "header": "Chỉnh sửa cửa hàng",
+        "leftHeader": "Chi tiết cửa hàng",
+        "rightHeader": "Vị trí cửa hàng",
         "leftSubHeader": "Nhập thông tin chi tiết cửa hàng.",
         "rightSubHeader": "Chọn vị trí của cửa hàng",
         "addImage": "Thêm hình ảnh"
       },
-      "header": "Quản lý địa điểm",
-      "subheader": "Danh sách địa điểm",
+      "header": "Quản lý cửa hàng",
+      "subheader": "Danh sách cửa hàng",
       "listView": "Danh sách",
       "gridView": "Lưới",
       "viewDetailSheet": {
-        "header": "Thông tin địa điểm",
+        "header": "Thông tin cửa hàng",
         "subHeader": "Thông tin về"
       },
       "fields": {

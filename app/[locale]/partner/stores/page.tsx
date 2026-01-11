@@ -108,6 +108,7 @@ export default function AdminStoreManage() {
             >
               <LayoutGrid className="h-4 w-4" />
             </Button>
+
             {/* List view */}
             <Button
               type="button"

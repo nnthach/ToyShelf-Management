@@ -1,9 +1,6 @@
 "use client";
-import { ProductCategoryData } from "@/shared/constants/fakeData";
 import { FormFieldCustom } from "@/shared/styles/components/custom/FormFieldCustom";
-import ModelThreeDPreview from "@/shared/styles/components/custom/ModelThreeDPreview";
 import { Button } from "@/shared/styles/components/ui/button";
-import { SelectOption } from "@/shared/types/SubType";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Check, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -13,13 +10,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import MapCreate from "../../create/MapCreate";
 
-type EditProductPageProps = {
+type EditStPageProps = {
   params: {
     id: string;
   };
 };
 
-export default function EditProductPage({ params }: EditProductPageProps) {
+export default function EditStPage({ params }: EditStPageProps) {
   const { id } = params;
 
   const router = useRouter();
