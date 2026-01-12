@@ -1,4 +1,7 @@
 {
+  "rarelyUse": {
+    "selectImage": "Please select image"
+  },
   "common": {
     "all": "All",
     "isRequired": "is required",
@@ -56,6 +59,7 @@
     "search": "Search...",
     "button": {
       "edit": "Edit",
+      "confirm": "Confirm",
       "delete": "Delete",
       "close": "Close",
       "createPartner": "Add Partner",
@@ -152,6 +156,7 @@
       },
       "fields": {
         "address": "Address",
+        "owner": "Owner",
         "name": "Name",
         "latitude": "Latitude",
         "longitude": "Longitude",

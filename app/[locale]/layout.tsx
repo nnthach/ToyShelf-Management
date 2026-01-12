@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../../shared/styles/components/providers/theme-provider";
 import Providers from "./providers";
-import { Toaster } from "../../shared/styles/components/ui/sonner";
+import { ToastContainer } from "react-toastify";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "../../i18n/routing";
@@ -55,7 +55,7 @@ export default async function RootLayout({
               {children}
             </ThemeProvider>
           </Providers>
-          <Toaster />
+          <ToastContainer />
         </NextIntlClientProvider>
       </body>
     </html>

@@ -7,10 +7,12 @@ import {
   Check,
   Clock,
   Edit,
+  Mail,
   MapPin,
   Navigation,
   Star,
   Store,
+  User,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -121,6 +123,23 @@ export default function ViewStoreDetailPage({
                 <div className="flex items-center gap-3">
                   <Clock className="w-4 h-4 text-muted-foreground shrink-0" />
                   <p>Mon – Sun: 08:00 – 22:00</p>
+                </div>
+              </div>
+
+              {/*Owner */}
+              <div className="rounded-md border bg-muted/40 p-2 space-y-2">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <User className="w-4 h-4 text-muted-foreground" />
+                  <span>Owner: Nguyen Ngoc Thach</span>
+                </div>
+
+                <div className="space-y-1 text-sm">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Mail className="w-4 h-4" />
+                    <span className="text-xs">
+                      nguyenngocthach2301@gmail.com
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

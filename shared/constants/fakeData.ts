@@ -156,3 +156,5 @@ export const StoreFakeData = [
     status: StoreStatus.ACTIVE,
   },
 ];
+
+export const OWNER_OPTION = [{ value: "1", label: "A" }];

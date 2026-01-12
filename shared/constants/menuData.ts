@@ -50,6 +50,13 @@ export const AdminSidebarNested = [
   },
 
   {
+    label: "requestManagement",
+    sub: [
+      { title: "refillStock", url: "/admin/request/refill-stock", icon: Store },
+    ],
+  },
+
+  {
     label: "otherManagement",
     sub: [
       { title: "partnerLevel", url: "/admin/partner-level", icon: CircleStar },
