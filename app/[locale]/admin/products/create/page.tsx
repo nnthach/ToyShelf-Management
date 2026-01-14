@@ -1,5 +1,9 @@
 "use client";
 import { ProductCategoryData } from "@/shared/constants/fakeData";
+import {
+  ProductFormValues,
+  productSchema,
+} from "@/shared/schemas/product.schema";
 import { FormFieldCustom } from "@/shared/styles/components/custom/FormFieldCustom";
 import ModelThreeDPreview from "@/shared/styles/components/custom/ModelThreeDPreview";
 import { Button } from "@/shared/styles/components/ui/button";
@@ -27,27 +31,12 @@ export default function CreateProductPage() {
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
 
-  const formSchema = z.object({
-    name: z
-      .string("")
-      .min(1, `${tFields("productName")} ${tCommon("isRequired")}`),
-    description: z
-      .string("")
-      .min(1, `${tFields("description")} ${tCommon("isRequired")}`),
-    categoryId: z
-      .string("")
-      .min(1, `${tFields("productCategory")} ${tCommon("isRequired")}`),
-    weight: z.number().optional(),
-    unit: z.string().optional(),
-    color: z.array(z.string()).min(1, "Please select at least one color"),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ProductFormValues>({
+    resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
       description: "",
-      categoryId: "",
+      productCategoryId: "",
       weight: 0,
       unit: "",
       color: [],
@@ -83,7 +72,7 @@ export default function CreateProductPage() {
     setImageFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  function onSubmit(data: ProductFormValues) {
     // Do something with the form values.
     console.log("3d url", threeDPreview);
     console.log("3d file", threeDFile);
@@ -148,7 +137,7 @@ export default function CreateProductPage() {
                   placeholder={tFields("productName")}
                 />
                 <FormFieldCustom
-                  name="categoryId"
+                  name="productCategoryId"
                   label={tFields("productCategory")}
                   placeholder="Select a category"
                   type="select"

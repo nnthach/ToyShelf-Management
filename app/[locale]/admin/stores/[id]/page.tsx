@@ -3,31 +3,59 @@
 import { Button } from "@/shared/styles/components/ui/button";
 import {
   ArrowLeft,
-  Calendar,
-  Check,
+  Box,
   Clock,
   Edit,
   Mail,
   MapPin,
-  Navigation,
   Star,
-  Store,
   User,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import React from "react";
 import BarChartExample from "../components/charts/BarChart";
 import AreaChartExample from "../components/charts/AreaChart";
 import { TargetRevenueChart } from "../components/charts/TargetRevenueChart";
 import StoreFeedbackList from "../components/StoreFeebackList";
 import MostSellProduct from "../components/MostSellProduct";
+import { StoreDetailStatCard } from "@/shared/constants/fakeData";
 
 type ViewStoreDetailPageProps = {
   params: {
     id: string;
   };
 };
+
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+}
+
+const StatCard = ({ title, value, icon: Icon, color }: StatCardProps) => {
+  const [bgColor, textColor] = color.split(" ");
+
+  return (
+    <div
+      className={`flex flex-col justify-between rounded-2xl p-4 bg-white shadow-md border border-transparent hover:shadow-md transition-all duration-200`}
+    >
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="text-base font-medium mb-2 text-gray-400">{title}</p>
+          <h3 className="text-3xl font-bold">{value}</h3>
+        </div>
+
+        <div
+          className={`p-2 rounded-xl ${bgColor} backdrop-blur-sm flex items-center justify-center`}
+        >
+          <Icon className={`w-6 h-6 ${textColor}`} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function ViewStoreDetailPage({
   params,
 }: ViewStoreDetailPageProps) {
@@ -37,6 +65,7 @@ export default function ViewStoreDetailPage({
   const t = useTranslations("partner.stores.viewStore");
   const tButton = useTranslations("button");
   const tFields = useTranslations("partner.stores.fields");
+
   return (
     <>
       {/*Header */}
@@ -66,6 +95,23 @@ export default function ViewStoreDetailPage({
           <Edit />
         </Button>
       </div>
+
+      {/*Stat card */}
+      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
+        <StatCard
+          title={`Total Products`}
+          value={250}
+          icon={Box}
+          color="bg-green-200 text-green-900"
+        />
+        <StatCard
+          title={`Rating`}
+          value={4.8}
+          icon={Star}
+          color="bg-pink-200 text-pink-900"
+        />
+      </div>
+
       {/*Content */}
       <div className="mt-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">

@@ -3,20 +3,28 @@
 import { FormFieldCustom } from "@/shared/styles/components/custom/FormFieldCustom";
 import { Button } from "@/shared/styles/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Check, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, MapPin, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import MapCreate from "./MapCreate";
 import LoadingPageComponent from "@/shared/components/LoadingPageComponent";
 import { toast } from "react-toastify";
 import { uploadFileToCloudinary } from "@/shared/config/cloundinary";
 import { OPEN_DAY_OPTION } from "@/shared/constants/openday-option";
-import { OWNER_OPTION } from "@/shared/constants/fakeData";
 import ConfirmPopup from "./ConfirmPopup";
 import { StoreFormValues, storeSchema } from "@/shared/schemas/store.schema";
 import { useLocale } from "next-intl";
+import { useQuery } from "@tanstack/react-query";
+import useQueryParams from "@/shared/hooks/useQueryParams";
+import {
+  OpenMapFeature,
+  PlaceDetail,
+  QueryParams,
+} from "@/shared/types/SubType";
+import { getAllUsers } from "@/shared/services/user.service";
+import { Partner, User } from "@/shared/types";
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -34,13 +42,17 @@ export default function CreateProductPage() {
   const [openVerifyCreateForm, setOpenVerifyCreateForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGeocoding, setIsGeocoding] = useState(false);
+  const [showDropdownPartner, setShowDropdownPartner] = useState(false);
+  const [searchPartner, setSearchPartner] = useState("");
+  const [suggestions, setSuggestions] = useState<OpenMapFeature[]>([]);
+
 
   const form = useForm<StoreFormValues>({
     resolver: zodResolver(storeSchema),
     defaultValues: {
       name: "",
-      owner: "",
-      address: "",
+      partnerID: "",
+      storeAddress: "",
       openDay: "",
       openTime: "",
       closeTime: "",
@@ -50,50 +62,75 @@ export default function CreateProductPage() {
   });
   const [previewData, setPreviewData] = useState<StoreFormValues | null>(null);
 
-  const address = form.watch("address");
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
+    status: "",
+    limit: 10,
+    order: "",
+    page: 1,
+    search: "",
+  });
 
-  // map box
-  useEffect(() => {
-    if (!address) {
-      setIsGeocoding(false);
+  const { data: partnerList = [] } = useQuery<User[]>({
+    queryKey: ["users", query],
+    queryFn: () => getAllUsers(query),
+  });
+
+  // open map get address
+  const fetchSuggestions = async (text: string) => {
+    if (text.length < 4) {
+      setSuggestions([]);
       return;
     }
 
     setIsGeocoding(true);
 
-    const timeout = setTimeout(async () => {
-      try {
-        const res = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-            address
-          )}.json?access_token=${process.env.NEXT_PUBLIC_MAPBOX_API_KEY}`
-        );
+    try {
+      const res = await fetch(
+        `https://mapapis.openmap.vn/v1/autocomplete?text=${encodeURIComponent(
+          text
+        )}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`
+      );
 
-        const data = await res.json();
-        if (!data.features?.length) return;
+      console.log("res", res);
 
-        const [lng, lat] = data.features[0].center;
+      const data = await res.json();
 
-        form.setValue("latitude", lat);
-        form.setValue("longitude", lng);
-
-        window.dispatchEvent(
-          new CustomEvent("map:flyTo", {
-            detail: { lat, lng },
-          })
-        );
-      } catch (err) {
-        console.error("Geocoding error:", err);
-      } finally {
-        setIsGeocoding(false);
-      }
-    }, 5000);
-
-    return () => {
-      clearTimeout(timeout);
+      console.log("data", data.features);
+      setSuggestions(data.features || []);
+    } finally {
       setIsGeocoding(false);
-    };
-  }, [address]);
+    }
+  };
+
+  // open map get lat long
+  const fetchPlaceDetail = async (id: string): Promise<PlaceDetail | null> => {
+    if (!id) return null;
+
+    setIsGeocoding(true);
+
+    try {
+      const res = await fetch(
+        `https://mapapis.openmap.vn/v1/place?ids=${id}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`
+      );
+
+      if (!res.ok) throw new Error("Fetch place detail failed");
+
+      const data = await res.json();
+      const feature = data?.features?.[0];
+
+      if (!feature?.geometry?.coordinates) return null;
+
+      const [lng, lat] = feature.geometry.coordinates;
+
+      return {
+        lat,
+        lng,
+        address: feature.properties?.label ?? "",
+      };
+    } finally {
+      setIsGeocoding(false);
+    }
+  };
 
   // support loading
   useEffect(() => {
@@ -134,6 +171,14 @@ export default function CreateProductPage() {
   };
   /*END IMAGE */
 
+  /*Select partner */
+  const handleSelectPartner = (partner: Partner) => {
+    form.setValue("partnerID", partner.id);
+    setSearchPartner(partner.fullName);
+    setShowDropdownPartner(false);
+  };
+
+  // Show confirm modal
   function onSubmit(data: StoreFormValues) {
     setPreviewData(data);
     setOpenVerifyCreateForm(true);
@@ -201,7 +246,7 @@ export default function CreateProductPage() {
       </div>
 
       {/*Content */}
-      <div className="grid grid-cols-2 gap-3 w-full min-h-[80vh] my-4 rounded-xl">
+      <div className="grid grid-cols-3 gap-3 w-full min-h-[80vh] my-4 rounded-xl">
         {/*Field*/}
         <div className="bg-background rounded-lg p-4">
           <div className="mb-4">
@@ -260,6 +305,7 @@ export default function CreateProductPage() {
                   )}
                 </div>
               </div>
+
               {/*end img */}
               <div className="flex items-center gap-3">
                 <FormFieldCustom
@@ -268,21 +314,64 @@ export default function CreateProductPage() {
                   placeholder={tFields("name")}
                 />
 
+                <div
+                  className="relative w-full"
+                  tabIndex={-1}
+                  onBlur={() => setShowDropdownPartner(false)}
+                >
+                  <FormFieldCustom
+                    name="partnerID"
+                    label={tFields("owner")}
+                    placeholder={tFields("owner")}
+                    value={searchPartner}
+                    onFocus={() => setShowDropdownPartner(true)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setSearchPartner(e.target.value);
+                      form.setValue("partnerID", "");
+                      setShowDropdownPartner(true);
+                    }}
+                  />
+
+                  {showDropdownPartner && (
+                    <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-[200px] overflow-auto">
+                      {partnerList.length > 0 ? (
+                        partnerList.map((user) => (
+                          <li
+                            key={user.id}
+                            onMouseDown={() => handleSelectPartner(user)}
+                            className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-gray-700"
+                          >
+                            <div className="font-medium">{user.fullName}</div>
+                            <div className="text-xs text-gray-500">
+                              {user.email}
+                            </div>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="px-4 py-2 text-sm text-gray-400 select-none">
+                          Not found partner
+                        </li>
+                      )}
+                    </ul>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
                 <FormFieldCustom
-                  name="owner"
-                  label={tFields("owner")}
-                  placeholder={tFields("owner")}
+                  name="openDay"
+                  label={tFields("openDay")}
+                  placeholder={tFields("openDay")}
                   type="select"
-                  selectData={OWNER_OPTION}
+                  selectData={OPEN_DAY_OPTION}
+                />
+
+                <FormFieldCustom
+                  name="phoneNumber"
+                  label={tFields("phoneNumber")}
+                  placeholder={tFields("phoneNumber")}
                 />
               </div>
-              <FormFieldCustom
-                name="openDay"
-                label={tFields("openDay")}
-                placeholder={tFields("openDay")}
-                type="select"
-                selectData={OPEN_DAY_OPTION}
-              />
               <div className="flex items-center gap-3">
                 <FormFieldCustom
                   name="openTime"
@@ -322,12 +411,54 @@ export default function CreateProductPage() {
               className="space-y-3"
               id="form-rhf-demo"
             >
-              <FormFieldCustom
-                name="address"
-                label={tFields("address")}
-                placeholder={tFields("address")}
-                loading={isGeocoding}
-              />
+              <div className="relative">
+                <FormFieldCustom
+                  name="storeAddress"
+                  label={tFields("address")}
+                  placeholder={tFields("address")}
+                  loading={isGeocoding}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    form.setValue("storeAddress", e.target.value);
+                    fetchSuggestions(e.target.value);
+                  }}
+                />
+
+                {suggestions.length > 0 && (
+                  <div className="absolute border rounded-md bg-background z-10 w-full shadow max-h-[120px] overflow-y-auto">
+                    {suggestions.map((item) => (
+                      <div
+                        key={item.properties.id}
+                        className="px-3 py-2 hover:bg-muted cursor-pointer"
+                        onClick={async () => {
+                          const detail = await fetchPlaceDetail(
+                            item.properties.id
+                          );
+
+                          if (!detail) return;
+
+                          const { lat, lng, address } = detail;
+                          form.setValue("storeAddress", address);
+                          form.setValue("latitude", lat);
+                          form.setValue("longitude", lng);
+
+                          window.dispatchEvent(
+                            new CustomEvent("map:flyTo", {
+                              detail: { lat, lng },
+                            })
+                          );
+
+                          setSuggestions([]);
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <MapPin size={18} />
+                          {item.properties.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <div className="flex items-center gap-3">
                 <FormFieldCustom
                   name="latitude"
@@ -351,6 +482,7 @@ export default function CreateProductPage() {
 
       {openVerifyCreateForm && (
         <ConfirmPopup
+          isLoading={isLoading}
           openVerifyCreateForm={openVerifyCreateForm}
           setOpenVerifyCreateForm={setOpenVerifyCreateForm}
           previewData={previewData}

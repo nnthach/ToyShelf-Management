@@ -19,6 +19,7 @@ interface ConfirmPopupProps {
   imagePreview: string | null;
   previewData: StoreFormValues | null;
   handleConfirmCreate: () => void;
+  isLoading: boolean;
 }
 
 function ConfirmPopup({
@@ -27,6 +28,7 @@ function ConfirmPopup({
   imagePreview,
   previewData,
   handleConfirmCreate,
+  isLoading,
 }: ConfirmPopupProps) {
   const tButton = useTranslations("admin.button");
 
@@ -98,6 +100,7 @@ function ConfirmPopup({
           <DialogFooter>
             <Button
               variant="outline"
+              disabled={isLoading}
               onClick={() => setOpenVerifyCreateForm(false)}
             >
               {tButton("close")}
@@ -105,6 +108,7 @@ function ConfirmPopup({
 
             <Button
               onClick={handleConfirmCreate}
+              disabled={isLoading}
               className="btn-primary-gradient"
             >
               {tButton("publish")}

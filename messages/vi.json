@@ -160,6 +160,8 @@
       "fields": {
         "owner": "Đối tác sở hữu",
         "address": "Địa chỉ",
+        "phoneNumber": "Số điện thoại",
+
         "name": "Tên",
         "latitude": "Vĩ độ",
         "longitude": "Kinh độ",
@@ -183,11 +185,14 @@
         "userAccounts": "Tài khoản người dùng",
         "partnerLevel": "Cấp bậc đối tác",
         "productColor": "Màu sắc sản phẩm",
-        "productType": "Loại sản phẩm"
+        "productType": "Loại sản phẩm",
+        "refillStock": "Bổ sung hàng hóa"
       },
       "label": {
         "accountManagement": "Quản lý tài khoản",
         "application": "Ứng dụng",
+        "requestManagement": "Quản lý đơn yêu cầu",
+
         "products": "Sản phẩm",
         "storeManagement": "Quản lý cửa hàng",
         "otherManagement": "Quản lý khác"

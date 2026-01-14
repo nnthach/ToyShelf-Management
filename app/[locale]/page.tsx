@@ -1,6 +1,7 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/shared/redux/hooks";
+import { loginAPI } from "@/shared/services/user.service";
 import { Button } from "@/shared/styles/components/ui/button";
 import {
   Card,
@@ -19,13 +20,16 @@ import {
 import { Input } from "@/shared/styles/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LogIn } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import z from "zod";
 
 const formSchema = z.object({
-  email: z.email("Not correct email format."),
+  email: z.string("Not correct email format."),
+  // email: z.email("Not correct email format."),
   password: z
     .string()
     .min(6, "Password must be at least 6 characters.")
@@ -36,6 +40,10 @@ export default function HomePage() {
   const t = useTranslations("home");
   const tForm = useTranslations("form");
   const tButton = useTranslations("button");
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const locale = useLocale();
 
   const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
@@ -48,9 +56,26 @@ export default function HomePage() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      const res = await loginAPI(data);
+      console.log("login res", res);
+      const token = res.data?.accessToken;
+
+      form.reset();
+
+      localStorage.setItem("token", token);
+
+      toast.success(
+        locale === "vi" ? "Đăng nhập thành công" : "Login successfully!"
+      );
+    } catch (error) {
+      console.log("login err", error);
+      toast.error(locale === "vi" ? "Đăng nhập thất bại" : "Failed to login!");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -126,6 +151,7 @@ export default function HomePage() {
             variant="outline"
             type="button"
             className="w-[50%] cursor-pointer"
+            disabled={isLoading}
           >
             <Image
               src="/icons/google.png"
@@ -139,6 +165,7 @@ export default function HomePage() {
             type="submit"
             form="form-rhf-demo"
             className="w-[50%] cursor-pointer"
+            disabled={isLoading}
           >
             <LogIn />
             {tButton("signIn")}

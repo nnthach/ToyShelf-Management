@@ -14,6 +14,15 @@ export interface User {
   createdAt: string;
 }
 
+export interface Partner {
+  id: string;
+  email: string;
+  fullName: string;
+  role: UserRole;
+  status: UserStatus;
+  createdAt: string;
+}
+
 export interface Store {
   id: string;
   address: string;

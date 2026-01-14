@@ -1,3 +1,4 @@
+import { Calendar, PackageX, ShoppingCart, Wallet } from "lucide-react";
 import { StoreStatus } from "../enums/store-status.enum";
 
 export const ProductCategoryData = [
@@ -158,3 +159,37 @@ export const StoreFakeData = [
 ];
 
 export const OWNER_OPTION = [{ value: "1", label: "A" }];
+
+export const StoreDetailStatCard = [
+  {
+    id: 1,
+    name: "Total Orders",
+    value: 2487,
+    icon: ShoppingCart,
+    color: "blue",
+    trend: 22.7,
+  },
+  {
+    id: 2,
+    name: "Monthly Orders",
+    value: 486,
+    icon: Calendar,
+    color: "purple",
+    trend: -8.32,
+  },
+  {
+    id: 3,
+    name: "Monthly Revenue",
+    value: "$41,789",
+    icon: Wallet,
+    color: "red",
+    trend: 16.8,
+  },
+  {
+    id: 4,
+    name: "Out Of Stock",
+    value: "44 Items",
+    icon: PackageX,
+    color: "yellow",
+  },
+];

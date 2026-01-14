@@ -15,3 +15,49 @@ export interface StatusSelectOption<T = string> {
   label: string;
   value: T;
 }
+
+export type OpenMapFeature = {
+  type: "Feature";
+  id: string;
+
+  geometry: {
+    type: "Point";
+    coordinates: [number, number]; // [lng, lat]
+  } | null;
+
+  properties: {
+    id: string;
+    name: string;
+    label: string;
+    short_address: string;
+
+    category: string[]; // ['building', 'street_address']
+
+    housenumber?: string;
+    street?: string;
+    locality?: string; // phường
+    county?: string; // quận
+    region?: string; // tỉnh / thành phố
+    country?: string;
+    country_code?: string;
+    continent?: string;
+    zipcode?: string;
+
+    distance?: number | null;
+    has_child?: boolean;
+    forcodes?: string;
+    sid?: string;
+    source?: string;
+
+    opening_hours?: string | null;
+    opening_hours_v2?: unknown | null;
+    phone?: string | null;
+    website?: string | null;
+  };
+};
+
+export type PlaceDetail = {
+  lat: number;
+  lng: number;
+  address: string;
+};

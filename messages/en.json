@@ -157,6 +157,7 @@
       "fields": {
         "address": "Address",
         "owner": "Owner",
+        "phoneNumber": "Phone number",
         "name": "Name",
         "latitude": "Latitude",
         "longitude": "Longitude",
@@ -180,10 +181,12 @@
         "userAccounts": "User Accounts",
         "partnerLevel": "Partner Level",
         "productColor": "Product Color",
-        "productType": "Product Type"
+        "productType": "Product Type",
+        "refillStock": "Refill Stock"
       },
       "label": {
         "accountManagement": "Account Management",
+        "requestManagement": "Request Management",
         "application": "Application",
         "products": "Products",
         "storeManagement": "Store Management",
