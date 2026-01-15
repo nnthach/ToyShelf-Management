@@ -6,7 +6,7 @@ export const loginAPI = async <T>(data: T) => {
   return res.data;
 };
 
-export const getAllUsers = async <T>(params: T): Promise<User[]> => {
+export const getAllUsers = async <T>(params: T) => {
   const res = await api.get("/user/active", { params });
-  return res.data.data;
+  return res.data;
 };

@@ -1,22 +1,22 @@
-export const formatUserStatusText = (status: string) => {
+export const formatUserStatusText = (status: boolean) => {
   switch (status) {
-    case "PENDING_VERIFICATION":
-      return "Pending Verification";
-    case "VERIFIED":
-      return "Verified";
-    case "BANNED":
-      return "Banned";
+    case false:
+      return "Inactive";
+    case true:
+      return "Active";
+    // case "BANNED":
+    //   return "Banned";
   }
 };
 
-export const formatUserStatusColor = (status: string) => {
+export const formatUserStatusColor = (status: boolean) => {
   switch (status) {
-    case "PENDING_VERIFICATION":
+    case false:
       return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
-    case "VERIFIED":
+    case true:
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
-    case "BANNED":
-      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+    // case "BANNED":
+    //   return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
   }
 };
 

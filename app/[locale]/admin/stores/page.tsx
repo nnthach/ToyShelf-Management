@@ -1,29 +1,21 @@
 "use client";
 
-import {
-  ArrowDown,
-  ArrowUp,
-  Download,
-  LayoutGrid,
-  List,
-  Plus,
-} from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { LayoutGrid, List, Plus } from "lucide-react";
 import { QueryParams } from "@/shared/types/SubType";
 import { useTranslations } from "next-intl";
 import useQueryParams from "@/shared/hooks/useQueryParams";
-import { getAllProducts } from "@/shared/services/product.service";
-import { useFilterSearchBar } from "@/shared/hooks/useFilterSearchBar";
 import { Button } from "@/shared/styles/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { cn } from "@/shared/styles/lib/utils";
-import ProductListView from "./components/StoreView/StoreListView";
-import ProductGridView from "./components/StoreView/StoreGridView";
 import StoreListView from "./components/StoreView/StoreListView";
 import StoreGridView from "./components/StoreView/StoreGridView";
 import { getAllStores } from "@/shared/services/store.service";
 import { StoreFakeData } from "@/shared/constants/fakeData";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import useFetchList from "@/shared/hooks/useFetchList";
+import { Store } from "@/shared/types";
+import FilterSearch from "./components/FilterSearch";
 
 export default function AdminStoreManage() {
   const router = useRouter();
@@ -34,46 +26,20 @@ export default function AdminStoreManage() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
-    limit: 10,
     order: "",
-    page: 1,
     search: "",
   });
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["stores", query],
-    queryFn: () => getAllStores(query),
-  });
+  const debouncedSearch = useDebounce(query.search, 500);
+  const debouncedQuery = useMemo(
+    () => ({ ...query, search: debouncedSearch }),
+    [query, debouncedSearch]
+  );
 
-  const {
-    filters: tempFilter,
-    setFilters: setTempFilter,
-    handleChange: handleChangeFilter,
-    resetFilter,
-  } = useFilterSearchBar({
-    order: "",
-    status: "",
-    limit: 10,
-  });
-
-  const handleLimitChange = (value: number) => {
-    setTempFilter((prev) => ({ ...prev, limit: value }));
-  };
-
-  // Bấm Apply mới cập nhật
-  const handleApplyFilters = () => {
-    updateQuery({
-      status: tempFilter.status,
-      order: tempFilter.order,
-      limit: tempFilter.limit,
-      page: 1,
-    });
-  };
-
-  const handleResetAllQueryParams = () => {
-    resetFilter();
-    resetQuery();
-  };
+  const { data: storeList = [], loading } = useFetchList<Store[], QueryParams>(
+    getAllStores,
+    debouncedQuery
+  );
 
   return (
     <>
@@ -129,31 +95,35 @@ export default function AdminStoreManage() {
 
       {/*Table */}
       {productView === "list" ? (
-        <StoreListView
-          storeList={StoreFakeData ?? []}
-          // isLoading={isLoading}
-          isLoading={false}
-          tempFilter={tempFilter}
-          handleChangeFilter={handleChangeFilter}
-          handleLimitChange={handleLimitChange}
-          handleApplyFilters={handleApplyFilters}
-          query={query}
-          updateQuery={updateQuery}
-          handleResetAllQueryParams={handleResetAllQueryParams}
-        />
+        <StoreListView storeList={StoreFakeData ?? []} isLoading={false}>
+          <FilterSearch
+            query={query}
+            loading={loading}
+            resultCount={storeList.length}
+            onSearch={(val) => updateQuery({ search: val })}
+            onApplyFilter={(filter) =>
+              updateQuery({
+                ...filter,
+              })
+            }
+            onReset={() => resetQuery()}
+          />
+        </StoreListView>
       ) : (
-        <StoreGridView
-          storeList={StoreFakeData ?? []}
-          isLoading={false}
-          // isLoading={isLoading}
-          tempFilter={tempFilter}
-          handleChangeFilter={handleChangeFilter}
-          handleLimitChange={handleLimitChange}
-          handleApplyFilters={handleApplyFilters}
-          query={query}
-          updateQuery={updateQuery}
-          handleResetAllQueryParams={handleResetAllQueryParams}
-        />
+        <StoreGridView storeList={StoreFakeData ?? []} isLoading={false}>
+          <FilterSearch
+            query={query}
+            loading={loading}
+            resultCount={storeList.length}
+            onSearch={(val) => updateQuery({ search: val })}
+            onApplyFilter={(filter) =>
+              updateQuery({
+                ...filter,
+              })
+            }
+            onReset={() => resetQuery()}
+          />
+        </StoreGridView>
       )}
     </>
   );

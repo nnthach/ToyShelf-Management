@@ -32,7 +32,9 @@
     "user": {
       "VERIFIED": "Verified",
       "PENDING_VERIFICATION": "Pending Verification",
-      "INACTIVE": "In Active"
+      "INACTIVE": "In Active",
+      "active": "Active",
+      "inactive": "In active"
     },
     "partner": {
       "BASIC": "Basic",
@@ -84,6 +86,23 @@
         "header": "Create Partner Account"
       },
       "header": "Partner Management"
+    },
+
+    "orders": {
+      "header": "Order Management"
+    },
+
+    "productCategory": {
+      "createProductCategory": {
+        "header": "Create Product Category"
+      },
+      "header": "Product Category Management"
+    },
+    "productColor": {
+      "createProductColor": {
+        "header": "Create Product Color"
+      },
+      "header": "Product Color Management"
     },
     "products": {
       "createProduct": {
@@ -182,13 +201,16 @@
         "partnerLevel": "Partner Level",
         "productColor": "Product Color",
         "productType": "Product Type",
-        "refillStock": "Refill Stock"
+        "refillStock": "Refill Stock",
+        "orders": "Orders"
       },
       "label": {
         "accountManagement": "Account Management",
         "requestManagement": "Request Management",
         "application": "Application",
-        "products": "Products",
+        "products": "Products Management",
+        "orders": "Orders Management",
+
         "storeManagement": "Store Management",
         "otherManagement": "Other Management"
       }
@@ -220,7 +242,8 @@
       "name": "Name",
       "address": "Address",
       "workingTime": "Working Time",
-      "rating": "Rating"
+      "rating": "Rating",
+      "storeId": "Store"
     },
     "users": {
       "header": "User Management",

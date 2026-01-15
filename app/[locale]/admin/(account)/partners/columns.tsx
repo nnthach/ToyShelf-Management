@@ -25,14 +25,14 @@ export const getPartnerColumns = (
   },
 
   {
-    accessorKey: "level",
+    accessorKey: "isActive",
     header: t("level"),
     cell: ({ row }) => {
-      const level = row.getValue("level") as string;
+      const isActive = row.getValue("isActive") as boolean;
 
       return (
-        <span className={`${formatUserStatusColor(level)}`}>
-          {/* {formatUserStatusText(status)} */}1
+        <span className={`${formatUserStatusColor(isActive)}`}>
+          {/* {formatUserStatusText(status)} */}
         </span>
       );
     },
@@ -41,11 +41,11 @@ export const getPartnerColumns = (
     accessorKey: "status",
     header: t("status"),
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
+      const isActive = row.getValue("isActive") as boolean;
 
       return (
-        <span className={`${formatUserStatusColor(status)}`}>
-          {formatUserStatusText(status)}
+        <span className={`${formatUserStatusColor(isActive)}`}>
+          {formatUserStatusText(isActive)}
         </span>
       );
     },

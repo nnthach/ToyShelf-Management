@@ -4,7 +4,7 @@ import { Product, Store } from "@/shared/types";
 import { QueryParams } from "@/shared/types/SubType";
 import { Download, Eye, Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { ChangeEvent } from "react";
+import React, { ChangeEvent } from "react";
 import ViewDetailSheet from "../ViewDetailSheet";
 import ProductCardSkeleton from "@/shared/components/ProductCardSkeleton";
 import { ProductStatus } from "@/shared/enums/product-status.enum";
@@ -15,32 +15,10 @@ import { useRouter } from "next/navigation";
 interface StoreGridViewProps {
   storeList: Store[];
   isLoading: boolean;
-  tempFilter: {
-    order: string;
-    status: string;
-    limit: number;
-  };
-  handleChangeFilter: (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => void;
-  handleLimitChange: (value: number) => void;
-  handleApplyFilters: () => void;
-  query: QueryParams;
-  updateQuery: (newQuery: Partial<QueryParams>) => void;
-  handleResetAllQueryParams: () => void;
+  children: React.ReactNode;
 }
 
-function StoreGridView({
-  storeList,
-  isLoading,
-  tempFilter,
-  handleChangeFilter,
-  handleLimitChange,
-  handleApplyFilters,
-  query,
-  updateQuery,
-  handleResetAllQueryParams,
-}: StoreGridViewProps) {
+function StoreGridView({ storeList, isLoading, children }: StoreGridViewProps) {
   const router = useRouter();
   const tStatus = useTranslations("status.stores");
   const tButton = useTranslations("admin.button");
@@ -53,16 +31,7 @@ function StoreGridView({
   return (
     <div className="container mx-auto py-10">
       <div className="mb-4 p-4 border-b flex justify-between items-center bg-white dark:bg-sidebar rounded-xl">
-        <FilterSearchBar
-          tempFilter={tempFilter}
-          onFilterChange={handleChangeFilter}
-          onLimitChange={handleLimitChange}
-          onApplyFilters={handleApplyFilters}
-          query={{ search: query.search || "" }}
-          updateQuery={updateQuery}
-          selectStatusData={statusOptions}
-          reset={handleResetAllQueryParams}
-        />
+        {children}
         <div className="space-x-3">
           <Button>
             <Download /> {tButton("import")}
@@ -75,7 +44,7 @@ function StoreGridView({
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
         {isLoading
-          ? Array.from({ length: tempFilter.limit || 8 }).map((_, i) => (
+          ? Array.from({ length: 8 }).map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))
           : storeList.map((store) => {

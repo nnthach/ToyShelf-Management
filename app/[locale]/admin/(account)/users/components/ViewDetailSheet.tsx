@@ -20,6 +20,7 @@ import {
 } from "@/shared/utils/formatStatus";
 import { User } from "@/shared/types";
 import { useTranslations } from "next-intl";
+import { formatDateTime } from "@/shared/utils/format";
 
 function ViewDetailSheet({ user }: { user: User }) {
   const tViewDetailSheet = useTranslations("admin.users.viewDetailSheet");
@@ -36,7 +37,7 @@ function ViewDetailSheet({ user }: { user: User }) {
         <SheetHeader>
           <SheetTitle>{tViewDetailSheet("header")}</SheetTitle>
           <SheetDescription>
-            {tViewDetailSheet("subHeader")} {user.email}
+            {tViewDetailSheet("subHeader")} <b>{user.email}</b>
           </SheetDescription>
         </SheetHeader>
         <div className="flex bg-gray-200 dark:bg-muted h-full">
@@ -126,7 +127,7 @@ function ViewDetailSheet({ user }: { user: User }) {
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {tColumnTable("fullName")}
                 </p>
-                <p className="text-base font-bold">Nguyen Ngoc Thach</p>
+                <p className="text-base font-bold">{user.fullName}</p>
               </div>
 
               {/* Email */}
@@ -134,9 +135,7 @@ function ViewDetailSheet({ user }: { user: User }) {
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {tColumnTable("email")}
                 </p>
-                <p className="text-base font-bold">
-                  nguyenngocthach2301@gmail.com
-                </p>
+                <p className="text-base font-bold">{user.email}</p>
               </div>
 
               {/* Status */}
@@ -146,10 +145,10 @@ function ViewDetailSheet({ user }: { user: User }) {
                 </p>
                 <span
                   className={`text-base font-medium ${formatUserStatusColor(
-                    "VERIFIED"
+                    user.isActive
                   )}`}
                 >
-                  {formatUserStatusText("VERIFIED")}
+                  {formatUserStatusText(user.isActive)}
                 </span>
               </div>
 
@@ -158,7 +157,9 @@ function ViewDetailSheet({ user }: { user: User }) {
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {tColumnTable("createdAt")}
                 </p>
-                <p className="text-base font-bold">25/11/2025</p>
+                <p className="text-base font-bold">
+                  {formatDateTime(user.createdAt).full}
+                </p>
               </div>
 
               {/* Membership */}
@@ -166,7 +167,9 @@ function ViewDetailSheet({ user }: { user: User }) {
                 {/* Membership Level */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                   <div>
-                    <p className="text-sm text-gray-500">{tColumnTable("membershipLevel")}:</p>
+                    <p className="text-sm text-gray-500">
+                      {tColumnTable("membershipLevel")}:
+                    </p>
                     <p className="text-base font-medium">PREMIUM</p>
                   </div>
                 </div>

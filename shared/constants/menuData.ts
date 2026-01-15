@@ -14,6 +14,8 @@ import {
   CircleStar,
   Palette,
   Funnel,
+  Receipt,
+  ClipboardList,
 } from "lucide-react";
 
 // Admin
@@ -29,6 +31,11 @@ export const AdminSidebarGroups = [
   {
     label: "products",
     items: [{ title: "products", url: "/admin/products", icon: Package }],
+  },
+
+  {
+    label: "orders",
+    items: [{ title: "orders", url: "/admin/orders", icon: ClipboardList }],
   },
 ];
 

@@ -12,6 +12,7 @@ export interface User {
   role: UserRole;
   status: UserStatus;
   createdAt: string;
+  isActive: boolean;
 }
 
 export interface Partner {
@@ -63,7 +64,19 @@ export interface Product {
   status: ProductStatus;
 }
 
+export interface Order {
+  id: string;
+  storeId: string;
+  totalAmount: number;
+  status: "COMPLETE" | "FAILED" | "REFUND";
+}
+
 export interface ProductCategory {
+  id: string;
+  name: string;
+}
+
+export interface ProductColor {
   id: string;
   name: string;
 }

@@ -32,7 +32,9 @@
     "user": {
       "VERIFIED": "Đã xác thực",
       "PENDING_VERIFICATION": "Chờ xác thực",
-      "INACTIVE": "Chưa kích hoạt"
+      "INACTIVE": "Chưa kích hoạt",
+      "active": "Đã kích hoạt",
+      "inactive": "Chưa kích hoạt"
     },
     "partner": {
       "BASIC": "Cơ bản",
@@ -88,6 +90,9 @@
       },
       "header": "Quản lý Đối tác"
     },
+    "orders": {
+      "header": "Quản lý đơn hàng"
+    },
     "products": {
       "createProduct": {
         "header": "Thêm sản phẩm mới",
@@ -130,6 +135,20 @@
         "productImages": "Hình ảnh sản phẩm",
         "product3DFile": "Tệp sản phẩm 3D"
       }
+    },
+
+    "productCategory": {
+      "createProductCategory": {
+        "header": "Thêm danh sách sản phẩm"
+      },
+      "header": "Quản lý danh sách sản phẩm"
+    },
+
+    "productColor": {
+      "createProductColor": {
+        "header": "Thêm màu sắc sản phẩm"
+      },
+      "header": "Quản lý màu sắc sản phẩm"
     },
 
     "stores": {
@@ -186,14 +205,16 @@
         "partnerLevel": "Cấp bậc đối tác",
         "productColor": "Màu sắc sản phẩm",
         "productType": "Loại sản phẩm",
-        "refillStock": "Bổ sung hàng hóa"
+        "refillStock": "Bổ sucng hàng hóa",
+        "orders": "Đơn hàng"
       },
       "label": {
         "accountManagement": "Quản lý tài khoản",
         "application": "Ứng dụng",
         "requestManagement": "Quản lý đơn yêu cầu",
+        "orders": "Quản lý đơn hàng",
 
-        "products": "Sản phẩm",
+        "products": "Quản lý sản phẩm",
         "storeManagement": "Quản lý cửa hàng",
         "otherManagement": "Quản lý khác"
       }
@@ -225,7 +246,8 @@
       "name": "Tên",
       "address": "Địa chỉ",
       "workingTime": "Thời gian hoạt động",
-      "rating": "Rating"
+      "rating": "Đánh giá",
+      "storeId": "Cửa hàng"
     },
     "users": {
       "header": "Quản lý người dùng",

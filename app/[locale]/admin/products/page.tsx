@@ -1,29 +1,20 @@
 "use client";
 
-import {
-  ArrowDown,
-  ArrowUp,
-  Download,
-  LayoutGrid,
-  List,
-  Plus,
-  Upload,
-} from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { LayoutGrid, List, Plus } from "lucide-react";
 import { QueryParams } from "@/shared/types/SubType";
-import { getProductColumns } from "./columns";
 import { useTranslations } from "next-intl";
 import useQueryParams from "@/shared/hooks/useQueryParams";
 import { getAllProducts } from "@/shared/services/product.service";
-import { useFilterSearchBar } from "@/shared/hooks/useFilterSearchBar";
-import FilterSearchBar from "@/shared/components/FilterSearchBar";
-import { DataTable } from "@/shared/styles/components/ui/data-table";
 import { Button } from "@/shared/styles/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { cn } from "@/shared/styles/lib/utils";
 import ProductListView from "./components/ProductView/ProductListView";
 import ProductGridView from "./components/ProductView/ProductGridView";
+import { Product } from "@/shared/types";
+import useFetchList from "@/shared/hooks/useFetchList";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import FilterSearch from "./components/FilterSearch";
 
 export default function AdminProductManage() {
   const router = useRouter();
@@ -34,46 +25,20 @@ export default function AdminProductManage() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
-    limit: 10,
     order: "",
-    page: 1,
     search: "",
   });
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["products", query],
-    queryFn: () => getAllProducts(query),
-  });
+  const debouncedSearch = useDebounce(query.search, 500);
+  const debouncedQuery = useMemo(
+    () => ({ ...query, search: debouncedSearch }),
+    [query, debouncedSearch]
+  );
 
-  const {
-    filters: tempFilter,
-    setFilters: setTempFilter,
-    handleChange: handleChangeFilter,
-    resetFilter,
-  } = useFilterSearchBar({
-    order: "",
-    status: "",
-    limit: 10,
-  });
-
-  const handleLimitChange = (value: number) => {
-    setTempFilter((prev) => ({ ...prev, limit: value }));
-  };
-
-  // Bấm Apply mới cập nhật
-  const handleApplyFilters = () => {
-    updateQuery({
-      status: tempFilter.status,
-      order: tempFilter.order,
-      limit: tempFilter.limit,
-      page: 1,
-    });
-  };
-
-  const handleResetAllQueryParams = () => {
-    resetFilter();
-    resetQuery();
-  };
+  const { data: productList = [], loading } = useFetchList<
+    Product[],
+    QueryParams
+  >(getAllProducts, debouncedQuery);
 
   return (
     <>
@@ -130,29 +95,35 @@ export default function AdminProductManage() {
 
       {/*Table */}
       {productView === "list" ? (
-        <ProductListView
-          productList={data?.products ?? []}
-          isLoading={isLoading}
-          tempFilter={tempFilter}
-          handleChangeFilter={handleChangeFilter}
-          handleLimitChange={handleLimitChange}
-          handleApplyFilters={handleApplyFilters}
-          query={query}
-          updateQuery={updateQuery}
-          handleResetAllQueryParams={handleResetAllQueryParams}
-        />
+        <ProductListView productList={productList ?? []} isLoading={loading}>
+          <FilterSearch
+            query={query}
+            loading={loading}
+            resultCount={productList.length}
+            onSearch={(val) => updateQuery({ search: val })}
+            onApplyFilter={(filter) =>
+              updateQuery({
+                ...filter,
+              })
+            }
+            onReset={() => resetQuery()}
+          />
+        </ProductListView>
       ) : (
-        <ProductGridView
-          productList={data?.products ?? []}
-          isLoading={isLoading}
-          tempFilter={tempFilter}
-          handleChangeFilter={handleChangeFilter}
-          handleLimitChange={handleLimitChange}
-          handleApplyFilters={handleApplyFilters}
-          query={query}
-          updateQuery={updateQuery}
-          handleResetAllQueryParams={handleResetAllQueryParams}
-        />
+        <ProductGridView productList={productList ?? []} isLoading={loading}>
+          <FilterSearch
+            query={query}
+            loading={loading}
+            resultCount={productList.length}
+            onSearch={(val) => updateQuery({ search: val })}
+            onApplyFilter={(filter) =>
+              updateQuery({
+                ...filter,
+              })
+            }
+            onReset={() => resetQuery()}
+          />
+        </ProductGridView>
       )}
     </>
   );

@@ -23,26 +23,11 @@ export const getUserColumns = (
     accessorKey: "email",
     header: t("email"),
   },
-
   {
-    accessorKey: "membership",
-    header: t("membership"),
-    cell: ({ row }) => {
-      const membership = row.getValue("membership") as string;
-
-      return (
-        <span className={`${formatUserStatusColor(membership)}`}>
-          {/* {formatUserStatusText(status)} */}
-          Basic
-        </span>
-      );
-    },
-  },
-  {
-    accessorKey: "status",
+    accessorKey: "isActive",
     header: t("status"),
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
+      const status = row.getValue("isActive") as boolean;
 
       return (
         <span className={`${formatUserStatusColor(status)}`}>

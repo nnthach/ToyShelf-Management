@@ -22,7 +22,7 @@ const data = [
 
 const AreaChartExample = ({ isAnimationActive = true }) => (
   <div className="flex flex-col h-full">
-    <p className="font-medium w-full mb-4">Total Users</p>
+    <p className="font-bold text-lg w-full mb-4">Total Users</p>
     <div className="flex-1">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
