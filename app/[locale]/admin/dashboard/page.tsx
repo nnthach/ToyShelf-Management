@@ -6,21 +6,39 @@ import MostSellStore from "./components/MostSellStore";
 import BadFeedBackStore from "./components/BadFeedbackStore";
 import FeedbackList from "./components/FeedbackList";
 import StoreMap from "./components/StoreMap";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Box, ClipboardList, Star, Users } from "lucide-react";
 
 type StatCardProps = {
   title: string;
   value: string;
   change: string;
   changePercent: string;
+  color?: string | null;
+  icon: React.ComponentType<{ className?: string }>;
 };
 
-function StatCard({ title, value, change, changePercent }: StatCardProps) {
+function StatCard({
+  title,
+  value,
+  change,
+  changePercent,
+  icon: Icon,
+  color,
+}: StatCardProps) {
+  const [bgColor, textColor] = color.split(" ");
+
   return (
     <div className="bg-white rounded-xl border shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition">
       {/* Header */}
       <div className="flex items-center justify-between text-sm text-gray-500">
-        <span className="font-bold text-black">{title}</span>
+        <div className="flex items-center gap-2">
+          <div
+            className={`p-2 rounded-xl ${bgColor} backdrop-blur-sm flex items-center justify-center`}
+          >
+            <Icon className={`w-6 h-6 ${textColor}`} />
+          </div>
+          <span className="font-bold text-black">{title}</span>
+        </div>
         <span className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-0.5 rounded-full text-xs font-medium">
           <ArrowUpRight className="w-3 h-3" />
           {changePercent}
@@ -48,6 +66,8 @@ export default function AdminDashboard() {
           value="$250,520"
           change="+$30,215"
           changePercent="+12%"
+          icon={Box}
+          color="bg-green-100 text-green-900"
         />
 
         <StatCard
@@ -55,6 +75,8 @@ export default function AdminDashboard() {
           value="10,980"
           change="+1,647"
           changePercent="+15%"
+          icon={Star}
+          color="bg-yellow-100 text-yellow-900"
         />
 
         <StatCard
@@ -62,6 +84,8 @@ export default function AdminDashboard() {
           value="15,640"
           change="+2,815"
           changePercent="+18%"
+          icon={ClipboardList}
+          color="bg-pink-100 text-pink-900"
         />
 
         <StatCard
@@ -69,6 +93,8 @@ export default function AdminDashboard() {
           value="15"
           change="+2,815"
           changePercent="+18%"
+          icon={ClipboardList}
+          color="bg-blue-100 text-blue-900"
         />
       </div>
 

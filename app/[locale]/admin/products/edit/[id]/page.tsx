@@ -69,7 +69,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
     if (!files.length) return;
 
     setImageFiles((prev) => {
-      const merged = [...prev, ...files].slice(0, 6); // max 6
+      const merged = [...prev, ...files].slice(0, 4); // max 4
       return merged;
     });
 
@@ -287,7 +287,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
                 })}
 
                 {/* Upload box */}
-                {imageFiles.length < 6 && (
+                {imageFiles.length < 4 && (
                   <div
                     onClick={() => imageInputRef.current?.click()}
                     className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-400 hover:border-purple-500 hover:bg-purple-50 transition cursor-pointer"

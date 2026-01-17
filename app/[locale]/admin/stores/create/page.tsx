@@ -46,7 +46,6 @@ export default function CreateProductPage() {
   const [searchPartner, setSearchPartner] = useState("");
   const [suggestions, setSuggestions] = useState<OpenMapFeature[]>([]);
 
-
   const form = useForm<StoreFormValues>({
     resolver: zodResolver(storeSchema),
     defaultValues: {

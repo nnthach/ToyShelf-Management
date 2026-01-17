@@ -20,6 +20,7 @@ type CommonFieldProps =
 type FormFieldProps = CommonFieldProps & {
   name: string;
   label: string;
+  labelNote?: string;
   type?: FieldType;
   placeholder?: string;
   selectData?: SelectOption[];
@@ -33,7 +34,7 @@ const renderFieldByType = (
   placeholder?: string,
   selectData?: SelectOption[],
   props?: CommonFieldProps,
-  error?: string | undefined
+  error?: string | undefined,
 ) => {
   const invalidClass = error ? "border-red-500 focus:border-red-500" : "";
 
@@ -85,6 +86,7 @@ const renderFieldByType = (
 export function FormFieldCustom({
   name,
   label,
+  labelNote,
   type = "text",
   placeholder,
   selectData,
@@ -101,7 +103,9 @@ export function FormFieldCustom({
         control={control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="gap-1">
-            <FieldLabel htmlFor={name}>{label}</FieldLabel>
+            <FieldLabel htmlFor={name}>
+              {label} {labelNote}
+            </FieldLabel>
 
             {/* Wrapper để đặt spinner */}
             <div className="relative">
@@ -117,7 +121,7 @@ export function FormFieldCustom({
                     loading ? "pr-10" : ""
                   }`,
                 },
-                fieldState.error?.message
+                fieldState.error?.message,
               )}
 
               {loading && (

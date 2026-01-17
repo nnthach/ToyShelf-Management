@@ -111,7 +111,7 @@
         "rightHeader": "Product Images",
         "leftSubHeader": "Enter the details of the new product.",
         "rightSubHeader": "Upload images for the new product.",
-        "maxLengthImages": "Maximum 6 images",
+        "maxLengthImages": "Maximum 4 images",
         "add3dFile": "Click or drag 3D File"
       },
       "editProduct": {
@@ -120,7 +120,7 @@
         "rightHeader": "Product Images",
         "leftSubHeader": "Enter the details of the product.",
         "rightSubHeader": "Upload images for the product.",
-        "maxLengthImages": "Maximum 6 images",
+        "maxLengthImages": "Maximum 4 images",
         "add3dFile": "Click or drag 3D File"
       },
       "header": "Product Management",

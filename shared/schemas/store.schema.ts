@@ -2,8 +2,9 @@ import { z } from "zod";
 
 export const storeSchema = z.object({
   name: z.string().min(1),
-  partnerID: z.string().min(1),
-  code: z.string().min(1),
+  // partnerID: z.string().min(1),
+  partnerID: z.string().optional(),
+  // code: z.string().min(1),
   storeAddress: z.string().min(10),
   phoneNumber: z.string().min(10),
   openDay: z.string().min(1),

@@ -3,56 +3,59 @@ type UploadEntity = "product" | "store" | "staff";
 const getUploadConfig = (file: File, entity: UploadEntity) => {
   if (file.type.startsWith("image/")) {
     return {
-      folder: `${entity}s/images`,
+      folder: `${entity}/images`,
       tags: `${entity},image`,
     };
   }
 
   if (file.type.startsWith("video/")) {
     return {
-      folder: `${entity}s/videos`,
+      folder: `${entity}/videos`,
       tags: `${entity},video`,
     };
   }
 
   return {
-    folder: `${entity}s/models`,
+    folder: `${entity}/models`,
     tags: `${entity},3d`,
   };
 };
 
-export const uploadFileToCloudinary = async (
-  file: File | null,
-  entity: "product" | "store" | "staff"
-) => {
+const getResourceType = (file: File) => {
+  if (file.type.startsWith("image/")) return "image";
+  if (file.type.startsWith("video/")) return "video";
+  return "raw";
+};
+
+const uploadSingleFile = async (file: File, entity: UploadEntity) => {
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
   const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
-
-  console.log("cloudName", cloudName);
-  console.log("uploadPreset", uploadPreset);
-
-  if (!file) {
-    throw new Error("Missing file");
-  }
 
   if (!cloudName || !uploadPreset) {
     throw new Error("Missing Cloudinary env");
   }
 
   const { folder, tags } = getUploadConfig(file, entity);
+  console.log("folder", folder);
+  console.log("tags", tags);
 
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", uploadPreset);
-  formData.append("folder", folder);
+  formData.append(
+    "folder",
+    `toyscabin/${entity}/${file.type.startsWith("image/") ? "images" : "models"}`,
+  );
   formData.append("tags", tags);
 
+  const resourceType = getResourceType(file);
+
   const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+    `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`,
     {
       method: "POST",
       body: formData,
-    }
+    },
   );
 
   const data = await res.json();
@@ -62,4 +65,20 @@ export const uploadFileToCloudinary = async (
   }
 
   return data.secure_url;
+};
+
+export const uploadFileToCloudinary = async (
+  file: File | File[] | null,
+  entity: UploadEntity,
+) => {
+  if (!file) {
+    throw new Error("Missing file");
+  }
+
+  if (Array.isArray(file)) {
+    const uploads = file.map((item) => uploadSingleFile(item, entity));
+    return Promise.all(uploads);
+  }
+
+  return uploadSingleFile(file, entity);
 };

@@ -5,7 +5,6 @@ import {
   Legend,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Bar,
   ResponsiveContainer,
@@ -71,7 +70,7 @@ const BarChartExample = ({ isAnimationActive = true }) => (
           />
           <Bar
             dataKey="QRScan"
-            fill="lightblue"
+            fill="orange"
             isAnimationActive={isAnimationActive}
           />
         </BarChart>

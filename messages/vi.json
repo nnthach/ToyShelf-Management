@@ -100,7 +100,7 @@
         "rightHeader": "Hình ảnh sản phẩm",
         "leftSubHeader": "Nhập thông tin chi tiết của sản phẩm mới.",
         "rightSubHeader": "Tải lên hình ảnh cho sản phẩm mới.",
-        "maxLengthImages": "Tối đa 6 hình ảnh",
+        "maxLengthImages": "Tối đa 4 hình ảnh",
         "add3dFile": "Thêm tệp 3D"
       },
       "editProduct": {
@@ -109,7 +109,7 @@
         "rightHeader": "Hình ảnh sản phẩm",
         "leftSubHeader": "Nhập thông tin chi tiết của sản phẩm.",
         "rightSubHeader": "Tải lên hình ảnh cho sản phẩm.",
-        "maxLengthImages": "Tối đa 6 hình ảnh",
+        "maxLengthImages": "Tối đa 4 hình ảnh",
         "add3dFile": "Thêm tệp 3D"
       },
       "header": "Quản lý sản phẩm",

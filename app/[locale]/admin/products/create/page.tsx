@@ -1,4 +1,5 @@
 "use client";
+import { uploadFileToCloudinary } from "@/shared/config/cloundinary";
 import { ProductCategoryData } from "@/shared/constants/fakeData";
 import {
   ProductFormValues,
@@ -10,26 +11,32 @@ import { Button } from "@/shared/styles/components/ui/button";
 import { SelectOption } from "@/shared/types/SubType";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Check, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import z from "zod";
+import { toast } from "react-toastify";
+import ConfirmPopup from "./ConfirmPopup";
+import LoadingPageComponent from "@/shared/components/LoadingPageComponent";
 
 export default function CreateProductPage() {
   const router = useRouter();
   const t = useTranslations("admin.products.createProduct");
-  const tCommon = useTranslations("common");
   const tButton = useTranslations("admin.button");
   const tFields = useTranslations("admin.products.fields");
+  const locale = useLocale();
 
   const threeDInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   const [threeDPreview, setThreeDPreview] = useState<string | null>(null);
   const [threeDFile, setThreeDFile] = useState<File | null>(null);
-
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [previewData, setPreviewData] = useState<ProductFormValues | null>(
+    null,
+  );
+  const [openVerifyCreateForm, setOpenVerifyCreateForm] = useState(false);
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -59,7 +66,7 @@ export default function CreateProductPage() {
     if (!files.length) return;
 
     setImageFiles((prev) => {
-      const merged = [...prev, ...files].slice(0, 6); // max 6
+      const merged = [...prev, ...files].slice(0, 4); // max 6
       return merged;
     });
 
@@ -73,12 +80,45 @@ export default function CreateProductPage() {
   };
 
   function onSubmit(data: ProductFormValues) {
-    // Do something with the form values.
-    console.log("3d url", threeDPreview);
-    console.log("3d file", threeDFile);
-    console.log("image files:", imageFiles);
-    console.log(data);
+    console.log("alo");
+    setPreviewData(data);
+    setOpenVerifyCreateForm(true);
   }
+
+  const handleConfirmCreate = useCallback(async () => {
+    if (!previewData) return;
+
+    setIsLoading(true);
+    try {
+      const imagesUrl = imageFiles
+        ? await uploadFileToCloudinary(imageFiles, "product")
+        : null;
+
+      const threeDUrl = threeDFile
+        ? await uploadFileToCloudinary(threeDFile, "product")
+        : null;
+
+      console.log("threeDUrl products url", threeDUrl);
+
+      toast.success(
+        locale === "vi"
+          ? "Thêm sản phẩm thành công"
+          : "Product created successfully",
+      );
+
+      form.reset();
+      setPreviewData(null);
+      setImageFiles([]);
+
+      setOpenVerifyCreateForm(false);
+    } catch (error) {
+      toast.error(
+        locale === "vi" ? "Thêm sản phẩm thất bại" : "Failed to create product",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, [previewData, imageFiles, form]);
 
   const categoryOptions: SelectOption[] = ProductCategoryData.map((c) => ({
     value: c.id,
@@ -87,6 +127,8 @@ export default function CreateProductPage() {
 
   return (
     <>
+      {isLoading && <LoadingPageComponent />}
+
       {/*Header */}
       <div className="flex items-center justify-between">
         {/*Left */}
@@ -109,7 +151,7 @@ export default function CreateProductPage() {
           form="form-rhf-demo"
           className="btn-primary-gradient"
         >
-          {tButton("publish")}
+          {tButton("confirm")}
           <Check />
         </Button>
       </div>
@@ -117,7 +159,7 @@ export default function CreateProductPage() {
       {/*Content */}
       <div className="grid grid-cols-2 gap-3 w-full h-[80vh] my-4 rounded-xl overflow-y-auto">
         {/*Field*/}
-        <div className="bg-background rounded-lg p-4">
+        <div className="bg-background rounded-lg p-4 border">
           <div className="mb-4">
             <h1 className="text-md font-bold text-gray-950 dark:text-foreground">
               {t("leftHeader")}
@@ -147,6 +189,7 @@ export default function CreateProductPage() {
               <FormFieldCustom
                 name="weight"
                 label={tFields("weight")}
+                labelNote="(gram)"
                 placeholder={tFields("weight")}
                 type="number"
               />
@@ -161,7 +204,7 @@ export default function CreateProductPage() {
         </div>
 
         {/*Image 3Ds */}
-        <div className="bg-background rounded-lg p-4">
+        <div className="bg-background rounded-lg p-4 border">
           <div className="mb-4">
             <h1 className="text-md font-bold text-gray-950 dark:text-foreground">
               {t("rightHeader")}
@@ -277,7 +320,7 @@ export default function CreateProductPage() {
                 })}
 
                 {/* Upload box */}
-                {imageFiles.length < 6 && (
+                {imageFiles.length < 4 && (
                   <div
                     onClick={() => imageInputRef.current?.click()}
                     className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-gray-400 hover:border-purple-500 hover:bg-purple-50 transition cursor-pointer"
@@ -290,6 +333,18 @@ export default function CreateProductPage() {
           </div>
         </div>
       </div>
+
+      {openVerifyCreateForm && (
+        <ConfirmPopup
+          isLoading={isLoading}
+          openVerifyCreateForm={openVerifyCreateForm}
+          setOpenVerifyCreateForm={setOpenVerifyCreateForm}
+          previewData={previewData}
+          threeDPreview={threeDPreview}
+          imagePreview={imageFiles}
+          handleConfirmCreate={handleConfirmCreate}
+        />
+      )}
     </>
   );
 }
