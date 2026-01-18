@@ -49,7 +49,7 @@ export const getProductColumns = (
     accessorKey: "status",
     header: t("status"),
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
+      const status = row.getValue("status") as boolean;
 
       return (
         <span className={`${formatUserStatusColor(status)}`}>

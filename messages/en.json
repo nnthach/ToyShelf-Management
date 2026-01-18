@@ -51,7 +51,7 @@
     },
     "stores": {
       "viewStore": {
-        "header": "Detail of Store"
+        "header": "Store Information"
       },
       "fields": {}
     }
@@ -81,9 +81,19 @@
       "status": "Status",
       "limitPerPage": "Limit Per Page"
     },
+    "dashboard": {
+      "header": "Overview",
+      "subHeader": "Summary of key metrics and recent performance"
+    },
     "partners": {
       "createPartner": {
         "header": "Create Partner Account"
+      },
+      "viewPartner": {
+        "header": "Partner Information",
+        "viewPartnerSheet": {
+          "header": "Partner Overview"
+        }
       },
       "header": "Partner Management"
     },

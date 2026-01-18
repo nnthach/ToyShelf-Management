@@ -18,7 +18,8 @@ import AreaChartExample from "../components/charts/AreaChart";
 import { TargetRevenueChart } from "../components/charts/TargetRevenueChart";
 import StoreFeedbackList from "../components/StoreFeebackList";
 import MostSellProduct from "../components/MostSellProduct";
-import { StoreDetailStatCard } from "@/shared/constants/fakeData";
+import { StaffFakeData } from "@/shared/constants/fakeData";
+import ViewEverydayReportSheet from "./components/ViewEverydayReportSheet";
 
 type ViewStoreDetailPageProps = {
   params: {
@@ -65,6 +66,7 @@ export default function ViewStoreDetailPage({
   const t = useTranslations("partner.stores.viewStore");
   const tButton = useTranslations("button");
   const tFields = useTranslations("partner.stores.fields");
+  const tColumnTable = useTranslations("admin.tableColumn");
 
   return (
     <>
@@ -204,16 +206,70 @@ export default function ViewStoreDetailPage({
             <TargetRevenueChart />
           </div>
 
-          <div className="bg-background p-4 rounded-lg">
+          <div className="bg-background p-4 rounded-lg h-[50vh]">
             <MostSellProduct />
           </div>
 
-          <div className="bg-background p-4 rounded-lg">
+          <div className="bg-background p-4 rounded-lg h-[50vh]">
             <StoreFeedbackList />
           </div>
 
           <div className="bg-background rounded-lg border col-span-2 w-full overflow-hidden shadow-sm">
-            staff list
+            {/* List */}
+            <div className="overflow-x-auto border">
+              <table className="w-full text-sm">
+                {/* Header */}
+                <thead className="bg-gray-50 border-b">
+                  <tr className="text-left text-gray-600">
+                    <th className="px-4 py-3 font-medium">Full Name</th>
+                    <th className="px-4 py-3 font-medium">Email</th>
+                    <th className="px-4 py-3 font-medium">Role</th>
+                    <th className="px-4 py-3 font-medium">Status</th>
+                  </tr>
+                </thead>
+
+                {/* Body */}
+                <tbody className="divide-y">
+                  {StaffFakeData.map((staff) => (
+                    <tr key={staff.id} className="hover:bg-gray-50 transition">
+                      {/* Full name */}
+                      <td className="px-4 py-3 font-medium">
+                        {staff.fullName}
+                      </td>
+
+                      {/* Email */}
+                      <td className="px-4 py-3 text-gray-500">{staff.email}</td>
+
+                      {/* Role */}
+                      <td className="px-4 py-3">{staff.role}</td>
+
+                      {/* Status */}
+                      <td className="px-4 py-3">
+                        <span
+                          className={`px-2 py-1 text-xs rounded-md ${
+                            staff.status === "active"
+                              ? "bg-green-100 text-green-700"
+                              : staff.status === "inactive"
+                                ? "bg-gray-100 text-gray-600"
+                                : "bg-yellow-100 text-yellow-700"
+                          }`}
+                        >
+                          {staff.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {/*diver */}
+            <div className="h-px bg-gray-200 my-3" />
+            {/*Footer */}
+            <div className="p-4 flex justify-end">
+              <ViewEverydayReportSheet>
+                <Button>Everyday Reports</Button>
+              </ViewEverydayReportSheet>
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "../../../../../shared/styles/components/ui/button";
-import { Calendar } from "../../../../../shared/styles/components/ui/calendar";
+import { Button } from "@/shared/styles/components/ui/button";
+import { Calendar } from "@/shared/styles/components/ui/calendar";
 import {
   Card,
   CardContent,
@@ -8,13 +8,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../../../../shared/styles/components/ui/card";
+} from "@/shared/styles/components/ui/card";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../../../../shared/styles/components/ui/popover";
-import { ScrollArea } from "../../../../../shared/styles/components/ui/scroll-area";
+} from "@/shared/styles/components/ui/popover";
+import { ScrollArea } from "@/shared/styles/components/ui/scroll-area";
 import { format } from "date-fns";
 import { CalendarIcon, Star } from "lucide-react";
 import React, { useState } from "react";
@@ -97,7 +97,7 @@ const StoreFeedbackList = () => {
         </PopoverContent>
       </Popover>
       {/* LIST */}
-      <ScrollArea className="h-[240px] mt-4">
+      <ScrollArea className="h-[300px] mt-4">
         <div className="flex flex-col gap-3">
           {feedbacks.map((f) => (
             <Card

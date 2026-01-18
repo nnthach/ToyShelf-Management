@@ -12,6 +12,107 @@ export const ProductCategoryData = [
   },
 ];
 
+export const StaffFakeData = [
+  {
+    id: "staff-1",
+    fullName: "Nguyễn Ngọc Thạch",
+    email: "thach.nguyen",
+    role: "Manager",
+    status: "active",
+  },
+  {
+    id: "staff-2",
+    fullName: "Trần Minh Quân",
+    email: "minhquan.tran",
+    role: "Cashier",
+    status: "active",
+  },
+  {
+    id: "staff-3",
+    fullName: "Lê Thị Hồng",
+    email: "hong.le",
+    role: "Staff",
+    status: "inactive",
+  },
+  {
+    id: "staff-4",
+    fullName: "Phạm Quốc Bảo",
+    email: "quocbao.pham",
+    role: "Staff",
+    status: "pending",
+  },
+  {
+    id: "staff-5",
+    fullName: "Võ Anh Tuấn",
+    email: "anhtuan.vo",
+    role: "Supervisor",
+    status: "active",
+  },
+];
+
+export const ReportFakeData = [
+  {
+    id: "report-1",
+    store: "London Branch",
+    staff: "Nguyễn Ngọc Thạch",
+    createdAt: "2026-01-02",
+  },
+  {
+    id: "report-2",
+    store: "Manchester Branch",
+    staff: "Trần Minh Quân",
+    createdAt: "2026-01-03",
+  },
+  {
+    id: "report-3",
+    store: "Birmingham Branch",
+    staff: "Lê Thị Hồng",
+    createdAt: "2026-01-04",
+  },
+  {
+    id: "report-4",
+    store: "Liverpool Branch",
+    staff: "Phạm Quốc Bảo",
+    createdAt: "2026-01-05",
+  },
+  {
+    id: "report-5",
+    store: "Leeds Branch",
+    staff: "Võ Anh Tuấn",
+    createdAt: "2026-01-06",
+  },
+  {
+    id: "report-6",
+    store: "London Branch",
+    staff: "Trần Minh Quân",
+    createdAt: "2026-01-07",
+  },
+  {
+    id: "report-7",
+    store: "Manchester Branch",
+    staff: "Nguyễn Ngọc Thạch",
+    createdAt: "2026-01-08",
+  },
+  {
+    id: "report-8",
+    store: "Birmingham Branch",
+    staff: "Phạm Quốc Bảo",
+    createdAt: "2026-01-09",
+  },
+  {
+    id: "report-9",
+    store: "Liverpool Branch",
+    staff: "Lê Thị Hồng",
+    createdAt: "2026-01-10",
+  },
+  {
+    id: "report-10",
+    store: "Leeds Branch",
+    staff: "Võ Anh Tuấn",
+    createdAt: "2026-01-11",
+  },
+];
+
 export const StoreFakeData = [
   {
     id: "store1",

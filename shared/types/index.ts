@@ -3,7 +3,6 @@ import { ProductStatus } from "../enums/product-status.enum";
 import { StoreStatus } from "../enums/store-status.enum";
 import { UserStatus } from "../enums/user-status.enum";
 
-
 export type UserRole = "ADMIN" | "USER" | "PARTNER" | "STAFF";
 
 export interface User {
@@ -80,4 +79,11 @@ export interface ProductCategory {
 export interface ProductColor {
   id: string;
   name: string;
+}
+
+export interface Report {
+  id: string;
+  store: string;
+  staff: string;
+  createdAt: string;
 }

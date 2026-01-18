@@ -84,9 +84,19 @@
       "status": "Trạng thái",
       "limitPerPage": "Giới hạn mỗi trang"
     },
+    "dashboard": {
+      "header": "Tổng quan",
+      "subHeader": "Tóm tắt các chỉ số quan trọng và hiệu suất gần đây"
+    },
     "partners": {
       "createPartner": {
         "header": "Thêm tài khoản đối tác"
+      },
+      "viewPartner": {
+        "header": "Thông tin đối tác",
+        "viewPartnerSheet": {
+          "header": "Tổng quan đối tác"
+        }
       },
       "header": "Quản lý Đối tác"
     },
