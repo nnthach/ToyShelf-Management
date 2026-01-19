@@ -1,7 +1,8 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/shared/redux/hooks";
-import { loginAPI } from "@/shared/services/user.service";
+import { setUser } from "@/shared/redux/slice/authSlice";
+import { getMyProfileAPI, loginAPI } from "@/shared/services/user.service";
 import { Button } from "@/shared/styles/components/ui/button";
 import {
   Card,
@@ -22,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LogIn } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -41,12 +43,15 @@ export default function HomePage() {
   const tForm = useTranslations("form");
   const tButton = useTranslations("button");
 
-  const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter();
   const locale = useLocale();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+
+  console.log("auth", auth);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -60,16 +65,35 @@ export default function HomePage() {
     setIsLoading(true);
     try {
       const res = await loginAPI(data);
-      console.log("login res", res);
       const token = res.data?.accessToken;
-
-      form.reset();
+      const roles = res.data?.roles;
 
       localStorage.setItem("token", token);
+      localStorage.setItem("roles", JSON.stringify(roles));
 
+      const fetchProfileRes = await getMyProfileAPI();
+
+      const payload = {
+        ...fetchProfileRes.data,
+        roles,
+      };
+
+      dispatch(setUser(payload));
+
+      form.reset();
       toast.success(
-        locale === "vi" ? "Đăng nhập thành công" : "Login successfully!"
+        locale === "vi" ? "Đăng nhập thành công" : "Login successfully!",
       );
+
+      if (roles.includes("Admin")) {
+        router.replace("/admin/dashboard");
+      } else if (roles.includes("Customer") && !roles.includes("Admin")) {
+        toast.error(
+          locale === "vi"
+            ? "Hệ thống dành cho quản trị viên!"
+            : "System belong to administrator!",
+        );
+      }
     } catch (error) {
       console.log("login err", error);
       toast.error(locale === "vi" ? "Đăng nhập thất bại" : "Failed to login!");
@@ -85,7 +109,20 @@ export default function HomePage() {
     >
       <Card className="w-full max-w-md shadow-xl bg-white/80 dark:bg-card/80 backdrop-blur-md">
         <CardHeader className="text-center">
-          <CardTitle className="font-bold text-2xl">Toys Cabin</CardTitle>
+          <CardTitle className="font-bold text-2xl">
+            <div className=" flex items-center gap-1 justify-center">
+              <div className="relative w-[50px] h-[50px]">
+                <Image
+                  src="/images/finallogo.png"
+                  alt="Toyscabin logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              {/*#0D47A1 */}
+              <p className="text-[#1E88E5] font-bold text-xl">ToysCabin</p>
+            </div>
+          </CardTitle>
           <CardDescription>{t("subheader")}</CardDescription>
         </CardHeader>
 

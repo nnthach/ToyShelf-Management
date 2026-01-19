@@ -6,6 +6,11 @@ export const loginAPI = async <T>(data: T) => {
   return res.data;
 };
 
+export const getMyProfileAPI = async () => {
+  const res = await api.get("/user/profile");
+  return res.data;
+};
+
 export const getAllUsers = async <T>(params: T) => {
   const res = await api.get("/user/active", { params });
   return res.data;
