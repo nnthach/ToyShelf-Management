@@ -100,6 +100,13 @@
       },
       "header": "Quản lý Đối tác"
     },
+
+    "partnerLevel": {
+      "createPartnerLevel": {
+        "header": "Thêm cấp bậc đối tác"
+      },
+      "header": "Quản lý cấp bậc đối tác"
+    },
     "orders": {
       "header": "Quản lý đơn hàng"
     },
@@ -143,7 +150,11 @@
         "weight": "Trọng lượng",
         "unit": "Đơn vị",
         "productImages": "Hình ảnh sản phẩm",
-        "product3DFile": "Tệp sản phẩm 3D"
+        "product3DFile": "Tệp sản phẩm 3D",
+        "size": "Kích thước",
+        "length": "Dài",
+        "width": "Rộng",
+        "height": "Cao"
       }
     },
 
@@ -152,6 +163,19 @@
         "header": "Thêm danh sách sản phẩm"
       },
       "header": "Quản lý danh sách sản phẩm"
+    },
+
+    "productPriceLevel": {
+      "createProductPriceLevel": {
+        "header": "Thêm cấp bậc sản phẩm"
+      },
+      "header": "Quản lý cấp bậc sản phẩm",
+      "fields": {
+        "name": "Tên",
+        "description": "Mô tả",
+        "priceFrom": "Gía từ",
+        "priceTo": "Gía đến"
+      }
     },
 
     "productColor": {
@@ -214,7 +238,8 @@
         "userAccounts": "Tài khoản người dùng",
         "partnerLevel": "Cấp bậc đối tác",
         "productColor": "Màu sắc sản phẩm",
-        "productType": "Loại sản phẩm",
+        "productPriceLevel": "Cấp bậc sản phẩm",
+        "productType": "Danh mục sản phẩm",
         "refillStock": "Bổ sucng hàng hóa",
         "orders": "Đơn hàng"
       },

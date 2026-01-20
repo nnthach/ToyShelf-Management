@@ -97,6 +97,12 @@
       },
       "header": "Partner Management"
     },
+    "partnerLevel": {
+      "createPartnerLevel": {
+        "header": "Create Partner Level"
+      },
+      "header": "Partner Level Management"
+    },
 
     "orders": {
       "header": "Order Management"
@@ -107,6 +113,19 @@
         "header": "Create Product Category"
       },
       "header": "Product Category Management"
+    },
+
+    "productPriceLevel": {
+      "createProductPriceLevel": {
+        "header": "Create Product Price Level"
+      },
+      "header": "Product Price Level Management",
+      "fields": {
+        "name": "Name",
+        "description": "Description",
+        "priceFrom": "Price from",
+        "priceTo": "Price to"
+      }
     },
     "productColor": {
       "createProductColor": {
@@ -154,11 +173,22 @@
         "weight": "Weight",
         "unit": "Unit",
         "productImages": "Product Images",
-        "product3DFile": " 3D Product Files"
+        "product3DFile": " 3D Product Files",
+        "size": "Size",
+        "length": "Length",
+        "width": "Width",
+        "height": "Height"
       }
     },
 
     "stores": {
+      "viewStore": {
+        "button": {
+          "staffList": "Staffs",
+          "productList": "Products",
+          "feedbackList": "Feedbacks"
+        }
+      },
       "createStore": {
         "header": "Add New Store",
         "leftHeader": "Store Details",
@@ -210,7 +240,8 @@
         "userAccounts": "User Accounts",
         "partnerLevel": "Partner Level",
         "productColor": "Product Color",
-        "productType": "Product Type",
+        "productType": "Product Category",
+        "productPriceLevel": "Product Price Level",
         "refillStock": "Refill Stock",
         "orders": "Orders"
       },
@@ -253,13 +284,44 @@
       "address": "Address",
       "workingTime": "Working Time",
       "rating": "Rating",
-      "storeId": "Store"
+      "storeId": "Store",
+      "staffId": "Staff ID",
+      "store": "Store"
     },
     "users": {
       "header": "User Management",
       "viewDetailSheet": {
         "header": "User Information",
         "subHeader": "Information about\n\n"
+      }
+    }
+  },
+  "warehouse": {
+    "headerDashboard": "TOYSCABIN – Warehouse Management System",
+    "sidebar": {
+      "item": {
+        "dashboard": "Dashboard",
+        "notifications": "Notifications",
+        "products": "Products",
+        "settings": "Settings",
+        "staffAccounts": "Staff Accounts",
+        "stores": "Stores",
+        "userAccounts": "User Accounts",
+        "partnerLevel": "Partner Level",
+        "productColor": "Product Color",
+        "productType": "Product Category",
+        "refillStock": "Refill Stock",
+        "orders": "Orders"
+      },
+      "label": {
+        "accountManagement": "Account Management",
+        "requestManagement": "Request Management",
+        "application": "Application",
+        "products": "Products Management",
+        "orders": "Orders Management",
+
+        "storeManagement": "Store Management",
+        "otherManagement": "Other Management"
       }
     }
   },

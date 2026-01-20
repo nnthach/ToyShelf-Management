@@ -1,7 +1,7 @@
 import {
   Collapsible,
   CollapsibleContent,
-} from "../styles/components/ui/collapsible";
+} from "../../styles/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -17,18 +17,23 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarSeparator,
-} from "../styles/components/ui/sidebar";
+} from "../../styles/components/ui/sidebar";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { CollapsibleTrigger } from "@radix-ui/react-collapsible";
-import { AdminSidebarGroups, AdminSidebarNested } from "../constants/menuData";
+import {
+  AdminSidebarGroups,
+  AdminSidebarNested,
+  WarehouseManagerSidebarGroups,
+  WarehouseManagerSidebarNested,
+} from "../../constants/menuData";
 import { Bell, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-const AdminSidebar = () => {
-  const tItem = useTranslations("admin.sidebar.item");
-  const tLabel = useTranslations("admin.sidebar.label");
+const WarehouseSidebar = () => {
+  const tItem = useTranslations("warehouse.sidebar.item");
+  const tLabel = useTranslations("warehouse.sidebar.label");
 
   return (
     <Sidebar
@@ -37,14 +42,10 @@ const AdminSidebar = () => {
     >
       {/* Header */}
       <SidebarHeader className="min-h-[50px] p-0">
-        {/* <SidebarMenu className="h-full"> */}
-        {/* <SidebarMenuItem> */}
-        {/* <SidebarMenuButton asChild> */}
         <Link href={"/"} className="p-2 flex items-center gap-2">
           <div className="relative w-[50px] h-[50px]">
             <Image
               src="/images/finallogo.png"
-              // src="/images/final_logo_toyscabin.png"
               alt="Toyscabin logo"
               fill
               className="object-contain"
@@ -53,9 +54,6 @@ const AdminSidebar = () => {
           {/*#0D47A1 */}
           <p className="text-[#1E88E5] font-bold text-xl">ToysCabin</p>
         </Link>
-        {/* </SidebarMenuButton> */}
-        {/* </SidebarMenuItem> */}
-        {/* </SidebarMenu> */}
       </SidebarHeader>
 
       <SidebarSeparator />
@@ -63,7 +61,7 @@ const AdminSidebar = () => {
       {/* Content */}
       <SidebarContent className="custom-scrollbar">
         {/* --- Simple groups --- */}
-        {AdminSidebarGroups.map((group) => (
+        {WarehouseManagerSidebarGroups.map((group) => (
           <SidebarGroup key={group.label}>
             <SidebarGroupLabel>{tLabel(group.label)}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -90,7 +88,7 @@ const AdminSidebar = () => {
         ))}
 
         {/* --- Nested collapsible sub groups --- */}
-        {AdminSidebarNested.map((group) => (
+        {WarehouseManagerSidebarNested.map((group) => (
           <Collapsible key={group.label} className="group/collapsible">
             <SidebarGroup>
               <SidebarGroupLabel asChild className="cursor-pointer">
@@ -154,4 +152,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default WarehouseSidebar;

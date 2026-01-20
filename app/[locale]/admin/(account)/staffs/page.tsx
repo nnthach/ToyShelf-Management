@@ -8,7 +8,7 @@ import { QueryParams } from "@/shared/types/SubType";
 import { getAllUsers } from "../../../../../shared/services/user.service";
 import useQueryParams from "../../../../../shared/hooks/useQueryParams";
 import { useTranslations } from "next-intl";
-import CreateStaffModal from "./components/CreateShipperModal";
+import CreateStaffModal from "./components/CreateStaffModal";
 import useFetchList from "@/shared/hooks/useFetchList";
 import { User } from "@/shared/types";
 import { useDebounce } from "@/shared/hooks/useDebounce";

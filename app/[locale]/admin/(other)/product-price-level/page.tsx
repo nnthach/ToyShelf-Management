@@ -13,10 +13,10 @@ import { useDebounce } from "@/shared/hooks/useDebounce";
 import { ProductCategory } from "@/shared/types";
 import useFetchList from "@/shared/hooks/useFetchList";
 import FilterSearch from "./components/FilterSearch";
-import CreateProductCategoryModal from "./components/CreatePartnerLevelModal";
+import CreateProductCategoryModal from "./components/CreateProductPriceLevelModal";
 
-export default function AdminPartnerLevel() {
-  const t = useTranslations("admin.partnerLevel");
+export default function AdminProductPriceLevel() {
+  const t = useTranslations("admin.productPriceLevel");
   const tButton = useTranslations("admin.button");
   const tColumnTable = useTranslations("admin.tableColumn");
 

@@ -4,8 +4,8 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../styles/components/ui/avatar";
-import { Button } from "../styles/components/ui/button";
+} from "../../styles/components/ui/avatar";
+import { Button } from "../../styles/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,10 +13,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../styles/components/ui/dropdown-menu";
-import { useSidebar } from "../styles/components/ui/sidebar";
+} from "../../styles/components/ui/dropdown-menu";
+import { SidebarTrigger, useSidebar } from "../../styles/components/ui/sidebar";
+import { Toggle } from "../../styles/components/ui/toggle";
 import {
   ChevronLeft,
+  ChevronRight,
   LogOut,
   Menu,
   Moon,
@@ -25,13 +27,13 @@ import {
   User,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-
-import LocaleSwitcher from "./LocaleSwitcher";
+import Link from "next/link";
+import React from "react";
+import LocaleSwitcher from "../LocaleSwitcher";
 import { useTranslations } from "next-intl";
 
-const PartnerAdminNavbar = () => {
-  const t = useTranslations("partner");
-
+const AdminNavbar = () => {
+  const t = useTranslations("admin");
   const { theme, setTheme } = useTheme();
   const { open, toggleSidebar } = useSidebar();
 
@@ -87,4 +89,4 @@ const PartnerAdminNavbar = () => {
   );
 };
 
-export default PartnerAdminNavbar;
+export default AdminNavbar;

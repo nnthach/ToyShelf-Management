@@ -23,6 +23,7 @@ import React from "react";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  pageSize?: number;
   children?: React.ReactNode;
   isLoading?: boolean;
 }
@@ -31,6 +32,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   children,
+  pageSize = 10,
   isLoading,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -38,6 +40,12 @@ export function DataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    initialState: {
+      pagination: {
+        pageSize,
+        pageIndex: 0,
+      },
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     // sort
@@ -64,7 +72,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -93,7 +101,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id} className="px-4 py-4">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

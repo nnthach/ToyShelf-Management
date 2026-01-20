@@ -18,31 +18,35 @@ import { useTranslations } from "next-intl";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 
-function CreateStaffModal() {
+function CreateProductPriceLevelModal() {
   const tButton = useTranslations("admin.button");
   const tStatus = useTranslations("status.partner");
   const tCommon = useTranslations("common");
-  const tFields = useTranslations("partner.fields");
-  const tCreateStaff = useTranslations("admin.staffs.createStaff");
+  const tFields = useTranslations("admin.productPriceLevel.fields");
+  const tCreateProductPriceLevel = useTranslations(
+    "admin.productPriceLevel.createProductPriceLevel",
+  );
 
   const formSchema = z.object({
-    fullname: z
+    name: z.string("").min(1, `${tFields("name")} ${tCommon("isRequired")}`),
+    description: z
       .string("")
-      .min(1, `${tFields("fullname")} ${tCommon("isRequired")}`),
-    adminOfStore: z
+      .min(1, `${tFields("description")} ${tCommon("isRequired")}`),
+    priceFrom: z
       .string("")
-      .min(1, `${tFields("adminOfStore")} ${tCommon("isRequired")}`),
-    partnerLevel: z
+      .min(1, `${tFields("priceFrom")} ${tCommon("isRequired")}`),
+    priceTo: z
       .string("")
-      .min(1, `${tFields("partnerLevel")} ${tCommon("isRequired")}`),
+      .min(1, `${tFields("priceTo")} ${tCommon("isRequired")}`),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullname: "",
-      adminOfStore: "",
-      partnerLevel: "",
+      name: "",
+      description: "",
+      priceFrom: "",
+      priceTo: "",
     },
   });
 
@@ -50,11 +54,6 @@ function CreateStaffModal() {
     // Do something with the form values.
     console.log("partner dâta", data);
   }
-
-  const partnerLevelOption = PARTNER_LEVEL_OPTIONS.map((option) => ({
-    value: option.value,
-    label: tStatus(option.label),
-  }));
 
   return (
     <Dialog
@@ -67,12 +66,12 @@ function CreateStaffModal() {
       <form>
         <DialogTrigger asChild>
           <Button className="btn-primary-gradient">
-            <Plus /> {tButton("createPartner")}
+            <Plus /> {tCreateProductPriceLevel("header")}
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{tCreateStaff("header")}</DialogTitle>
+            <DialogTitle>{tCreateProductPriceLevel("header")}</DialogTitle>
             <DialogDescription>
               Make changes to your profile here. Click save when you&apos;re
               done.
@@ -87,27 +86,28 @@ function CreateStaffModal() {
             >
               <div className="grid grid-cols-2 gap-3">
                 <FormFieldCustom
-                  name="fullname"
-                  label={tFields("fullname")}
-                  placeholder={tFields("fullname")}
+                  name="name"
+                  label={tFields("name")}
+                  placeholder={tFields("name")}
                 />
                 <FormFieldCustom
-                  name="partnerLevel"
-                  label={tFields("partnerLevel")}
-                  placeholder={`${tCommon("select")} ${tFields(
-                    "partnerLevel"
-                  )}`}
-                  type="select"
-                  selectData={partnerLevelOption}
+                  name="description"
+                  label={tFields("description")}
+                  placeholder={tFields("description")}
                 />
               </div>
-              <FormFieldCustom
-                name="adminOfStore"
-                label={tFields("adminOfStore")}
-                placeholder={`${tCommon("select")} ${tFields("adminOfStore")}`}
-                type="select"
-                selectData={partnerLevelOption}
-              />
+              <div className="grid grid-cols-2 gap-3">
+                <FormFieldCustom
+                  name="priceFrom"
+                  label={tFields("priceFrom")}
+                  placeholder={tFields("priceFrom")}
+                />
+                <FormFieldCustom
+                  name="priceTo"
+                  label={tFields("priceTo")}
+                  placeholder={tFields("priceTo")}
+                />
+              </div>
             </form>
           </FormProvider>
           <DialogFooter>
@@ -124,4 +124,4 @@ function CreateStaffModal() {
   );
 }
 
-export default CreateStaffModal;
+export default CreateProductPriceLevelModal;

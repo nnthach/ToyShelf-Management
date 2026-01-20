@@ -1,5 +1,6 @@
 import { Calendar, PackageX, ShoppingCart, Wallet } from "lucide-react";
 import { StoreStatus } from "../enums/store-status.enum";
+import { Product } from "../types";
 
 export const ProductCategoryData = [
   {
@@ -9,6 +10,93 @@ export const ProductCategoryData = [
   {
     id: "cat2",
     name: "Dolls",
+  },
+];
+
+export const ProductFakeData: Product[] = [
+  {
+    id: 1,
+    title: "Product A",
+    description: "",
+    category: "Food",
+    price: 100000,
+    discountPercentage: 0,
+    rating: 4.5,
+    stock: 20,
+    brand: "Brand A",
+    images: [],
+  },
+  {
+    id: 2,
+    title: "Product A",
+    description: "",
+    category: "Food",
+    price: 100000,
+    discountPercentage: 0,
+    rating: 4.5,
+    stock: 20,
+    brand: "Brand A",
+    images: [],
+  },
+  {
+    id: 3,
+    title: "Product A",
+    description: "",
+    category: "Food",
+    price: 100000,
+    discountPercentage: 0,
+    rating: 4.5,
+    stock: 20,
+    brand: "Brand A",
+    images: [],
+  },
+  {
+    id: 4,
+    title: "Product A",
+    description: "",
+    category: "Food",
+    price: 100000,
+    discountPercentage: 0,
+    rating: 4.5,
+    stock: 20,
+    brand: "Brand A",
+    images: [],
+  },
+  {
+    id: 5,
+    title: "Product A",
+    description: "",
+    category: "Food",
+    price: 100000,
+    discountPercentage: 0,
+    rating: 4.5,
+    stock: 20,
+    brand: "Brand A",
+    images: [],
+  },
+  {
+    id: 6,
+    title: "Product A",
+    description: "",
+    category: "Food",
+    price: 100000,
+    discountPercentage: 0,
+    rating: 4.5,
+    stock: 20,
+    brand: "Brand A",
+    images: [],
+  },
+  {
+    id: 7,
+    title: "Product A",
+    description: "",
+    category: "Food",
+    price: 100000,
+    discountPercentage: 0,
+    rating: 4.5,
+    stock: 20,
+    brand: "Brand A",
+    images: [],
   },
 ];
 

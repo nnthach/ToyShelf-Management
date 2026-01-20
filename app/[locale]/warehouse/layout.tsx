@@ -1,7 +1,7 @@
 import { SidebarProvider } from "../../../shared/styles/components/ui/sidebar";
 import { cookies } from "next/headers";
-import PartnerAdminSidebar from "@/shared/components/layout/PartnerAdminSidebar";
-import PartnerAdminNavbar from "@/shared/components/layout/PartnerAdminNavbar";
+import WarehouseSidebar from "@/shared/components/layout/WarehouseSidebar";
+import WarehouseNavbar from "@/shared/components/layout/WarehouseNavbar";
 
 export default async function PartnerAdminLayout({
   children,
@@ -14,9 +14,9 @@ export default async function PartnerAdminLayout({
   return (
     <div className="flex bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-neutral-800 dark:via-neutral-800 dark:to-neutral-800">
       <SidebarProvider defaultOpen={defaultOpen}>
-        <PartnerAdminSidebar />
+        <WarehouseSidebar />
         <main className="flex-1">
-          <PartnerAdminNavbar />
+          <WarehouseNavbar />
           <div className="px-4 mt-4">{children}</div>
         </main>
       </SidebarProvider>

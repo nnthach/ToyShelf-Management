@@ -16,6 +16,7 @@ import {
   Funnel,
   Receipt,
   ClipboardList,
+  Award,
 } from "lucide-react";
 
 // Admin
@@ -69,6 +70,11 @@ export const AdminSidebarNested = [
       { title: "partnerLevel", url: "/admin/partner-level", icon: CircleStar },
       { title: "productColor", url: "/admin/product-color", icon: Palette },
       { title: "productType", url: "/admin/product-type", icon: Funnel },
+      {
+        title: "productPriceLevel",
+        url: "/admin/product-price-level",
+        icon: Award,
+      },
     ],
   },
 ];
@@ -95,6 +101,36 @@ export const PartnerAdminSidebarNested = [
     sub: [
       { title: "stores", url: "/partner/stores", icon: Store },
       { title: "cabinets", url: "/partner/cabinets", icon: Server },
+    ],
+  },
+];
+
+// Warehouse manager
+export const WarehouseManagerSidebarGroups = [
+  {
+    label: "application",
+    items: [
+      {
+        title: "dashboard",
+        url: "/warehouse/dashboard",
+        icon: LayoutDashboard,
+      },
+      { title: "notifications", url: "#", icon: Bell, badge: true },
+      { title: "settings", url: "#", icon: Settings },
+    ],
+  },
+];
+
+export const WarehouseManagerSidebarNested = [
+  {
+    label: "accountManagement",
+    sub: [{ title: "staffAccounts", url: "/warehouse/staffs", icon: UserStar }],
+  },
+  {
+    label: "storeManagement",
+    sub: [
+      { title: "stores", url: "/warehouse/stores", icon: Store },
+      { title: "cabinets", url: "/warehouse/cabinets", icon: Server },
     ],
   },
 ];

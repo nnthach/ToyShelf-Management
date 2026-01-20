@@ -4,8 +4,8 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../styles/components/ui/avatar";
-import { Button } from "../styles/components/ui/button";
+} from "../../styles/components/ui/avatar";
+import { Button } from "../../styles/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +13,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../styles/components/ui/dropdown-menu";
-import { SidebarTrigger, useSidebar } from "../styles/components/ui/sidebar";
-import { Toggle } from "../styles/components/ui/toggle";
+} from "../../styles/components/ui/dropdown-menu";
+import { SidebarTrigger, useSidebar } from "../../styles/components/ui/sidebar";
+import { Toggle } from "../../styles/components/ui/toggle";
 import {
   ChevronLeft,
   ChevronRight,
@@ -29,11 +29,11 @@ import {
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import React from "react";
-import LocaleSwitcher from "./LocaleSwitcher";
+import LocaleSwitcher from "../LocaleSwitcher";
 import { useTranslations } from "next-intl";
 
-const AdminNavbar = () => {
-  const t = useTranslations("admin");
+const WarehouseNavbar = () => {
+  const t = useTranslations("warehouse");
   const { theme, setTheme } = useTheme();
   const { open, toggleSidebar } = useSidebar();
 
@@ -89,4 +89,4 @@ const AdminNavbar = () => {
   );
 };
 
-export default AdminNavbar;
+export default WarehouseNavbar;

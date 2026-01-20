@@ -8,11 +8,12 @@ import {
   Edit,
   Mail,
   MapPin,
+  MessageSquare,
   Star,
   User,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import BarChartExample from "../components/charts/BarChart";
 import AreaChartExample from "../components/charts/AreaChart";
 import { TargetRevenueChart } from "../components/charts/TargetRevenueChart";
@@ -20,6 +21,9 @@ import StoreFeedbackList from "../components/StoreFeebackList";
 import MostSellProduct from "../components/MostSellProduct";
 import { StaffFakeData } from "@/shared/constants/fakeData";
 import ViewEverydayReportSheet from "./components/ViewEverydayReportSheet";
+import ViewStoreProductSheet from "./components/ViewStoreProductSheet";
+import ViewStoreFeedbackSheet from "./components/ViewStoreFeedbackSheet";
+import ViewStoreStaffSheet from "./components/ViewStoreStaffSheet";
 
 type ViewStoreDetailPageProps = {
   params: {
@@ -57,14 +61,14 @@ const StatCard = ({ title, value, icon: Icon, color }: StatCardProps) => {
   );
 };
 
-export default function ViewStoreDetailPage({
-  params,
-}: ViewStoreDetailPageProps) {
-  const { id } = params;
+export default function ViewStoreDetailPage() {
+  const params = useParams();
+  const id = params.id as string;
 
   const router = useRouter();
   const t = useTranslations("partner.stores.viewStore");
   const tButton = useTranslations("button");
+  const tAdminButton = useTranslations("admin.stores.viewStore.button");
   const tFields = useTranslations("partner.stores.fields");
   const tColumnTable = useTranslations("admin.tableColumn");
 
@@ -87,15 +91,45 @@ export default function ViewStoreDetailPage({
           </h1>
         </div>
         {/*Right */}
-        <Button
-          type="submit"
-          form="form-rhf-demo"
-          className="btn-primary-gradient"
-          onClick={() => router.push(`/admin/stores/${id}/edit`)}
-        >
-          {tButton("edit")}
-          <Edit />
-        </Button>
+        <div className="flex items-center gap-3">
+          <ViewStoreStaffSheet>
+            <Button
+              className="
+      bg-blue-500 text-white
+      dark:bg-blue-900 dark:text-blue-100
+      hover:bg-blue-600 dark:hover:bg-blue-800
+    "
+            >
+              <User className="h-4 w-4" />
+              {tAdminButton("staffList")}
+            </Button>
+          </ViewStoreStaffSheet>
+          <ViewStoreProductSheet>
+            <Button
+              className="
+      bg-green-500 text-white
+      dark:bg-green-900 dark:text-green-100
+      hover:bg-green-600 dark:hover:bg-green-800
+    "
+            >
+              <Box className="h-4 w-4" />
+              {tAdminButton("productList")}
+            </Button>
+          </ViewStoreProductSheet>
+
+          <ViewStoreFeedbackSheet>
+            <Button
+              className="
+      bg-amber-500 text-white
+      dark:bg-amber-900 dark:text-amber-100
+      hover:bg-amber-600 dark:hover:bg-amber-800
+    "
+            >
+              <MessageSquare className="h-4 w-4" />
+              {tAdminButton("feedbackList")}
+            </Button>
+          </ViewStoreFeedbackSheet>
+        </div>
       </div>
 
       {/*Stat card */}

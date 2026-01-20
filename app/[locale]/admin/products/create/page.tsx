@@ -45,6 +45,10 @@ export default function CreateProductPage() {
       description: "",
       productCategoryId: "",
       weight: 0,
+      width: 0,
+      length: 0,
+      height: 0,
+      size: "",
       unit: "",
       color: [],
     },
@@ -186,13 +190,50 @@ export default function CreateProductPage() {
                   selectData={categoryOptions}
                 />
               </div>
-              <FormFieldCustom
-                name="weight"
-                label={tFields("weight")}
-                labelNote="(gram)"
-                placeholder={tFields("weight")}
-                type="number"
-              />
+              <div className="grid grid-cols-3 gap-3">
+                <FormFieldCustom
+                  name="price"
+                  label={tFields("price")}
+                  placeholder={tFields("price")}
+                />
+                <FormFieldCustom
+                  name="size"
+                  label={tFields("size")}
+                  placeholder="Select a size"
+                  type="select"
+                  selectData={categoryOptions}
+                />
+                <FormFieldCustom
+                  name="weight"
+                  label={tFields("weight")}
+                  labelNote="(gram)"
+                  placeholder={tFields("weight")}
+                  type="number"
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <FormFieldCustom
+                  name="Length"
+                  label={tFields("length")}
+                  labelNote="(cm)"
+                  placeholder={tFields("weight")}
+                  type="number"
+                />
+                <FormFieldCustom
+                  name="width"
+                  label={tFields("width")}
+                  labelNote="(cm)"
+                  placeholder={tFields("width")}
+                  type="number"
+                />
+                <FormFieldCustom
+                  name="height"
+                  label={tFields("height")}
+                  labelNote="(cm)"
+                  placeholder={tFields("height")}
+                  type="number"
+                />
+              </div>
               <FormFieldCustom
                 name="description"
                 label={tFields("description")}
