@@ -16,7 +16,9 @@
     "signIn": "Đăng nhập",
     "signUp": "Đăng ký",
     "submit": "Xác nhận",
-    "edit": "Chỉnh sửa"
+    "edit": "Chỉnh sửa",
+    "disable": "Vô hiệu hóa",
+    "restore": "Khôi phục"
   },
   "status": {
     "products": {
@@ -267,7 +269,8 @@
         "productPriceLevel": "Cấp bậc sản phẩm",
         "productType": "Danh mục sản phẩm",
         "refillStock": "Bổ sucng hàng hóa",
-        "orders": "Đơn hàng"
+        "orders": "Đơn hàng",
+        "warehouseAccounts": "Kho hàng"
       },
       "label": {
         "accountManagement": "Quản lý tài khoản",

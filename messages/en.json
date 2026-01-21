@@ -16,7 +16,9 @@
     "signIn": "Sign In",
     "signUp": "Sign Up",
     "submit": "Submit",
-    "edit": "Edit"
+    "edit": "Edit",
+    "disable": "Disable",
+    "restore": "Restore"
   },
   "status": {
     "products": {
@@ -269,7 +271,8 @@
         "productType": "Product Category",
         "productPriceLevel": "Product Price Level",
         "refillStock": "Refill Stock",
-        "orders": "Orders"
+        "orders": "Orders",
+        "warehouse": "Warehouse"
       },
       "label": {
         "accountManagement": "Account Management",
@@ -279,7 +282,8 @@
         "orders": "Orders Management",
         "staffManagement": "Staff Management",
         "storeManagement": "Store Management",
-        "otherManagement": "Other Management"
+        "otherManagement": "Other Management",
+        "warehouseManagement": "Warehouse Management"
       }
     },
     "staffs": {

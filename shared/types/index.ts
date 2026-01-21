@@ -28,7 +28,7 @@ export interface Partner {
 
 export interface Store {
   id: string;
-  address: string;
+  storeAddress: string;
   name: string;
   latitude: number;
   longitude: number;
@@ -38,6 +38,9 @@ export interface Store {
   closeTime: string;
   openDay: string;
   status: StoreStatus;
+  isActive: boolean;
+  partnerId: string;
+  phoneNumber: string;
 }
 
 export interface Cabinet {

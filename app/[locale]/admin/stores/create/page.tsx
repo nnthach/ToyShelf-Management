@@ -25,6 +25,9 @@ import {
 } from "@/shared/types/SubType";
 import { Partner, User } from "@/shared/types";
 import { getAllUserAPI } from "@/shared/services/user.service";
+import { getAllPartnerAPI } from "@/shared/services/partner.service";
+import { useDebounce } from "@/shared/hooks/useDebounce";
+import { createStoreAPI } from "@/shared/services/store.service";
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -52,27 +55,35 @@ export default function CreateProductPage() {
       name: "",
       partnerID: "",
       storeAddress: "",
-      openDay: "",
-      openTime: "",
-      closeTime: "",
-      latitude: 0,
-      longitude: 0,
+      phoneNumber: "",
+      code: "",
+      // openDay: "",
+      // openTime: "",
+      // closeTime: "",
+      // latitude: 0,
+      // longitude: 0,
     },
   });
   const [previewData, setPreviewData] = useState<StoreFormValues | null>(null);
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-    limit: 10,
-    order: "",
-    page: 1,
+    isActive: true,
     search: "",
   });
 
-  const { data: partnerList = [] } = useQuery<Partner[]>({
-    queryKey: ["users", query],
-    queryFn: () => getAllUserAPI(query),
+  const { data: partnerList = [] } = useQuery({
+    queryKey: ["partners", query],
+    queryFn: () => getAllPartnerAPI(query),
+    select: (res) => res.data as Partner[],
   });
+
+  const debouncedSearch = useDebounce(searchPartner, 500);
+
+  useEffect(() => {
+    updateQuery({
+      search: debouncedSearch || "",
+    });
+  }, [debouncedSearch]);
 
   // open map get address
   const fetchSuggestions = async (text: string) => {
@@ -86,8 +97,8 @@ export default function CreateProductPage() {
     try {
       const res = await fetch(
         `https://mapapis.openmap.vn/v1/autocomplete?text=${encodeURIComponent(
-          text
-        )}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`
+          text,
+        )}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`,
       );
 
       console.log("res", res);
@@ -109,7 +120,7 @@ export default function CreateProductPage() {
 
     try {
       const res = await fetch(
-        `https://mapapis.openmap.vn/v1/place?ids=${id}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`
+        `https://mapapis.openmap.vn/v1/place?ids=${id}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`,
       );
 
       if (!res.ok) throw new Error("Fetch place detail failed");
@@ -173,8 +184,9 @@ export default function CreateProductPage() {
   /*Select partner */
   const handleSelectPartner = (partner: Partner) => {
     form.setValue("partnerID", partner.id);
-    setSearchPartner(partner.fullName);
+    setSearchPartner(partner.companyName);
     setShowDropdownPartner(false);
+    updateQuery({ search: "" });
   };
 
   // Show confirm modal
@@ -186,16 +198,21 @@ export default function CreateProductPage() {
   const handleConfirmCreate = useCallback(async () => {
     if (!previewData) return;
 
+    console.log("previewData", previewData);
     setIsLoading(true);
     try {
-      const imageUrl = imageFile
-        ? await uploadFileToCloudinary(imageFile, "store")
-        : null;
+      // const imageUrl = imageFile
+      //   ? await uploadFileToCloudinary(imageFile, "store")
+      //   : null;
+
+      const res = await createStoreAPI(previewData);
+
+      console.log("res", res);
 
       toast.success(
         locale === "vi"
           ? "Tạo cửa hàng thành công"
-          : "Store created successfully"
+          : "Store created successfully",
       );
 
       form.reset();
@@ -206,7 +223,7 @@ export default function CreateProductPage() {
       setOpenVerifyCreateForm(false);
     } catch (error) {
       toast.error(
-        locale === "vi" ? "Tạo cửa hàng thất bại" : "Failed to create store"
+        locale === "vi" ? "Tạo cửa hàng thất bại" : "Failed to create store",
       );
     } finally {
       setIsLoading(false);
@@ -304,8 +321,8 @@ export default function CreateProductPage() {
                   )}
                 </div>
               </div>
-
               {/*end img */}
+
               <div className="flex items-center gap-3">
                 <FormFieldCustom
                   name="name"
@@ -334,15 +351,17 @@ export default function CreateProductPage() {
                   {showDropdownPartner && (
                     <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-[200px] overflow-auto">
                       {partnerList.length > 0 ? (
-                        partnerList.map((user) => (
+                        partnerList.map((partner) => (
                           <li
-                            key={user.id}
-                            onMouseDown={() => handleSelectPartner(user)}
+                            key={partner.id}
+                            onMouseDown={() => handleSelectPartner(partner)}
                             className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-gray-700"
                           >
-                            <div className="font-medium">{user.fullName}</div>
+                            <div className="font-medium">
+                              {partner.companyName}
+                            </div>
                             <div className="text-xs text-gray-500">
-                              {user.email}
+                              {partner.email}
                             </div>
                           </li>
                         ))
@@ -430,20 +449,20 @@ export default function CreateProductPage() {
                         className="px-3 py-2 hover:bg-muted cursor-pointer"
                         onClick={async () => {
                           const detail = await fetchPlaceDetail(
-                            item.properties.id
+                            item.properties.id,
                           );
 
                           if (!detail) return;
 
                           const { lat, lng, address } = detail;
                           form.setValue("storeAddress", address);
-                          form.setValue("latitude", lat);
-                          form.setValue("longitude", lng);
+                          // form.setValue("latitude", lat);
+                          // form.setValue("longitude", lng);
 
                           window.dispatchEvent(
                             new CustomEvent("map:flyTo", {
                               detail: { lat, lng },
-                            })
+                            }),
                           );
 
                           setSuggestions([]);

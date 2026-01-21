@@ -17,6 +17,7 @@ import {
   Receipt,
   ClipboardList,
   Award,
+  Warehouse,
 } from "lucide-react";
 
 // Admin
@@ -47,6 +48,12 @@ export const AdminSidebarNested = [
       { title: "userAccounts", url: "/admin/users", icon: User },
       { title: "staffAccounts", url: "/admin/staffs", icon: UserStar },
       { title: "partnerAccounts", url: "/admin/partners", icon: Users },
+    ],
+  },
+  {
+    label: "warehouseManagement",
+    sub: [
+      { title: "warehouse", url: "/admin/stores", icon: Warehouse },
     ],
   },
   {

@@ -11,6 +11,10 @@ import { ProductStatus } from "@/shared/enums/product-status.enum";
 import { PRODUCT_STATUS_OPTIONS } from "@/shared/constants/product-status";
 import { STORE_STATUS_OPTIONS } from "@/shared/constants/store-status";
 import { useRouter } from "next/navigation";
+import {
+  formatStoreStatusColor,
+  formatStoreStatusText,
+} from "@/shared/utils/formatStatus";
 
 interface StoreGridViewProps {
   storeList: Store[];
@@ -22,11 +26,6 @@ function StoreGridView({ storeList, isLoading, children }: StoreGridViewProps) {
   const router = useRouter();
   const tStatus = useTranslations("status.stores");
   const tButton = useTranslations("admin.button");
-
-  const statusOptions = STORE_STATUS_OPTIONS.map((status) => ({
-    value: status.value,
-    label: tStatus(status.label),
-  }));
 
   return (
     <div className="container mx-auto py-10">
@@ -101,8 +100,8 @@ function StoreGridView({ storeList, isLoading, children }: StoreGridViewProps) {
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-500">Address</span>
-                          <span className="font-medium text-gray-900 truncate">
-                            {store.address}
+                          <span className="font-medium text-gray-900 truncate w-[150px]">
+                            {store?.storeAddress}
                           </span>
                         </div>
                       </div>
@@ -116,7 +115,7 @@ function StoreGridView({ storeList, isLoading, children }: StoreGridViewProps) {
                        bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700"
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
-                      {store?.status}
+                      {formatStoreStatusText(store?.isActive)}
                     </span>
                   </div>
 

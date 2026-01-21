@@ -28,7 +28,7 @@ function StoreActionCell({ id }: { id: string }) {
 }
 
 export const getStoreColumns = (
-  t: (key: string) => string
+  t: (key: string) => string,
 ): ColumnDef<Store>[] => [
   {
     accessorFn: (row) => row.images?.[0],
@@ -44,14 +44,32 @@ export const getStoreColumns = (
   {
     accessorKey: "name",
     header: t("name"),
+    cell: ({ row }) => {
+      const { name, partnerId } = row.original as {
+        name: string;
+        partnerId: string;
+      };
+
+      return (
+        <div>
+          <p>{name}</p>
+          <p>{partnerId}</p>
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "address",
+    accessorKey: "storeAddress",
     header: t("address"),
-  },
-  {
-    accessorKey: "rating",
-    header: t("rating"),
+    cell: ({ row }) => {
+      const storeAddress = row.getValue("storeAddress") as string;
+
+      return (
+        <div className="w-[200px]">
+          <p className="text-sm text-gray-700 line-clamp-2">{storeAddress}</p>
+        </div>
+      );
+    },
   },
 
   {

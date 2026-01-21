@@ -18,7 +18,7 @@ interface ConfirmPopupProps {
   setOpenVerifyCreateForm: Dispatch<SetStateAction<boolean>>;
   imagePreview: string | null;
   previewData: StoreFormValues | null;
-  handleConfirmCreate: () => void;
+  handleConfirmUpdate: () => void;
   isLoading: boolean;
 }
 
@@ -27,7 +27,7 @@ function ConfirmPopup({
   setOpenVerifyCreateForm,
   imagePreview,
   previewData,
-  handleConfirmCreate,
+  handleConfirmUpdate,
   isLoading,
 }: ConfirmPopupProps) {
   const tButton = useTranslations("admin.button");
@@ -59,7 +59,7 @@ function ConfirmPopup({
           <div className="p-5 space-y-4">
             {/* Name & Rating */}
             <div className="space-y-1">
-              <h3 className="text-xl font-bold">Deer Coffee</h3>
+              <h3 className="text-xl font-bold">{previewData?.name}</h3>
             </div>
 
             {/* Divider */}
@@ -70,9 +70,7 @@ function ConfirmPopup({
               {/* Address */}
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
-                <p className="leading-snug">
-                  123 Đường ABC, Quận 1, TP. Hồ Chí Minh
-                </p>
+                <p className="leading-snug">{previewData.storeAddress}</p>
               </div>
 
               {/* Time */}
@@ -91,7 +89,7 @@ function ConfirmPopup({
               <div className="space-y-1 text-sm">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Mail className="w-4 h-4" />
-                  <span className="text-xs">nguyenngocthach2301@gmail.com</span>
+                  <span className="text-xs">{previewData.partnerID}</span>
                 </div>
               </div>
             </div>
@@ -107,7 +105,7 @@ function ConfirmPopup({
             </Button>
 
             <Button
-              onClick={handleConfirmCreate}
+              onClick={handleConfirmUpdate}
               disabled={isLoading}
               className="btn-primary-gradient"
             >

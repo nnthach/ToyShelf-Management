@@ -22,11 +22,7 @@ type FilterBarProps = {
   showStatus?: boolean;
   showOrder?: boolean;
   onSearch: (val: string) => void;
-  onApplyFilter: (val: {
-    status?: boolean;
-    order?: string;
-    limit?: number;
-  }) => void;
+  onApplyFilter: (val: { isActive?: boolean; order?: string }) => void;
   onReset: () => void;
 };
 
@@ -53,36 +49,30 @@ export default function FilterSearch({
   }, [debouncedSearch]);
 
   const [tempFilter, setTempFilter] = useState<{
-    status: "" | "true" | "false";
+    isActive?: boolean;
     order: string;
-    limit: number;
   }>({
-    status:
-      query.status === true ? "true" : query.status === false ? "false" : "",
+    isActive: undefined,
     order: query.order ?? "",
-    limit: query.limit ?? 10,
   });
 
   const isFiltered =
     query.search ||
     (showOrder && query.order !== "") ||
-    (showStatus && typeof query.status === "boolean");
+    (showStatus && query.isActive !== undefined);
 
   const handleApply = () => {
     onApplyFilter({
-      status:
-        tempFilter.status === "" ? undefined : tempFilter.status === "true",
+      isActive: tempFilter.isActive,
       order: tempFilter.order || undefined,
-      limit: tempFilter.limit,
     });
   };
 
   const handleResetAll = () => {
     setSearchInput("");
     setTempFilter({
-      status: "",
+      isActive: undefined,
       order: "",
-      limit: 10,
     });
     onReset();
   };
@@ -127,15 +117,22 @@ export default function FilterSearch({
                 <Label>{tFilter("status")}</Label>
                 <select
                   className="border rounded-md h-9 px-2"
-                  value={tempFilter.status}
+                  value={
+                    tempFilter.isActive === undefined
+                      ? "all"
+                      : String(tempFilter.isActive)
+                  }
                   onChange={(e) =>
                     setTempFilter((p) => ({
                       ...p,
-                      status: e.target.value as "" | "true" | "false",
+                      isActive:
+                        e.target.value === "all"
+                          ? undefined
+                          : e.target.value === "true",
                     }))
                   }
                 >
-                  <option value="">{tCommon("all")}</option>
+                  <option value="all">{tCommon("all")}</option>
                   <option value="true">{tStatus("active")}</option>
                   <option value="false">{tStatus("inactive")}</option>
                 </select>

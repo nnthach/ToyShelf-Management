@@ -4,6 +4,7 @@ import { Button } from "@/shared/styles/components/ui/button";
 import {
   ArrowLeft,
   Box,
+  Check,
   Clock,
   Edit,
   Mail,
@@ -24,12 +25,13 @@ import ViewEverydayReportSheet from "./components/ViewEverydayReportSheet";
 import ViewStoreProductSheet from "./components/ViewStoreProductSheet";
 import ViewStoreFeedbackSheet from "./components/ViewStoreFeedbackSheet";
 import ViewStoreStaffSheet from "./components/ViewStoreStaffSheet";
-
-type ViewStoreDetailPageProps = {
-  params: {
-    id: string;
-  };
-};
+import { useQuery } from "@tanstack/react-query";
+import { getStoreDetailAPI } from "@/shared/services/store.service";
+import LoadingPageComponent from "@/shared/components/LoadingPageComponent";
+import {
+  formatStoreStatusColor,
+  formatStoreStatusText,
+} from "@/shared/utils/formatStatus";
 
 interface StatCardProps {
   title: string;
@@ -71,6 +73,19 @@ export default function ViewStoreDetailPage() {
   const tAdminButton = useTranslations("admin.stores.viewStore.button");
   const tFields = useTranslations("partner.stores.fields");
   const tColumnTable = useTranslations("admin.tableColumn");
+
+  const { data: storeDetail, isLoading } = useQuery({
+    queryKey: ["store", id],
+    queryFn: () => getStoreDetailAPI(id!),
+    select: (res) => res.data,
+    enabled: !!id,
+  });
+
+  if (!id) return null;
+
+  if (isLoading) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <>
@@ -129,6 +144,30 @@ export default function ViewStoreDetailPage() {
               {tAdminButton("feedbackList")}
             </Button>
           </ViewStoreFeedbackSheet>
+
+          <Button
+            className="btn-primary-gradient"
+            onClick={() => router.push(`/admin/stores/${id}/edit`)}
+          >
+            <Check className="h-4 w-4" />
+            {tButton("edit")}
+          </Button>
+
+          <Button
+            className="btn-primary-gradient"
+            onClick={() => router.push(`/admin/stores/${id}/edit`)}
+          >
+            <Check className="h-4 w-4" />
+            {tButton("disable")}
+          </Button>
+
+          <Button
+            className="btn-primary-gradient"
+            onClick={() => router.push(`/admin/stores/${id}/edit`)}
+          >
+            <Check className="h-4 w-4" />
+            {tButton("restore")}
+          </Button>
         </div>
       </div>
 
@@ -165,10 +204,10 @@ export default function ViewStoreDetailPage() {
             </div>
 
             {/* Content */}
-            <div className="p-5 space-y-4">
+            <div className="p-5 py-3 space-y-2">
               {/* Name & Rating */}
               <div className="space-y-1">
-                <h3 className="text-xl font-bold">Deer Coffee</h3>
+                <h3 className="text-xl font-bold">{storeDetail?.name}</h3>
 
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1 text-yellow-500">
@@ -182,8 +221,10 @@ export default function ViewStoreDetailPage() {
                   </span>
 
                   {/* Status Badge */}
-                  <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                    Đang hoạt động
+                  <span
+                    className={`ml-auto text-xs px-2 py-0.5 rounded-full ${formatStoreStatusColor(storeDetail?.isActive)} `}
+                  >
+                    {formatStoreStatusText(storeDetail?.isActive)}
                   </span>
                 </div>
               </div>
@@ -196,9 +237,7 @@ export default function ViewStoreDetailPage() {
                 {/* Address */}
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
-                  <p className="leading-snug">
-                    123 Đường ABC, Quận 1, TP. Hồ Chí Minh
-                  </p>
+                  <p className="leading-snug">{storeDetail?.storeAddress}</p>
                 </div>
 
                 {/* Time */}
@@ -218,9 +257,7 @@ export default function ViewStoreDetailPage() {
                 <div className="space-y-1 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Mail className="w-4 h-4" />
-                    <span className="text-xs">
-                      nguyenngocthach2301@gmail.com
-                    </span>
+                    <span className="text-xs">{storeDetail?.partnerId}</span>
                   </div>
                 </div>
               </div>

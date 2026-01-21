@@ -10,12 +10,13 @@ import { useMemo, useState } from "react";
 import { cn } from "@/shared/styles/lib/utils";
 import StoreListView from "./components/StoreView/StoreListView";
 import StoreGridView from "./components/StoreView/StoreGridView";
-import { getAllStores } from "@/shared/services/store.service";
 import { StoreFakeData } from "@/shared/constants/fakeData";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import useFetchList from "@/shared/hooks/useFetchList";
 import { Store } from "@/shared/types";
 import FilterSearch from "./components/FilterSearch";
+import { useQuery } from "@tanstack/react-query";
+import { getAllStoreAPI } from "@/shared/services/store.service";
 
 export default function AdminStoreManage() {
   const router = useRouter();
@@ -25,21 +26,18 @@ export default function AdminStoreManage() {
   const [productView, setProductView] = useState<"list" | "grid">("grid");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
+    isActive: undefined,
     order: "",
     search: "",
   });
 
-  const debouncedSearch = useDebounce(query.search, 500);
-  const debouncedQuery = useMemo(
-    () => ({ ...query, search: debouncedSearch }),
-    [query, debouncedSearch]
-  );
+  const { data: storeList = [], isLoading } = useQuery({
+    queryKey: ["stores", query],
+    queryFn: () => getAllStoreAPI(query),
+    select: (res) => res.data as Store[],
+  });
 
-  const { data: storeList = [], loading } = useFetchList<Store[], QueryParams>(
-    getAllStores,
-    debouncedQuery
-  );
+  console.log("store list", storeList);
 
   return (
     <>
@@ -69,7 +67,7 @@ export default function AdminStoreManage() {
                 "flex items-center gap-2 rounded-md px-4 py-2 text-sm transition-all hover:text-blue-400 dark:hover:text-white",
                 productView === "grid"
                   ? "bg-white dark:bg-sidebar text-blue-600 shadow dark:bg-white dark:text-black"
-                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700"
+                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700",
               )}
             >
               <LayoutGrid className="h-4 w-4" />
@@ -84,7 +82,7 @@ export default function AdminStoreManage() {
                 "flex items-center gap-2 rounded-md p-2 text-sm transition-all hover:text-blue-400 dark:hover:text-white",
                 productView === "list"
                   ? "bg-white dark:bg-sidebar text-blue-600 shadow dark:bg-white dark:text-black"
-                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700"
+                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700",
               )}
             >
               <List />
@@ -95,10 +93,10 @@ export default function AdminStoreManage() {
 
       {/*Table */}
       {productView === "list" ? (
-        <StoreListView storeList={StoreFakeData ?? []} isLoading={false}>
+        <StoreListView storeList={storeList ?? []} isLoading={isLoading}>
           <FilterSearch
             query={query}
-            loading={loading}
+            loading={isLoading}
             resultCount={storeList.length}
             onSearch={(val) => updateQuery({ search: val })}
             onApplyFilter={(filter) =>
@@ -110,10 +108,10 @@ export default function AdminStoreManage() {
           />
         </StoreListView>
       ) : (
-        <StoreGridView storeList={StoreFakeData ?? []} isLoading={false}>
+        <StoreGridView storeList={storeList ?? []} isLoading={isLoading}>
           <FilterSearch
             query={query}
-            loading={loading}
+            loading={isLoading}
             resultCount={storeList.length}
             onSearch={(val) => updateQuery({ search: val })}
             onApplyFilter={(filter) =>

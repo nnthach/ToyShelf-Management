@@ -20,36 +20,30 @@ export const formatUserStatusColor = (status: boolean) => {
   }
 };
 
-export const formatStoreStatusText = (status: string) => {
-  switch (status) {
-    case "INACTIVE":
-      return "In Active";
-    case "ACTIVE":
+export const formatStoreStatusText = (isActive: boolean) => {
+  switch (isActive) {
+    case false:
+      return "Inactive";
+    case true:
       return "Active";
-    case "CLOSED":
-      return "Closed";
   }
 };
 
-export const formatStoreStatusColor = (status: string) => {
-  switch (status) {
-    case "INACTIVE":
+export const formatStoreStatusColor = (isActive: boolean) => {
+  switch (isActive) {
+    case false:
       return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
-    case "ACTIVE":
+    case true:
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
-    case "CLOSED":
-      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
   }
 };
 
-export const formatCabinetStatusText = (status: string) => {
-  switch (status) {
-    case "MAINTENANCE":
-      return "Maintenance";
-    case "AVAILABLE":
+export const formatCabinetStatusText = (isActive: boolean) => {
+  switch (isActive) {
+    case false:
+      return "Inactive";
+    case true:
       return "Active";
-    case "DISABLED":
-      return "Disabled";
   }
 };
 
