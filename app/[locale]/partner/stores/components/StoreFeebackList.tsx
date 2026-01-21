@@ -97,7 +97,7 @@ const StoreFeedbackList = () => {
         </PopoverContent>
       </Popover>
       {/* LIST */}
-      <ScrollArea className="h-[300px] mt-4">
+      <ScrollArea className="h-[240px] mt-4">
         <div className="flex flex-col gap-3">
           {feedbacks.map((f) => (
             <Card

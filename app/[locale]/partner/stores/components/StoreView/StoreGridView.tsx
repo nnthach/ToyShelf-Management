@@ -1,66 +1,36 @@
 import FilterSearchBar from "@/shared/components/FilterSearchBar";
 import { Button } from "@/shared/styles/components/ui/button";
-import { Store } from "@/shared/types";
+import { Product, Store } from "@/shared/types";
 import { QueryParams } from "@/shared/types/SubType";
 import { Download, Eye, Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { ChangeEvent } from "react";
+import React, { ChangeEvent } from "react";
+import ViewDetailSheet from "../ViewDetailSheet";
 import ProductCardSkeleton from "@/shared/components/ProductCardSkeleton";
+import { ProductStatus } from "@/shared/enums/product-status.enum";
+import { PRODUCT_STATUS_OPTIONS } from "@/shared/constants/product-status";
 import { STORE_STATUS_OPTIONS } from "@/shared/constants/store-status";
 import { useRouter } from "next/navigation";
+import {
+  formatStoreStatusColor,
+  formatStoreStatusText,
+} from "@/shared/utils/formatStatus";
 
 interface StoreGridViewProps {
   storeList: Store[];
   isLoading: boolean;
-  tempFilter: {
-    order: string;
-    status: string;
-    limit: number;
-  };
-  handleChangeFilter: (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => void;
-  handleLimitChange: (value: number) => void;
-  handleApplyFilters: () => void;
-  query: QueryParams;
-  updateQuery: (newQuery: Partial<QueryParams>) => void;
-  handleResetAllQueryParams: () => void;
+  children: React.ReactNode;
 }
 
-function StoreGridView({
-  storeList,
-  isLoading,
-  tempFilter,
-  handleChangeFilter,
-  handleLimitChange,
-  handleApplyFilters,
-  query,
-  updateQuery,
-  handleResetAllQueryParams,
-}: StoreGridViewProps) {
+function StoreGridView({ storeList, isLoading, children }: StoreGridViewProps) {
+  const router = useRouter();
   const tStatus = useTranslations("status.stores");
   const tButton = useTranslations("admin.button");
-
-  const router = useRouter();
-
-  const statusOptions = STORE_STATUS_OPTIONS.map((status) => ({
-    value: status.value,
-    label: tStatus(status.label),
-  }));
 
   return (
     <div className="container mx-auto py-10">
       <div className="mb-4 p-4 border-b flex justify-between items-center bg-white dark:bg-sidebar rounded-xl">
-        <FilterSearchBar
-          tempFilter={tempFilter}
-          onFilterChange={handleChangeFilter}
-          onLimitChange={handleLimitChange}
-          onApplyFilters={handleApplyFilters}
-          query={{ search: query.search || "" }}
-          updateQuery={updateQuery}
-          selectStatusData={statusOptions}
-          reset={handleResetAllQueryParams}
-        />
+        {children}
         <div className="space-x-3">
           <Button>
             <Download /> {tButton("import")}
@@ -73,7 +43,7 @@ function StoreGridView({
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
         {isLoading
-          ? Array.from({ length: tempFilter.limit || 8 }).map((_, i) => (
+          ? Array.from({ length: 8 }).map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))
           : storeList.map((store) => {
@@ -98,17 +68,15 @@ function StoreGridView({
                     </div>
 
                     {/* Eye button */}
-                    {/* <ViewDetailSheet store={store}> */}
                     <Button
                       variant="outline"
                       size="icon"
                       className="absolute top-2 right-2 z-20
                opacity-0 group-hover:opacity-100 transition"
-                      onClick={() => router.push(`/partner/stores/${store.id}`)}
+                      onClick={() => router.push(`/admin/stores/${store.id}`)}
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
-                    {/* </ViewDetailSheet> */}
 
                     {/* Hover info */}
                     <div
@@ -132,8 +100,8 @@ function StoreGridView({
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-500">Address</span>
-                          <span className="font-medium text-gray-900 truncate">
-                            {store.address}
+                          <span className="font-medium text-gray-900 truncate w-[150px]">
+                            {store?.storeAddress}
                           </span>
                         </div>
                       </div>
@@ -147,7 +115,7 @@ function StoreGridView({
                        bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700"
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
-                      {store?.status}
+                      {formatStoreStatusText(store?.isActive)}
                     </span>
                   </div>
 

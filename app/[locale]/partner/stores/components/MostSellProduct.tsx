@@ -15,14 +15,14 @@ const MostSellProduct = () => {
   const t = useTranslations("home");
 
   return (
-    <Card className="flex flex-col h-full border-none p-0 max-w-sm shadow-none">
-      <CardHeader className="p-0">
+    <Card className="flex flex-col h-full border-none p-0 max-w-sm shadow-none gap-3">
+      <CardHeader className="p-0 gap-1">
         <CardTitle className="text-lg font-bold">Most Sell Product</CardTitle>
         <CardDescription className="text-sm text-muted-foreground">
           The product sells the most in this month
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-0 flex flex-col gap-2">
+      <CardContent className="p-0 flex flex-col gap-1">
         <div className="relative w-full aspect-4/3 rounded-md overflow-hidden">
           <Image
             src="https://dddn.1cdn.vn/2020/08/03/diendandoanhnghiep.vn-media-uploaded-493-2020-07-28-_ven6oi9tabzmnhzp3atbcx-enternews-1595875625.jpg"

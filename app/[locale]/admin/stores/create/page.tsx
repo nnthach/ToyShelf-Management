@@ -505,7 +505,7 @@ export default function CreateProductPage() {
           setOpenVerifyCreateForm={setOpenVerifyCreateForm}
           previewData={previewData}
           imagePreview={imagePreview}
-          handleConfirmCreate={handleConfirmCreate}
+          handleConfirmCreateOrUpdate={handleConfirmCreate}
         />
       )}
     </>

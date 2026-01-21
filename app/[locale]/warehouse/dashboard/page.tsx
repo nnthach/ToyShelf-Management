@@ -5,7 +5,6 @@ import { PieChartExample } from "./components/charts/PieChart";
 import MostSellStore from "./components/MostSellStore";
 import BadFeedBackStore from "./components/BadFeedbackStore";
 import FeedbackList from "./components/FeedbackList";
-import StoreMap from "./components/StoreMap";
 
 export default function AdminDashboard() {
   return (
@@ -14,7 +13,7 @@ export default function AdminDashboard() {
         <h1>Dashboard</h1>
       </div>
       <div className="bg-background rounded-lg col-span-3 h-[50vh] w-full">
-        <StoreMap />
+        alo
       </div>
       <div className="bg-background p-4 rounded-lg lg:col-span-2 xl:col-span-1 2xl:col-span-2 min-h-[50vh]">
         <AreaChartExample />

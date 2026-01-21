@@ -84,14 +84,14 @@ export const getStoreColumns = (
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "isActive",
     header: t("status"),
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
+      const isActive = row.getValue("isActive") as boolean;
 
       return (
-        <span className={`${formatStoreStatusColor(status)}`}>
-          {formatStoreStatusText(status)}
+        <span className={`${formatStoreStatusColor(isActive)}`}>
+          {formatStoreStatusText(isActive)}
         </span>
       );
     },

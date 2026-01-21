@@ -521,7 +521,7 @@ export default function EditStPage() {
           setOpenVerifyCreateForm={setOpenVerifyCreateForm}
           previewData={previewData}
           imagePreview={imagePreview}
-          handleConfirmUpdate={handleConfirmUpdate}
+          handleConfirmCreateOrUpdate={handleConfirmUpdate}
         />
       )}
     </>

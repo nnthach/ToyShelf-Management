@@ -1,31 +1,21 @@
 "use client";
 
-import {
-  ArrowDown,
-  ArrowUp,
-  Download,
-  LayoutGrid,
-  List,
-  Plus,
-} from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { LayoutGrid, List, Plus } from "lucide-react";
 import { QueryParams } from "@/shared/types/SubType";
 import { useTranslations } from "next-intl";
 import useQueryParams from "@/shared/hooks/useQueryParams";
-import { getAllProducts } from "@/shared/services/product.service";
-import { useFilterSearchBar } from "@/shared/hooks/useFilterSearchBar";
 import { Button } from "@/shared/styles/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import {  useState } from "react";
 import { cn } from "@/shared/styles/lib/utils";
-import ProductListView from "./components/StoreView/StoreListView";
-import ProductGridView from "./components/StoreView/StoreGridView";
 import StoreListView from "./components/StoreView/StoreListView";
 import StoreGridView from "./components/StoreView/StoreGridView";
-import { getAllStores } from "@/shared/services/store.service";
-import { StoreFakeData } from "@/shared/constants/fakeData";
+import { Store } from "@/shared/types";
+import FilterSearch from "./components/FilterSearch";
+import { useQuery } from "@tanstack/react-query";
+import { getAllStoreAPI } from "@/shared/services/store.service";
 
-export default function AdminStoreManage() {
+export default function PartnerStoreManage() {
   const router = useRouter();
   const t = useTranslations("admin.stores");
   const tButton = useTranslations("admin.button");
@@ -33,47 +23,18 @@ export default function AdminStoreManage() {
   const [productView, setProductView] = useState<"list" | "grid">("grid");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-    limit: 10,
+    isActive: undefined,
     order: "",
-    page: 1,
     search: "",
   });
 
-  const { data, isLoading } = useQuery({
+  const { data: storeList = [], isLoading } = useQuery({
     queryKey: ["stores", query],
-    queryFn: () => getAllStores(query),
+    queryFn: () => getAllStoreAPI(query),
+    select: (res) => res.data as Store[],
   });
 
-  const {
-    filters: tempFilter,
-    setFilters: setTempFilter,
-    handleChange: handleChangeFilter,
-    resetFilter,
-  } = useFilterSearchBar({
-    order: "",
-    status: "",
-    limit: 10,
-  });
-
-  const handleLimitChange = (value: number) => {
-    setTempFilter((prev) => ({ ...prev, limit: value }));
-  };
-
-  // Bấm Apply mới cập nhật
-  const handleApplyFilters = () => {
-    updateQuery({
-      status: tempFilter.status,
-      order: tempFilter.order,
-      limit: tempFilter.limit,
-      page: 1,
-    });
-  };
-
-  const handleResetAllQueryParams = () => {
-    resetFilter();
-    resetQuery();
-  };
+  console.log("store list", storeList);
 
   return (
     <>
@@ -103,12 +64,11 @@ export default function AdminStoreManage() {
                 "flex items-center gap-2 rounded-md px-4 py-2 text-sm transition-all hover:text-blue-400 dark:hover:text-white",
                 productView === "grid"
                   ? "bg-white dark:bg-sidebar text-blue-600 shadow dark:bg-white dark:text-black"
-                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700"
+                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700",
               )}
             >
               <LayoutGrid className="h-4 w-4" />
             </Button>
-
             {/* List view */}
             <Button
               type="button"
@@ -119,7 +79,7 @@ export default function AdminStoreManage() {
                 "flex items-center gap-2 rounded-md p-2 text-sm transition-all hover:text-blue-400 dark:hover:text-white",
                 productView === "list"
                   ? "bg-white dark:bg-sidebar text-blue-600 shadow dark:bg-white dark:text-black"
-                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700"
+                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700",
               )}
             >
               <List />
@@ -130,31 +90,35 @@ export default function AdminStoreManage() {
 
       {/*Table */}
       {productView === "list" ? (
-        <StoreListView
-          storeList={StoreFakeData ?? []}
-          // isLoading={isLoading}
-          isLoading={false}
-          tempFilter={tempFilter}
-          handleChangeFilter={handleChangeFilter}
-          handleLimitChange={handleLimitChange}
-          handleApplyFilters={handleApplyFilters}
-          query={query}
-          updateQuery={updateQuery}
-          handleResetAllQueryParams={handleResetAllQueryParams}
-        />
+        <StoreListView storeList={storeList ?? []} isLoading={isLoading}>
+          <FilterSearch
+            query={query}
+            loading={isLoading}
+            resultCount={storeList.length}
+            onSearch={(val) => updateQuery({ search: val })}
+            onApplyFilter={(filter) =>
+              updateQuery({
+                ...filter,
+              })
+            }
+            onReset={() => resetQuery()}
+          />
+        </StoreListView>
       ) : (
-        <StoreGridView
-          storeList={StoreFakeData ?? []}
-          isLoading={false}
-          // isLoading={isLoading}
-          tempFilter={tempFilter}
-          handleChangeFilter={handleChangeFilter}
-          handleLimitChange={handleLimitChange}
-          handleApplyFilters={handleApplyFilters}
-          query={query}
-          updateQuery={updateQuery}
-          handleResetAllQueryParams={handleResetAllQueryParams}
-        />
+        <StoreGridView storeList={storeList ?? []} isLoading={isLoading}>
+          <FilterSearch
+            query={query}
+            loading={isLoading}
+            resultCount={storeList.length}
+            onSearch={(val) => updateQuery({ search: val })}
+            onApplyFilter={(filter) =>
+              updateQuery({
+                ...filter,
+              })
+            }
+            onReset={() => resetQuery()}
+          />
+        </StoreGridView>
       )}
     </>
   );

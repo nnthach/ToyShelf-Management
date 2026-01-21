@@ -1,23 +1,34 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Product, Store, User } from "@/shared/types";
+import { Store } from "@/shared/types";
 
-import ViewDetailSheet from "./components/ViewDetailSheet";
 import {
   formatStoreStatusColor,
   formatStoreStatusText,
-  formatUserStatusColor,
-  formatUserStatusText,
 } from "@/shared/utils/formatStatus";
-import { formatDateTime } from "@/shared/utils/format";
 import { Eye } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
+function StoreActionCell({ id }: { id: string }) {
+  const router = useRouter();
+
+  return (
+    <button
+      onClick={() => router.push(`/admin/stores/${id}`)}
+      title="Detail"
+      className="text-blue-500 hover:text-blue-700"
+    >
+      <Eye size={18} />
+    </button>
+  );
+}
+
 export const getStoreColumns = (
-  t: (key: string) => string
+  t: (key: string) => string,
 ): ColumnDef<Store>[] => [
   {
     accessorFn: (row) => row.images?.[0],
@@ -33,14 +44,32 @@ export const getStoreColumns = (
   {
     accessorKey: "name",
     header: t("name"),
+    cell: ({ row }) => {
+      const { name, partnerId } = row.original as {
+        name: string;
+        partnerId: string;
+      };
+
+      return (
+        <div>
+          <p>{name}</p>
+          <p>{partnerId}</p>
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "address",
+    accessorKey: "storeAddress",
     header: t("address"),
-  },
-  {
-    accessorKey: "rating",
-    header: t("rating"),
+    cell: ({ row }) => {
+      const storeAddress = row.getValue("storeAddress") as string;
+
+      return (
+        <div className="w-[200px]">
+          <p className="text-sm text-gray-700 line-clamp-2">{storeAddress}</p>
+        </div>
+      );
+    },
   },
 
   {
@@ -55,14 +84,14 @@ export const getStoreColumns = (
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "isActive",
     header: t("status"),
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
+      const isActive = row.getValue("isActive") as boolean;
 
       return (
-        <span className={`${formatStoreStatusColor(status)}`}>
-          {formatStoreStatusText(status)}
+        <span className={`${formatStoreStatusColor(isActive)}`}>
+          {formatStoreStatusText(isActive)}
         </span>
       );
     },
@@ -72,13 +101,7 @@ export const getStoreColumns = (
     header: t("action"),
     cell: ({ row }) => {
       const store = row.original;
-      return (
-        <ViewDetailSheet store={store}>
-          <span title="Detail" className="cursor-pointer text-blue-400">
-            <Eye />
-          </span>
-        </ViewDetailSheet>
-      );
+      return <StoreActionCell id={store.id} />;
     },
   },
 ];

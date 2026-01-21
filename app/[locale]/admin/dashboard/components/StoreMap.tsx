@@ -6,6 +6,10 @@ import { StoreFakeData } from "@/shared/constants/fakeData";
 import "./StoreMap.css";
 import { Store } from "@/shared/types";
 import { useTheme } from "next-themes";
+import { useQuery } from "@tanstack/react-query";
+import useQueryParams from "@/shared/hooks/useQueryParams";
+import { QueryParams } from "@/shared/types/SubType";
+import { getAllStoreAPI } from "@/shared/services/store.service";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || "";
 
@@ -15,6 +19,18 @@ function StoreMap() {
   const [selectStore, setSelectStore] = useState<Store | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
+    isActive: undefined,
+    order: "",
+    search: "",
+  });
+
+  const { data: storeList = [], isLoading } = useQuery({
+    queryKey: ["stores", query],
+    queryFn: () => getAllStoreAPI(query),
+    select: (res) => res.data as Store[],
+  });
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -50,7 +66,7 @@ function StoreMap() {
   useEffect(() => {
     if (!mapRef.current) return;
 
-    const storeMarkers = StoreFakeData.map((store) => {
+    const storeMarkers = storeList.map((store) => {
       const storeIcon = document.createElement("div");
       storeIcon.className = "store-marker";
 
@@ -91,7 +107,7 @@ function StoreMap() {
               {selectStore.name}
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-300 mt-1 line-clamp-2">
-              {selectStore.address}
+              {selectStore.storeAddress}
             </p>
           </div>
 

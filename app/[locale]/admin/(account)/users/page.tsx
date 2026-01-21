@@ -8,10 +8,6 @@ import { getAllUserAPI } from "../../../../../shared/services/user.service";
 import useQueryParams from "../../../../../shared/hooks/useQueryParams";
 import { getUserColumns } from "./columns";
 import { useTranslations } from "next-intl";
-import { useDebounce } from "@/shared/hooks/useDebounce";
-import { useMemo } from "react";
-import useFetchList from "@/shared/hooks/useFetchList";
-import { User } from "@/shared/types";
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
 

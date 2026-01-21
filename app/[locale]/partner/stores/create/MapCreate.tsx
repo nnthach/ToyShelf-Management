@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
+import { useTheme } from "next-themes";
 
 interface FlyToPayload {
   lat: number;
@@ -15,12 +16,17 @@ function MapCreate() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const markerRef = useRef<mapboxgl.Marker | null>(null);
 
+  const { theme } = useTheme();
+
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/standard",
+      style:
+        theme === "dark"
+          ? "mapbox://styles/mapbox/navigation-night-v1"
+          : "mapbox://styles/mapbox/standard",
       center: [106.7009, 10.7769], // default VN
       zoom: 10,
     });
@@ -47,6 +53,18 @@ function MapCreate() {
       mapRef.current?.remove();
     };
   }, []);
+
+  // map theme
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const style =
+      theme === "dark"
+        ? "mapbox://styles/mapbox/navigation-night-v1"
+        : "mapbox://styles/mapbox/standard";
+
+    mapRef.current.setStyle(style);
+  }, [theme]);
 
   return (
     <div className="relative w-full h-full">
