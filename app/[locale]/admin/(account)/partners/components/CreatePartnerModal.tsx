@@ -1,4 +1,10 @@
+"use client";
 import { PARTNER_LEVEL_OPTIONS } from "@/shared/constants/partner-level";
+import {
+  PartnerFormValues,
+  partnerSchema,
+} from "@/shared/schemas/partner.schema";
+import { createPartnerAPI } from "@/shared/services/partner.service";
 import { FormFieldCustom } from "@/shared/styles/components/custom/FormFieldCustom";
 import { Button } from "@/shared/styles/components/ui/button";
 import {
@@ -11,44 +17,56 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/styles/components/ui/dialog";
-import { SelectOption } from "@/shared/types/SubType";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import z from "zod";
+import { toast } from "react-toastify";
 
 function CreatePartnerModal() {
+  const locale = useLocale();
   const tButton = useTranslations("admin.button");
   const tStatus = useTranslations("status.partner");
   const tCommon = useTranslations("common");
-  const tFields = useTranslations("partner.fields");
+  const tFields = useTranslations("admin.partners.fields");
   const tCreatePartner = useTranslations("admin.partners.createPartner");
+  const queryClient = useQueryClient();
 
-  const formSchema = z.object({
-    fullname: z
-      .string("")
-      .min(1, `${tFields("fullname")} ${tCommon("isRequired")}`),
-    adminOfStore: z
-      .string("")
-      .min(1, `${tFields("adminOfStore")} ${tCommon("isRequired")}`),
-    partnerLevel: z
-      .string("")
-      .min(1, `${tFields("partnerLevel")} ${tCommon("isRequired")}`),
-  });
+  const [open, setOpen] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<PartnerFormValues>({
+    resolver: zodResolver(partnerSchema),
     defaultValues: {
-      fullname: "",
-      adminOfStore: "",
-      partnerLevel: "",
+      companyName: "",
+      tier: "",
+      revenueSharePercent: 0,
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    console.log("partner dâta", data);
+  async function onSubmit(data: PartnerFormValues) {
+    try {
+      await createPartnerAPI(data);
+
+      queryClient.invalidateQueries({
+        queryKey: ["partners"],
+      });
+
+      form.reset();
+      toast.success(
+        locale === "vi"
+          ? "Tạo đối tác thành công"
+          : "Create partner successfully!",
+      );
+
+      setOpen(false);
+    } catch (error) {
+      console.log("create partner err", error);
+      toast.error(
+        locale === "vi" ? "Tạo đối tác thất bại" : "Failed to create partner",
+      );
+    }
   }
 
   const partnerLevelOption = PARTNER_LEVEL_OPTIONS.map((option) => ({
@@ -56,10 +74,18 @@ function CreatePartnerModal() {
     label: tStatus(option.label),
   }));
 
+  const revenueOption = [
+    { value: 5, label: "5%" },
+    { value: 10, label: "10%" },
+    { value: 15, label: "15%" },
+  ];
+
   return (
     <Dialog
-      onOpenChange={(open) => {
-        if (!open) {
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+        if (!value) {
           form.reset();
         }
       }}
@@ -87,26 +113,24 @@ function CreatePartnerModal() {
             >
               <div className="grid grid-cols-2 gap-3">
                 <FormFieldCustom
-                  name="fullname"
-                  label={tFields("fullname")}
-                  placeholder={tFields("fullname")}
+                  name="companyName"
+                  label={tFields("companyName.label")}
+                  placeholder={tFields("companyName.label")}
                 />
                 <FormFieldCustom
-                  name="partnerLevel"
-                  label={tFields("partnerLevel")}
-                  placeholder={`${tCommon("select")} ${tFields(
-                    "partnerLevel"
-                  )}`}
+                  name="tier"
+                  label={tFields("tier.label")}
+                  placeholder={`${tCommon("select")} ${tFields("tier.label")}`}
                   type="select"
                   selectData={partnerLevelOption}
                 />
               </div>
               <FormFieldCustom
-                name="adminOfStore"
-                label={tFields("adminOfStore")}
-                placeholder={`${tCommon("select")} ${tFields("adminOfStore")}`}
+                name="revenueSharePercent"
+                label={tFields("revenueSharePercent.label")}
+                placeholder={`${tCommon("select")} ${tFields("revenueSharePercent.label")}`}
                 type="select"
-                selectData={partnerLevelOption}
+                selectData={revenueOption}
               />
             </form>
           </FormProvider>
@@ -114,7 +138,11 @@ function CreatePartnerModal() {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" form="form-create-partner">
+            <Button
+              type="submit"
+              form="form-create-partner"
+              // disabled={createPartnerMutation.isPending}
+            >
               {tButton("publish")}
             </Button>
           </DialogFooter>

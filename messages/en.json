@@ -95,6 +95,32 @@
           "header": "Partner Overview"
         }
       },
+      "fields": {
+        "isActive": {
+          "label": "Status",
+          "required": "Status is required"
+        },
+        "fullName": {
+          "label": "Full name",
+          "required": "Full name is required"
+        },
+        "createdAt": {
+          "label": "Created At"
+        },
+        "action": "Action",
+        "companyName": {
+          "label": "Company name",
+          "required": "Company name is required"
+        },
+        "tier": {
+          "label": "Tier",
+          "required": "Tier is required"
+        },
+        "revenueSharePercent": {
+          "label": "Revenue Share Percent",
+          "required": "Revenue share percent is required"
+        }
+      },
       "header": "Partner Management"
     },
     "partnerLevel": {
@@ -251,7 +277,7 @@
         "application": "Application",
         "products": "Products Management",
         "orders": "Orders Management",
-
+        "staffManagement": "Staff Management",
         "storeManagement": "Store Management",
         "otherManagement": "Other Management"
       }

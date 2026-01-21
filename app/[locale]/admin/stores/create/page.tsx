@@ -23,8 +23,8 @@ import {
   PlaceDetail,
   QueryParams,
 } from "@/shared/types/SubType";
-import { getAllUsers } from "@/shared/services/user.service";
 import { Partner, User } from "@/shared/types";
+import { getAllUserAPI } from "@/shared/services/user.service";
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -69,9 +69,9 @@ export default function CreateProductPage() {
     search: "",
   });
 
-  const { data: partnerList = [] } = useQuery<User[]>({
+  const { data: partnerList = [] } = useQuery<Partner[]>({
     queryKey: ["users", query],
-    queryFn: () => getAllUsers(query),
+    queryFn: () => getAllUserAPI(query),
   });
 
   // open map get address

@@ -95,7 +95,9 @@ export function FormFieldCustom({
 }: FormFieldProps) {
   const { control } = useFormContext();
 
+  const t = useTranslations();
   const tCommon = useTranslations("common");
+
   return (
     <FieldGroup>
       <Controller
@@ -129,7 +131,16 @@ export function FormFieldCustom({
               )}
             </div>
 
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
+            {fieldState.error && (
+              <FieldError
+                errors={[
+                  {
+                    ...fieldState.error,
+                    message: t(fieldState.error.message ?? ""),
+                  },
+                ]}
+              />
+            )}
           </Field>
         )}
       />

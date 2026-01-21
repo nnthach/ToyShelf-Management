@@ -43,7 +43,7 @@ const AdminSidebar = () => {
         {/* <SidebarMenu className="h-full"> */}
         {/* <SidebarMenuItem> */}
         {/* <SidebarMenuButton asChild> */}
-        <Link href={"/"} className="p-2 flex items-center gap-2">
+        <Link href={"/admin/dashboard"} className="p-2 flex items-center gap-2">
           <div className="relative w-[50px] h-[50px]">
             <Image
               src="/images/finallogo.png"

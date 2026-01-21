@@ -84,20 +84,36 @@ export const PartnerAdminSidebarGroups = [
   {
     label: "application",
     items: [
-      { title: "dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
+      { title: "dashboard", url: "/partner/dashboard", icon: LayoutDashboard },
       { title: "notifications", url: "#", icon: Bell, badge: true },
       { title: "settings", url: "#", icon: Settings },
     ],
+  },
+  {
+    label: "staffManagement",
+    items: [{ title: "staffAccounts", url: "/partner/staffs", icon: UserStar }],
+  },
+  {
+    label: "products",
+    items: [{ title: "products", url: "/partner/products", icon: Package }],
+  },
+
+  {
+    label: "orders",
+    items: [{ title: "orders", url: "/partner/orders", icon: ClipboardList }],
   },
 ];
 
 export const PartnerAdminSidebarNested = [
   {
-    label: "accountManagement",
-    sub: [{ title: "staffAccounts", url: "/partner/staffs", icon: UserStar }],
+    label: "storeManagement",
+    sub: [
+      { title: "stores", url: "/partner/stores", icon: Store },
+      { title: "cabinets", url: "/partner/cabinets", icon: Server },
+    ],
   },
   {
-    label: "storeManagement",
+    label: "requestManagement",
     sub: [
       { title: "stores", url: "/partner/stores", icon: Store },
       { title: "cabinets", url: "/partner/cabinets", icon: Server },

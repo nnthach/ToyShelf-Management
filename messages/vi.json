@@ -98,6 +98,32 @@
           "header": "Tổng quan đối tác"
         }
       },
+      "fields": {
+        "isActive": {
+          "label": "Trạng thái",
+          "required": "Trạng thái bắt buộc"
+        },
+        "fullName": {
+          "label": "Tên đầy đủ",
+          "required": "Tên đầy đủ bắt buộc"
+        },
+        "createdAt": {
+          "label": "Ngày tạo"
+        },
+        "action": "Hành động",
+        "companyName": {
+          "label": "Tên công ty",
+          "required": "Tên công ty bắt buộc"
+        },
+        "tier": {
+          "label": "Cấp bậc",
+          "required": "Cấp bậc bắt buộc"
+        },
+        "revenueSharePercent": {
+          "label": "Phần trăm hoa hồng",
+          "required": "Phần trăm hoa hồng bắt buộc"
+        }
+      },
       "header": "Quản lý Đối tác"
     },
 
@@ -248,7 +274,7 @@
         "application": "Ứng dụng",
         "requestManagement": "Quản lý đơn yêu cầu",
         "orders": "Quản lý đơn hàng",
-
+        "staffManagement": "Quản lý nhân viên",
         "products": "Quản lý sản phẩm",
         "storeManagement": "Quản lý cửa hàng",
         "otherManagement": "Quản lý khác"

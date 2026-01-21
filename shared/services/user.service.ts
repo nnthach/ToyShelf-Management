@@ -11,7 +11,12 @@ export const getMyProfileAPI = async () => {
   return res.data;
 };
 
-export const getAllUsers = async <T>(params: T) => {
-  const res = await api.get("/user/active", { params });
+export const getAllUserAPI = async <T>(params: T) => {
+  const res = await api.get("/user", { params });
+  return res.data;
+};
+
+export const getUserDetailAPI = async (id: string) => {
+  const res = await api.get(`/user/${id}`);
   return res.data;
 };

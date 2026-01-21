@@ -4,6 +4,7 @@ export interface QueryParams {
   status?: string | boolean;
   search?: string;
   order?: string;
+  isActive?: boolean;
 }
 
 export interface SelectOption {

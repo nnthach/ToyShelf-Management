@@ -5,7 +5,6 @@ import { getStaffColumns } from "./columns";
 import { Button } from "../../../../../shared/styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
 import { QueryParams } from "@/shared/types/SubType";
-import { getAllUsers } from "../../../../../shared/services/user.service";
 import useQueryParams from "../../../../../shared/hooks/useQueryParams";
 import { useTranslations } from "next-intl";
 import CreateStaffModal from "./components/CreateStaffModal";
@@ -14,6 +13,7 @@ import { User } from "@/shared/types";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import { useMemo } from "react";
 import FilterSearch from "./components/FilterSearch";
+import { getAllUserAPI } from "@/shared/services/user.service";
 
 export default function AdminUserManage() {
   const t = useTranslations("admin.staffs");
@@ -33,7 +33,7 @@ export default function AdminUserManage() {
   );
 
   const { data: staffList = [], loading } = useFetchList<User[], QueryParams>(
-    getAllUsers,
+    getAllUserAPI,
     debouncedQuery
   );
   const columns = getStaffColumns(tColumnTable);

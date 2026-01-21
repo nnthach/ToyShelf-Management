@@ -1,5 +1,5 @@
-import { QueryParams } from "@/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { QueryParams } from "../types/SubType";
 
 interface PaginationProps {
   data: unknown[];
@@ -7,7 +7,7 @@ interface PaginationProps {
   onUpdateQuery: (
     newQuery: Partial<
       Record<string, string | number | boolean | null | undefined>
-    >
+    >,
   ) => void;
   loading: boolean;
 }

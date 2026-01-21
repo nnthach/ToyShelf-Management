@@ -6,12 +6,12 @@ import { Button } from "../../../../../shared/styles/components/ui/button";
 import { ArrowDown, ArrowUp, Download, Plus, Upload } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/shared/types/SubType";
-import { getAllUsers } from "../../../../../shared/services/user.service";
 import useQueryParams from "../../../../../shared/hooks/useQueryParams";
 import FilterSearchBar from "../../../../../shared/components/FilterSearchBar";
 import { useFilterSearchBar } from "../../../../../shared/hooks/useFilterSearchBar";
 import { useTranslations } from "next-intl";
 import CreateStaffModal from "./components/CreateStaffModal";
+import { getAllUserAPI } from "@/shared/services/user.service";
 
 export default function AdminUserManage() {
   const t = useTranslations("admin.staffs");
@@ -28,7 +28,7 @@ export default function AdminUserManage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["users", query],
-    queryFn: () => getAllUsers(query),
+    queryFn: () => getAllUserAPI(query),
   });
 
   const {

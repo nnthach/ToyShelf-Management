@@ -1,12 +1,12 @@
-import { Button } from "../../../../../../shared/styles/components/ui/button";
+"use client";
+
+import { Button } from "@/shared/styles/components/ui/button";
 import {
   Card,
   CardHeader,
   CardTitle,
-} from "../../../../../../shared/styles/components/ui/card";
-import { Input } from "../../../../../../shared/styles/components/ui/input";
-import { Label } from "../../../../../../shared/styles/components/ui/label";
-import { ScrollArea } from "../../../../../../shared/styles/components/ui/scroll-area";
+} from "@/shared/styles/components/ui/card";
+import { ScrollArea } from "@/shared/styles/components/ui/scroll-area";
 import {
   Sheet,
   SheetClose,
@@ -16,22 +16,120 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../../../../../../shared/styles/components/ui/sheet";
+} from "@/shared/styles/components/ui/sheet";
 import { DollarSign, Eye, Home } from "lucide-react";
-import { User } from "@/shared/types";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getPartnerDetailAPI,
+  updatePartnerAPI,
+} from "@/shared/services/partner.service";
+import { FormProvider, useForm } from "react-hook-form";
+import {
+  PartnerFormValues,
+  partnerSchema,
+} from "@/shared/schemas/partner.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormFieldCustom } from "@/shared/styles/components/custom/FormFieldCustom";
+import { useLocale, useTranslations } from "next-intl";
+import { PARTNER_LEVEL_OPTIONS } from "@/shared/constants/partner-level";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
-function ViewDetailSheet({ user }: { user: User }) {
+type ViewDetailSheetProps = {
+  partnerId: string | null;
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+function ViewDetailSheet({ partnerId, isOpen, onClose }: ViewDetailSheetProps) {
+  const locale = useLocale();
+  const tFields = useTranslations("admin.partners.fields");
+  const tStatus = useTranslations("status.partner");
+  const tCommon = useTranslations("common");
+  const tButton = useTranslations("admin.button");
+
+  const queryClient = useQueryClient();
+
+  const { data: partnerDetail, isLoading } = useQuery({
+    queryKey: ["partner", partnerId],
+    queryFn: () => getPartnerDetailAPI(partnerId!),
+    select: (res) => res.data,
+    enabled: !!partnerId,
+  });
+
+  const form = useForm<PartnerFormValues>({
+    resolver: zodResolver(partnerSchema),
+    defaultValues: {
+      companyName: "",
+      tier: "",
+      revenueSharePercent: 0,
+    },
+  });
+
+  useEffect(() => {
+    if (partnerDetail) {
+      form.reset({
+        companyName: partnerDetail.companyName,
+        tier: partnerDetail.tier,
+        revenueSharePercent: partnerDetail.revenueSharePercent,
+      });
+    }
+  }, [partnerDetail, form]);
+
+  const partnerLevelOption = PARTNER_LEVEL_OPTIONS.map((option) => ({
+    value: option.value,
+    label: tStatus(option.label),
+  }));
+
+  const revenueOption = [
+    { value: 5, label: "5%" },
+    { value: 10, label: "10%" },
+    { value: 15, label: "15%" },
+  ];
+
+  async function onSubmit(data: PartnerFormValues) {
+    try {
+      await updatePartnerAPI(data, partnerId!);
+
+      queryClient.invalidateQueries({
+        queryKey: ["partners"],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["partner", partnerId],
+      });
+
+      form.reset();
+      toast.success(
+        locale === "vi"
+          ? "Cập nhật đối tác thành công"
+          : "Update partner successfully!",
+      );
+    } catch (error) {
+      console.log("Update partner err", error);
+      toast.error(
+        locale === "vi"
+          ? "Cập nhật đối tác thất bại"
+          : "Failed to update partner",
+      );
+    }
+  }
+
+  if (!partnerId) return null;
+
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <span title="Detail" className="cursor-pointer text-blue-400">
-          <Eye />
-        </span>
-      </SheetTrigger>
+    <Sheet
+      open={isOpen}
+      onOpenChange={(value) => {
+        if (!value) onClose();
+      }}
+    >
       <SheetContent className="w-full !max-w-[1200px]">
         <SheetHeader>
           <SheetTitle>Partner Information</SheetTitle>
-          <SheetDescription>Information about {user.email}</SheetDescription>
+          <SheetDescription>
+            Information about {partnerDetail?.email}
+          </SheetDescription>
         </SheetHeader>
         <div className="flex bg-gray-200 dark:bg-muted h-full">
           {/*Left */}
@@ -115,18 +213,39 @@ function ViewDetailSheet({ user }: { user: User }) {
           {/*Right */}
           <div className="bg-background flex-1 border-t border-border flex flex-col">
             <div className="grid flex-1 auto-rows-min gap-6 px-4 mt-4">
-              <div className="grid gap-3">
-                <Label htmlFor="sheet-demo-name">Name</Label>
-                <Input id="sheet-demo-name" defaultValue="Pedro Duarte" />
-              </div>
-              <div className="grid gap-3">
-                <Label htmlFor="sheet-demo-username">Username</Label>
-                <Input id="sheet-demo-username" defaultValue="@peduarte" />
-              </div>
+              <FormProvider {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-3"
+                  id="form-update-partner"
+                >
+                  <FormFieldCustom
+                    name="companyName"
+                    label={tFields("companyName.label")}
+                    placeholder={tFields("companyName.label")}
+                  />
+                  <FormFieldCustom
+                    name="tier"
+                    label={tFields("tier.label")}
+                    placeholder={`${tCommon("select")} ${tFields("tier.label")}`}
+                    type="select"
+                    selectData={partnerLevelOption}
+                  />
+                  <FormFieldCustom
+                    name="revenueSharePercent"
+                    label={tFields("revenueSharePercent.label")}
+                    placeholder={`${tCommon("select")} ${tFields("revenueSharePercent.label")}`}
+                    type="select"
+                    selectData={revenueOption}
+                  />
+                </form>
+              </FormProvider>
             </div>
 
             <SheetFooter>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" form="form-update-partner">
+                {tButton("saveChange")}
+              </Button>
               <SheetClose asChild>
                 <Button variant="outline">Close</Button>
               </SheetClose>

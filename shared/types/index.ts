@@ -18,9 +18,11 @@ export interface User {
 export interface Partner {
   id: string;
   email: string;
+  companyName: string;
   fullName: string;
-  role: UserRole;
-  status: UserStatus;
+  tier: string;
+  revenueSharePercent: number;
+  isActive: boolean;
   createdAt: string;
 }
 

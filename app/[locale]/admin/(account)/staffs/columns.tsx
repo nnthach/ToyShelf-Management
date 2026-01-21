@@ -13,7 +13,7 @@ import ViewDetailSheet from "./components/ViewDetailSheet";
 // You can use a Zod schema here if you want.
 
 export const getStaffColumns = (
-  t: (key: string) => string
+  t: (key: string) => string,
 ): ColumnDef<User>[] => [
   {
     accessorKey: "fullName",
@@ -28,10 +28,11 @@ export const getStaffColumns = (
     accessorKey: "workingArea",
     header: t("workingArea"),
     cell: ({ row }) => {
-      const workingArea = row.getValue("workingArea") as string;
+      // const workingArea = row.getValue("workingArea") as string;
 
       return (
-        <span className={`${formatUserStatusColor(workingArea)}`}>
+        // <span className={`${formatUserStatusColor(workingArea)}`}>
+        <span>
           {/* {formatUserStatusText(status)} */}1
         </span>
       );
@@ -41,7 +42,7 @@ export const getStaffColumns = (
     accessorKey: "status",
     header: t("status"),
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
+      const status = row.getValue("isActive") as boolean;
 
       return (
         <span className={`${formatUserStatusColor(status)}`}>

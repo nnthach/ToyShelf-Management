@@ -17,7 +17,8 @@ function StatCard({
   icon: Icon,
   color,
 }: StatCardProps) {
-  const [bgColor, textColor] = color.split(" ");
+  const safeColor = color ?? "bg-gray-100 text-gray-500";
+  const [bgColor, textColor] = safeColor.split(" ");
 
   return (
     <div className="bg-white rounded-xl border shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition">
