@@ -5,7 +5,8 @@
   "common": {
     "all": "All",
     "isRequired": "is required",
-    "select": "Select"
+    "select": "Select",
+    "map": "Map"
   },
   "form": {
     "email": "Email Address",
@@ -142,6 +143,16 @@
 
     "warehouse": {
       "header": "Warehouse Management",
+      "createWarehouse": {
+        "header": "Create Warehouse"
+      },
+      "viewWarehouse": {
+        "header": "Warehouse Information",
+        "subHeader": "Information about",
+        "viewWarehouseSheet": {
+          "header": "Warehouse Overview"
+        }
+      },
       "fields": {
         "isActive": {
           "label": "Status",

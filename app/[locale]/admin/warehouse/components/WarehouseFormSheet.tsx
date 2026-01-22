@@ -183,7 +183,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
     <div className="bg-background flex-1 border-t border-border flex flex-col">
       <div className="grid flex-1 auto-rows-min gap-6 px-4 mt-4">
         <div className="flex flex-col gap-2 mb-3">
-          <p className="text-sm font-medium">Bản đồ</p>
+          <p className="text-sm font-medium">{tCommon("map")}</p>
           <div className="w-full h-[200px]">
             <MapCreate />
           </div>

@@ -5,7 +5,8 @@
   "common": {
     "all": "Tất cả",
     "isRequired": "bắt buộc",
-    "select": "Chọn"
+    "select": "Chọn",
+    "map": "Bản đồ"
   },
   "form": {
     "email": "Địa chỉ email",
@@ -30,6 +31,10 @@
       "ACTIVE": "Hoạt động",
       "CLOSED": "Đóng cửa",
       "INACTIVE": "Ngưng họat động"
+    },
+    "isActive": {
+      "Active": "Hoạt động",
+      "Inactive": "Ngưng hoạt động"
     },
     "user": {
       "VERIFIED": "Đã xác thực",
@@ -137,6 +142,46 @@
     },
     "orders": {
       "header": "Quản lý đơn hàng"
+    },
+
+    "warehouse": {
+      "header": "Quản lý kho hàng",
+      "createWarehouse": {
+        "header": "Tạo kho hàng"
+      },
+      "viewWarehouse": {
+        "header": "Thông tin kho hàng",
+        "subHeader": "Thông tin về kho",
+        "viewWarehouseSheet": {
+          "header": "Tổng quan kho hàng"
+        }
+      },
+      "fields": {
+        "isActive": {
+          "label": "Trạng thái",
+          "required": "Trạng thái bắt buộc"
+        },
+        "name": {
+          "label": "Tên",
+          "required": "Tên bắt buộc"
+        },
+        "createdAt": {
+          "label": "Ngày tạo"
+        },
+        "action": "Hành động",
+        "address": {
+          "label": "Địa chỉ",
+          "required": "Địa chỉ bắt buộc"
+        },
+        "latitude": {
+          "label": "Kinh độ",
+          "required": "Kinh độ bắt buộc"
+        },
+        "longitude": {
+          "label": "Vĩ độ",
+          "required": "Vĩ độ bắt buộc"
+        }
+      }
     },
     "products": {
       "createProduct": {
@@ -270,7 +315,7 @@
         "productType": "Danh mục sản phẩm",
         "refillStock": "Bổ sucng hàng hóa",
         "orders": "Đơn hàng",
-        "warehouseAccounts": "Kho hàng"
+        "warehouse": "Kho hàng"
       },
       "label": {
         "accountManagement": "Quản lý tài khoản",
@@ -278,6 +323,7 @@
         "requestManagement": "Quản lý đơn yêu cầu",
         "orders": "Quản lý đơn hàng",
         "staffManagement": "Quản lý nhân viên",
+        "warehouseManagement": "Quản lý kho hàng",
         "products": "Quản lý sản phẩm",
         "storeManagement": "Quản lý cửa hàng",
         "otherManagement": "Quản lý khác"

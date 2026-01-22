@@ -9,30 +9,15 @@ import {
 import { ScrollArea } from "@/shared/styles/components/ui/scroll-area";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
 } from "@/shared/styles/components/ui/sheet";
 import { DollarSign, Home } from "lucide-react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormFieldCustom } from "@/shared/styles/components/custom/FormFieldCustom";
+import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
-import { toast } from "react-toastify";
-import { useEffect } from "react";
-import {
-  getWarehouseDetailAPI,
-  updateWarehouseAPI,
-} from "@/shared/services/warehouse.service";
-import {
-  WarehouseFormValues,
-  warehouseSchema,
-} from "@/shared/schemas/warehouse.schema";
-import { PlaceDetail } from "@/shared/types/SubType";
+import { getWarehouseDetailAPI } from "@/shared/services/warehouse.service";
 import WarehouseFormSheet from "./WarehouseFormSheet";
 import {
   formatUserStatusColor,
@@ -51,6 +36,7 @@ function ViewDetailSheet({
   onClose,
 }: ViewDetailSheetProps) {
   const locale = useLocale();
+  const t = useTranslations("admin.warehouse.viewWarehouse");
   const tFields = useTranslations("admin.warehouse.fields");
   const tStatus = useTranslations("status.isActive");
   const tCommon = useTranslations("common");
@@ -75,7 +61,7 @@ function ViewDetailSheet({
       <SheetContent className="w-full !max-w-[1200px]">
         <SheetHeader>
           <SheetTitle>
-            Warehouse Information{" "}
+            {t("header")}{" "}
             <span
               className={`text-sm pb-1 ${formatUserStatusColor(warehouseDetail?.isActive)}`}
             >
@@ -83,7 +69,7 @@ function ViewDetailSheet({
             </span>
           </SheetTitle>
           <SheetDescription>
-            Information about {warehouseDetail?.name}
+            {t("subHeader")} {warehouseDetail?.name}
           </SheetDescription>
         </SheetHeader>
         <div className="flex bg-gray-200 dark:bg-muted h-full">
@@ -166,7 +152,7 @@ function ViewDetailSheet({
           </div>
 
           {/*Right */}
-          <WarehouseFormSheet warehouse={warehouseDetail} onClose={onClose}/>
+          <WarehouseFormSheet warehouse={warehouseDetail} onClose={onClose} />
         </div>
       </SheetContent>
     </Sheet>

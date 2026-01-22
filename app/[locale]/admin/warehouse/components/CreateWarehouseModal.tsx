@@ -99,7 +99,7 @@ function CreateWarehouseModal() {
       <form>
         <DialogTrigger asChild>
           <Button className="btn-primary-gradient">
-            <Plus /> {tButton("createWarehouse")}
+            <Plus /> {tCreatePartner("header")}
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
@@ -112,7 +112,7 @@ function CreateWarehouseModal() {
           </DialogHeader>
 
           <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium">Bản đồ</p>
+            <p className="text-sm font-medium">{tCommon("map")}</p>
             <div className="w-full h-[200px]">
               <MapCreate />
             </div>
