@@ -1,7 +1,6 @@
 "use client";
 
 import useQueryParams from "@/shared/hooks/useQueryParams";
-import { getAllProductCategory } from "@/shared/services/product-category.service";
 import { useTranslations } from "next-intl";
 import { QueryParams } from "next-intl/navigation";
 import { useMemo } from "react";
@@ -14,6 +13,7 @@ import { ProductCategory } from "@/shared/types";
 import useFetchList from "@/shared/hooks/useFetchList";
 import FilterSearch from "./components/FilterSearch";
 import CreateProductCategoryModal from "./components/CreateProductPriceLevelModal";
+import { getAllProductCategoryAPI } from "@/shared/services/product-category.service";
 
 export default function AdminProductPriceLevel() {
   const t = useTranslations("admin.productPriceLevel");
@@ -35,7 +35,7 @@ export default function AdminProductPriceLevel() {
   const { data: productCategoryList = [], loading } = useFetchList<
     ProductCategory[],
     QueryParams
-  >(getAllProductCategory, debouncedQuery);
+  >(getAllProductCategoryAPI, debouncedQuery);
 
   const columns = getProductCategoryColumns(tColumnTable);
 
