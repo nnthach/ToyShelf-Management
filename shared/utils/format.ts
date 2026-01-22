@@ -21,12 +21,15 @@ export const formatDateTime = (data: string) => {
 };
 
 export const formatToSlug = (data: string) => {
-  return data
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D")
-    .trim()
-    .replace(/\s+/g, "-")
-    .toUpperCase();
+  const timestamp = Date.now();
+  return (
+    data
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D")
+      .trim()
+      .replace(/\s+/g, "-")
+      .toUpperCase() + `-${timestamp}`
+  );
 };

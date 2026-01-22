@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { Lock, MapPin, RotateCcw, Trash2 } from "lucide-react";
 import { useLocale } from "next-intl";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, memo, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useTranslations } from "use-intl";
@@ -306,4 +306,4 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
   );
 }
 
-export default WarehouseFormSheet;
+export default memo(WarehouseFormSheet);

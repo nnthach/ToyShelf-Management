@@ -87,6 +87,9 @@ export interface Warehouse {
 export interface ProductCategory {
   id: string;
   name: string;
+  description: string;
+  code: string;
+  isActive: boolean;
 }
 
 export interface ProductColor {

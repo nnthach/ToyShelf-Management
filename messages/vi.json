@@ -233,9 +233,34 @@
 
     "productCategory": {
       "createProductCategory": {
-        "header": "Thêm danh sách sản phẩm"
+        "header": "Thêm danh mục sản phẩm"
       },
-      "header": "Quản lý danh sách sản phẩm"
+      "viewProductCategory": {
+        "header": "Thông tin danh mục sản phẩm",
+        "subHeader": "Thông tin về",
+        "viewProductCategorySheet": {
+          "header": "Tổng quan danh mục"
+        }
+      },
+      "fields": {
+        "isActive": {
+          "label": "Trạng thái",
+          "required": "Trạng thái bắt buộc"
+        },
+        "name": {
+          "label": "Tên",
+          "required": "Tên bắt buộc"
+        },
+        "description": {
+          "label": "Mô tả",
+          "required": "Mô tả bắt buộc"
+        },
+        "createdAt": {
+          "label": "Ngày tạo"
+        },
+        "action": "Hành động"
+      },
+      "header": "Quản lý danh mục sản phẩm"
     },
 
     "productPriceLevel": {

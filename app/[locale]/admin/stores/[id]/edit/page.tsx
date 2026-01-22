@@ -7,14 +7,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import MapCreate from "../../create/MapCreate";
 import ConfirmPopup from "../../create/ConfirmPopup";
 import { StoreFormValues, storeSchema } from "@/shared/schemas/store.schema";
-import {
-  OpenMapFeature,
-  PlaceDetail,
-  QueryParams,
-} from "@/shared/types/SubType";
+import { QueryParams } from "@/shared/types/SubType";
 import useQueryParams from "@/shared/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
 import { getAllPartnerAPI } from "@/shared/services/partner.service";
@@ -27,6 +22,9 @@ import {
 import { toast } from "react-toastify";
 import LoadingPageComponent from "@/shared/components/LoadingPageComponent";
 import { OPEN_DAY_OPTION } from "@/shared/constants/openday-option";
+import { useMapCreate } from "@/shared/hooks/useMapCreate";
+import { formatToSlug } from "@/shared/utils/format";
+import MapCreate from "@/shared/components/MapCreate";
 
 export default function EditStPage() {
   const { id } = useParams<{ id: string }>();
@@ -36,6 +34,7 @@ export default function EditStPage() {
   const tButton = useTranslations("admin.button");
   const tFields = useTranslations("admin.stores.fields");
   const tRarelyUse = useTranslations("selectImage");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
 
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -43,11 +42,8 @@ export default function EditStPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [openVerifyCreateForm, setOpenVerifyCreateForm] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isGeocoding, setIsGeocoding] = useState(false);
   const [showDropdownPartner, setShowDropdownPartner] = useState(false);
   const [searchPartner, setSearchPartner] = useState("");
-  const [suggestions, setSuggestions] = useState<OpenMapFeature[]>([]);
 
   const { data: storeDetail } = useQuery({
     queryKey: ["store", id],
@@ -86,6 +82,16 @@ export default function EditStPage() {
     search: "",
   });
 
+  const {
+    suggestions,
+    isGeocoding,
+    isLoading,
+    setIsLoading,
+    fetchPlaceDetail,
+    fetchSuggestions,
+    setSuggestions,
+  } = useMapCreate();
+
   // support select partner
   const { data: partnerList = [] } = useQuery({
     queryKey: ["partners", query],
@@ -100,72 +106,6 @@ export default function EditStPage() {
       search: debouncedSearch || "",
     });
   }, [debouncedSearch]);
-
-  // open map get address
-  const fetchSuggestions = async (text: string) => {
-    if (text.length < 4) {
-      setSuggestions([]);
-      return;
-    }
-
-    setIsGeocoding(true);
-
-    try {
-      const res = await fetch(
-        `https://mapapis.openmap.vn/v1/autocomplete?text=${encodeURIComponent(
-          text,
-        )}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`,
-      );
-
-      console.log("res", res);
-
-      const data = await res.json();
-
-      console.log("data", data.features);
-      setSuggestions(data.features || []);
-    } finally {
-      setIsGeocoding(false);
-    }
-  };
-
-  // open map get lat long
-  const fetchPlaceDetail = async (id: string): Promise<PlaceDetail | null> => {
-    if (!id) return null;
-
-    setIsGeocoding(true);
-
-    try {
-      const res = await fetch(
-        `https://mapapis.openmap.vn/v1/place?ids=${id}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`,
-      );
-
-      if (!res.ok) throw new Error("Fetch place detail failed");
-
-      const data = await res.json();
-      const feature = data?.features?.[0];
-
-      if (!feature?.geometry?.coordinates) return null;
-
-      const [lng, lat] = feature.geometry.coordinates;
-
-      return {
-        lat,
-        lng,
-        address: feature.properties?.label ?? "",
-      };
-    } finally {
-      setIsGeocoding(false);
-    }
-  };
-
-  // support loading
-  useEffect(() => {
-    if (isLoading) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-  }, [isLoading]);
 
   /*IMAGE */
   const handleSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,6 +155,12 @@ export default function EditStPage() {
     if (!previewData) return;
 
     console.log("previewData", previewData);
+    const payload = {
+      ...previewData,
+      code: formatToSlug(previewData.name),
+    };
+    console.log("payload", payload);
+
     setIsLoading(true);
     try {
       // const imageUrl = imageFile
@@ -237,6 +183,7 @@ export default function EditStPage() {
       setImagePreview(null);
 
       setOpenVerifyCreateForm(false);
+      router.back();
     } catch (error) {
       toast.error(
         locale === "vi" ? "Tạo cửa hàng thất bại" : "Failed to create store",
@@ -433,7 +380,7 @@ export default function EditStPage() {
             <p className="text-gray-500 text-sm">{t("rightSubHeader")}</p>
           </div>
           <div className="flex flex-col gap-2 mb-3">
-            <p className="text-sm font-medium">Bản đồ</p>
+            <p className="text-sm font-medium">{tCommon("map")}</p>
             <div className="w-full h-[260px]">
               <MapCreate />
             </div>

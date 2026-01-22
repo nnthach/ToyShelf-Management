@@ -19,7 +19,8 @@
     "submit": "Submit",
     "edit": "Edit",
     "disable": "Disable",
-    "restore": "Restore"
+    "restore": "Restore",
+    "delete": "Delete"
   },
   "status": {
     "products": {
@@ -188,6 +189,31 @@
     "productCategory": {
       "createProductCategory": {
         "header": "Create Product Category"
+      },
+      "viewProductCategory": {
+        "header": "Product Category Information",
+        "subHeader": "Information about",
+        "viewProductCategorySheet": {
+          "header": "Product Category Overview"
+        }
+      },
+      "fields": {
+        "isActive": {
+          "label": "Status",
+          "required": "Status is required"
+        },
+        "name": {
+          "label": "Name",
+          "required": "Name is required"
+        },
+        "description": {
+          "label": "Description",
+          "required": "Description is required"
+        },
+        "createdAt": {
+          "label": "Created At"
+        },
+        "action": "Action"
       },
       "header": "Product Category Management"
     },
@@ -360,6 +386,7 @@
       "workingArea": "Working Area",
       "image": "Image",
       "name": "Name",
+      "title": "Title",
       "address": "Address",
       "workingTime": "Working Time",
       "rating": "Rating",
