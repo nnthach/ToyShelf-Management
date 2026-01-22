@@ -211,23 +211,86 @@
         "subHeader": "Thông tin về"
       },
       "fields": {
-        "brand": "Thương hiệu",
-        "productCategory": "Danh mục",
-        "description": "Mô tả",
-        "membershipLevel": "Cấp độ thành viên",
-        "price": "Giá",
-        "productName": "Tên sản phẩm",
-        "sku": "Mã sản phẩm",
-        "status": "Trạng thái",
-        "stock": "Hàng tồn kho",
-        "weight": "Trọng lượng",
-        "unit": "Đơn vị",
-        "productImages": "Hình ảnh sản phẩm",
-        "product3DFile": "Tệp sản phẩm 3D",
-        "size": "Kích thước",
-        "length": "Dài",
-        "width": "Rộng",
-        "height": "Cao"
+        "brand": {
+          "label": "Thương hiệu",
+          "required": "Thương hiệu là bắt buộc"
+        },
+        "material": {
+          "label": "Chất liệu",
+          "required": "Chất liệu là bắt buộc"
+        },
+        "ageRange": {
+          "label": "Độ tuổi phù hợp",
+          "required": "Độ tuổi phù hợp là bắt buộc"
+        },
+        "originCountry": {
+          "label": "Quốc gia xuất xứ",
+          "required": "Quốc gia xuất xứ là bắt buộc"
+        },
+        "productCategory": {
+          "label": "Danh mục",
+          "required": "Danh mục là bắt buộc"
+        },
+        "description": {
+          "label": "Mô tả",
+          "required": "Mô tả là bắt buộc"
+        },
+        "membershipLevel": {
+          "label": "Cấp độ thành viên",
+          "required": "Cấp độ thành viên là bắt buộc"
+        },
+        "price": {
+          "label": "Giá",
+          "required": "Giá là bắt buộc"
+        },
+        "productName": {
+          "label": "Tên sản phẩm",
+          "required": "Tên sản phẩm là bắt buộc"
+        },
+        "sku": {
+          "label": "Mã SKU",
+          "required": "Mã SKU là bắt buộc"
+        },
+        "status": {
+          "label": "Trạng thái",
+          "required": "Trạng thái là bắt buộc"
+        },
+        "stock": {
+          "label": "Số lượng tồn kho",
+          "required": "Số lượng tồn kho là bắt buộc"
+        },
+        "weight": {
+          "label": "Khối lượng",
+          "required": "Khối lượng là bắt buộc"
+        },
+        "unit": {
+          "label": "Đơn vị",
+          "required": "Đơn vị là bắt buộc"
+        },
+        "productImages": {
+          "label": "Hình ảnh sản phẩm",
+          "required": "Hình ảnh sản phẩm là bắt buộc"
+        },
+        "product3DFile": {
+          "label": "Tệp 3D sản phẩm",
+          "required": "Tệp 3D sản phẩm là bắt buộc"
+        },
+        "size": {
+          "label": "Kích thước",
+          "required": "Kích thước là bắt buộc"
+        },
+        "length": {
+          "label": "Chiều dài",
+          "required": "Chiều dài là bắt buộc"
+        },
+        "width": {
+          "label": "Chiều rộng",
+          "required": "Chiều rộng là bắt buộc"
+        },
+        "height": {
+          "label": "Chiều cao",
+          "required": "Chiều cao là bắt buộc"
+        }
       }
     },
 
@@ -363,6 +426,9 @@
     "tableColumn": {
       "action": "Hành động",
       "brand": "Thương hiệu",
+      "ageRange": "Độ tuổi",
+      "material": "Chất liệu",
+      "originCountry": "Xuất sứ",
       "category": "Danh mục",
       "createdAt": "Được tạo vào",
       "description": "Mô tả",

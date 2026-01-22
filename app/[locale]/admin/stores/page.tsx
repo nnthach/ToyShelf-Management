@@ -27,8 +27,8 @@ export default function AdminStoreManage() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: "",
-    search: "",
+    order: undefined,
+    search: undefined,
   });
 
   const { data: storeList = [], isLoading } = useQuery({

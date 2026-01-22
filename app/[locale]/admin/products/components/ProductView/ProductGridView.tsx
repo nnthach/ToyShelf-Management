@@ -4,19 +4,25 @@ import { Download, Eye, Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
 import ViewDetailSheet from "../ViewDetailSheet";
 import ProductCardSkeleton from "@/shared/components/ProductCardSkeleton";
+import {
+  formatUserStatusColor,
+  formatUserStatusText,
+} from "@/shared/utils/formatStatus";
 
 interface ProductGridViewProps {
   productList: Product[];
   isLoading: boolean;
   children: React.ReactNode;
+  handleViewDetail: (productId: string) => void;
 }
 
 function ProductGridView({
   productList,
   isLoading,
   children,
+  handleViewDetail,
 }: ProductGridViewProps) {
-  const tStatus = useTranslations("status.products");
+  const tStatus = useTranslations("status.isActive");
   const tButton = useTranslations("admin.button");
 
   return (
@@ -60,16 +66,15 @@ function ProductGridView({
                     </div>
 
                     {/* Eye button */}
-                    <ViewDetailSheet product={product}>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="absolute top-2 right-2 z-20
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="absolute top-2 right-2 z-20
                opacity-0 group-hover:opacity-100 transition"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </ViewDetailSheet>
+                      onClick={() => handleViewDetail(product.id)}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
 
                     {/* Hover info */}
                     <div
@@ -104,11 +109,11 @@ function ProductGridView({
                   {/* Status */}
                   <div className="mb-2">
                     <span
-                      className="inline-flex items-center gap-1 rounded-full
-                       bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700"
+                      className={` ${formatUserStatusColor(product?.isActive)} inline-flex items-center gap-1 rounded-full
+                       bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700`}
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
-                      Published
+                      {tStatus(formatUserStatusText(product?.isActive))}
                     </span>
                   </div>
 

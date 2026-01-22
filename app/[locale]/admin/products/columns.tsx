@@ -1,21 +1,20 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Product, User } from "@/shared/types";
-
-import ViewDetailSheet from "./components/ViewDetailSheet";
+import { Product } from "@/shared/types";
 import {
   formatUserStatusColor,
   formatUserStatusText,
 } from "@/shared/utils/formatStatus";
-import { formatDateTime } from "@/shared/utils/format";
 import { Eye } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export const getProductColumns = (
-  t: (key: string) => string
+  t: (key: string) => string,
+  tStatus: (key: string) => string,
+  onViewDetail: (productId: string) => void,
 ): ColumnDef<Product>[] => [
   {
     accessorFn: (row) => row.images?.[0],
@@ -33,12 +32,17 @@ export const getProductColumns = (
     header: t("sku"),
   },
   {
-    accessorKey: "title",
+    accessorKey: "name",
     header: t("productName"),
   },
   {
-    accessorKey: "category",
+    accessorKey: "productCategoryId",
     header: t("category"),
+  },
+
+  {
+    accessorKey: "ageRange",
+    header: t("ageRange"),
   },
 
   {
@@ -46,14 +50,14 @@ export const getProductColumns = (
     header: t("price"),
   },
   {
-    accessorKey: "status",
+    accessorKey: "isActive",
     header: t("status"),
     cell: ({ row }) => {
-      const status = row.getValue("status") as boolean;
+      const status = row.getValue("isActive") as boolean;
 
       return (
         <span className={`${formatUserStatusColor(status)}`}>
-          {formatUserStatusText(status)}
+          {tStatus(formatUserStatusText(status))}
         </span>
       );
     },
@@ -64,11 +68,13 @@ export const getProductColumns = (
     cell: ({ row }) => {
       const product = row.original;
       return (
-        <ViewDetailSheet product={product}>
-          <span title="Detail" className="cursor-pointer text-blue-400">
-            <Eye />
-          </span>
-        </ViewDetailSheet>
+        <span
+          onClick={() => onViewDetail(product?.id)}
+          title="Detail"
+          className="cursor-pointer text-blue-400"
+        >
+          <Eye />
+        </span>
       );
     },
   },

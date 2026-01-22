@@ -1,56 +1,97 @@
 "use client";
+import LoadingPageComponent from "@/shared/components/LoadingPageComponent";
 import { ProductCategoryData } from "@/shared/constants/fakeData";
+import {
+  ProductBrandOption,
+  ProductMaterialOption,
+} from "@/shared/constants/product-option";
+import {
+  ProductFormValues,
+  productSchema,
+} from "@/shared/schemas/product.schema";
+import { getAllProductCategoryAPI } from "@/shared/services/product-category.service";
+import {
+  getProductDetailAPI,
+  updateProductAPI,
+} from "@/shared/services/product.service";
 import { FormFieldCustom } from "@/shared/styles/components/custom/FormFieldCustom";
 import ModelThreeDPreview from "@/shared/styles/components/custom/ModelThreeDPreview";
 import { Button } from "@/shared/styles/components/ui/button";
+import { ProductCategory } from "@/shared/types";
 import { SelectOption } from "@/shared/types/SubType";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Check, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useParams, useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import z from "zod";
+import ConfirmPopup from "../../create/ConfirmPopup";
 
-type EditProductPageProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default function EditProductPage({ params }: EditProductPageProps) {
-  const { id } = params;
+export default function EditProductPage() {
+  const { id } = useParams<{ id: string }>();
 
   const router = useRouter();
   const t = useTranslations("admin.products.editProduct");
   const tButton = useTranslations("admin.button");
   const tFields = useTranslations("admin.products.fields");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
 
   const threeDInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   const [threeDPreview, setThreeDPreview] = useState<string | null>(null);
   const [threeDFile, setThreeDFile] = useState<File | null>(null);
-
   const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [previewData, setPreviewData] = useState<ProductFormValues | null>(
+    null,
+  );
+  const [openVerifyCreateForm, setOpenVerifyCreateForm] = useState(false);
 
-  const formSchema = z.object({
-    name: z.string(""),
-    description: z.string(""),
-    categoryId: z.string(""),
-    weight: z.number().optional(),
-    unit: z.string().optional(),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ProductFormValues>({
+    resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
       description: "",
-      categoryId: "",
-      weight: 0,
-      unit: "",
+      productCategoryId: "",
+      price: 0,
+      brand: "",
+      material: "",
+      originCountry: "",
+      ageRange: "",
     },
+  });
+
+  const { data: productDetail, isLoading: loadingFetchProduct } = useQuery({
+    queryKey: ["product", id],
+    queryFn: () => getProductDetailAPI(id!),
+    select: (res) => res.data,
+    enabled: !!id,
+  });
+
+  useEffect(() => {
+    if (productDetail) {
+      form.reset({
+        name: productDetail.name,
+        description: productDetail.description,
+        productCategoryId: productDetail.productCategoryId,
+        price: productDetail.price,
+        brand: productDetail.brand,
+        material: productDetail.material,
+        originCountry: productDetail.originCountry,
+        ageRange: productDetail.ageRange,
+      });
+    }
+  }, [productDetail, form]);
+
+  const { data: categoryList = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({}),
+    select: (res) => res.data as ProductCategory[],
   });
 
   const handleRemoveThreeD = (e: React.MouseEvent) => {
@@ -82,21 +123,65 @@ export default function EditProductPage({ params }: EditProductPageProps) {
     setImageFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    console.log("3d url", threeDPreview);
-    console.log("3d file", threeDFile);
-    console.log("image files:", imageFiles);
-    console.log(data);
+  function onSubmit(data: ProductFormValues) {
+    setPreviewData(data);
+    setOpenVerifyCreateForm(true);
   }
 
-  const categoryOptions: SelectOption[] = ProductCategoryData.map((c) => ({
+  const handleConfirmUpdate = useCallback(async () => {
+    if (!previewData) return;
+
+    console.log("preview data", previewData);
+
+    setIsLoading(true);
+    try {
+      // const imagesUrl = imageFiles
+      //   ? await uploadFileToCloudinary(imageFiles, "product")
+      //   : null;
+
+      // const threeDUrl = threeDFile
+      //   ? await uploadFileToCloudinary(threeDFile, "product")
+      //   : null;
+
+      // console.log("threeDUrl products url", threeDUrl);
+      await updateProductAPI(previewData, id);
+
+      toast.success(
+        locale === "vi"
+          ? "Cập nhật sản phẩm thành công"
+          : "Product updated successfully",
+      );
+
+      form.reset();
+      setPreviewData(null);
+      setImageFiles([]);
+
+      setOpenVerifyCreateForm(false);
+      router.back();
+    } catch (error) {
+      toast.error(
+        locale === "vi"
+          ? "Cập nhật sản phẩm thất bại"
+          : "Failed to update product",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, [previewData, imageFiles, form]);
+
+  const categoryOptions: SelectOption[] = categoryList.map((c) => ({
     value: c.id,
     label: c.name,
   }));
 
+  if (loadingFetchProduct) {
+    <LoadingPageComponent />;
+  }
+
   return (
     <>
+      {isLoading && <LoadingPageComponent />}
+
       {/*Header */}
       <div className="flex items-center justify-between">
         {/*Left */}
@@ -143,27 +228,90 @@ export default function EditProductPage({ params }: EditProductPageProps) {
               <div className="grid grid-cols-2 gap-3">
                 <FormFieldCustom
                   name="name"
-                  label={tFields("productName")}
-                  placeholder="Product name"
+                  label={tFields("productName.label")}
+                  placeholder={tFields("productName.label")}
                 />
                 <FormFieldCustom
-                  name="categoryId"
-                  label={tFields("productCategory")}
-                  placeholder="Select a category"
+                  name="productCategoryId"
+                  label={tFields("productCategory.label")}
+                  placeholder={`${tCommon("select")} ${tFields("productCategory.label")}`}
                   type="select"
                   selectData={categoryOptions}
                 />
               </div>
-              <FormFieldCustom
-                name="weight"
-                label={tFields("weight")}
-                placeholder={tFields("weight")}
-                type="number"
-              />
+              <div className="grid grid-cols-3 gap-3">
+                <FormFieldCustom
+                  name="price"
+                  label={tFields("price.label")}
+                  placeholder={tFields("price.label")}
+                  type="number"
+                />
+                <FormFieldCustom
+                  name="size"
+                  label={tFields("size.label")}
+                  placeholder={`${tCommon("select")} ${tFields("size.label")}`}
+                  type="select"
+                  selectData={categoryOptions}
+                />
+                <FormFieldCustom
+                  name="weight"
+                  label={tFields("weight.label")}
+                  placeholder={`${tCommon("select")} ${tFields("weight.label")}`}
+                  labelNote="(gram)"
+                  type="number"
+                />
+                <FormFieldCustom
+                  name="material"
+                  label={tFields("material.label")}
+                  placeholder={`${tCommon("select")} ${tFields("material.label")}`}
+                  type="select"
+                  selectData={ProductMaterialOption}
+                />
+                <FormFieldCustom
+                  name="brand"
+                  label={tFields("brand.label")}
+                  placeholder={`${tCommon("select")} ${tFields("brand.label")}`}
+                  type="select"
+                  selectData={ProductBrandOption}
+                />
+                <FormFieldCustom
+                  name="originCountry"
+                  label={tFields("originCountry.label")}
+                  placeholder={tFields("originCountry.label")}
+                />
+                <FormFieldCustom
+                  name="ageRange"
+                  label={tFields("ageRange.label")}
+                  placeholder={tFields("ageRange.label")}
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <FormFieldCustom
+                  name="Length"
+                  label={tFields("length.label")}
+                  placeholder={tFields("length.label")}
+                  labelNote="(cm)"
+                  type="number"
+                />
+                <FormFieldCustom
+                  name="width"
+                  label={tFields("width.label")}
+                  placeholder={tFields("width.label")}
+                  labelNote="(cm)"
+                  type="number"
+                />
+                <FormFieldCustom
+                  name="height"
+                  label={tFields("height.label")}
+                  labelNote="(cm)"
+                  placeholder={tFields("height.label")}
+                  type="number"
+                />
+              </div>
               <FormFieldCustom
                 name="description"
-                label={tFields("description")}
-                placeholder={tFields("description")}
+                label={tFields("description.label")}
+                placeholder={tFields("description.label")}
                 type="textarea"
               />
             </form>
@@ -182,7 +330,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
             {/* 3D Preview */}
             <div className="flex flex-col gap-2">
               <span className="text-sm font-medium">
-                {tFields("product3DFile")}
+                {tFields("product3DFile.label")}
               </span>
 
               <input
@@ -243,7 +391,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
             {/* Image Upload */}
             <div className="flex flex-col gap-2">
               <span className="text-sm font-medium">
-                {tFields("productImages")} ({t("maxLengthImages")})
+                {tFields("productImages.label")} ({t("maxLengthImages")})
               </span>
 
               <input
@@ -300,6 +448,18 @@ export default function EditProductPage({ params }: EditProductPageProps) {
           </div>
         </div>
       </div>
+
+      {openVerifyCreateForm && (
+        <ConfirmPopup
+          isLoading={isLoading}
+          openVerifyCreateForm={openVerifyCreateForm}
+          setOpenVerifyCreateForm={setOpenVerifyCreateForm}
+          previewData={previewData}
+          threeDPreview={threeDPreview}
+          imagePreview={imageFiles}
+          handleConfirmCreate={handleConfirmUpdate}
+        />
+      )}
     </>
   );
 }

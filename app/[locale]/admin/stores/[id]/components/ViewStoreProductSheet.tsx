@@ -16,7 +16,6 @@ import {
 } from "@/shared/styles/components/ui/card";
 import { DollarSign } from "lucide-react";
 import { DataTable } from "@/shared/styles/components/ui/data-table";
-import { ProductFakeData } from "@/shared/constants/fakeData";
 import { useState } from "react";
 import { Product } from "@/shared/types";
 import { getProductColumns } from "./ProductColumn";
@@ -72,17 +71,17 @@ function ViewStoreProductSheet({ children }: { children: React.ReactNode }) {
                   <p className="font-semibold">
                     Products{" "}
                     <span className="text-gray-500">
-                      ({ProductFakeData.length})
+                      product list
                     </span>
                   </p>
                 </div>
 
                 {/* List */}
-                <DataTable
+                {/* <DataTable
                   columns={columns}
                   data={ProductFakeData}
                   pageSize={6}
-                />
+                /> */}
               </div>
             </div>
           </div>

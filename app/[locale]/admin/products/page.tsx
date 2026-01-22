@@ -4,7 +4,6 @@ import { LayoutGrid, List, Plus } from "lucide-react";
 import { QueryParams } from "@/shared/types/SubType";
 import { useTranslations } from "next-intl";
 import useQueryParams from "@/shared/hooks/useQueryParams";
-import { getAllProducts } from "@/shared/services/product.service";
 import { Button } from "@/shared/styles/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -15,30 +14,36 @@ import { Product } from "@/shared/types";
 import useFetchList from "@/shared/hooks/useFetchList";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 import FilterSearch from "./components/FilterSearch";
+import { getAllProductAPI } from "@/shared/services/product.service";
+import { useQuery } from "@tanstack/react-query";
+import { getProductColumns } from "./columns";
+import ViewDetailSheet from "./components/ViewDetailSheet";
 
 export default function AdminProductManage() {
   const router = useRouter();
   const t = useTranslations("admin.products");
   const tButton = useTranslations("admin.button");
+  const tColumnTable = useTranslations("admin.tableColumn");
 
   const [productView, setProductView] = useState<"list" | "grid">("list");
 
+  const [selectedProductId, setSelectProductId] = useState<string | null>(null);
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-    order: "",
-    search: "",
+    isActive: undefined,
+    order: undefined,
+    search: undefined,
   });
 
-  const debouncedSearch = useDebounce(query.search, 500);
-  const debouncedQuery = useMemo(
-    () => ({ ...query, search: debouncedSearch }),
-    [query, debouncedSearch]
-  );
+  const { data: productList = [], isLoading } = useQuery({
+    queryKey: ["products", query],
+    queryFn: () => getAllProductAPI(query),
+    select: (res) => res.data,
+  });
 
-  const { data: productList = [], loading } = useFetchList<
-    Product[],
-    QueryParams
-  >(getAllProducts, debouncedQuery);
+  const handleViewDetail = (productId: string) => {
+    setSelectProductId(productId);
+  };
 
   return (
     <>
@@ -68,7 +73,7 @@ export default function AdminProductManage() {
                 "flex items-center gap-2 rounded-md p-2 text-sm transition-all hover:text-blue-400 dark:hover:text-white",
                 productView === "list"
                   ? "bg-white dark:bg-sidebar text-blue-600 shadow dark:bg-white dark:text-black"
-                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700"
+                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700",
               )}
             >
               <List />
@@ -84,7 +89,7 @@ export default function AdminProductManage() {
                 "flex items-center gap-2 rounded-md px-4 py-2 text-sm transition-all hover:text-blue-400 dark:hover:text-white",
                 productView === "grid"
                   ? "bg-white dark:bg-sidebar text-blue-600 shadow dark:bg-white dark:text-black"
-                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700"
+                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700",
               )}
             >
               <LayoutGrid className="h-4 w-4" />
@@ -95,10 +100,14 @@ export default function AdminProductManage() {
 
       {/*Table */}
       {productView === "list" ? (
-        <ProductListView productList={productList ?? []} isLoading={loading}>
+        <ProductListView
+          handleViewDetail={handleViewDetail}
+          productList={productList ?? []}
+          isLoading={isLoading}
+        >
           <FilterSearch
             query={query}
-            loading={loading}
+            loading={isLoading}
             resultCount={productList.length}
             onSearch={(val) => updateQuery({ search: val })}
             onApplyFilter={(filter) =>
@@ -110,10 +119,14 @@ export default function AdminProductManage() {
           />
         </ProductListView>
       ) : (
-        <ProductGridView productList={productList ?? []} isLoading={loading}>
+        <ProductGridView
+          productList={productList ?? []}
+          isLoading={isLoading}
+          handleViewDetail={handleViewDetail}
+        >
           <FilterSearch
             query={query}
-            loading={loading}
+            loading={isLoading}
             resultCount={productList.length}
             onSearch={(val) => updateQuery({ search: val })}
             onApplyFilter={(filter) =>
@@ -125,6 +138,12 @@ export default function AdminProductManage() {
           />
         </ProductGridView>
       )}
+
+      <ViewDetailSheet
+        productId={selectedProductId}
+        isOpen={!!selectedProductId}
+        onClose={() => setSelectProductId(null)}
+      />
     </>
   );
 }

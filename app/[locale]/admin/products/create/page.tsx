@@ -18,12 +18,21 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import ConfirmPopup from "./ConfirmPopup";
 import LoadingPageComponent from "@/shared/components/LoadingPageComponent";
+import { createProductAPI } from "@/shared/services/product.service";
+import { getAllProductCategoryAPI } from "@/shared/services/product-category.service";
+import { useQuery } from "@tanstack/react-query";
+import { ProductCategory } from "@/shared/types";
+import {
+  ProductBrandOption,
+  ProductMaterialOption,
+} from "@/shared/constants/product-option";
 
 export default function CreateProductPage() {
   const router = useRouter();
   const t = useTranslations("admin.products.createProduct");
   const tButton = useTranslations("admin.button");
   const tFields = useTranslations("admin.products.fields");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
 
   const threeDInputRef = useRef<HTMLInputElement>(null);
@@ -44,14 +53,18 @@ export default function CreateProductPage() {
       name: "",
       description: "",
       productCategoryId: "",
-      weight: 0,
-      width: 0,
-      length: 0,
-      height: 0,
-      size: "",
-      unit: "",
-      color: [],
+      price: 0,
+      brand: "",
+      material: "",
+      originCountry: "",
+      ageRange: "",
     },
+  });
+
+  const { data: categoryList = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({}),
+    select: (res) => res.data as ProductCategory[],
   });
 
   const handleRemoveThreeD = (e: React.MouseEvent) => {
@@ -84,7 +97,6 @@ export default function CreateProductPage() {
   };
 
   function onSubmit(data: ProductFormValues) {
-    console.log("alo");
     setPreviewData(data);
     setOpenVerifyCreateForm(true);
   }
@@ -92,17 +104,20 @@ export default function CreateProductPage() {
   const handleConfirmCreate = useCallback(async () => {
     if (!previewData) return;
 
+    console.log("preview data", previewData);
+
     setIsLoading(true);
     try {
-      const imagesUrl = imageFiles
-        ? await uploadFileToCloudinary(imageFiles, "product")
-        : null;
+      // const imagesUrl = imageFiles
+      //   ? await uploadFileToCloudinary(imageFiles, "product")
+      //   : null;
 
-      const threeDUrl = threeDFile
-        ? await uploadFileToCloudinary(threeDFile, "product")
-        : null;
+      // const threeDUrl = threeDFile
+      //   ? await uploadFileToCloudinary(threeDFile, "product")
+      //   : null;
 
-      console.log("threeDUrl products url", threeDUrl);
+      // console.log("threeDUrl products url", threeDUrl);
+      await createProductAPI(previewData);
 
       toast.success(
         locale === "vi"
@@ -124,7 +139,7 @@ export default function CreateProductPage() {
     }
   }, [previewData, imageFiles, form]);
 
-  const categoryOptions: SelectOption[] = ProductCategoryData.map((c) => ({
+  const categoryOptions: SelectOption[] = categoryList.map((c) => ({
     value: c.id,
     label: c.name,
   }));
@@ -179,13 +194,13 @@ export default function CreateProductPage() {
               <div className="grid grid-cols-2 gap-3">
                 <FormFieldCustom
                   name="name"
-                  label={tFields("productName")}
-                  placeholder={tFields("productName")}
+                  label={tFields("productName.label")}
+                  placeholder={tFields("productName.label")}
                 />
                 <FormFieldCustom
                   name="productCategoryId"
-                  label={tFields("productCategory")}
-                  placeholder="Select a category"
+                  label={tFields("productCategory.label")}
+                  placeholder={`${tCommon("select")} ${tFields("productCategory.label")}`}
                   type="select"
                   selectData={categoryOptions}
                 />
@@ -193,51 +208,76 @@ export default function CreateProductPage() {
               <div className="grid grid-cols-3 gap-3">
                 <FormFieldCustom
                   name="price"
-                  label={tFields("price")}
-                  placeholder={tFields("price")}
+                  label={tFields("price.label")}
+                  placeholder={tFields("price.label")}
+                  type="number"
                 />
                 <FormFieldCustom
                   name="size"
-                  label={tFields("size")}
-                  placeholder="Select a size"
+                  label={tFields("size.label")}
+                  placeholder={`${tCommon("select")} ${tFields("size.label")}`}
                   type="select"
                   selectData={categoryOptions}
                 />
                 <FormFieldCustom
                   name="weight"
-                  label={tFields("weight")}
+                  label={tFields("weight.label")}
+                  placeholder={`${tCommon("select")} ${tFields("weight.label")}`}
                   labelNote="(gram)"
-                  placeholder={tFields("weight")}
                   type="number"
+                />
+                <FormFieldCustom
+                  name="material"
+                  label={tFields("material.label")}
+                  placeholder={`${tCommon("select")} ${tFields("material.label")}`}
+                  type="select"
+                  selectData={ProductMaterialOption}
+                />
+                <FormFieldCustom
+                  name="brand"
+                  label={tFields("brand.label")}
+                  placeholder={`${tCommon("select")} ${tFields("brand.label")}`}
+                  type="select"
+                  selectData={ProductBrandOption}
+                />
+                <FormFieldCustom
+                  name="originCountry"
+                  label={tFields("originCountry.label")}
+                  placeholder={tFields("originCountry.label")}
+                />
+                <FormFieldCustom
+                  name="ageRange"
+                  label={tFields("ageRange.label")}
+                  placeholder={tFields("ageRange.label")}
                 />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <FormFieldCustom
                   name="Length"
-                  label={tFields("length")}
+                  label={tFields("length.label")}
+                  placeholder={tFields("length.label")}
                   labelNote="(cm)"
-                  placeholder={tFields("weight")}
                   type="number"
                 />
                 <FormFieldCustom
                   name="width"
-                  label={tFields("width")}
+                  label={tFields("width.label")}
+                  placeholder={tFields("width.label")}
                   labelNote="(cm)"
-                  placeholder={tFields("width")}
                   type="number"
                 />
                 <FormFieldCustom
                   name="height"
-                  label={tFields("height")}
+                  label={tFields("height.label")}
                   labelNote="(cm)"
-                  placeholder={tFields("height")}
+                  placeholder={tFields("height.label")}
                   type="number"
                 />
               </div>
               <FormFieldCustom
                 name="description"
-                label={tFields("description")}
-                placeholder={tFields("description")}
+                label={tFields("description.label")}
+                placeholder={tFields("description.label")}
                 type="textarea"
               />
             </form>
@@ -256,7 +296,7 @@ export default function CreateProductPage() {
             {/* 3D Preview */}
             <div className="flex flex-col gap-2">
               <span className="text-sm font-medium">
-                {tFields("product3DFile")}
+                {tFields("product3DFile.label")}
               </span>
 
               <input
@@ -317,7 +357,7 @@ export default function CreateProductPage() {
             {/* Image Upload */}
             <div className="flex flex-col gap-2">
               <span className="text-sm font-medium">
-                {tFields("productImages")} ({t("maxLengthImages")})
+                {tFields("productImages.label")} ({t("maxLengthImages")})
               </span>
 
               <input

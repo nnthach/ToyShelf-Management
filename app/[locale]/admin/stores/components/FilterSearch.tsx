@@ -8,7 +8,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/shared/styles/components/ui/popover";
-import { Slider } from "@/shared/styles/components/ui/slider";
 import { QueryParams } from "@/shared/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Filter, Search, X, XCircle } from "lucide-react";
@@ -45,7 +44,7 @@ export default function FilterSearch({
   const debouncedSearch = useDebounce(searchInput, 500);
 
   useEffect(() => {
-    onSearch(debouncedSearch);
+    onSearch(debouncedSearch.trim());
   }, [debouncedSearch]);
 
   const [tempFilter, setTempFilter] = useState<{
@@ -57,8 +56,8 @@ export default function FilterSearch({
   });
 
   const isFiltered =
-    query.search ||
-    (showOrder && query.order !== "") ||
+    Boolean(query.search?.trim()) ||
+    (showOrder && Boolean(query.order)) ||
     (showStatus && query.isActive !== undefined);
 
   const handleApply = () => {

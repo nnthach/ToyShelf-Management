@@ -264,23 +264,86 @@
         "subHeader": "Information about"
       },
       "fields": {
-        "brand": "Brand",
-        "productCategory": "Category",
-        "description": "Description",
-        "membershipLevel": "Membership Level",
-        "price": "Price",
-        "productName": "Product Name",
-        "sku": "SKU",
-        "status": "Status",
-        "stock": "Stock",
-        "weight": "Weight",
-        "unit": "Unit",
-        "productImages": "Product Images",
-        "product3DFile": " 3D Product Files",
-        "size": "Size",
-        "length": "Length",
-        "width": "Width",
-        "height": "Height"
+        "brand": {
+          "label": "Brand",
+          "required": "Brand is required"
+        },
+        "material": {
+          "label": "Material",
+          "required": "Material is required"
+        },
+        "ageRange": {
+          "label": "Age Range",
+          "required": "Age range is required"
+        },
+        "originCountry": {
+          "label": "Origin Country",
+          "required": "Origin country is required"
+        },
+        "productCategory": {
+          "label": "Category",
+          "required": "Category is required"
+        },
+        "description": {
+          "label": "Description",
+          "required": "Description is required"
+        },
+        "membershipLevel": {
+          "label": "Membership Level",
+          "required": "Membership level is required"
+        },
+        "price": {
+          "label": "Price",
+          "required": "Price is required"
+        },
+        "productName": {
+          "label": "Product Name",
+          "required": "Product name is required"
+        },
+        "sku": {
+          "label": "SKU",
+          "required": "SKU is required"
+        },
+        "status": {
+          "label": "Status",
+          "required": "Status is required"
+        },
+        "stock": {
+          "label": "Stock",
+          "required": "Stock is required"
+        },
+        "weight": {
+          "label": "Weight",
+          "required": "Weight is required"
+        },
+        "unit": {
+          "label": "Unit",
+          "required": "Unit is required"
+        },
+        "productImages": {
+          "label": "Product Images",
+          "required": "Product images are required"
+        },
+        "product3DFile": {
+          "label": "3D Product Files",
+          "required": "3D product file is required"
+        },
+        "size": {
+          "label": "Size",
+          "required": "Size is required"
+        },
+        "length": {
+          "label": "Length",
+          "required": "Length is required"
+        },
+        "width": {
+          "label": "Width",
+          "required": "Width is required"
+        },
+        "height": {
+          "label": "Height",
+          "required": "Height is required"
+        }
       }
     },
 
@@ -370,6 +433,9 @@
     "tableColumn": {
       "action": "Action",
       "brand": "Brand",
+      "ageRange": "Age Range",
+      "material": "Material",
+      "originCountry": "Origin Country",
       "category": "Category",
       "createdAt": "Created At",
       "description": "Description",

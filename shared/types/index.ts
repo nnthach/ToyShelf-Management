@@ -55,7 +55,7 @@ export interface Cabinet {
 }
 
 export interface Product {
-  id?: number;
+  id: string;
   title?: string;
   description?: string;
   category?: string;
@@ -67,6 +67,11 @@ export interface Product {
   sku?: string;
   images?: string[];
   status?: ProductStatus;
+  name?: string;
+  material?: string;
+  originCountry: string;
+  ageRange: string;
+  isActive: boolean;
 }
 
 export interface Order {

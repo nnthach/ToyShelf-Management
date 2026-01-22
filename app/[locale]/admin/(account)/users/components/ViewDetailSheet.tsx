@@ -1,10 +1,9 @@
-import { Button } from "../../../../../../shared/styles/components/ui/button";
 import {
   Card,
   CardHeader,
   CardTitle,
-} from "../../../../../../shared/styles/components/ui/card";
-import { ScrollArea } from "../../../../../../shared/styles/components/ui/scroll-area";
+} from "@/shared/styles/components/ui/card";
+import { ScrollArea } from "@/shared/styles/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -12,7 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../../../../../../shared/styles/components/ui/sheet";
+} from "@/shared/styles/components/ui/sheet";
 import { DollarSign, Eye, Home } from "lucide-react";
 import {
   formatUserStatusColor,
@@ -145,7 +144,7 @@ function ViewDetailSheet({ user }: { user: User }) {
                 </p>
                 <span
                   className={`text-base font-medium ${formatUserStatusColor(
-                    user.isActive
+                    user.isActive,
                   )}`}
                 >
                   {formatUserStatusText(user.isActive)}
