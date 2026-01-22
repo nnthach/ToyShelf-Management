@@ -76,6 +76,14 @@ export interface Order {
   status: "COMPLETE" | "FAILED" | "REFUND";
 }
 
+export interface Warehouse {
+  id: string;
+  address: string;
+  name: string;
+  code: string;
+  isActive: boolean;
+}
+
 export interface ProductCategory {
   id: string;
   name: string;

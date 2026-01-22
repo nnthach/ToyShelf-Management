@@ -31,6 +31,10 @@
       "CLOSED": "Closed",
       "INACTIVE": "In active"
     },
+    "isActive": {
+      "Active": "Active",
+      "Inactive": "Inactive"
+    },
     "user": {
       "VERIFIED": "Verified",
       "PENDING_VERIFICATION": "Pending Verification",
@@ -134,6 +138,40 @@
 
     "orders": {
       "header": "Order Management"
+    },
+
+    "warehouse": {
+      "header": "Warehouse Management",
+      "fields": {
+        "isActive": {
+          "label": "Status",
+          "required": "Status is required"
+        },
+        "name": {
+          "label": "Name",
+          "required": "Name is required"
+        },
+        "createdAt": {
+          "label": "Created At"
+        },
+        "action": "Action",
+        "companyName": {
+          "label": "Company name",
+          "required": "Company name is required"
+        },
+        "address": {
+          "label": "Address",
+          "required": "Address is required"
+        },
+        "latitude": {
+          "label": "Latitude",
+          "required": "Latitude is required"
+        },
+        "longitude": {
+          "label": "Longitude",
+          "required": "Longitude is required"
+        }
+      }
     },
 
     "productCategory": {

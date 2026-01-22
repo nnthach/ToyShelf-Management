@@ -19,3 +19,14 @@ export const formatDateTime = (data: string) => {
     full: `${formattedTime}, ${formattedDate}`,
   };
 };
+
+export const formatToSlug = (data: string) => {
+  return data
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .trim()
+    .replace(/\s+/g, "-")
+    .toUpperCase();
+};

@@ -5,10 +5,7 @@ import { Product } from "@/shared/types";
 import { useTranslations } from "next-intl";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,

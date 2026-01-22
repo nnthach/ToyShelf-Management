@@ -52,9 +52,7 @@ export const AdminSidebarNested = [
   },
   {
     label: "warehouseManagement",
-    sub: [
-      { title: "warehouse", url: "/admin/stores", icon: Warehouse },
-    ],
+    sub: [{ title: "warehouse", url: "/admin/warehouse", icon: Warehouse }],
   },
   {
     label: "storeManagement",
