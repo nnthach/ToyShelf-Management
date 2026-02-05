@@ -6,6 +6,18 @@ export const loginAPI = async <T>(data: T) => {
   return res.data;
 };
 
+export const forgotPasswordRequestAPI = async (email: string) => {
+  const res = await api.post("/ForgotPassword/request", null, {
+    params: { email },
+  });
+  return res.data;
+};
+
+export const forgotPasswordResetAPI = async <T>(data: T) => {
+  const res = await api.post("/ForgotPassword/reset", data);
+  return res.data;
+};
+
 export const getMyProfileAPI = async () => {
   const res = await api.get("/user/profile");
   return res.data;

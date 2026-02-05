@@ -31,15 +31,19 @@ import z from "zod";
 
 const formSchema = z.object({
   email: z.string("Not correct email format."),
-  // email: z.email("Not correct email format."),
-  password: z
+  otpCode: z.string(),
+  newPassword: z
+    .string()
+    .min(6, "Password must be at least 6 characters.")
+    .max(20, "Password must be at most 20 characters."),
+  confirmPassword: z
     .string()
     .min(6, "Password must be at least 6 characters.")
     .max(20, "Password must be at most 20 characters."),
 });
 
-export default function HomePage() {
-  const t = useTranslations("home");
+export default function ResetPasswordPage() {
+  const t = useTranslations("forgotPassword");
   const tForm = useTranslations("form");
   const tButton = useTranslations("button");
 
@@ -57,7 +61,9 @@ export default function HomePage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password: "",
+      otpCode: "",
+      newPassword: "",
+      confirmPassword: "",
     },
   });
 
@@ -65,35 +71,16 @@ export default function HomePage() {
     setIsLoading(true);
     try {
       const res = await loginAPI(data);
-      const token = res.data?.accessToken;
-      const roles = res.data?.roles;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("roles", JSON.stringify(roles));
 
       const fetchProfileRes = await getMyProfileAPI();
 
-      const payload = {
-        ...fetchProfileRes.data,
-        roles,
-      };
 
-      dispatch(setUser(payload));
 
       form.reset();
       toast.success(
         locale === "vi" ? "Đăng nhập thành công" : "Login successfully!",
       );
 
-      // if (roles.includes("Admin")) {
-      //   router.replace("/admin/dashboard");
-      // } else if (roles.includes("Customer") && !roles.includes("Admin")) {
-      //   toast.error(
-      //     locale === "vi"
-      //       ? "Hệ thống dành cho quản trị viên!"
-      //       : "System belong to administrator!",
-      //   );
-      // }
     } catch (error) {
       console.log("login err", error);
       toast.error(locale === "vi" ? "Đăng nhập thất bại" : "Failed to login!");
@@ -120,7 +107,7 @@ export default function HomePage() {
                 />
               </div>
               {/*#0D47A1 */}
-              <p className="text-[#1E88E5] font-bold text-xl">Toys Shelf</p>
+              <p className="text-[#1E88E5] font-bold text-xl">ToysCabin</p>
             </div>
           </CardTitle>
           <CardDescription>{t("subheader")}</CardDescription>
@@ -158,16 +145,16 @@ export default function HomePage() {
             {/* Password */}
             <FieldGroup>
               <Controller
-                name="password"
+                name="newPassword"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="gap-1">
-                    <FieldLabel htmlFor="password">
-                      {tForm("password")}
+                    <FieldLabel htmlFor="newPassword">
+                      {tForm("newPassword")}
                     </FieldLabel>
                     <Input
                       {...field}
-                      id="password"
+                      id="newPassword"
                       aria-invalid={fieldState.invalid}
                       placeholder="******"
                       type="password"
@@ -180,12 +167,6 @@ export default function HomePage() {
                 )}
               />
             </FieldGroup>
-
-            <div className="text-right">
-              <span className="text-sm text-gray-500 hover:text-black cursor-pointer">
-                Quên mật khẩu?
-              </span>
-            </div>
           </form>
         </CardContent>
 

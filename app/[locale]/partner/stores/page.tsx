@@ -42,7 +42,7 @@ export default function PartnerStoreManage() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold dark:text-foreground">
-            {t("header")}
+            Quản lý cửa hàng
           </h1>
           <p className="text-gray-500 dark:text-gray-200">{t("subheader")}</p>
         </div>

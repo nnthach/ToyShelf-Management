@@ -31,11 +31,13 @@ import Link from "next/link";
 import React from "react";
 import LocaleSwitcher from "../LocaleSwitcher";
 import { useTranslations } from "next-intl";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 const AdminNavbar = () => {
   const t = useTranslations("admin");
   const { theme, setTheme } = useTheme();
   const { open, toggleSidebar } = useSidebar();
+  const { logout } = useAuth();
 
   return (
     <nav className="p-4 flex items-center justify-between bg-white dark:bg-sidebar">
@@ -49,7 +51,7 @@ const AdminNavbar = () => {
       </div>
       {/*right */}
       <div className="flex items-center gap-4">
-        <LocaleSwitcher />
+        {/* <LocaleSwitcher /> */}
         <Button
           variant="outline"
           size="icon"
@@ -78,7 +80,11 @@ const AdminNavbar = () => {
               <Settings />
               Setting
             </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive" className="cursor-pointer">
+            <DropdownMenuItem
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={logout}
+            >
               <LogOut />
               Logout
             </DropdownMenuItem>

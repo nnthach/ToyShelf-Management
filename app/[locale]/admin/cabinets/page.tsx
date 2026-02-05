@@ -1,5 +1,97 @@
-import React from "react";
+"use client";
+
+import { Download, Plus, Upload } from "lucide-react";
+import { QueryParams } from "@/shared/types/SubType";
+import { useTranslations } from "next-intl";
+import useQueryParams from "@/shared/hooks/useQueryParams";
+import { Button } from "@/shared/styles/components/ui/button";
+import { useRouter } from "next/navigation";
+import { Cabinet } from "@/shared/types";
+import FilterSearch from "./components/FilterSearch";
+import { useQuery } from "@tanstack/react-query";
+import { getCabinetColumns } from "./columns";
+import { DataTable } from "@/shared/styles/components/ui/data-table";
+import { getAllCabinAPI } from "@/shared/services/cabinet.service";
+import { useState } from "react";
+import ViewDetailSheet from "./components/ViewDetailSheet";
 
 export default function AdminCabinetManage() {
-  return <div>AdminCabinetManage</div>;
+  const router = useRouter();
+
+  const [selectedCabinetId, setSelectCabinetId] = useState<string | null>(null);
+
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
+    isActive: undefined,
+    order: undefined,
+    search: undefined,
+  });
+
+  const { data: cabinetList = [], isLoading } = useQuery({
+    queryKey: ["cabinets", query],
+    queryFn: () => getAllCabinAPI(query),
+    select: (res) => res.data as Cabinet[],
+  });
+
+  const handleViewDetail = (productId: string) => {
+    setSelectCabinetId(productId);
+  };
+
+  const columns = getCabinetColumns(handleViewDetail);
+
+  return (
+    <>
+      {/*Header */}
+      <div className="flex justify-between items-center">
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý kệ
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">Danh sách kệ</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button
+            className="btn-primary-gradient"
+            onClick={() => router.push("/admin/cabinets/create")}
+          >
+            <Plus /> Thêm kệ mới
+          </Button>
+        </div>
+      </div>
+
+      <div className="container mx-auto py-10">
+        <DataTable columns={columns} data={cabinetList} isLoading={isLoading}>
+          <div className="p-4 border-b flex justify-between items-center">
+            {/*Filter search */}
+            <FilterSearch
+              query={query}
+              loading={isLoading}
+              resultCount={cabinetList.length}
+              onSearch={(val) => updateQuery({ search: val })}
+              onApplyFilter={(filter) =>
+                updateQuery({
+                  ...filter,
+                })
+              }
+              onReset={() => resetQuery()}
+            />
+
+            <div className="space-x-3">
+              <Button>
+                <Download /> Nhập dữ liệu
+              </Button>
+              <Button variant={"outline"}>
+                <Upload /> Xuất dữ liệu
+              </Button>
+            </div>
+          </div>
+        </DataTable>
+      </div>
+
+      <ViewDetailSheet
+        cabinetId={selectedCabinetId}
+        isOpen={!!selectedCabinetId}
+        onClose={() => setSelectCabinetId(null)}
+      />
+    </>
+  );
 }

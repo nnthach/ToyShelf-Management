@@ -1,11 +1,14 @@
+"use client";
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { logout, setLoading, setUser } from "../redux/slice/authSlice";
 import { getMyProfileAPI } from "../services/user.service";
 import { useLocale } from "next-intl";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export function useAuth() {
+  const router = useRouter();
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const locale = useLocale();
@@ -44,6 +47,7 @@ export function useAuth() {
     toast.success(
       locale === "vi" ? "Đăng xuất thành công" : "Logout successfully!",
     );
+    router.replace("/");
   };
 
   return { user, logout: logoutUser };

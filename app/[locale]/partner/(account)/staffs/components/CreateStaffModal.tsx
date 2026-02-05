@@ -1,4 +1,6 @@
 import { PARTNER_LEVEL_OPTIONS } from "@/shared/constants/partner-level";
+import { inviteToStoreAPI } from "@/shared/services/store-invite.service";
+import { getAllStoreAPI } from "@/shared/services/store.service";
 import { FormFieldCustom } from "@/shared/styles/components/custom/FormFieldCustom";
 import { Button } from "@/shared/styles/components/ui/button";
 import {
@@ -11,7 +13,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/styles/components/ui/dialog";
+import { Store } from "@/shared/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { FormProvider, useForm } from "react-hook-form";
@@ -24,35 +28,40 @@ function CreateStaffModal() {
   const tFields = useTranslations("partner.fields");
   const tCreateStaff = useTranslations("admin.staffs.createStaff");
 
+  const { data: storeList = [], isLoading } = useQuery({
+    queryKey: ["stores", { isActive: undefined }],
+    queryFn: () => getAllStoreAPI({ isActive: undefined }),
+    select: (res) => res.data as Store[],
+  });
+
   const formSchema = z.object({
-    fullname: z
-      .string("")
-      .min(1, `${tFields("fullname")} ${tCommon("isRequired")}`),
-    adminOfStore: z
-      .string("")
-      .min(1, `${tFields("adminOfStore")} ${tCommon("isRequired")}`),
-    partnerLevel: z
-      .string("")
-      .min(1, `${tFields("partnerLevel")} ${tCommon("isRequired")}`),
+    storeId: z.string("").min(1),
+    email: z.string("").min(1),
+    storeRole: z.string("").min(1),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullname: "",
-      adminOfStore: "",
-      partnerLevel: "",
+      storeId: "",
+      email: "",
+      storeRole: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    // Do something with the form values.
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log("partner dâta", data);
+    try {
+      const res = await inviteToStoreAPI(data);
+      console.log("res", res);
+    } catch (error) {
+      console.log("invite staff to store err", error);
+    }
   }
 
-  const partnerLevelOption = PARTNER_LEVEL_OPTIONS.map((option) => ({
-    value: option.value,
-    label: tStatus(option.label),
+  const storeOptions = storeList.map((s) => ({
+    value: s.id,
+    label: s.name,
   }));
 
   return (
@@ -86,27 +95,23 @@ function CreateStaffModal() {
             >
               <div className="grid grid-cols-2 gap-3">
                 <FormFieldCustom
-                  name="fullname"
-                  label={tFields("fullname")}
-                  placeholder={tFields("fullname")}
+                  name="email"
+                  label={tFields("email")}
+                  placeholder={tFields("email")}
                 />
                 <FormFieldCustom
-                  name="partnerLevel"
-                  label={tFields("partnerLevel")}
-                  placeholder={`${tCommon("select")} ${tFields(
-                    "partnerLevel"
-                  )}`}
+                  name="storeRole"
+                  label={tFields("storeRole")}
+                  placeholder={tFields("storeRole")}
+                />
+                <FormFieldCustom
+                  name="storeId"
+                  label={tFields("store")}
+                  placeholder={`${tCommon("select")} ${tFields("store")}`}
                   type="select"
-                  selectData={partnerLevelOption}
+                  selectData={storeOptions}
                 />
               </div>
-              <FormFieldCustom
-                name="adminOfStore"
-                label={tFields("adminOfStore")}
-                placeholder={`${tCommon("select")} ${tFields("adminOfStore")}`}
-                type="select"
-                selectData={partnerLevelOption}
-              />
             </form>
           </FormProvider>
           <DialogFooter>

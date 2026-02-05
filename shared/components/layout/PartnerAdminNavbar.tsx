@@ -47,7 +47,7 @@ const PartnerAdminNavbar = () => {
       </div>
       {/*right */}
       <div className="flex items-center gap-4">
-        <LocaleSwitcher />
+        {/* <LocaleSwitcher /> */}
         <Button
           variant="outline"
           size="icon"

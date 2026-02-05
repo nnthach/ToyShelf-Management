@@ -46,12 +46,15 @@ export interface Store {
 export interface Cabinet {
   id: string;
   storeID: string;
+  code?: string;
   name: string;
   numberOfSlot: number;
+  locationDescription: string;
   layoutName: string;
   qrCodeUrl: string;
   images: string[];
-  status: CabinetStatus;
+  isOnline: boolean;
+  isActive: boolean;
 }
 
 export interface Product {

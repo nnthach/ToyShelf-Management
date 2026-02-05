@@ -205,7 +205,7 @@ export default function CreateProductPage() {
                   selectData={categoryOptions}
                 />
               </div>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <FormFieldCustom
                   name="price"
                   label={tFields("price.label")}
@@ -250,8 +250,6 @@ export default function CreateProductPage() {
                   label={tFields("ageRange.label")}
                   placeholder={tFields("ageRange.label")}
                 />
-              </div>
-              <div className="grid grid-cols-3 gap-3">
                 <FormFieldCustom
                   name="Length"
                   label={tFields("length.label")}

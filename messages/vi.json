@@ -363,7 +363,7 @@
         "rightSubHeader": "Chọn vị trí của cửa hàng",
         "addImage": "Thêm hình ảnh"
       },
-      "header": "Quản lý cửa hàng",
+      "header": "Giám sát cửa hàng",
       "subheader": "Danh sách cửa hàng",
       "listView": "Danh sách",
       "gridView": "Lưới",
@@ -413,7 +413,7 @@
         "staffManagement": "Quản lý nhân viên",
         "warehouseManagement": "Quản lý kho hàng",
         "products": "Quản lý sản phẩm",
-        "storeManagement": "Quản lý cửa hàng",
+        "storeManagement": "Giám sát cửa hàng",
         "otherManagement": "Quản lý khác"
       }
     },

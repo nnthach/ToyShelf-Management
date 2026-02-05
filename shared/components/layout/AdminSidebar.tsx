@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -28,10 +30,15 @@ import { Bell, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useAppSelector } from "@/shared/redux/hooks";
 
 const AdminSidebar = () => {
   const tItem = useTranslations("admin.sidebar.item");
   const tLabel = useTranslations("admin.sidebar.label");
+
+  const { user } = useAppSelector((state) => state.auth);
+
+  console.log("user", user);
 
   return (
     <Sidebar
@@ -144,7 +151,7 @@ const AdminSidebar = () => {
               </Avatar>
 
               <div className="flex flex-col text-left">
-                <span className="font-medium text-sm">Alex Johnson</span>
+                <span className="font-medium text-sm">{user?.fullName}</span>
                 <span className="text-xs text-muted-foreground">
                   Administrator
                 </span>
