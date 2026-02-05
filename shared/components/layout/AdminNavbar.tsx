@@ -14,30 +14,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../styles/components/ui/dropdown-menu";
-import { SidebarTrigger, useSidebar } from "../../styles/components/ui/sidebar";
-import { Toggle } from "../../styles/components/ui/toggle";
+import { useSidebar } from "../../styles/components/ui/sidebar";
 import {
   ChevronLeft,
-  ChevronRight,
+  Lock,
   LogOut,
   Menu,
   Moon,
-  Settings,
   Sun,
   User,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import Link from "next/link";
-import React from "react";
-import LocaleSwitcher from "../LocaleSwitcher";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/shared/hooks/useAuth";
+import { useAccountAdminModal } from "@/shared/context/AccountAdminModalContext";
 
 const AdminNavbar = () => {
   const t = useTranslations("admin");
   const { theme, setTheme } = useTheme();
   const { open, toggleSidebar } = useSidebar();
   const { logout } = useAuth();
+
+  const { openProfile, openChangePassword } = useAccountAdminModal();
 
   return (
     <nav className="p-4 flex items-center justify-between bg-white dark:bg-sidebar">
@@ -51,7 +49,6 @@ const AdminNavbar = () => {
       </div>
       {/*right */}
       <div className="flex items-center gap-4">
-        {/* <LocaleSwitcher /> */}
         <Button
           variant="outline"
           size="icon"
@@ -70,15 +67,18 @@ const AdminNavbar = () => {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={10} className="mr-2">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>Tài khoản</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem onClick={openProfile} className="cursor-pointer">
               <User />
-              Profile
+              Thông tin
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <Settings />
-              Setting
+            <DropdownMenuItem
+              onClick={openChangePassword}
+              className="cursor-pointer"
+            >
+              <Lock />
+              Đặt lại mật khẩu
             </DropdownMenuItem>
             <DropdownMenuItem
               variant="destructive"
@@ -86,7 +86,7 @@ const AdminNavbar = () => {
               onClick={logout}
             >
               <LogOut />
-              Logout
+              Đăng xuất
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -1,8 +1,7 @@
-import AdminSidebar from "../../../shared/components/layout/AdminSidebar";
-import AdminNavbar from "../../../shared/components/layout/AdminNavbar";
 import { SidebarProvider } from "../../../shared/styles/components/ui/sidebar";
 import { cookies } from "next/headers";
 import { RolePermission } from "@/shared/components/RolePermission";
+import { AdminClientShell } from "@/shared/components/layout/AdminClient";
 
 export default async function AdminLayout({
   children,
@@ -17,11 +16,7 @@ export default async function AdminLayout({
     // <RolePermission allowedRoles={["Admin"]}>
     <div className="flex bg-slate-100 dark:bg-neutral-800">
       <SidebarProvider defaultOpen={defaultOpen}>
-        <AdminSidebar />
-        <main className="flex-1">
-          <AdminNavbar />
-          <div className="px-4 mt-4">{children}</div>
-        </main>
+        <AdminClientShell>{children}</AdminClientShell>
       </SidebarProvider>
     </div>
     // </RolePermission>

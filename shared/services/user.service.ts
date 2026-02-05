@@ -13,6 +13,11 @@ export const forgotPasswordRequestAPI = async (email: string) => {
   return res.data;
 };
 
+export const changePasswordRequestAPI = async <T>(data: T) => {
+  const res = await api.post("/account/set-password", data);
+  return res.data;
+};
+
 export const forgotPasswordResetAPI = async <T>(data: T) => {
   const res = await api.post("/ForgotPassword/reset", data);
   return res.data;
@@ -20,6 +25,11 @@ export const forgotPasswordResetAPI = async <T>(data: T) => {
 
 export const getMyProfileAPI = async () => {
   const res = await api.get("/user/profile");
+  return res.data;
+};
+
+export const updateMyProfileAPI = async <T>(data: T) => {
+  const res = await api.put("/user", data);
   return res.data;
 };
 
