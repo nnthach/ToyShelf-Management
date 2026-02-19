@@ -103,6 +103,8 @@ export interface ProductCategory {
 export interface ProductColor {
   id: string;
   name: string;
+  hexCode: string;
+  skuCode: string;
 }
 
 export interface Report {

@@ -1,39 +1,65 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import CreateProductColorModal from "./components/CreateProductColorModal";
-
-import { useDebounce } from "@/src/hooks/useDebounce";
 import useQueryParams from "@/src/hooks/useQueryParams";
-import useFetchList from "@/src/hooks/useFetchList";
 import { getProductColorColumns } from "./columns";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import FilterSearch from "./components/FilterSearch";
 import { Button } from "@/src/styles/components/ui/button";
 import { Upload } from "lucide-react";
 import { QueryParams } from "@/src/types/SubType";
-import { ProductColor } from "@/src/types";
-import { getAllProductColor } from "@/src/services/product-color.service copy";
+import {
+  deleteProductColorDetailAPI,
+  getAllProductColorAPI,
+} from "@/src/services/product-color.service";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import EditProductColorModal from "./components/EditProductColorModal";
+import { toast } from "react-toastify";
 
 export default function AdminProductColor() {
+  const [selectedColorId, setSelectedColorId] = useState("");
+  const queryClient = useQueryClient();
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
     order: "",
     search: "",
   });
 
-  const debouncedSearch = useDebounce(query.search, 500);
-  const debouncedQuery = useMemo(
-    () => ({ ...query, search: debouncedSearch }),
-    [query, debouncedSearch],
-  );
+  const { data: productColorList = [], isLoading: loading } = useQuery({
+    queryKey: ["colors", query],
+    queryFn: () => getAllProductColorAPI(query),
+    select: (res) => res.data,
+  });
 
-  const { data: productColorList = [], loading } = useFetchList<
-    ProductColor[],
-    QueryParams
-  >(getAllProductColor, debouncedQuery);
+  const handleEdit = (colorId: string) => {
+    setSelectedColorId(colorId);
+  };
 
-  const columns = getProductColorColumns();
+  const deleteMutation = useMutation({
+    mutationFn: deleteProductColorDetailAPI,
+    onSuccess: () => {
+      toast.success("Xóa màu thành công");
+
+      // reload danh sách
+      queryClient.invalidateQueries({
+        queryKey: ["colors"],
+      });
+    },
+    onError: () => {
+      toast.error("Xóa màu thất bại");
+    },
+  });
+
+  const handleDelete = (colorId: string) => {
+    const confirmDelete = window.confirm("Bạn có chắc muốn xóa màu này không?");
+
+    if (!confirmDelete) return;
+
+    deleteMutation.mutate(colorId);
+  };
+
+  const columns = getProductColorColumns(handleEdit, handleDelete);
 
   return (
     <div>
@@ -70,6 +96,16 @@ export default function AdminProductColor() {
           </div>
         </DataTable>
       </div>
+
+      {selectedColorId && (
+        <EditProductColorModal
+          colorId={selectedColorId}
+          isOpen={!!selectedColorId}
+          onClose={() => {
+            setSelectedColorId("");
+          }}
+        />
+      )}
     </div>
   );
 }

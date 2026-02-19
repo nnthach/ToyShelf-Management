@@ -23,60 +23,70 @@ import {
 // Admin
 export const AdminSidebarGroups = [
   {
-    label: "application",
+    label: "Ứng dụng",
     items: [
-      { title: "dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
-      { title: "notifications", url: "#", icon: Bell, badge: true },
-      { title: "settings", url: "#", icon: Settings },
+      { title: "Tổng quan", url: "/admin/dashboard", icon: LayoutDashboard },
+      { title: "Thông báo", url: "#", icon: Bell, badge: true },
+      { title: "Cài đặt", url: "#", icon: Settings },
     ],
   },
   {
-    label: "products",
-    items: [{ title: "products", url: "/admin/products", icon: Package }],
-  },
-
-  {
-    label: "orders",
-    items: [{ title: "orders", url: "/admin/orders", icon: ClipboardList }],
+    label: "Quản lý đơn hàng",
+    items: [{ title: "Đơn hàng", url: "/admin/orders", icon: ClipboardList }],
   },
 ];
 
 export const AdminSidebarNested = [
   {
-    label: "accountManagement",
+    label: "Quản lý tài khoản",
     sub: [
-      { title: "userAccounts", url: "/admin/users", icon: User },
-      { title: "staffAccounts", url: "/admin/staffs", icon: UserStar },
-      { title: "partnerAccounts", url: "/admin/partners", icon: Users },
-    ],
-  },
-  {
-    label: "warehouseManagement",
-    sub: [{ title: "warehouse", url: "/admin/warehouse", icon: Warehouse }],
-  },
-  {
-    label: "storeManagement",
-    sub: [
-      { title: "stores", url: "/admin/stores", icon: Store },
-      { title: "cabinets", url: "/admin/cabinets", icon: Server },
+      { title: "Người dùng tài khoản", url: "/admin/users", icon: User },
+      { title: "Nhân viên tài khoản", url: "/admin/staffs", icon: UserStar },
+      { title: "Đối tác tài khoản", url: "/admin/partners", icon: Users },
     ],
   },
 
   {
-    label: "requestManagement",
+    label: "Quản lý sản phẩm",
     sub: [
-      { title: "refillStock", url: "/admin/request/refill-stock", icon: Store },
+      { title: "Sản phẩm", url: "/admin/products", icon: User },
+      { title: "Màu sắc", url: "/admin/product-color", icon: Palette },
+      { title: "Phân loại", url: "/admin/product-type", icon: Funnel },
+    ],
+  },
+  {
+    label: "Quản lý kho",
+    sub: [{ title: "Kho", url: "/admin/warehouse", icon: Warehouse }],
+  },
+  {
+    label: "Giám sát cửa hàng",
+    sub: [
+      { title: "Cửa hàng", url: "/admin/stores", icon: Store },
+      { title: "Kệ", url: "/admin/shelf", icon: Server },
     ],
   },
 
   {
-    label: "otherManagement",
+    label: "Yêu cầu",
     sub: [
-      { title: "partnerLevel", url: "/admin/partner-level", icon: CircleStar },
-      { title: "productColor", url: "/admin/product-color", icon: Palette },
-      { title: "productType", url: "/admin/product-type", icon: Funnel },
       {
-        title: "productPriceLevel",
+        title: "Thêm sản phẩm",
+        url: "/admin/request/refill-stock",
+        icon: Store,
+      },
+    ],
+  },
+
+  {
+    label: "Khác",
+    sub: [
+      {
+        title: "Cấp bậc đối tác",
+        url: "/admin/partner-level",
+        icon: CircleStar,
+      },
+      {
+        title: "Cấp bậc giá sản phẩm",
         url: "/admin/product-price-level",
         icon: Award,
       },

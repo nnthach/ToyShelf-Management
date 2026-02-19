@@ -25,7 +25,7 @@ export default function AdminPartnerManage() {
   });
 
   const { data: partnerList = [], isLoading } = useQuery({
-    queryKey: ["partners", query],
+    queryKey: ["colors", query],
     queryFn: () => getAllPartnerAPI(query),
     select: (res) => res.data,
   });
