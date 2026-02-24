@@ -295,3 +295,260 @@ export const StoreDetailStatCard = [
     color: "yellow",
   },
 ];
+
+export const PriceTableFakeData = [
+  {
+    id: "pt-1",
+    name: "Bảng tt 1",
+    type: "Tier",
+    partnerTierId: "1111",
+    partnerTierName: "Cấp độ 1",
+    isActive: true,
+    items: [
+      {
+        id: "pti-1-1",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        priceSegmentName: "Co ban",
+        commissionRate: 2,
+      },
+      {
+        id: "pti-1-2",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        priceSegmentName: "Nang cao",
+        commissionRate: 4,
+      },
+      {
+        id: "pti-1-3",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        priceSegmentName: "Cao cao",
+        commissionRate: 4,
+      },
+    ],
+  },
+  {
+    id: "pt-2",
+    name: "Bảng cd 1",
+    type: "Campaign",
+    partnerTierId: "1111",
+    partnerTierName: "Cấp độ 1",
+    isActive: true,
+    items: [
+      {
+        id: "pti-2-1",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        priceSegmentName: "Co ban",
+        commissionRate: 3,
+      },
+      {
+        id: "pti-2-2",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        priceSegmentName: "Nang cao",
+        commissionRate: 4,
+      },
+      {
+        id: "pti-2-3",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        priceSegmentName: "Cao cao",
+        commissionRate: 5,
+      },
+    ],
+  },
+  {
+    id: "pt-3",
+    name: "Bảng db 1",
+    type: "Special",
+    partnerTierId: "1111",
+    partnerTierName: "Cấp độ 1",
+    isActive: true,
+    items: [
+      {
+        id: "pti-3-1",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        priceSegmentName: "Co ban",
+        commissionRate: 3,
+      },
+      {
+        id: "pti-3-2",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        priceSegmentName: "Nang cao",
+        commissionRate: 4,
+      },
+      {
+        id: "pti-3-3",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        priceSegmentName: "Cao cao",
+        commissionRate: 5,
+      },
+    ],
+  },
+
+  {
+    id: "pt-4",
+    name: "Bảng tt 2",
+    type: "Tier",
+    partnerTierId: "1112",
+    partnerTierName: "Cấp độ 2",
+    isActive: true,
+    items: [
+      {
+        id: "pti-4-1",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        priceSegmentName: "Co ban",
+        commissionRate: 2,
+      },
+      {
+        id: "pti-4-2",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        priceSegmentName: "Nang cao",
+        commissionRate: 4,
+      },
+      {
+        id: "pti-4-3",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        priceSegmentName: "Cao cao",
+        commissionRate: 4,
+      },
+    ],
+  },
+  {
+    id: "pt-5",
+    name: "Bảng cd 2",
+    type: "Campaign",
+    partnerTierId: "1112",
+    partnerTierName: "Cấp độ 2",
+    isActive: true,
+    items: [
+      {
+        id: "pti-5-1",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        priceSegmentName: "Co ban",
+        commissionRate: 3,
+      },
+      {
+        id: "pti-5-2",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        priceSegmentName: "Nang cao",
+        commissionRate: 4,
+      },
+      {
+        id: "pti-5-3",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        priceSegmentName: "Cao cao",
+        commissionRate: 5,
+      },
+    ],
+  },
+  {
+    id: "pt-6",
+    name: "Bảng db 2",
+    type: "Special",
+    partnerTierId: "1112",
+    partnerTierName: "Cấp độ 2",
+    isActive: true,
+    items: [
+      {
+        id: "pti-6-1",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        priceSegmentName: "Co ban",
+        commissionRate: 3,
+      },
+      {
+        id: "pti-6-2",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        priceSegmentName: "Nang cao",
+        commissionRate: 4,
+      },
+      {
+        id: "pti-6-3",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        priceSegmentName: "Cao cao",
+        commissionRate: 5,
+      },
+    ],
+  },
+
+  {
+    id: "pt-7",
+    name: "Bảng tt 3",
+    type: "Tier",
+    partnerTierId: "1113",
+    partnerTierName: "Cấp độ 3",
+    isActive: true,
+    items: [
+      {
+        id: "pti-7-1",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        priceSegmentName: "Co ban",
+        commissionRate: 2,
+      },
+      {
+        id: "pti-7-2",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        priceSegmentName: "Nang cao",
+        commissionRate: 4,
+      },
+      {
+        id: "pti-7-3",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        priceSegmentName: "Cao cao",
+        commissionRate: 4,
+      },
+    ],
+  },
+  {
+    id: "pt-8",
+    name: "Bảng cd 3",
+    type: "Campaign",
+    partnerTierId: "1113",
+    partnerTierName: "Cấp độ 3",
+    isActive: true,
+    items: [
+      {
+        id: "pti-8-1",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        priceSegmentName: "Co ban",
+        commissionRate: 3,
+      },
+      {
+        id: "pti-8-2",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        priceSegmentName: "Nang cao",
+        commissionRate: 4,
+      },
+      {
+        id: "pti-8-3",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        priceSegmentName: "Cao cao",
+        commissionRate: 5,
+      },
+    ],
+  },
+  {
+    id: "pt-9",
+    name: "Bảng db 3",
+    type: "Special",
+    partnerTierId: "1113",
+    partnerTierName: "Cấp độ 3",
+    isActive: true,
+    items: [
+      {
+        id: "pti-9-1",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        priceSegmentName: "Co ban",
+        commissionRate: 3,
+      },
+      {
+        id: "pti-9-2",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        priceSegmentName: "Nang cao",
+        commissionRate: 4,
+      },
+      {
+        id: "pti-9-3",
+        priceSegmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        priceSegmentName: "Cao cao",
+        commissionRate: 5,
+      },
+    ],
+  },
+];

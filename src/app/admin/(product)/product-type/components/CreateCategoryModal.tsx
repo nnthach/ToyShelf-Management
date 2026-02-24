@@ -35,14 +35,12 @@ function CreateCategoryModal() {
     defaultValues: {
       name: "",
       description: "",
-      code: "",
     },
   });
 
   async function onSubmit(data: ProductCategoryFormValues) {
     const payload = {
       ...data,
-      code: formatToSlug(data.name),
     };
 
     console.log("payload", payload);

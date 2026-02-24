@@ -90,6 +90,11 @@ export const AdminSidebarNested = [
         url: "/admin/partner-level",
         icon: CircleStar,
       },
+      {
+        title: "Bảng giá hoa hồng đối tác",
+        url: "/admin/price-table",
+        icon: CircleStar,
+      },
     ],
   },
 ];

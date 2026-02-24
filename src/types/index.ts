@@ -121,6 +121,23 @@ export interface PartnerTier {
   priority: number;
 }
 
+export interface PriceTableItem {
+  id: string;
+  priceSegmentId: string;
+  priceSegmentName: string;
+  commissionRate: number;
+}
+
+export interface PriceTable {
+  id: string;
+  name: string;
+  type: string;
+  partnerTierId: string;
+  partnerTierName: string;
+  isActive: boolean;
+  items: PriceTableItem[];
+}
+
 export interface Report {
   id: string;
   store: string;
