@@ -115,6 +115,12 @@ export interface ProductColor {
   skuCode: string;
 }
 
+export interface PartnerTier {
+  id: string;
+  name: string;
+  priority: number;
+}
+
 export interface Report {
   id: string;
   store: string;

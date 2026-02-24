@@ -53,9 +53,13 @@ function CreateProductPriceSegmentModal() {
   });
 
   async function onSubmit(data: FormValues) {
-    console.log("create price segment data", data);
+    const payload = {
+      ...data,
+      code: data.name,
+    };
+    console.log("create price segment data", payload);
     try {
-      await createProducePriceSegmentAPI(data);
+      await createProducePriceSegmentAPI(payload);
 
       queryClient.invalidateQueries({
         queryKey: ["productPriceSegments"],

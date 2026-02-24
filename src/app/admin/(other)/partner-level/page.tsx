@@ -2,53 +2,82 @@
 
 import useQueryParams from "@/src/hooks/useQueryParams";
 
-import { useMemo } from "react";
-import { getProductCategoryColumns } from "./columns";
+import { useState } from "react";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { Button } from "@/src/styles/components/ui/button";
 import { Upload } from "lucide-react";
-import { useDebounce } from "@/src/hooks/useDebounce";
 import useFetchList from "@/src/hooks/useFetchList";
 import FilterSearch from "./components/FilterSearch";
-import CreateProductCategoryModal from "./components/CreatePartnerLevelModal";
 import { QueryParams } from "@/src/types/SubType";
-import { ProductCategory } from "@/src/types";
-import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import { PartnerTier } from "@/src/types";
+import {
+  deletePartnerTierAPI,
+  getAllPartnerTierAPI,
+} from "@/src/services/partner-tier.service";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { getPartnerTierColumns } from "./columns";
+import CreatePartnerTierModal from "./components/CreatePartnerLevelModal";
+import EditPartnerTierModal from "./components/EditPartnerTierModal";
 
 export default function AdminPartnerLevel() {
-
+  const [selectedPartnerTierId, setSelectedPartnerTierId] = useState("");
+  const queryClient = useQueryClient();
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
     order: "",
     search: "",
   });
 
-  const debouncedSearch = useDebounce(query.search, 500);
-  const debouncedQuery = useMemo(
-    () => ({ ...query, search: debouncedSearch }),
-    [query, debouncedSearch],
-  );
+  const { data: partnerTierList = [], isLoading: loading } = useQuery({
+    queryKey: ["partnerTiers", query],
+    queryFn: () => getAllPartnerTierAPI(query),
+    select: (res) => res.data,
+  });
 
-  const { data: productCategoryList = [], loading } = useFetchList<
-    ProductCategory[],
-    QueryParams
-  >(getAllProductCategoryAPI, debouncedQuery);
+  const handleEdit = (tierId: string) => {
+    setSelectedPartnerTierId(tierId);
+  };
 
-  const columns = getProductCategoryColumns();
+  const deleteMutation = useMutation({
+    mutationFn: deletePartnerTierAPI,
+    onSuccess: () => {
+      toast.success("Xóa thành công");
+
+      // reload danh sách
+      queryClient.invalidateQueries({
+        queryKey: ["partnerTiers"],
+      });
+    },
+    onError: () => {
+      toast.error("Xóa thất bại");
+    },
+  });
+
+  const handleDelete = (tierId: string) => {
+    const confirmDelete = window.confirm(
+      "Bạn có chắc muốn xóa cấp độ đối tác này không?",
+    );
+
+    if (!confirmDelete) return;
+
+    deleteMutation.mutate(tierId);
+  };
+
+  const columns = getPartnerTierColumns(handleEdit, handleDelete);
 
   return (
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý danh mục sản phẩm</h1>
-        <CreateProductCategoryModal />
+        <h1 className="text-4xl font-bold ">Quản lý cấp độ đối tác</h1>
+        <CreatePartnerTierModal />
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={productCategoryList ?? []}
+          data={partnerTierList ?? []}
           isLoading={loading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -56,7 +85,7 @@ export default function AdminPartnerLevel() {
             <FilterSearch
               query={query}
               loading={loading}
-              resultCount={productCategoryList.length}
+              resultCount={partnerTierList.length}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -72,6 +101,16 @@ export default function AdminPartnerLevel() {
           </div>
         </DataTable>
       </div>
+
+      {selectedPartnerTierId && (
+        <EditPartnerTierModal
+          tierId={selectedPartnerTierId}
+          isOpen={!!selectedPartnerTierId}
+          onClose={() => {
+            setSelectedPartnerTierId("");
+          }}
+        />
+      )}
     </div>
   );
 }
