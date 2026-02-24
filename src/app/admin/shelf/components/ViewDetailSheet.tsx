@@ -9,7 +9,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import CabinetFormSheet from "./CabinetFormSheet";
-import { getCabinDetailAPI } from "@/src/services/cabinet.service";
+import { getCabinDetailAPI } from "@/src/services/shelf.service";
 
 type ViewDetailSheetProps = {
   cabinetId: string | null;
@@ -44,9 +44,7 @@ function ViewDetailSheet({ cabinetId, isOpen, onClose }: ViewDetailSheetProps) {
         </SheetHeader>
         <div className="flex bg-gray-200 dark:bg-muted h-full">
           {/*Left */}
-          <div className="w-[70%] p-4">
-            {/* Tabs content */}
-          </div>
+          <div className="w-[70%] p-4">{/* Tabs content */}</div>
 
           {/*Right */}
           <CabinetFormSheet cabinet={cabinetDetail} onClose={onClose} />

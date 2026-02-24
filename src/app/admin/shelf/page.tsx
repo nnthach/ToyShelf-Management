@@ -13,7 +13,7 @@ import { useState } from "react";
 import ViewDetailSheet from "./components/ViewDetailSheet";
 import { QueryParams } from "@/src/types/SubType";
 import { Cabinet } from "@/src/types";
-import { getAllCabinAPI } from "@/src/services/cabinet.service";
+import { getAllShelfAPI } from "@/src/services/shelf.service";
 
 export default function AdminCabinetManage() {
   const router = useRouter();
@@ -26,9 +26,9 @@ export default function AdminCabinetManage() {
     search: undefined,
   });
 
-  const { data: cabinetList = [], isLoading } = useQuery({
-    queryKey: ["cabinets", query],
-    queryFn: () => getAllCabinAPI(query),
+  const { data: shelfList = [], isLoading } = useQuery({
+    queryKey: ["shelfs", query],
+    queryFn: () => getAllShelfAPI(query),
     select: (res) => res.data as Cabinet[],
   });
 
@@ -59,13 +59,13 @@ export default function AdminCabinetManage() {
       </div>
 
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={cabinetList} isLoading={isLoading}>
+        <DataTable columns={columns} data={shelfList} isLoading={isLoading}>
           <div className="p-4 border-b flex justify-between items-center">
             {/*Filter search */}
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={cabinetList.length}
+              resultCount={shelfList.length}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({

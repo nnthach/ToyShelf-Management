@@ -100,6 +100,14 @@ export interface ProductCategory {
   isActive: boolean;
 }
 
+export interface ProductPriceSegment {
+  id: string;
+  code: string;
+  name: string;
+  minPrice: number;
+  maxPrice: number;
+}
+
 export interface ProductColor {
   id: string;
   name: string;
