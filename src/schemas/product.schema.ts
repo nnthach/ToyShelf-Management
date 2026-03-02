@@ -15,7 +15,16 @@ export const productSchema = z.object({
   height: z.number().min(1).optional(),
   weight: z.coerce.number().optional(),
   unit: z.string().optional(),
-  color: z.array(z.string()).optional(),
+  colors: z.array(
+    z.object({
+      name: z.string(),
+      colorId: z.string().min(1),
+      priceSegmentId: z.string().min(1),
+      price: z.coerce.number().min(1),
+      model3DUrl: z.string(),
+      imageUrl: z.string(),
+    }),
+  ),
 });
 
 export type ProductFormValues = z.input<typeof productSchema>;

@@ -24,7 +24,7 @@
       "@/*": ["*"]
     }
   },
-  "files": ["react-three-fiber.d.ts", "next-env.d.ts"],
+  "files": ["next-env.d.ts", "model-viewer.d.ts"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

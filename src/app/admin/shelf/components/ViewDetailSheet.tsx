@@ -9,7 +9,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import CabinetFormSheet from "./CabinetFormSheet";
-import { getCabinDetailAPI } from "@/src/services/shelf.service";
+import { getShelfDetailAPI } from "@/src/services/shelf.service";
 
 type ViewDetailSheetProps = {
   cabinetId: string | null;
@@ -22,7 +22,7 @@ function ViewDetailSheet({ cabinetId, isOpen, onClose }: ViewDetailSheetProps) {
 
   const { data: cabinetDetail, isLoading } = useQuery({
     queryKey: ["cabinet", cabinetId],
-    queryFn: () => getCabinDetailAPI(cabinetId!),
+    queryFn: () => getShelfDetailAPI(cabinetId!),
     select: (res) => res.data,
     enabled: !!cabinetId,
   });

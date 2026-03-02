@@ -3,22 +3,18 @@
 import useQueryParams from "@/src/hooks/useQueryParams";
 
 import { useState } from "react";
-import { DataTable } from "@/src/styles/components/ui/data-table";
 import { Button } from "@/src/styles/components/ui/button";
 import { Upload } from "lucide-react";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
-
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { getPartnerTierColumns } from "./columns";
 import CreatePartnerTierModal from "./components/CreatePriceTableModal";
 import EditPartnerTierModal from "./components/EditPartnerTierModal";
 import {
   deletePriceTableAPI,
   getAllPriceTableAPI,
 } from "@/src/services/price-table.service";
-import { PriceTableFakeData } from "@/src/constants/fakeData";
 import { PriceTable } from "@/src/types";
 
 const getTypeStyle = (type: string) => {
@@ -62,7 +58,7 @@ export default function AdminPriceTable() {
   const { data: priceTableList = [], isLoading: loading } = useQuery({
     queryKey: ["priceTables", query],
     queryFn: () => getAllPriceTableAPI(query),
-    select: (res) => res.data as PriceTable,
+    select: (res) => res.data as PriceTable[],
   });
 
   const handleEdit = (tierId: string) => {
@@ -108,7 +104,7 @@ export default function AdminPriceTable() {
           <FilterSearch
             query={query}
             loading={loading}
-            resultCount={priceTableList.length}
+            resultCount={priceTableList?.length || 0}
             onSearch={(val) => updateQuery({ search: val })}
             onApplyFilter={(filter) =>
               updateQuery({

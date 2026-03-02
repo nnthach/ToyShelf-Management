@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/styles/components/ui/dialog";
-import { Check, Clock, Mail, MapPin, User } from "lucide-react";
+import { Check } from "lucide-react";
 import { memo } from "react";
 
 import { Dispatch, SetStateAction } from "react";
