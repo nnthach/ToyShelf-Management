@@ -1,28 +1,21 @@
 import ProductColorItem from "@/src/components/ProductColorItem";
 import { ProductFormValues } from "@/src/schemas/product.schema";
-import { getAllProductColorAPI } from "@/src/services/product-color.service";
-import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
-import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import ModelThreeDPreview from "@/src/styles/components/custom/ModelThreeDPreview";
 import { Button } from "@/src/styles/components/ui/button";
-import { ProductColor, ProductPriceSegment } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
-import { useQuery } from "@tanstack/react-query";
-import { Trash2 } from "lucide-react";
 import { memo } from "react";
-import { useFieldArray, UseFormReturn, useWatch } from "react-hook-form";
+import { useFieldArray, UseFormReturn } from "react-hook-form";
 
-interface ProductMediaRightProps {
+interface EditProductMediaRightProps {
   form: UseFormReturn<ProductFormValues>;
   colorOptions: SelectOption[];
   priceSegmentOptions: SelectOption[];
 }
 
-function ProductMediaRight({
+function EditProductMediaRight({
   form,
   colorOptions,
   priceSegmentOptions,
-}: ProductMediaRightProps) {
+}: EditProductMediaRightProps) {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "colors",
@@ -72,4 +65,4 @@ function ProductMediaRight({
   );
 }
 
-export default memo(ProductMediaRight);
+export default memo(EditProductMediaRight);

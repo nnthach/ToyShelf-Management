@@ -4,20 +4,14 @@ import {
   ProductBrandOption,
   ProductMaterialOption,
 } from "@/src/constants/product-option";
-import { ProductFormValues } from "@/src/schemas/product.schema";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { ProductCategory } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
 import { useQuery } from "@tanstack/react-query";
 import { memo } from "react";
-import { FormProvider, UseFormReturn } from "react-hook-form";
 
-interface ProductInfoLeftProps {
-  form: UseFormReturn<ProductFormValues>;
-}
-
-function ProductInfoLeft({ form }: ProductInfoLeftProps) {
+function EditProductInfoLeft() {
   // product category
   const { data: categoryList = [] } = useQuery({
     queryKey: ["categories"],
@@ -138,4 +132,4 @@ function ProductInfoLeft({ form }: ProductInfoLeftProps) {
   );
 }
 
-export default memo(ProductInfoLeft);
+export default memo(EditProductInfoLeft);

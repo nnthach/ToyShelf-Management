@@ -17,7 +17,7 @@ export const productSchema = z.object({
   unit: z.string().optional(),
   colors: z.array(
     z.object({
-      name: z.string(),
+      name: z.string().optional(),
       colorId: z.string().min(1, "Chọn màu sắc là bắt buộc"),
       priceSegmentId: z.string().min(1, "Chọn phân khúc giá là bắt buộc"),
       price: z.coerce.number().min(1, "Giá sản phẩm là bắt buộc"),
@@ -25,11 +25,12 @@ export const productSchema = z.object({
       model3DFile: z
         .instanceof(File)
         .optional()
+        .or(z.undefined())
         .refine((file) => !file || file.size <= 10 * 1024 * 1024, {
           message: "File 3D phải nhỏ hơn 10MB",
         }),
       imageUrl: z.string(),
-      imageFile: z.instanceof(File).optional(),
+      imageFile: z.instanceof(File).optional().or(z.undefined()),
       priceSegmentName: z.string().optional(),
       colorName: z.string().optional(),
       colorHex: z.string().optional(),

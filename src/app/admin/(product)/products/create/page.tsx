@@ -11,10 +11,10 @@ import ConfirmPopup from "./ConfirmPopup";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProductAPI } from "@/src/services/product.service";
-import ProductInfoLeft from "./components/ProductInfoLeft";
-import ProductMediaRight from "./components/ProductMediaRight";
+import CreateProductInfoLeft from "./components/CreateProductInfoLeft";
+import CreateProductMediaRight from "./components/CreateProductMediaRight";
 import { getAllProductColorAPI } from "@/src/services/product-color.service";
-import { ProductColor, ProductPriceSegment } from "@/src/types";
+import { Color, ProductPriceSegment } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
 import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
 import { useQuery } from "@tanstack/react-query";
@@ -57,7 +57,7 @@ export default function CreateProductPage() {
   const { data: colorList = [] } = useQuery({
     queryKey: ["colors"],
     queryFn: () => getAllProductColorAPI({}),
-    select: (res) => res.data as ProductColor[],
+    select: (res) => res.data as Color[],
   });
 
   const colorOptions = colorList.map((c) => ({
@@ -195,10 +195,10 @@ export default function CreateProductPage() {
         <form onSubmit={form.handleSubmit(onSubmit)} id="form-create-product">
           <div className="grid grid-cols-2 gap-3 w-full h-[80vh] my-4 rounded-xl overflow-y-auto">
             {/*Field*/}
-            <ProductInfoLeft form={form} />
+            <CreateProductInfoLeft />
 
             {/*Image 3Ds */}
-            <ProductMediaRight
+            <CreateProductMediaRight
               form={form}
               colorOptions={colorOptions}
               priceSegmentOptions={priceSegmentOptions}

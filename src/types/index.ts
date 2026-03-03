@@ -57,24 +57,42 @@ export interface Cabinet {
   isActive: boolean;
 }
 
+export interface Color {
+  id: string;
+  name: string;
+  hexCode: string;
+  skuCode: string;
+}
+
+export interface ProductColorItem {
+  id: string;
+  productId: string;
+  sku: string;
+  priceSegmentId: string;
+  colorId: string;
+  price: number;
+  qrCode: string;
+  model3DUrl: string;
+  imageUrl: string;
+  isActive: boolean;
+}
+
 export interface Product {
   id: string;
-  title?: string;
-  description?: string;
-  category?: string;
-  price?: number;
-  discountPercentage?: number;
-  rating?: number;
-  stock?: number;
-  brand?: string;
-  sku?: string;
-  images?: string[];
-  status?: ProductStatus;
-  name?: string;
-  material?: string;
+  productCategoryId: string;
+  sku: string;
+  name: string;
+  description: string;
+  price: number;
+  brand: string;
+  material: string;
   originCountry: string;
   ageRange: string;
   isActive: boolean;
+  isConsignment: boolean;
+  createdAt: string;
+  updatedAt: string | null;
+  colors: ProductColorItem[];
 }
 
 export interface Order {
@@ -106,13 +124,6 @@ export interface ProductPriceSegment {
   name: string;
   minPrice: number;
   maxPrice: number;
-}
-
-export interface ProductColor {
-  id: string;
-  name: string;
-  hexCode: string;
-  skuCode: string;
 }
 
 export interface PartnerTier {
