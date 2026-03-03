@@ -20,11 +20,7 @@ type FilterBarProps = {
   showStatus?: boolean;
   showOrder?: boolean;
   onSearch: (val: string) => void;
-  onApplyFilter: (val: {
-    isActive?: boolean;
-    order?: string;
-    // limit?: number;
-  }) => void;
+  onApplyFilter: (val: { isActive?: boolean; order?: string }) => void;
   onReset: () => void;
 };
 
@@ -47,11 +43,9 @@ export default function FilterSearch({
   const [tempFilter, setTempFilter] = useState<{
     isActive?: boolean;
     order: string;
-    // limit: number;
   }>({
     isActive: undefined,
     order: query.order ?? "",
-    // limit: query.limit ?? 10,
   });
 
   const isFiltered =
@@ -61,9 +55,8 @@ export default function FilterSearch({
 
   const handleApply = () => {
     onApplyFilter({
-      isActive: tempFilter.isActive,
+      isActive: tempFilter.isActive || undefined,
       order: tempFilter.order || undefined,
-      // limit: tempFilter.limit,
     });
   };
 
@@ -72,7 +65,6 @@ export default function FilterSearch({
     setTempFilter({
       isActive: undefined,
       order: "",
-      // limit: 10,
     });
     onReset();
   };

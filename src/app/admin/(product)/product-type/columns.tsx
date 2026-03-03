@@ -7,13 +7,14 @@ import {
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Eye } from "lucide-react";
+import { Edit, Eye, Trash } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export const getProductCategoryColumns = (
-  onViewDetail: (categoryId: string) => void,
+  onEdit: (categoryId: string) => void,
+  onDelete: (categoryId: string) => void,
 ): ColumnDef<ProductCategory>[] => [
   {
     accessorKey: "name",
@@ -41,15 +42,24 @@ export const getProductCategoryColumns = (
     accessorKey: "action",
     header: "Hành động",
     cell: ({ row }) => {
-      const category = row.original;
+      const color = row.original;
       return (
-        <span
-          onClick={() => onViewDetail(category.id)}
-          title="Detail"
-          className="cursor-pointer text-blue-400"
-        >
-          <Eye />
-        </span>
+        <div className="flex items-center gap-3">
+          <span
+            onClick={() => onEdit(color.id)}
+            title="Chi tiết"
+            className="cursor-pointer text-blue-400"
+          >
+            <Edit size={20} />
+          </span>
+          <span
+            onClick={() => onDelete(color.id)}
+            title="Xóa"
+            className="cursor-pointer text-red-400"
+          >
+            <Trash size={20} />
+          </span>
+        </div>
       );
     },
   },

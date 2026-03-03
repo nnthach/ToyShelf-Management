@@ -24,8 +24,8 @@ export default function AdminProductManage() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: undefined,
-    search: undefined,
+    order: "",
+    search: "",
   });
 
   const { data: productList = [], isLoading } = useQuery({

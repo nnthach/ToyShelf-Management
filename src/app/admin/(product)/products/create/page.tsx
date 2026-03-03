@@ -1,40 +1,27 @@
 "use client";
 
 import { ProductFormValues, productSchema } from "@/src/schemas/product.schema";
-import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import ModelThreeDPreview from "@/src/styles/components/custom/ModelThreeDPreview";
 import { Button } from "@/src/styles/components/ui/button";
-import { ArrowLeft, Check, Trash2 } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useCallback, useRef, useState } from "react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { useCallback, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import ConfirmPopup from "./ConfirmPopup";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
-import { useQuery } from "@tanstack/react-query";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProductColor, ProductPriceSegment } from "@/src/types";
 import { createProductAPI } from "@/src/services/product.service";
-import { SelectOption } from "@/src/types/SubType";
-import { getAllProductColorAPI } from "@/src/services/product-color.service";
-import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
 import ProductInfoLeft from "./components/ProductInfoLeft";
+import ProductMediaRight from "./components/ProductMediaRight";
+import { getAllProductColorAPI } from "@/src/services/product-color.service";
+import { ProductColor, ProductPriceSegment } from "@/src/types";
+import { SelectOption } from "@/src/types/SubType";
+import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
+import { useQuery } from "@tanstack/react-query";
+import { uploadFileToCloudinary } from "@/src/config/cloundinary";
 
 export default function CreateProductPage() {
   const router = useRouter();
-
-  const threeDInputRef = useRef<HTMLInputElement>(null);
-  const imageInputRef = useRef<HTMLInputElement>(null);
-
-  const [threeDFiles, setThreeDFiles] = useState<Record<number, File | null>>(
-    {},
-  );
-  const [threeDPreviews, setThreeDPreviews] = useState<
-    Record<number, string | null>
-  >({});
-
-  const [imageFiles, setImageFiles] = useState<Record<number, File[]>>({});
 
   const [isLoading, setIsLoading] = useState(false);
   const [previewData, setPreviewData] = useState<ProductFormValues | null>(
@@ -66,11 +53,6 @@ export default function CreateProductPage() {
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "colors",
-  });
-
   // product color
   const { data: colorList = [] } = useQuery({
     queryKey: ["colors"],
@@ -78,9 +60,10 @@ export default function CreateProductPage() {
     select: (res) => res.data as ProductColor[],
   });
 
-  const colorOptions: SelectOption[] = colorList.map((c) => ({
+  const colorOptions = colorList.map((c) => ({
     value: c.id,
-    label: c.name,
+    label: c.name.charAt(0).toUpperCase() + c.name.slice(1).toLowerCase(),
+    hexCode: c.hexCode,
   }));
 
   // product price segment
@@ -97,19 +80,31 @@ export default function CreateProductPage() {
     }),
   );
 
-  const handleRemoveThreeD = (index: number) => {
-    setThreeDFiles((prev) => ({ ...prev, [index]: null }));
-    setThreeDPreviews((prev) => ({ ...prev, [index]: null }));
-  };
-
   function onSubmit(data: ProductFormValues) {
+    console.log("data submit", data);
     const payload = {
       ...data,
-      colors: data.colors.map((i) => ({
-        ...i,
-        price: Number(i.price),
-      })),
+      colors: data.colors.map((i) => {
+        const selectedColor = colorOptions.find((c) => c.value === i.colorId);
+
+        const selectedSegment = priceSegmentOptions.find(
+          (p) => p.value === i.priceSegmentId,
+        );
+
+        const label = selectedColor?.label ?? "";
+        const formattedName =
+          label.charAt(0).toUpperCase() + label.slice(1).toLowerCase();
+
+        return {
+          ...i,
+          price: Number(i.price),
+          colorName: formattedName,
+          colorHex: selectedColor?.hexCode ?? "#ccc",
+          priceSegmentName: selectedSegment?.label ?? "",
+        };
+      }),
     };
+
     setPreviewData(payload);
     setOpenVerifyCreateForm(true);
   }
@@ -117,20 +112,39 @@ export default function CreateProductPage() {
   const handleConfirmCreate = useCallback(async () => {
     if (!previewData) return;
 
-    console.log("preview data", previewData);
-
     setIsLoading(true);
     try {
-      // const imagesUrl = imageFiles
-      //   ? await uploadFileToCloudinary(imageFiles, "product")
-      //   : null;
+      // upload files to cloudinary and get url
+      const uploadedColors = await Promise.all(
+        previewData.colors.map(async (color) => {
+          let imageUrl = color.imageUrl;
+          let model3DUrl = color.model3DUrl;
 
-      // const threeDUrl = threeDFile
-      //   ? await uploadFileToCloudinary(threeDFile, "product")
-      //   : null;
+          if (color.imageFile instanceof File) {
+            imageUrl = await uploadFileToCloudinary(color.imageFile, "product");
+          }
 
-      // console.log("threeDUrl products url", threeDUrl);
-      await createProductAPI(previewData);
+          if (color.model3DFile instanceof File) {
+            model3DUrl = await uploadFileToCloudinary(
+              color.model3DFile,
+              "product",
+            );
+          }
+
+          return {
+            ...color,
+            imageUrl,
+            model3DUrl,
+          };
+        }),
+      );
+
+      const finalPayload = {
+        ...previewData,
+        colors: uploadedColors,
+      };
+
+      await createProductAPI(finalPayload);
 
       toast.success("Thêm sản phẩm thành công");
 
@@ -168,8 +182,8 @@ export default function CreateProductPage() {
         {/*Right */}
         <Button
           type="submit"
-          form="form-rhf-demo"
           className="btn-primary-gradient"
+          form="form-create-product"
         >
           Xác nhận
           <Check />
@@ -177,192 +191,31 @@ export default function CreateProductPage() {
       </div>
 
       {/*Content */}
-      <div className="grid grid-cols-2 gap-3 w-full h-[80vh] my-4 rounded-xl overflow-y-auto">
-        {/*Field*/}
-        <ProductInfoLeft form={form} />
+      <FormProvider {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} id="form-create-product">
+          <div className="grid grid-cols-2 gap-3 w-full h-[80vh] my-4 rounded-xl overflow-y-auto">
+            {/*Field*/}
+            <ProductInfoLeft form={form} />
 
-        {/*Image 3Ds */}
-        <div className="bg-background rounded-lg p-4 border h-full overflow-y-auto">
-          <div className="mb-4">
-            <h1 className="text-md font-bold text-gray-950 dark:text-foreground">
-              Màu sắc, hình ảnh và mô hình 3D
-            </h1>
-            <p className="text-gray-500 text-sm">
-              Lựa chọn màu sắc, tải lên hình ảnh sản phẩm và file mô hình 3D
-            </p>
+            {/*Image 3Ds */}
+            <ProductMediaRight
+              form={form}
+              colorOptions={colorOptions}
+              priceSegmentOptions={priceSegmentOptions}
+            />
           </div>
+        </form>
+      </FormProvider>
 
-          <div className="flex flex-col gap-3">
-            {fields.map((field, index) => (
-              <div
-                key={field.id}
-                className="border p-3 rounded-md items-center"
-              >
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="col-span-1">
-                    <FormProvider {...form}>
-                      <form className="space-y-3" id="form-rhf-demo">
-                        <div className="grid grid-cols-1 gap-3">
-                          <FormFieldCustom
-                            name={`colors.${index}.colorId`}
-                            label="Màu sắc"
-                            placeholder="Chọn màu sắc"
-                            type="select"
-                            selectData={colorOptions}
-                          />
-                          <FormFieldCustom
-                            name={`colors.${index}.price`}
-                            label="Giá sản phẩm"
-                            placeholder="Giá sản phẩm"
-                            type="number"
-                          />
-
-                          <FormFieldCustom
-                            name={`colors.${index}.priceSegmentId`}
-                            label="Phân khúc giá"
-                            placeholder="Chọn phân khúc giá"
-                            type="select"
-                            selectData={priceSegmentOptions}
-                          />
-                        </div>
-                      </form>
-                    </FormProvider>
-                  </div>
-
-                  <div className="col-span-2">
-                    <div className="grid grid-cols-2 gap-3">
-                      {/* 3D Preview */}
-                      <div className="flex flex-col gap-2">
-                        <span className="text-sm font-medium">
-                          File mô hình 3D
-                        </span>
-
-                        <input
-                          ref={threeDInputRef}
-                          type="file"
-                          accept=".glb,.gltf"
-                          hidden
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-
-                            const url = URL.createObjectURL(file);
-
-                            setThreeDFiles((prev) => ({
-                              ...prev,
-                              [index]: file,
-                            }));
-
-                            setThreeDPreviews((prev) => ({
-                              ...prev,
-                              [index]: url,
-                            }));
-                          }}
-                        />
-
-                        <div
-                          onClick={() =>
-                            !threeDPreviews[index] &&
-                            threeDInputRef.current?.click()
-                          }
-                          className="relative
-        h-[200px] border-2 border-dashed border-gray-300 rounded-xl
-        flex items-center justify-center hover:border-blue-500 transition cursor-pointer bg-muted"
-                        >
-                          {threeDPreviews[index] ? (
-                            <div className="h-[200px] rounded-xl overflow-hidden w-full">
-                              <ModelThreeDPreview
-                                key={threeDPreviews[index]}
-                                url={threeDPreviews[index] ?? ""}
-                              />
-
-                              {!threeDPreviews[index] && (
-                                <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                                  Thêm file 3D
-                                </div>
-                              )}
-                            </div>
-                          ) : (
-                            <div className="flex flex-col items-center text-gray-500">
-                              <span className="text-sm">Thêm file 3D</span>
-                              <span className="text-xs text-gray-400 mt-1">
-                                (.glb, .gltf)
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Image Upload */}
-                      <div className="flex flex-col gap-2">
-                        <span className="text-sm font-medium">
-                          Hình ảnh sản phẩm
-                        </span>
-
-                        <input
-                          ref={imageInputRef}
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          hidden
-                          onChange={(e) => {
-                            const files = Array.from(e.target.files || []);
-
-                            setImageFiles((prev) => ({
-                              ...prev,
-                              [index]: [...(prev[index] || []), ...files].slice(
-                                0,
-                                4,
-                              ),
-                            }));
-                          }}
-                        />
-
-                        <div className="grid grid-cols-4 gap-3">
-                          {/* Preview images */}
-                          <div
-                            key={index}
-                            className="relative aspect-square rounded-lg overflow-hidden group border h-[200px] border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center hover:border-blue-500 transition cursor-pointer bg-muted"
-                          >
-                            {(imageFiles[index] || []).map((file, imgIndex) => {
-                              const previewUrl = URL.createObjectURL(file);
-
-                              return <img key={imgIndex} src={previewUrl} />;
-                            })}
-
-                            <button
-                              type="button"
-                              className="absolute top-1 right-1 w-7 h-7 rounded-md
-                  bg-white/80 hover:bg-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
-                            >
-                              <Trash2
-                                size={14}
-                                className="text-red-500 group-hover:text-white"
-                              />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* {openVerifyCreateForm && (
+      {openVerifyCreateForm && (
         <ConfirmPopup
           isLoading={isLoading}
           openVerifyCreateForm={openVerifyCreateForm}
           setOpenVerifyCreateForm={setOpenVerifyCreateForm}
           previewData={previewData}
-          threeDPreview={threeDPreview}
-          imagePreview={imageFiles}
           handleConfirmCreate={handleConfirmCreate}
         />
-      )} */}
+      )}
     </>
   );
 }

@@ -16,17 +16,6 @@ export const getProductColumns = (
   onViewDetail: (productId: string) => void,
 ): ColumnDef<Product>[] => [
   {
-    accessorFn: (row) => row.images?.[0],
-    id: "image",
-    header: "Hình ảnh",
-    cell: ({ getValue }) => (
-      <img
-        src={getValue() as string}
-        className="w-12 h-12 object-cover rounded"
-      />
-    ),
-  },
-  {
     accessorKey: "sku",
     header: "Mã sản phẩm",
   },

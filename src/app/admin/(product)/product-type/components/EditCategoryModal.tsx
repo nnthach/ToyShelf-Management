@@ -13,9 +13,9 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import {
@@ -24,12 +24,33 @@ import {
 } from "@/src/schemas/product-category.schema";
 import {
   createProductCategoryAPI,
+  getAllProductCategoryAPI,
+  getProductCategoryDetailAPI,
+  updateProductCategoryAPI,
 } from "@/src/services/product-category.service";
+import { SelectOption } from "@/src/types/SubType";
+import { ProductCategory } from "@/src/types";
 
-function CreateCategoryModal() {
+type EditProductCategoryModalProps = {
+  categoryId: string;
+  isOpen: boolean;
+  onClose: () => void;
+};
+function EditCategoryModal({
+  categoryId,
+  isOpen,
+  onClose,
+}: EditProductCategoryModalProps) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
+
+  const { data: categoryDetail, isLoading } = useQuery({
+    queryKey: ["category", categoryId],
+    queryFn: () => getProductCategoryDetailAPI(categoryId!),
+    select: (res) => res.data,
+    enabled: !!categoryId,
+  });
 
   const form = useForm<ProductCategoryFormValues>({
     resolver: zodResolver(productCateSchema),
@@ -39,41 +60,46 @@ function CreateCategoryModal() {
     },
   });
 
+  useEffect(() => {
+    if (categoryDetail) {
+      form.reset({
+        name: categoryDetail.name,
+        description: categoryDetail.description,
+      });
+    }
+  }, [categoryDetail, form]);
+
   async function onSubmit(data: ProductCategoryFormValues) {
     try {
-      await createProductCategoryAPI(data);
+      await updateProductCategoryAPI(categoryId, data);
       queryClient.invalidateQueries({
         queryKey: ["categories"],
       });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["category", categoryId],
+      });
+
       form.reset();
-      toast.success("Tạo danh mục thành công");
+      toast.success("Cập nhật danh mục thành công");
       setOpen(false);
     } catch (error) {
-      console.log("create product category err", error);
-      toast.error("Tạo danh mục thất bại");
+      console.log("update product category err", error);
+      toast.error("Cập nhật danh mục thất bại");
     }
   }
 
   return (
     <Dialog
-      open={open}
+      open={isOpen}
       onOpenChange={(value) => {
-        setOpen(value);
-        if (!value) {
-          form.reset();
-        }
+        if (!value) onClose();
       }}
     >
       <form>
-        <DialogTrigger asChild>
-          <Button className="btn-primary-gradient">
-            <Plus />
-            Thêm danh mục mới
-          </Button>
-        </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Thêm danh mục mới</DialogTitle>
+            <DialogTitle>Cập nhật danh mục</DialogTitle>
             <DialogDescription>
               Make changes to your profile here. Click save when you&apos;re
               done.
@@ -84,7 +110,7 @@ function CreateCategoryModal() {
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-3"
-              id="form-create-product-category"
+              id="form-update-product-category"
             >
               <FormFieldCustom
                 name="name"
@@ -103,8 +129,8 @@ function CreateCategoryModal() {
             <DialogClose asChild>
               <Button variant="outline">Hủy</Button>
             </DialogClose>
-            <Button type="submit" form="form-create-product-category">
-              Tạo mới
+            <Button type="submit" form="form-update-product-category">
+              Cập nhật
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -113,4 +139,4 @@ function CreateCategoryModal() {
   );
 }
 
-export default memo(CreateCategoryModal);
+export default memo(EditCategoryModal);

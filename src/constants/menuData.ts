@@ -51,7 +51,7 @@ export const AdminSidebarNested = [
     sub: [
       { title: "Sản phẩm", url: "/admin/products", icon: User },
       { title: "Màu sắc", url: "/admin/product-color", icon: Palette },
-      { title: "Phân loại", url: "/admin/product-type", icon: Funnel },
+      { title: "Danh mục", url: "/admin/product-type", icon: Funnel },
       {
         title: "Cấp bậc giá sản phẩm",
         url: "/admin/product-price-level",

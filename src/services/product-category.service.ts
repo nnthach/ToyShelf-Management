@@ -15,7 +15,7 @@ export const createProductCategoryAPI = async <T>(data: T) => {
   return res.data;
 };
 
-export const updateProductCategoryAPI = async <T>(data: T, id: string) => {
+export const updateProductCategoryAPI = async <T>(id: string, data: T) => {
   const res = await api.put(`/ProductCategory/${id}`, data);
   return res.data;
 };

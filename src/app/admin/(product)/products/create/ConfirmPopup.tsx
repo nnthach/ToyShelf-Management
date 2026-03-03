@@ -16,8 +16,6 @@ import { Check } from "lucide-react";
 interface ConfirmPopupProps {
   openVerifyCreateForm: boolean;
   setOpenVerifyCreateForm: Dispatch<SetStateAction<boolean>>;
-  imagePreview: File[] | [];
-  threeDPreview: string | null;
   previewData: ProductFormValues | null;
   handleConfirmCreate: () => void;
   isLoading: boolean;
@@ -26,8 +24,6 @@ interface ConfirmPopupProps {
 function ConfirmPopup({
   openVerifyCreateForm,
   setOpenVerifyCreateForm,
-  imagePreview,
-  threeDPreview,
   previewData,
   handleConfirmCreate,
   isLoading,
@@ -43,48 +39,7 @@ function ConfirmPopup({
           </DialogHeader>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-            {/* LEFT */}
-            <div className="space-y-4">
-              {threeDPreview && (
-                <div className="rounded-xl overflow-hidden border bg-muted">
-                  <div className="px-3 py-2 text-sm font-medium border-b">
-                    3D Preview
-                  </div>
-                  <div className="h-[260px]">
-                    <ModelThreeDPreview url={threeDPreview} />
-                  </div>
-                </div>
-              )}
-
-              {imagePreview.length > 0 && (
-                <div className="rounded-xl border bg-muted p-3">
-                  <div className="text-sm font-medium mb-2">
-                    Product Images ({imagePreview.length}/4)
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    {imagePreview.slice(0, 4).map((file, index) => {
-                      const previewUrl = URL.createObjectURL(file);
-
-                      return (
-                        <div
-                          key={index}
-                          className="relative aspect-square overflow-hidden rounded-lg border"
-                        >
-                          <img
-                            src={previewUrl}
-                            alt={`preview-${index}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* RIGHT */}
+            {/* left info */}
             <div className="rounded-xl border bg-background p-5 space-y-5">
               <div>
                 <h3 className="text-xl font-bold">{previewData?.name}</h3>
@@ -113,6 +68,71 @@ function ConfirmPopup({
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* right color & media*/}
+            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+              <h3 className="text-sm font-semibold">Màu sắc & Media</h3>
+
+              {previewData.colors?.map((color, index) => (
+                <div
+                  key={index}
+                  className="rounded-xl border bg-background p-4 space-y-3"
+                >
+                  {/* Header */}
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-5 h-5 rounded-full border shadow-sm"
+                        style={{ backgroundColor: color.colorHex }}
+                      />
+                      <span className="font-semibold">{color.colorName}</span>
+                    </div>
+
+                    <span className="text-xs bg-muted px-2 py-1 rounded-md">
+                      {color.priceSegmentName}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* Image */}
+                    <div className="aspect-square rounded-lg overflow-hidden border bg-muted">
+                      {color.imageUrl ? (
+                        <img
+                          src={color.imageUrl}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-xs text-muted-foreground">
+                          Không có ảnh
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 3D */}
+                    <div className="aspect-square rounded-lg overflow-hidden border bg-muted">
+                      {color.model3DUrl ? (
+                        <ModelThreeDPreview
+                          key={color.model3DUrl}
+                          url={color.model3DUrl}
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-xs text-muted-foreground">
+                          Không có 3D
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Price */}
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Giá:</span>
+                    <span className="font-semibold">
+                      {Number(color.price).toLocaleString()} đ
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 

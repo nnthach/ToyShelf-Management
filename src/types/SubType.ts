@@ -8,7 +8,7 @@ export interface QueryParams {
 }
 
 export interface SelectOption {
-  value: string | number;
+  value: string | number ;
   label: string;
 }
 

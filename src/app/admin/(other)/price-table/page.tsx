@@ -10,12 +10,12 @@ import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import CreatePartnerTierModal from "./components/CreatePriceTableModal";
-import EditPartnerTierModal from "./components/EditPartnerTierModal";
 import {
   deletePriceTableAPI,
   getAllPriceTableAPI,
 } from "@/src/services/price-table.service";
 import { PriceTable } from "@/src/types";
+import EditPriceTableModal from "./components/EditPriceTableModal";
 
 const getTypeStyle = (type: string) => {
   switch (type) {
@@ -185,8 +185,8 @@ export default function AdminPriceTable() {
       </div>
 
       {selectedPriceTableId && (
-        <EditPartnerTierModal
-          tierId={selectedPriceTableId}
+        <EditPriceTableModal
+          priceTableId={selectedPriceTableId}
           isOpen={!!selectedPriceTableId}
           onClose={() => {
             setSelectedPriceTableId("");

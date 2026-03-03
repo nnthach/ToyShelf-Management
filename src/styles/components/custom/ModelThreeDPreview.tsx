@@ -7,7 +7,7 @@ export default function ModelThreeDPreview({ url }: { url: string }) {
       src={url}
       camera-controls
       auto-rotate
-      style={{ width: "100%", height: "200px" }}
+      style={{ width: "100%", height: "100%" }}
     />
   );
 }

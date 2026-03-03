@@ -8,21 +8,24 @@ import { DataTable } from "@/src/styles/components/ui/data-table";
 import { Button } from "@/src/styles/components/ui/button";
 import { Upload } from "lucide-react";
 import FilterSearch from "./components/FilterSearch";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CreateCategoryModal from "./components/CreateCategoryModal";
-import ViewDetailSheet from "./components/ViewDetailSheet";
 import { QueryParams } from "@/src/types/SubType";
-import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import { deleteProductCategoryAPI, getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import EditCategoryModal from "./components/EditCategoryModal";
+import { toast } from "react-toastify";
 
 export default function AdminProductType() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null,
   );
 
+  const queryClient = useQueryClient();
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: undefined,
-    search: undefined,
+    order: "",
+    search: "",
   });
 
   const { data: categoryList = [], isLoading } = useQuery({
@@ -31,17 +34,40 @@ export default function AdminProductType() {
     select: (res) => res.data,
   });
 
-  const handleViewDetail = (warehouseId: string) => {
-    setSelectedCategoryId(warehouseId);
+  const handleEdit = (categoryId: string) => {
+    setSelectedCategoryId(categoryId);
   };
 
-  const columns = getProductCategoryColumns(handleViewDetail);
+  const deleteMutation = useMutation({
+    mutationFn: deleteProductCategoryAPI,
+    onSuccess: () => {
+      toast.success("Xóa danh mục thành công");
+
+      // reload danh sách
+      queryClient.invalidateQueries({
+        queryKey: ["categories"],
+      });
+    },
+    onError: () => {
+      toast.error("Xóa danh mục thất bại");
+    },
+  });
+
+  const handleDelete = (categoryId: string) => {
+    const confirmDelete = window.confirm("Bạn có chắc muốn xóa danh mục này không?");
+
+    if (!confirmDelete) return;
+
+    deleteMutation.mutate(categoryId);
+  };
+
+  const columns = getProductCategoryColumns(handleEdit, handleDelete);
 
   return (
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý cấp độ giá sản phẩm</h1>
+        <h1 className="text-4xl font-bold ">Quản lý danh mục sản phẩm</h1>
         <CreateCategoryModal />
       </div>
       {/*Table */}
@@ -73,11 +99,15 @@ export default function AdminProductType() {
         </DataTable>
       </div>
 
-      <ViewDetailSheet
-        productCateId={selectedCategoryId}
-        isOpen={!!selectedCategoryId}
-        onClose={() => setSelectedCategoryId(null)}
-      />
+      {selectedCategoryId && (
+        <EditCategoryModal
+          categoryId={selectedCategoryId}
+          isOpen={!!selectedCategoryId}
+          onClose={() => {
+            setSelectedCategoryId(null);
+          }}
+        />
+      )}
     </>
   );
 }
