@@ -33,3 +33,20 @@ export const formatToSlug = (data: string) => {
       .toUpperCase() + `-${timestamp}`
   );
 };
+
+export const formatToInitials = (data: string) => {
+  const removeWords = ["thanh", "pho", "tinh", "quan", "huyen"];
+
+  return data
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .toLowerCase()
+    .trim()
+    .split(/\s+/)
+    .filter((word) => !removeWords.includes(word))
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+};

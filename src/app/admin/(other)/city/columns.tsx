@@ -1,0 +1,49 @@
+"use client";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { City, PartnerTier } from "@/src/types";
+import { Edit, Trash } from "lucide-react";
+
+// This type is used to define the shape of our data.
+// You can use a Zod schema here if you want.
+
+export const getCityColumns = (
+  onEdit: (tierId: string) => void,
+  onDelete: (tierId: string) => void,
+): ColumnDef<City>[] => [
+  {
+    accessorKey: "name",
+    header: "Tên",
+  },
+
+  {
+    accessorKey: "code",
+    header: "Mã thành phố",
+  },
+
+  {
+    accessorKey: "action",
+    header: "Hành động",
+    cell: ({ row }) => {
+      const city = row.original;
+      return (
+        <div className="flex items-center gap-3">
+          <span
+            onClick={() => onEdit(city.id)}
+            title="Chi tiết"
+            className="cursor-pointer text-blue-400"
+          >
+            <Edit size={20} />
+          </span>
+          <span
+            onClick={() => onDelete(city.id)}
+            title="Xóa"
+            className="cursor-pointer text-red-400"
+          >
+            <Trash size={20} />
+          </span>
+        </div>
+      );
+    },
+  },
+];

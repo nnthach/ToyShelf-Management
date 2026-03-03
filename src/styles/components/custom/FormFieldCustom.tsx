@@ -8,7 +8,7 @@ import { SelectOption } from "@/src/types/SubType";
 
 type RHFField = ControllerRenderProps<FieldValues, string>;
 
-type FieldType = "text" | "number" | "textarea" | "select" | "time";
+type FieldType = "text" | "number" | "textarea" | "select" | "time" | "date";
 
 type CommonFieldProps =
   | React.InputHTMLAttributes<HTMLInputElement>
@@ -42,6 +42,18 @@ const renderFieldByType = (
           {...field}
           {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
           id={field.name}
+          placeholder={placeholder}
+          className={`${props?.className ?? ""} ${invalidClass}`}
+        />
+      );
+
+    case "date":
+      return (
+        <Input
+          {...field}
+          {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
+          id={field.name}
+          type="date"
           placeholder={placeholder}
           className={`${props?.className ?? ""} ${invalidClass}`}
         />

@@ -149,9 +149,25 @@ export interface PriceTable {
   items: PriceTableItem[];
 }
 
+export interface CommissionPolicy {
+  id: string;
+  partnerTierId: string;
+  partnerTierName: string;
+  priceSegmentId: string;
+  priceSegmentName: string;
+  commissionRate: number;
+  effectiveDate: string;
+}
+
 export interface Report {
   id: string;
   store: string;
   staff: string;
   createdAt: string;
+}
+
+export interface City {
+  id: string;
+  code: string;
+  name: string;
 }

@@ -54,7 +54,7 @@ export const AdminSidebarNested = [
       { title: "Danh mục", url: "/admin/product-type", icon: Funnel },
       {
         title: "Cấp bậc giá sản phẩm",
-        url: "/admin/product-price-level",
+        url: "/admin/product-price-segment",
         icon: Award,
       },
     ],
@@ -93,6 +93,16 @@ export const AdminSidebarNested = [
       {
         title: "Bảng giá hoa hồng đối tác",
         url: "/admin/price-table",
+        icon: CircleStar,
+      },
+      {
+        title: "Chính sách hoa hồng",
+        url: "/admin/commission-policy",
+        icon: CircleStar,
+      },
+            {
+        title: "Danh sách thành phố",
+        url: "/admin/city",
         icon: CircleStar,
       },
     ],
