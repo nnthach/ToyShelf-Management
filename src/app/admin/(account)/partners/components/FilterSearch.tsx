@@ -42,7 +42,7 @@ export default function FilterSearch({
 
   useEffect(() => {
     onSearch(debouncedSearch);
-  }, [debouncedSearch]);
+  }, [debouncedSearch, onSearch]);
 
   const [tempFilter, setTempFilter] = useState<{
     isActive?: boolean;

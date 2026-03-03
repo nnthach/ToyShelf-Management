@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { logout, setLoading, setUser } from "../redux/slice/authSlice";
 import { getMyProfileAPI } from "../services/user.service";

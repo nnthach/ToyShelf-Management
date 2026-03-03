@@ -19,12 +19,13 @@
         "name": "next"
       }
     ],
+    "types": [],
+
     "baseUrl": ".",
     "paths": {
       "@/*": ["*"]
     }
   },
-  "files": ["next-env.d.ts", "model-viewer.d.ts"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

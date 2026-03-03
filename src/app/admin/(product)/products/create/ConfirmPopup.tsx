@@ -8,10 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/styles/components/ui/dialog";
-import { Check } from "lucide-react";
 import { memo } from "react";
 
 import { Dispatch, SetStateAction } from "react";
+import { Check } from "lucide-react";
 
 interface ConfirmPopupProps {
   openVerifyCreateForm: boolean;
@@ -110,15 +110,6 @@ function ConfirmPopup({
                       ? Number(previewData.weight)
                       : "--"}{" "}
                     {previewData?.unit}
-                  </p>
-                </div>
-
-                <div className="rounded-md border p-3">
-                  <span className="text-muted-foreground text-xs">Colors</span>
-                  <p className="font-medium">
-                    {previewData?.color?.length
-                      ? previewData.color.join(", ")
-                      : "--"}
                   </p>
                 </div>
               </div>

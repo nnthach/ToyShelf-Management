@@ -1,5 +1,4 @@
 import api from "../config/axios";
-import { User } from "../types";
 
 export const loginAPI = async <T>(data: T) => {
   const res = await api.post("/account/login", data);
