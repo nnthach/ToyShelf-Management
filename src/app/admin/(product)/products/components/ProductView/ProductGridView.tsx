@@ -2,7 +2,10 @@ import { Button } from "@/src/styles/components/ui/button";
 import { Download, Eye, Upload } from "lucide-react";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import { Product } from "@/src/types";
-import { formatUserStatusColor, formatUserStatusText } from "@/src/utils/formatStatus";
+import {
+  formatUserStatusColor,
+  formatUserStatusText,
+} from "@/src/utils/formatStatus";
 
 interface ProductGridViewProps {
   productList: Product[];
@@ -38,7 +41,8 @@ function ProductGridView({
               <ProductCardSkeleton key={i} />
             ))
           : productList.map((product) => {
-              const image = product.images?.[0];
+              const image = "";
+              // const image = product.images?.[0];
 
               return (
                 <div
@@ -92,7 +96,7 @@ function ProductGridView({
                         <div className="flex justify-between">
                           <span className="text-gray-500">Category</span>
                           <span className="font-medium text-gray-900 truncate">
-                            {product.category}
+                            {/* {product.category} */}
                           </span>
                         </div>
                       </div>
@@ -112,7 +116,7 @@ function ProductGridView({
 
                   {/* Title */}
                   <h3 className="text-sm font-semibold text-gray-900 line-clamp-2">
-                    {product.title}
+                    {/* {product.title} */}
                   </h3>
                 </div>
               );

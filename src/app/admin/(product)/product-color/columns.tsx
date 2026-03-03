@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ProductColor } from "@/src/types";
+import { Color } from "@/src/types";
 import { Edit, Trash } from "lucide-react";
 
 // This type is used to define the shape of our data.
@@ -10,7 +10,7 @@ import { Edit, Trash } from "lucide-react";
 export const getProductColorColumns = (
   onEdit: (colorId: string) => void,
   onDelete: (colorId: string) => void,
-): ColumnDef<ProductColor>[] => [
+): ColumnDef<Color>[] => [
   {
     id: "colorPreview",
     accessorKey: "hexCode",
