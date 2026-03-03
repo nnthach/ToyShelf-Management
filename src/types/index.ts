@@ -107,6 +107,9 @@ export interface Warehouse {
   address: string;
   name: string;
   code: string;
+  cityId: string;
+  cityName: string;
+  cityCode: string;
   isActive: boolean;
 }
 

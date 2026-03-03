@@ -16,10 +16,22 @@ export const getWarehouseColumns = (
     accessorKey: "name",
     header: "Tên",
   },
+  {
+    accessorKey: "code",
+    header: "Mã kho",
+  },
+
+  {
+    accessorKey: "cityName",
+    header: "Thành phố",
+  },
 
   {
     accessorKey: "address",
     header: "Địa chỉ",
+    cell: ({ row }) => (
+      <div className="max-w-[250px] truncate">{row.getValue("address")}</div>
+    ),
   },
 
   {

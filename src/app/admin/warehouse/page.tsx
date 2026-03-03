@@ -20,8 +20,8 @@ export default function AdminWarehouseManagement() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: undefined,
-    search: undefined,
+    order: "",
+    search: "",
   });
 
   const { data: warehouseList = [], isLoading } = useQuery({

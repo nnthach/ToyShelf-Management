@@ -17,15 +17,16 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MapPin, Plus } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import MapCreate from "./MapCreate";
 import { useMapCreate } from "@/src/hooks/useMapCreate";
-import { formatToSlug } from "@/src/utils/format";
 import { createWarehouseAPI } from "@/src/services/warehouse.service";
+import { getAllCityAPI } from "@/src/services/city.service";
+import { City } from "@/src/types";
 
 function CreateWarehouseModal() {
   const queryClient = useQueryClient();
@@ -48,19 +49,25 @@ function CreateWarehouseModal() {
       name: "",
       address: "",
       code: "",
+      cityId: "",
     },
   });
 
+  const { data: cityList = [], isLoading: isCityLoading } = useQuery({
+    queryKey: ["cities", { isActive: undefined }],
+    queryFn: () => getAllCityAPI({ isActive: undefined }),
+    select: (res) => res.data as City[],
+  });
+
+  const cityOptions = cityList.map((s) => ({
+    value: s.id,
+    label: s.name,
+  }));
+
   async function onSubmit(data: WarehouseFormValues) {
-    const payload = {
-      ...data,
-      code: formatToSlug(data.name),
-    };
-
-    console.log("payload", payload);
-
+    console.log("submit data", data);
     try {
-      await createWarehouseAPI(payload);
+      await createWarehouseAPI(data);
       queryClient.invalidateQueries({
         queryKey: ["warehouses"],
       });
@@ -114,6 +121,14 @@ function CreateWarehouseModal() {
                 name="name"
                 label="Tên kho"
                 placeholder="Tên kho"
+              />
+
+              <FormFieldCustom
+                name="cityId"
+                label="Thành phố"
+                placeholder="Chọn thành phố"
+                type="select"
+                selectData={cityOptions}
               />
 
               <div className="relative">

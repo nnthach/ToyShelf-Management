@@ -4,15 +4,21 @@ import {
   WarehouseFormValues,
   warehouseSchema,
 } from "@/src/schemas/warehouse.schema";
-import { deleteWarehouseAPI, disableWarehouseAPI, restoreWarehouseAPI, updateWarehouseAPI } from "@/src/services/warehouse.service";
+import { getAllCityAPI } from "@/src/services/city.service";
+import {
+  deleteWarehouseAPI,
+  disableWarehouseAPI,
+  restoreWarehouseAPI,
+  updateWarehouseAPI,
+} from "@/src/services/warehouse.service";
 
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
-import { Warehouse } from "@/src/types";
+import { City, Warehouse } from "@/src/types";
 import { formatToSlug } from "@/src/utils/format";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Lock, MapPin, RotateCcw, Trash2 } from "lucide-react";
 import { ChangeEvent, memo, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -24,6 +30,17 @@ type WarehouseFormSheetProps = {
 };
 function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
   const queryClient = useQueryClient();
+
+  const { data: cityList = [], isLoading: isCityLoading } = useQuery({
+    queryKey: ["cities", { isActive: undefined }],
+    queryFn: () => getAllCityAPI({ isActive: undefined }),
+    select: (res) => res.data as City[],
+  });
+
+  const cityOptions = cityList.map((s) => ({
+    value: s.id,
+    label: s.name,
+  }));
 
   const {
     suggestions,
@@ -41,10 +58,9 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       name: "",
       address: "",
       code: "",
+      cityId: "",
     },
   });
-
-  console.log("ware house", warehouse);
 
   useEffect(() => {
     if (warehouse) {
@@ -52,18 +68,14 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
         name: warehouse.name,
         address: warehouse.address,
         code: warehouse.code,
+        cityId: warehouse.cityId,
       });
     }
   }, [warehouse, form]);
 
   async function onSubmit(data: WarehouseFormValues) {
-    const payload = {
-      ...data,
-      code: formatToSlug(data.name),
-    };
-
     try {
-      await updateWarehouseAPI(payload, warehouse.id!);
+      await updateWarehouseAPI(data, warehouse.id!);
 
       queryClient.invalidateQueries({
         queryKey: ["warehouses"],
@@ -157,6 +169,14 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
               name="name"
               label="Tên kho"
               placeholder="Tên kho"
+            />
+
+            <FormFieldCustom
+              name="cityId"
+              label="Thành phố"
+              placeholder="Chọn thành phố"
+              type="select"
+              selectData={cityOptions}
             />
 
             <div className="relative">
