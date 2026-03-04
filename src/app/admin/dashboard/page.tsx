@@ -19,6 +19,7 @@ export default function AdminDashboard() {
         </h1>
         <p className="text-gray-500 dark:text-gray-200">Tổng quan hệ thống</p>
       </div>
+
       {/*Statistic card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
         <StatCard

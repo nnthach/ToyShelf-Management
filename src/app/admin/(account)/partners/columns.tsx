@@ -9,13 +9,25 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Eye } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const getPartnerColumns = (
-  onViewDetail: (partnerId: string) => void,
-): ColumnDef<User>[] => [
+const ActionCell = ({ id }: { id: string }) => {
+  const router = useRouter();
+
+  return (
+    <span
+      onClick={() => router.push(`/admin/partners/${id}`)}
+      className="cursor-pointer text-blue-400"
+    >
+      <Eye />
+    </span>
+  );
+};
+
+export const getPartnerColumns = (): ColumnDef<User>[] => [
   {
     accessorKey: "fullName",
     header: "Tên đầy đủ",
@@ -24,7 +36,7 @@ export const getPartnerColumns = (
       const email = row.getValue("email") as string;
       return (
         <div>
-          <span>{fullname || 'Chưa có tên'}</span>
+          <span>{fullname || "Chưa có tên"}</span>
           <span>{email}</span>
         </div>
       );
@@ -66,17 +78,6 @@ export const getPartnerColumns = (
   {
     accessorKey: "action",
     header: "Hành động",
-    cell: ({ row }) => {
-      const partner = row.original;
-      return (
-        <span
-          onClick={() => onViewDetail(partner.id)}
-          title="Detail"
-          className="cursor-pointer text-blue-400"
-        >
-          <Eye />
-        </span>
-      );
-    },
+    cell: ({ row }) => <ActionCell id={row.original.id} />,
   },
 ];

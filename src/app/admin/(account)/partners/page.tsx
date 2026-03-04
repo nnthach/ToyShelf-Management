@@ -14,9 +14,6 @@ import { QueryParams } from "@/src/types/SubType";
 import { getAllPartnerAPI } from "@/src/services/partner.service";
 
 export default function AdminPartnerManage() {
-  const [selectedPartnerId, setSelectedPartnerId] = useState<string | null>(
-    null,
-  );
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
@@ -30,11 +27,7 @@ export default function AdminPartnerManage() {
     select: (res) => res.data,
   });
 
-  const handleViewDetail = (partnerId: string) => {
-    setSelectedPartnerId(partnerId);
-  };
-
-  const columns = getPartnerColumns(handleViewDetail);
+  const columns = getPartnerColumns();
 
   return (
     <>
@@ -76,12 +69,6 @@ export default function AdminPartnerManage() {
           </div>
         </DataTable>
       </div>
-
-      <ViewDetailSheet
-        partnerId={selectedPartnerId}
-        isOpen={!!selectedPartnerId}
-        onClose={() => setSelectedPartnerId(null)}
-      />
     </>
   );
 }
