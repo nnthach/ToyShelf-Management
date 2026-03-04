@@ -1,102 +1,78 @@
 "use client";
 
 import { DataTable } from "../../../../styles/components/ui/data-table";
-import { getStaffColumns } from "./columns";
 import { Button } from "../../../../styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
 import useQueryParams from "../../../../hooks/useQueryParams";
-import FilterSearchBar from "../../../../components/FilterSearchBar";
-import { useFilterSearchBar } from "../../../../hooks/useFilterSearchBar";
-import CreateStaffModal from "./components/CreateStaffModal";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { QueryParams } from "@/src/types/SubType";
-import { getAllUserAPI } from "@/src/services/user.service";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
+import { getStaffColumns } from "./columns";
+import CreateStaffModal from "./components/CreateStaffModal";
+import FilterSearch from "./components/FilterSearch";
 
-export default function AdminUserManage() {
+export default function PartnerManageStaff() {
+  const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-    limit: 10,
+    isActive: undefined,
     order: "",
-    page: 1,
     search: "",
   });
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["users", query],
-    queryFn: () => getAllUserAPI(query),
+  const { data: staffList = [], isLoading } = useQuery({
+    queryKey: ["staffs", query],
+    queryFn: () => getAllPartnerAPI(query),
+    select: (res) => res.data,
   });
 
-  const {
-    filters: tempFilter,
-    setFilters: setTempFilter,
-    handleChange: handleChangeFilter,
-    resetFilter,
-  } = useFilterSearchBar({
-    order: "",
-    status: "",
-    limit: 10,
-  });
-
-  const handleLimitChange = (value: number) => {
-    setTempFilter((prev) => ({ ...prev, limit: value }));
+  const handleViewDetail = (partnerId: string) => {
+    setSelectedStaffId(partnerId);
   };
 
-  // Bấm Apply mới cập nhật
-  const handleApplyFilters = () => {
-    updateQuery({
-      status: tempFilter.status,
-      order: tempFilter.order,
-      limit: tempFilter.limit,
-      page: 1,
-    });
-  };
-
-  const handleResetAllQueryParams = () => {
-    resetFilter();
-    resetQuery();
-  };
-
-  const columns = getStaffColumns();
+  const columns = getStaffColumns(handleViewDetail);
 
   return (
-    <div>
+    <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold text-blue-600 dark:text-foreground">
-          Quản lý nhân viên
-        </h1>
+        <h1 className="text-4xl font-bold">Quản lý nhân viên</h1>
         <CreateStaffModal />
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={data?.users ?? []}
+          data={staffList ?? []}
           isLoading={isLoading}
         >
           <div className="p-4 border-b flex justify-between items-center">
             {/*Filter search */}
-            <FilterSearchBar
-              tempFilter={tempFilter}
-              onFilterChange={handleChangeFilter}
-              onLimitChange={handleLimitChange}
-              onApplyFilters={handleApplyFilters}
-              query={{ search: query.search || "" }}
-              updateQuery={updateQuery}
-              reset={handleResetAllQueryParams}
+            <FilterSearch
+              query={query}
+              loading={isLoading}
+              resultCount={staffList.length}
+              onSearch={(val) => updateQuery({ search: val })}
+              onApplyFilter={(filter) =>
+                updateQuery({
+                  ...filter,
+                })
+              }
+              onReset={() => resetQuery()}
             />
 
             <div className="space-x-3">
               <Button>
-                <Download /> Nhập khẩu
+                <Download /> Nhập dữ liệu
               </Button>
               <Button variant={"outline"}>
-                <Upload /> Xuất khẩu
+                <Upload /> Xuất dữ liệu
               </Button>
             </div>
           </div>
         </DataTable>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,10 +1,4 @@
 "use client";
-import { PARTNER_LEVEL_OPTIONS } from "@/src/constants/partner-level";
-import { PartnerFormValues, partnerSchema } from "@/src/schemas/partner.schema";
-import { createPartnerStaffAccountAPI } from "@/src/services/account.service";
-import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
-import { createPartnerAPI } from "@/src/services/partner.service";
-import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import {
   Dialog,
@@ -16,49 +10,50 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import { PartnerTier } from "@/src/types";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import z from "zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
+import { createRoleAPI } from "@/src/services/role.service";
 
-function CreateStaffModal() {
+function CreateRoleModal() {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
 
   const formSchema = z.object({
-    email: z.string().min(1, "Email là bắt buộc"),
-    fullName: z.string().min(1, "Tên đầy đủ là bắt buộc"),
+    name: z.string().min(1, "Tên cấp độ vai trò là bắt buộc"),
+    description: z.string().min(1, "Mô tả cấp độ vai trò là bắt buộc"),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      fullName: "",
+      name: "",
+      description: "",
     },
   });
 
-  async function onSubmit(data: z.input<typeof formSchema>) {
+  async function onSubmit(data: z.output<typeof formSchema>) {
+    console.log("create role data", data);
     try {
-      await createPartnerStaffAccountAPI(data);
+      await createRoleAPI(data);
 
       queryClient.invalidateQueries({
-        queryKey: ["staffs"],
+        queryKey: ["roles"],
       });
 
       form.reset();
-      toast.success("Tạo nhân viên thành công");
+      toast.success("Thêm cấp độ vai trò mới thành công");
 
       setOpen(false);
     } catch (error) {
-      console.log("create staff err", error);
-      toast.error("Tạo nhân viên thất bại");
+      console.log("create role err", error);
+      toast.error("Thêm cấp độ vai trò mới thất bại");
     }
   }
 
@@ -74,12 +69,12 @@ function CreateStaffModal() {
     >
       <DialogTrigger asChild>
         <Button className="btn-primary-gradient">
-          <Plus /> Thêm nhân viên
+          <Plus /> Thêm cấp độ vai trò
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Thêm nhân viên mới</DialogTitle>
+          <DialogTitle>Thêm cấp độ vai trò</DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
@@ -88,23 +83,28 @@ function CreateStaffModal() {
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-3"
-            id="form-create-staff"
+            className="space-y-3 mb-2"
+            id="form-create-role"
           >
             <FormFieldCustom
-              name="fullName"
-              label="Tên đầy đủ"
-              placeholder="Tên đầy đủ"
+              name="name"
+              label="Tên cấp độ vai trò"
+              placeholder="Ví dụ: Cấp độ 1"
             />
-            <FormFieldCustom name="email" label="Email" placeholder="Email" />
+
+            <FormFieldCustom
+              name="description"
+              label="Mô tả cấp độ vai trò"
+              placeholder="Ví dụ: 1"
+            />
           </form>
         </FormProvider>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">Hủy</Button>
           </DialogClose>
-          <Button type="submit" form="form-create-staff">
-            Tạo nhân viên
+          <Button type="submit" form="form-create-role">
+            Thêm mới
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -112,4 +112,4 @@ function CreateStaffModal() {
   );
 }
 
-export default CreateStaffModal;
+export default CreateRoleModal;

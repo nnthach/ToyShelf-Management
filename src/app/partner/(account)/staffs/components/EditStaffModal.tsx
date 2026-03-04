@@ -24,7 +24,7 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-function CreatePartnerModal() {
+function EditStaffModal() {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -129,4 +129,4 @@ function CreatePartnerModal() {
   );
 }
 
-export default CreatePartnerModal;
+export default EditStaffModal;

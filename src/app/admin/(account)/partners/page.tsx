@@ -8,7 +8,7 @@ import { getPartnerColumns } from "./columns";
 import CreatePartnerModal from "./components/CreatePartnerModal";
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ViewDetailSheet from "./components/ViewDetailSheet";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllPartnerAPI } from "@/src/services/partner.service";
@@ -25,7 +25,7 @@ export default function AdminPartnerManage() {
   });
 
   const { data: partnerList = [], isLoading } = useQuery({
-    queryKey: ["colors", query],
+    queryKey: ["partners", query],
     queryFn: () => getAllPartnerAPI(query),
     select: (res) => res.data,
   });

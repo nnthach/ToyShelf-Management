@@ -1,4 +1,3 @@
-// import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { Button } from "@/src/styles/components/ui/button";
 import { Input } from "@/src/styles/components/ui/input";
@@ -9,6 +8,7 @@ import {
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
 import { QueryParams } from "@/src/types/SubType";
+
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Filter, Search, X, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -21,9 +21,9 @@ type FilterBarProps = {
   showOrder?: boolean;
   onSearch: (val: string) => void;
   onApplyFilter: (val: {
-    isActive?: boolean;
+    status?: boolean;
     order?: string;
-    // limit?: number;
+    limit?: number;
   }) => void;
   onReset: () => void;
 };
@@ -37,6 +37,8 @@ export default function FilterSearch({
   onApplyFilter,
   onReset,
 }: FilterBarProps) {
+
+
   const [searchInput, setSearchInput] = useState(query.search ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
 
@@ -45,34 +47,36 @@ export default function FilterSearch({
   }, [debouncedSearch]);
 
   const [tempFilter, setTempFilter] = useState<{
-    isActive?: boolean;
+    status: "" | "true" | "false";
     order: string;
-    // limit: number;
+    limit: number;
   }>({
-    isActive: undefined,
+    status:
+      query.status === true ? "true" : query.status === false ? "false" : "",
     order: query.order ?? "",
-    // limit: query.limit ?? 10,
+    limit: query.limit ?? 10,
   });
 
   const isFiltered =
     query.search ||
     (showOrder && query.order !== "") ||
-    (showStatus && query.isActive !== undefined);
+    (showStatus && typeof query.status === "boolean");
 
   const handleApply = () => {
     onApplyFilter({
-      isActive: tempFilter.isActive,
+      status:
+        tempFilter.status === "" ? undefined : tempFilter.status === "true",
       order: tempFilter.order || undefined,
-      // limit: tempFilter.limit,
+      limit: tempFilter.limit,
     });
   };
 
   const handleResetAll = () => {
     setSearchInput("");
     setTempFilter({
-      isActive: undefined,
+      status: "",
       order: "",
-      // limit: 10,
+      limit: 10,
     });
     onReset();
   };
@@ -117,24 +121,17 @@ export default function FilterSearch({
                 <Label>Trạng thái</Label>
                 <select
                   className="border rounded-md h-9 px-2"
-                  value={
-                    tempFilter.isActive === undefined
-                      ? "all"
-                      : String(tempFilter.isActive)
-                  }
+                  value={tempFilter.status}
                   onChange={(e) =>
                     setTempFilter((p) => ({
                       ...p,
-                      isActive:
-                        e.target.value === "all"
-                          ? undefined
-                          : e.target.value === "true",
+                      status: e.target.value as "" | "true" | "false",
                     }))
                   }
                 >
-                  <option value="all">Tất cả</option>
-                  <option value="true">Hoạt động</option>
-                  <option value="false">Không hoạt động</option>
+                  <option value="">Tất cả</option>
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
                 </select>
               </div>
             )}
@@ -181,7 +178,7 @@ export default function FilterSearch({
     "
         >
           <XCircle className="w-4 h-4" />
-          Xóa
+          Clear
         </Button>
       )}
     </div>

@@ -20,8 +20,8 @@ export interface Partner {
   email: string;
   companyName: string;
   fullName: string;
-  tier: string;
-  revenueSharePercent: number;
+  partnerTierId: string;
+  partnerTierName: string;
   isActive: boolean;
   createdAt: string;
 }
@@ -133,6 +133,12 @@ export interface PartnerTier {
   id: string;
   name: string;
   priority: number;
+}
+
+export interface Role {
+  id: string;
+  name: string;
+  description: string;
 }
 
 export interface PriceTableItem {

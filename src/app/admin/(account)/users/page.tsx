@@ -17,17 +17,6 @@ export default function AdminUserManage() {
     search: "",
   });
 
-  // const debouncedSearch = useDebounce(query.search, 500);
-  // const debouncedQuery = useMemo(
-  //   () => ({ ...query, search: debouncedSearch }),
-  //   [query, debouncedSearch],
-  // );
-
-  // const { data: userList = [], loading } = useFetchList<User[], QueryParams>(
-  //   getAllUsers,
-  //   debouncedQuery
-  // );
-
   const { data: userList = [], isLoading } = useQuery({
     queryKey: ["users", query],
     queryFn: () => getAllUserAPI(query),

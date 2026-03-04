@@ -42,7 +42,7 @@ export const AdminSidebarNested = [
     sub: [
       { title: "Người dùng tài khoản", url: "/admin/users", icon: User },
       { title: "Nhân viên tài khoản", url: "/admin/staffs", icon: UserStar },
-      { title: "Đối tác tài khoản", url: "/admin/partners", icon: Users },
+      { title: "Đối tác", url: "/admin/partners", icon: Users },
     ],
   },
 
@@ -100,9 +100,14 @@ export const AdminSidebarNested = [
         url: "/admin/commission-policy",
         icon: CircleStar,
       },
-            {
+      {
         title: "Danh sách thành phố",
         url: "/admin/city",
+        icon: CircleStar,
+      },
+      {
+        title: "Chức vụ",
+        url: "/admin/roles",
         icon: CircleStar,
       },
     ],

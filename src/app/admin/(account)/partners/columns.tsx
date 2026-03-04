@@ -24,7 +24,7 @@ export const getPartnerColumns = (
       const email = row.getValue("email") as string;
       return (
         <div>
-          <span>{fullname}</span>
+          <span>{fullname || 'Chưa có tên'}</span>
           <span>{email}</span>
         </div>
       );
@@ -37,7 +37,7 @@ export const getPartnerColumns = (
   },
 
   {
-    accessorKey: "tier",
+    accessorKey: "partnerTierName",
     header: "Cấp bậc",
   },
 
