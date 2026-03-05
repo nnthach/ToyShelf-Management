@@ -76,15 +76,13 @@ export default function HomePage() {
       form.reset();
       toast.success("Đăng nhập thành công");
 
-      // if (roles.includes("Admin")) {
-      //   router.replace("/admin/dashboard");
-      // } else if (roles.includes("Customer") && !roles.includes("Admin")) {
-      //   toast.error(
-      //     locale === "vi"
-      //       ? "Hệ thống dành cho quản trị viên!"
-      //       : "System belong to administrator!",
-      //   );
-      // }
+      if (roles.includes("Admin")) {
+        router.replace("/admin/dashboard");
+      } else if (roles.includes("PartnerAdmin") && !roles.includes("Admin")) {
+        router.replace("/partner/dashboard");
+      } else if (roles.includes("Customer") && !roles.includes("Admin")) {
+        toast.error("Hệ thống dành cho quản trị viên!");
+      }
     } catch (error) {
       console.log("login err", error);
       toast.error("Đăng nhập thất bại");

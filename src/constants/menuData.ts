@@ -117,41 +117,38 @@ export const AdminSidebarNested = [
 // Partner admin
 export const PartnerAdminSidebarGroups = [
   {
-    label: "application",
+    label: "Ứng dụng",
     items: [
-      { title: "dashboard", url: "/partner/dashboard", icon: LayoutDashboard },
-      { title: "notifications", url: "#", icon: Bell, badge: true },
-      { title: "settings", url: "#", icon: Settings },
+      { title: "Tổng quan", url: "/partner/dashboard", icon: LayoutDashboard },
+      { title: "Thông báo", url: "#", icon: Bell, badge: true },
+      { title: "Cài đặt", url: "#", icon: Settings },
     ],
   },
   {
-    label: "staffManagement",
-    items: [{ title: "staffAccounts", url: "/partner/staffs", icon: UserStar }],
+    label: "Quản lý cửa hàng",
+    items: [{ title: "Cửa hàng", url: "/partner/stores", icon: Store }],
   },
   {
-    label: "products",
-    items: [{ title: "products", url: "/partner/products", icon: Package }],
+    label: "Quản lý nhân sự",
+    items: [
+      { title: "Tài khoản nhân viên", url: "/partner/staffs", icon: UserStar },
+    ],
   },
-
   {
-    label: "orders",
-    items: [{ title: "orders", url: "/partner/orders", icon: ClipboardList }],
+    label: "Đơn hàng",
+    items: [{ title: "Đơn hàng", url: "/partner/orders", icon: ClipboardList }],
   },
 ];
 
 export const PartnerAdminSidebarNested = [
   {
-    label: "storeManagement",
+    label: "Quản lý yêu cầu",
     sub: [
-      { title: "stores", url: "/partner/stores", icon: Store },
-      { title: "cabinets", url: "/partner/cabinets", icon: Server },
-    ],
-  },
-  {
-    label: "requestManagement",
-    sub: [
-      { title: "stores", url: "/partner/stores", icon: Store },
-      { title: "cabinets", url: "/partner/cabinets", icon: Server },
+      {
+        title: "Lời mời tham gia cửa hàng",
+        url: "/partner/stores",
+        icon: Store,
+      },
     ],
   },
 ];

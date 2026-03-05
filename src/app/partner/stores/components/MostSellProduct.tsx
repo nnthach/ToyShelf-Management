@@ -25,7 +25,7 @@ const MostSellProduct = () => {
         <div className="relative w-full aspect-4/3 rounded-md overflow-hidden">
           <Image
             src="https://dddn.1cdn.vn/2020/08/03/diendandoanhnghiep.vn-media-uploaded-493-2020-07-28-_ven6oi9tabzmnhzp3atbcx-enternews-1595875625.jpg"
-            alt="Most Sell Store"
+            alt="Sản phẩm bán chạy nhất"
             fill
             className="object-cover"
           />

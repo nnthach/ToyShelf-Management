@@ -12,7 +12,7 @@ interface StoreListViewProps {
 }
 
 function StoreListView({ storeList, isLoading, children }: StoreListViewProps) {
-  const columns = getStoreColumns((key: string) => key);
+  const columns = getStoreColumns();
 
   return (
     <div className="container mx-auto py-10">

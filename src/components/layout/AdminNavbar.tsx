@@ -23,7 +23,7 @@ import { useAuth } from "@/src/hooks/useAuth";
 const AdminNavbar = () => {
   const { theme, setTheme } = useTheme();
   const { open, toggleSidebar } = useSidebar();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { openProfile, openChangePassword } = useAccountAdminModal();
 
   return (
@@ -50,8 +50,11 @@ const AdminNavbar = () => {
 
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer">
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <Avatar className="border border-black/50 shadow-sm">
+              <AvatarImage
+                src={user?.avatarUrl || "https://github.com/shadcn.png"}
+                alt="@shadcn"
+              />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>

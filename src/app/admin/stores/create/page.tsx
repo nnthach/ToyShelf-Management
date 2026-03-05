@@ -23,7 +23,7 @@ import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import { OPEN_DAY_OPTION } from "@/src/constants/openday-option";
 import ConfirmPopup from "./ConfirmPopup";
 
-export default function CreateProductPage() {
+export default function AdminCreateStorePage() {
   const router = useRouter();
 
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -38,7 +38,7 @@ export default function CreateProductPage() {
     resolver: zodResolver(storeSchema),
     defaultValues: {
       name: "",
-      partnerID: "",
+      partnerId: "",
       storeAddress: "",
       phoneNumber: "",
       code: "",
@@ -112,7 +112,7 @@ export default function CreateProductPage() {
 
   /*Select partner */
   const handleSelectPartner = (partner: Partner) => {
-    form.setValue("partnerID", partner.id);
+    form.setValue("partnerId", partner.id);
     setSearchPartner(partner.companyName);
     setShowDropdownPartner(false);
     updateQuery({ search: "" });
@@ -267,14 +267,14 @@ export default function CreateProductPage() {
                   onBlur={() => setShowDropdownPartner(false)}
                 >
                   <FormFieldCustom
-                    name="partnerID"
+                    name="partnerId"
                     label="Chủ quản lý"
                     placeholder="Chủ quản lý"
                     value={searchPartner}
                     onFocus={() => setShowDropdownPartner(true)}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setSearchPartner(e.target.value);
-                      form.setValue("partnerID", "");
+                      form.setValue("partnerId", "");
                       setShowDropdownPartner(true);
                     }}
                   />

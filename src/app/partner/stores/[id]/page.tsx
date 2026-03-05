@@ -6,8 +6,10 @@ import {
   Box,
   Check,
   Clock,
+  Edit,
   Mail,
   MapPin,
+  MessageSquare,
   Star,
   User,
 } from "lucide-react";
@@ -18,15 +20,15 @@ import { TargetRevenueChart } from "../components/charts/TargetRevenueChart";
 import StoreFeedbackList from "../components/StoreFeebackList";
 import MostSellProduct from "../components/MostSellProduct";
 import { StaffFakeData } from "@/src/constants/fakeData";
+import ViewEverydayReportSheet from "./components/ViewEverydayReportSheet";
 import ViewStoreProductSheet from "./components/ViewStoreProductSheet";
+import ViewStoreFeedbackSheet from "./components/ViewStoreFeedbackSheet";
 import ViewStoreStaffSheet from "./components/ViewStoreStaffSheet";
 import { useQuery } from "@tanstack/react-query";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import { getStoreDetailAPI } from "@/src/services/store.service";
-import {
-  formatStoreStatusColor,
-  formatStoreStatusText,
-} from "@/src/utils/formatStatus";
+import { formatStoreStatusColor, formatStoreStatusText } from "@/src/utils/formatStatus";
+
 
 interface StatCardProps {
   title: string;
@@ -122,7 +124,18 @@ export default function ViewStoreDetailPage() {
             </Button>
           </ViewStoreProductSheet>
 
-
+          <ViewStoreFeedbackSheet>
+            <Button
+              className="
+      bg-amber-500 text-white
+      dark:bg-amber-900 dark:text-amber-100
+      hover:bg-amber-600 dark:hover:bg-amber-800
+    "
+            >
+              <MessageSquare className="h-4 w-4" />
+              Danh sách đánh giá
+            </Button>
+          </ViewStoreFeedbackSheet>
 
           <Button
             className="btn-primary-gradient"
@@ -145,7 +158,7 @@ export default function ViewStoreDetailPage() {
             onClick={() => router.push(`/admin/stores/${id}/edit`)}
           >
             <Check className="h-4 w-4" />
-            Khôi phục
+            Phục hồi
           </Button>
         </div>
       </div>
@@ -153,13 +166,13 @@ export default function ViewStoreDetailPage() {
       {/*Stat card */}
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
         <StatCard
-          title={`Total Products`}
+          title={`Tổng sản phẩm`}
           value={250}
           icon={Box}
           color="bg-green-200 text-green-900"
         />
         <StatCard
-          title={`Rating`}
+          title={`Đánh giá`}
           value={4.8}
           icon={Star}
           color="bg-pink-200 text-pink-900"
@@ -314,6 +327,12 @@ export default function ViewStoreDetailPage() {
             </div>
             {/*diver */}
             <div className="h-px bg-gray-200 my-3" />
+            {/*Footer */}
+            <div className="flex justify-end">
+              <ViewEverydayReportSheet>
+                <Button>Các báo cáo hàng ngày</Button>
+              </ViewEverydayReportSheet>
+            </div>
           </div>
         </div>
       </div>

@@ -87,7 +87,7 @@ function ConfirmPopup({
               <div className="space-y-1 text-sm">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Mail className="w-4 h-4" />
-                  <span className="text-xs">{previewData.partnerID}</span>
+                  <span className="text-xs">{previewData.partnerId}</span>
                 </div>
               </div>
             </div>

@@ -6,39 +6,37 @@ import { ArrowLeft, Check, MapPin, Trash2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import MapCreate from "../../create/MapCreate";
 import ConfirmPopup from "../../create/ConfirmPopup";
 import { StoreFormValues, storeSchema } from "@/src/schemas/store.schema";
-
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@/src/hooks/useDebounce";
-
 import { toast } from "react-toastify";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import { OPEN_DAY_OPTION } from "@/src/constants/openday-option";
-import { OpenMapFeature, PlaceDetail, QueryParams } from "@/src/types/SubType";
+import { useMapCreate } from "@/src/hooks/useMapCreate";
+import MapCreate from "@/src/components/MapCreate";
 import {
   getStoreDetailAPI,
   updateStoreAPI,
 } from "@/src/services/store.service";
+import { QueryParams } from "@/src/types/SubType";
 import { getAllPartnerAPI } from "@/src/services/partner.service";
 import { Partner } from "@/src/types";
+import { formatToSlug } from "@/src/utils/format";
 
 export default function EditStPage() {
   const { id } = useParams<{ id: string }>();
 
   const router = useRouter();
+
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [openVerifyCreateForm, setOpenVerifyCreateForm] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isGeocoding, setIsGeocoding] = useState(false);
   const [showDropdownPartner, setShowDropdownPartner] = useState(false);
   const [searchPartner, setSearchPartner] = useState("");
-  const [suggestions, setSuggestions] = useState<OpenMapFeature[]>([]);
 
   const { data: storeDetail } = useQuery({
     queryKey: ["store", id],
@@ -51,7 +49,7 @@ export default function EditStPage() {
     resolver: zodResolver(storeSchema),
     defaultValues: {
       name: "",
-      partnerID: "",
+      partnerId: "",
       storeAddress: "",
       phoneNumber: "",
       code: "",
@@ -64,7 +62,7 @@ export default function EditStPage() {
         name: storeDetail.name,
         storeAddress: storeDetail.storeAddress,
         phoneNumber: storeDetail.phoneNumber,
-        partnerID: storeDetail.partnerID,
+        partnerId: storeDetail.partnerId,
         code: storeDetail.code,
       });
     }
@@ -76,6 +74,16 @@ export default function EditStPage() {
     isActive: true,
     search: "",
   });
+
+  const {
+    suggestions,
+    isGeocoding,
+    isLoading,
+    setIsLoading,
+    fetchPlaceDetail,
+    fetchSuggestions,
+    setSuggestions,
+  } = useMapCreate();
 
   // support select partner
   const { data: partnerList = [] } = useQuery({
@@ -91,72 +99,6 @@ export default function EditStPage() {
       search: debouncedSearch || "",
     });
   }, [debouncedSearch]);
-
-  // open map get address
-  const fetchSuggestions = async (text: string) => {
-    if (text.length < 4) {
-      setSuggestions([]);
-      return;
-    }
-
-    setIsGeocoding(true);
-
-    try {
-      const res = await fetch(
-        `https://mapapis.openmap.vn/v1/autocomplete?text=${encodeURIComponent(
-          text,
-        )}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`,
-      );
-
-      console.log("res", res);
-
-      const data = await res.json();
-
-      console.log("data", data.features);
-      setSuggestions(data.features || []);
-    } finally {
-      setIsGeocoding(false);
-    }
-  };
-
-  // open map get lat long
-  const fetchPlaceDetail = async (id: string): Promise<PlaceDetail | null> => {
-    if (!id) return null;
-
-    setIsGeocoding(true);
-
-    try {
-      const res = await fetch(
-        `https://mapapis.openmap.vn/v1/place?ids=${id}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`,
-      );
-
-      if (!res.ok) throw new Error("Fetch place detail failed");
-
-      const data = await res.json();
-      const feature = data?.features?.[0];
-
-      if (!feature?.geometry?.coordinates) return null;
-
-      const [lng, lat] = feature.geometry.coordinates;
-
-      return {
-        lat,
-        lng,
-        address: feature.properties?.label ?? "",
-      };
-    } finally {
-      setIsGeocoding(false);
-    }
-  };
-
-  // support loading
-  useEffect(() => {
-    if (isLoading) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-  }, [isLoading]);
 
   /*IMAGE */
   const handleSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,7 +132,7 @@ export default function EditStPage() {
 
   /*Select partner */
   const handleSelectPartner = (partner: Partner) => {
-    form.setValue("partnerID", partner.id);
+    form.setValue("partnerId", partner.id);
     setSearchPartner(partner.companyName);
     setShowDropdownPartner(false);
     updateQuery({ search: "" });
@@ -206,6 +148,12 @@ export default function EditStPage() {
     if (!previewData) return;
 
     console.log("previewData", previewData);
+    const payload = {
+      ...previewData,
+      code: formatToSlug(previewData.name),
+    };
+    console.log("payload", payload);
+
     setIsLoading(true);
     try {
       // const imageUrl = imageFile
@@ -224,6 +172,7 @@ export default function EditStPage() {
       setImagePreview(null);
 
       setOpenVerifyCreateForm(false);
+      router.back();
     } catch (error) {
       toast.error("Tạo cửa hàng thất bại");
     } finally {
@@ -339,14 +288,14 @@ export default function EditStPage() {
                   onBlur={() => setShowDropdownPartner(false)}
                 >
                   <FormFieldCustom
-                    name="partnerID"
+                    name="partnerId"
                     label="Chủ quản lý"
                     placeholder="Chủ quản lý"
                     value={searchPartner}
                     onFocus={() => setShowDropdownPartner(true)}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setSearchPartner(e.target.value);
-                      form.setValue("partnerID", "");
+                      form.setValue("partnerId", "");
                       setShowDropdownPartner(true);
                     }}
                   />
@@ -415,9 +364,11 @@ export default function EditStPage() {
         <div className="bg-background rounded-lg p-4">
           <div className="mb-4">
             <h1 className="text-md font-bold text-gray-950 dark:text-foreground">
-              Địa chỉ
+              Bản đồ
             </h1>
-            <p className="text-gray-500 text-sm">Nhập địa chỉ cửa hàng</p>
+            <p className="text-gray-500 text-sm">
+              Chọn vị trí cửa hàng trên bản đồ
+            </p>
           </div>
           <div className="flex flex-col gap-2 mb-3">
             <p className="text-sm font-medium">Bản đồ</p>

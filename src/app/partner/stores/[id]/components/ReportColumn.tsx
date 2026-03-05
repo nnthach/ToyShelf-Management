@@ -1,6 +1,5 @@
 "use client";
 
-import { Report } from "@/src/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
@@ -27,20 +26,20 @@ export const getReportColumns = (
 ): ColumnDef<Report>[] => [
   {
     accessorKey: "store",
-    header: "Cửa hàng",
+    header: 'Cửa hàng',
   },
   {
     accessorKey: "staffId",
-    header: "Nhân viên",
+    header: 'Nhân viên',
   },
   {
     accessorKey: "rating",
-    header: "Đánh giá",
+    header: 'Đánh giá',
   },
 
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: 'Hành động',
     cell: ({ row }) => {
       const report = row.original;
       return <ReportActionCell report={report} onView={onView} />;

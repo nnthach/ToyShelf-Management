@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/src/hooks/useAuth";
 import {
   Avatar,
   AvatarFallback,
@@ -17,6 +18,7 @@ import {
 import { useSidebar } from "../../styles/components/ui/sidebar";
 import {
   ChevronLeft,
+  Lock,
   LogOut,
   Menu,
   Moon,
@@ -25,10 +27,13 @@ import {
   User,
 } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useAccountAdminModal } from "@/src/context/AccountAdminModalContext";
 
 const PartnerAdminNavbar = () => {
   const { theme, setTheme } = useTheme();
   const { open, toggleSidebar } = useSidebar();
+  const { logout, user } = useAuth();
+  const { openProfile, openChangePassword } = useAccountAdminModal();
 
   return (
     <nav className="p-4 flex items-center justify-between bg-white dark:bg-sidebar">
@@ -54,23 +59,33 @@ const PartnerAdminNavbar = () => {
 
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer">
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <Avatar className="border border-black/50 shadow-sm">
+              <AvatarImage
+                src={user?.avatarUrl || "https://github.com/shadcn.png"}
+                alt="@shadcn"
+              />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={10} className="mr-2">
             <DropdownMenuLabel>Tài khoản</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem onClick={openProfile} className="cursor-pointer">
               <User />
-              Hồ sơ
+              Thông tin
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <Settings />
-              Cài đặt
+            <DropdownMenuItem
+              onClick={openChangePassword}
+              className="cursor-pointer"
+            >
+              <Lock />
+              Đặt lại mật khẩu
             </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive" className="cursor-pointer">
+            <DropdownMenuItem
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={logout}
+            >
               <LogOut />
               Đăng xuất
             </DropdownMenuItem>

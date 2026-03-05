@@ -11,9 +11,9 @@ import {
 import { StaffFakeData } from "@/src/constants/fakeData";
 import { useState } from "react";
 import ReportDetailModal from "./ReportDetailModal";
+import { Report } from "@/src/types";
 
 function ViewStoreStaffSheet({ children }: { children: React.ReactNode }) {
-
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
 
   return (

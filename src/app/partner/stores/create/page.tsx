@@ -5,42 +5,47 @@ import { Button } from "@/src/styles/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Check, MapPin, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import MapCreate from "./MapCreate";
-import LoadingPageComponent from "@/src/components/LoadingPageComponent";
-import { toast } from "react-toastify";
-import { OPEN_DAY_OPTION } from "@/src/constants/openday-option";
-import ConfirmPopup from "./ConfirmPopup";
-import { StoreFormValues, storeSchema } from "@/src/schemas/store.schema";
 import { useQuery } from "@tanstack/react-query";
 import useQueryParams from "@/src/hooks/useQueryParams";
-
 import { useDebounce } from "@/src/hooks/useDebounce";
-import { OpenMapFeature, PlaceDetail, QueryParams } from "@/src/types/SubType";
+import { useMapCreate } from "@/src/hooks/useMapCreate";
+import MapCreate from "@/src/components/MapCreate";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { getAllPartnerAPI } from "@/src/services/partner.service";
-import { createStoreAPI } from "@/src/services/store.service";
 import { Partner } from "@/src/types";
+import { FormProvider, useForm } from "react-hook-form";
+import { StoreFormValues, storeSchema } from "@/src/schemas/store.schema";
+import { QueryParams } from "@/src/types/SubType";
+import { toast } from "react-toastify";
+import { formatToSlug } from "@/src/utils/format";
+import { createStoreAPI } from "@/src/services/store.service";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
+import { OPEN_DAY_OPTION } from "@/src/constants/openday-option";
+import ConfirmPopup from "./ConfirmPopup";
+import { useAuth } from "@/src/hooks/useAuth";
 
-export default function CreateProductPage() {
+export default function PartnerCreateStorePage() {
   const router = useRouter();
+
+  const { user } = useAuth();
+
+  const userId = user?.id;
+
+  console.log("user", user);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [openVerifyCreateForm, setOpenVerifyCreateForm] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isGeocoding, setIsGeocoding] = useState(false);
   const [showDropdownPartner, setShowDropdownPartner] = useState(false);
   const [searchPartner, setSearchPartner] = useState("");
-  const [suggestions, setSuggestions] = useState<OpenMapFeature[]>([]);
 
   const form = useForm<StoreFormValues>({
     resolver: zodResolver(storeSchema),
     defaultValues: {
       name: "",
-      partnerID: "",
+      partnerId: "",
       storeAddress: "",
       phoneNumber: "",
       code: "",
@@ -53,90 +58,42 @@ export default function CreateProductPage() {
   });
   const [previewData, setPreviewData] = useState<StoreFormValues | null>(null);
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: true,
-    search: "",
-  });
+  const {
+    suggestions,
+    isGeocoding,
+    isLoading,
+    setIsLoading,
+    fetchPlaceDetail,
+    fetchSuggestions,
+    setSuggestions,
+  } = useMapCreate();
 
-  const { data: partnerList = [] } = useQuery({
-    queryKey: ["partners", query],
-    queryFn: () => getAllPartnerAPI(query),
-    select: (res) => res.data as Partner[],
-  });
+  // const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
+  //   isActive: true,
+  //   search: "",
+  // });
 
-  const debouncedSearch = useDebounce(searchPartner, 500);
+  // const { data: partnerList = [] } = useQuery({
+  //   queryKey: ["partners", query],
+  //   queryFn: () => getAllPartnerAPI(query),
+  //   select: (res) => res.data as Partner[],
+  // });
 
-  useEffect(() => {
-    updateQuery({
-      search: debouncedSearch || "",
-    });
-  }, [debouncedSearch]);
+  // const debouncedSearch = useDebounce(searchPartner, 500);
 
-  // open map get address
-  const fetchSuggestions = async (text: string) => {
-    if (text.length < 4) {
-      setSuggestions([]);
-      return;
-    }
+  // useEffect(() => {
+  //   updateQuery({
+  //     search: debouncedSearch || "",
+  //   });
+  // }, [debouncedSearch]);
 
-    setIsGeocoding(true);
-
-    try {
-      const res = await fetch(
-        `https://mapapis.openmap.vn/v1/autocomplete?text=${encodeURIComponent(
-          text,
-        )}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`,
-      );
-
-      console.log("res", res);
-
-      const data = await res.json();
-
-      console.log("data", data.features);
-      setSuggestions(data.features || []);
-    } finally {
-      setIsGeocoding(false);
-    }
-  };
-
-  // open map get lat long
-  const fetchPlaceDetail = async (id: string): Promise<PlaceDetail | null> => {
-    if (!id) return null;
-
-    setIsGeocoding(true);
-
-    try {
-      const res = await fetch(
-        `https://mapapis.openmap.vn/v1/place?ids=${id}&apikey=${process.env.NEXT_PUBLIC_OPEN_MAP_API_KEY}`,
-      );
-
-      if (!res.ok) throw new Error("Fetch place detail failed");
-
-      const data = await res.json();
-      const feature = data?.features?.[0];
-
-      if (!feature?.geometry?.coordinates) return null;
-
-      const [lng, lat] = feature.geometry.coordinates;
-
-      return {
-        lat,
-        lng,
-        address: feature.properties?.label ?? "",
-      };
-    } finally {
-      setIsGeocoding(false);
-    }
-  };
-
-  // support loading
-  useEffect(() => {
-    if (isLoading) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-  }, [isLoading]);
+  /*Select partner */
+  // const handleSelectPartner = (partner: Partner) => {
+  //   form.setValue("partnerId", partner.id);
+  //   setSearchPartner(partner.companyName);
+  //   setShowDropdownPartner(false);
+  //   updateQuery({ search: "" });
+  // };
 
   /*IMAGE */
   const handleSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,14 +125,6 @@ export default function CreateProductPage() {
   };
   /*END IMAGE */
 
-  /*Select partner */
-  const handleSelectPartner = (partner: Partner) => {
-    form.setValue("partnerID", partner.id);
-    setSearchPartner(partner.companyName);
-    setShowDropdownPartner(false);
-    updateQuery({ search: "" });
-  };
-
   // Show confirm modal
   function onSubmit(data: StoreFormValues) {
     setPreviewData(data);
@@ -186,13 +135,19 @@ export default function CreateProductPage() {
     if (!previewData) return;
 
     console.log("previewData", previewData);
+    const payload = {
+      ...previewData,
+      partnerId: userId || "",
+    };
+    console.log("payload", payload);
+
     setIsLoading(true);
     try {
       // const imageUrl = imageFile
       //   ? await uploadFileToCloudinary(imageFile, "store")
       //   : null;
 
-      const res = await createStoreAPI(previewData);
+      const res = await createStoreAPI(payload);
 
       console.log("res", res);
 
@@ -243,9 +198,9 @@ export default function CreateProductPage() {
       </div>
 
       {/*Content */}
-      <div className="grid grid-cols-3 gap-3 w-full min-h-[80vh] my-4 rounded-xl">
+      <div className="grid grid-cols-2 gap-3 w-full min-h-[80vh] my-4 rounded-xl">
         {/*Field*/}
-        <div className="bg-background rounded-lg p-4">
+        <div className="bg-background rounded-lg p-4 shadow-sm">
           <div className="mb-4">
             <h1 className="text-md font-bold text-gray-950 dark:text-foreground">
               Thông tin cửa hàng
@@ -313,20 +268,20 @@ export default function CreateProductPage() {
                   placeholder="Tên cửa hàng"
                 />
 
-                <div
+                {/* <div
                   className="relative w-full"
                   tabIndex={-1}
                   onBlur={() => setShowDropdownPartner(false)}
                 >
                   <FormFieldCustom
-                    name="partnerID"
+                    name="partnerId"
                     label="Chủ quản lý"
                     placeholder="Chủ quản lý"
                     value={searchPartner}
                     onFocus={() => setShowDropdownPartner(true)}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setSearchPartner(e.target.value);
-                      form.setValue("partnerID", "");
+                      form.setValue("partnerId", "");
                       setShowDropdownPartner(true);
                     }}
                   />
@@ -353,9 +308,14 @@ export default function CreateProductPage() {
                           Not found partner
                         </li>
                       )}
+                      {partnerList.length === 0 && (
+                        <li className="px-4 py-2 text-sm text-gray-400 select-none">
+                          Không tìm thấy đối tác
+                        </li>
+                      )}
                     </ul>
                   )}
-                </div>
+                </div> */}
               </div>
 
               <div className="flex items-center gap-3">
@@ -392,7 +352,7 @@ export default function CreateProductPage() {
         </div>
 
         {/*Map */}
-        <div className="bg-background rounded-lg p-4">
+        <div className="bg-background rounded-lg p-4 shadow-sm">
           <div className="mb-4">
             <h1 className="text-md font-bold text-gray-950 dark:text-foreground">
               Địa chỉ
@@ -463,15 +423,15 @@ export default function CreateProductPage() {
               <div className="flex items-center gap-3">
                 <FormFieldCustom
                   name="latitude"
-                  label="Vĩ độ"
-                  placeholder="Vĩ độ"
+                  label="Kinh độ"
+                  placeholder="Kinh độ"
                   type="number"
                   readOnly={true}
                 />
                 <FormFieldCustom
                   name="longitude"
-                  label="Kinh độ"
-                  placeholder="Kinh độ"
+                  label="Vĩ độ"
+                  placeholder="Vĩ độ"
                   type="number"
                   readOnly={true}
                 />

@@ -4,15 +4,16 @@ import { LayoutGrid, List, Plus } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { cn } from "@/src/styles/lib/utils";
 import StoreListView from "./components/StoreView/StoreListView";
 import StoreGridView from "./components/StoreView/StoreGridView";
+
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { QueryParams } from "@/src/types/SubType";
-import { Store } from "@/src/types";
 import { getAllStoreAPI } from "@/src/services/store.service";
+import { Store } from "@/src/types";
 
 export default function PartnerStoreManage() {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function PartnerStoreManage() {
         <div className="flex items-center gap-4">
           <Button
             className="btn-primary-gradient"
-            onClick={() => router.push("/admin/stores/create")}
+            onClick={() => router.push("/partner/stores/create")}
           >
             <Plus /> Tạo cửa hàng
           </Button>

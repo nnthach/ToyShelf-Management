@@ -1,5 +1,6 @@
 import StatCard from "@/src/components/StatCard";
 import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
+import { Report } from "@/src/types";
 import { Box } from "lucide-react";
 
 function ReportDetailModal({

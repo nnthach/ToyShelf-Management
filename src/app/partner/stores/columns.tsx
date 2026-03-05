@@ -27,13 +27,11 @@ function StoreActionCell({ id }: { id: string }) {
   );
 }
 
-export const getStoreColumns = (
-  t: (key: string) => string,
-): ColumnDef<Store>[] => [
+export const getStoreColumns = (): ColumnDef<Store>[] => [
   {
     accessorFn: (row) => row.images?.[0],
     id: "image",
-    header: t("image"),
+    header: "Hình ảnh",
     cell: ({ getValue }) => (
       <img
         src={getValue() as string}
@@ -43,7 +41,7 @@ export const getStoreColumns = (
   },
   {
     accessorKey: "name",
-    header: t("name"),
+    header: "Tên",
     cell: ({ row }) => {
       const { name, partnerId } = row.original as {
         name: string;
@@ -60,7 +58,7 @@ export const getStoreColumns = (
   },
   {
     accessorKey: "storeAddress",
-    header: t("address"),
+    header: "Địa chỉ",
     cell: ({ row }) => {
       const storeAddress = row.getValue("storeAddress") as string;
 
@@ -73,7 +71,7 @@ export const getStoreColumns = (
   },
 
   {
-    header: t("workingTime"),
+    header: "Thời gian làm việc",
     cell: ({ row }) => {
       const { openTime, closeTime, openDay } = row.original;
       return (
@@ -85,7 +83,7 @@ export const getStoreColumns = (
   },
   {
     accessorKey: "isActive",
-    header: t("status"),
+    header: "Trạng thái",
     cell: ({ row }) => {
       const isActive = row.getValue("isActive") as boolean;
 
@@ -98,7 +96,7 @@ export const getStoreColumns = (
   },
   {
     accessorKey: "action",
-    header: t("action"),
+    header: "Hành động",
     cell: ({ row }) => {
       const store = row.original;
       return <StoreActionCell id={store.id} />;
