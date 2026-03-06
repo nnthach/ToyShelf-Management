@@ -1,10 +1,9 @@
 "use client";
 
-import { DataTable } from "../../../../styles/components/ui/data-table";
+import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStaffColumns } from "./columns";
-import { Button } from "../../../../styles/components/ui/button";
+import { Button } from "@/src/styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
-import useQueryParams from "../../../../hooks/useQueryParams";
 import CreateStaffModal from "./components/CreateStaffModal";
 import useFetchList from "@/src/hooks/useFetchList";
 import { useDebounce } from "@/src/hooks/useDebounce";
@@ -13,6 +12,7 @@ import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { User } from "@/src/types";
 import { getAllUserAPI } from "@/src/services/user.service";
+import useQueryParams from "@/src/hooks/useQueryParams";
 
 export default function AdminUserManage() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({

@@ -1,13 +1,12 @@
 import { User } from "@/src/types";
-import { Button } from "../../../../../styles/components/ui/button";
 import {
   Card,
   CardHeader,
   CardTitle,
-} from "../../../../../styles/components/ui/card";
-import { Input } from "../../../../../styles/components/ui/input";
-import { Label } from "../../../../../styles/components/ui/label";
-import { ScrollArea } from "../../../../../styles/components/ui/scroll-area";
+} from "@/src/styles/components/ui/card";
+import { Input } from "@/src/styles/components/ui/input";
+import { Label } from "@/src/styles/components/ui/label";
+import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
 import {
   Sheet,
   SheetClose,
@@ -17,8 +16,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../../../../../styles/components/ui/sheet";
+} from "@/src/styles/components/ui/sheet";
 import { DollarSign, Eye, Home } from "lucide-react";
+import { Button } from "@/src/styles/components/ui/button";
 
 function ViewDetailSheet({ user }: { user: User }) {
   return (
