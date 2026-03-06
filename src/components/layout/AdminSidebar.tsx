@@ -50,14 +50,13 @@ const AdminSidebar = () => {
           <div className="relative w-[50px] h-[50px]">
             <Image
               src="/images/finallogo.png"
-              // src="/images/final_logo_toyscabin.png"
-              alt="Toyscabin logo"
+              alt="ToyShelf logo"
               fill
               className="object-contain"
             />
           </div>
           {/*#0D47A1 */}
-          <p className="text-[#1E88E5] font-bold text-xl">ToysCabin</p>
+          <p className="text-[#1E88E5] font-bold text-xl">ToysShelf</p>
         </Link>
         {/* </SidebarMenuButton> */}
         {/* </SidebarMenuItem> */}

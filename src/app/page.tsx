@@ -118,7 +118,7 @@ export default function HomePage() {
               <div className="relative w-[50px] h-[50px]">
                 <Image
                   src="/images/finallogo.png"
-                  alt="Toyscabin logo"
+                  alt="ToyShelf logo"
                   fill
                   className="object-contain"
                 />

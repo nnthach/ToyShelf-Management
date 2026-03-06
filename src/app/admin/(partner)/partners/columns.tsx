@@ -30,7 +30,7 @@ const ActionCell = ({ id }: { id: string }) => {
 export const getPartnerColumns = (): ColumnDef<User>[] => [
   {
     accessorKey: "fullName",
-    header: "Tên đầy đủ",
+    header: "Tên đối tác",
     cell: ({ row }) => {
       const fullname = row.getValue("fullName") as string;
       const email = row.getValue("email") as string;

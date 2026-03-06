@@ -65,7 +65,7 @@ function CreatePartnerAccountModal() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const partnerRole = roleList.find((r) => r.name === "Partner");
+    const partnerRole = roleList.find((r) => r.name === "PartnerAdmin");
 
     const payload = {
       ...data,

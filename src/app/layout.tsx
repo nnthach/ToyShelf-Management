@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ToyCabin Management System",
+  title: "ToyShelf Management System",
   description:
-    "An automated vending cabinet management system that provides monitoring, control, analytics, and efficient operation of the entire ToyCabin network.",
+    "An automated vending shelf management system that provides monitoring, control, analytics, and efficient operation of the entire ToyShelf network.",
 };
 
 export default async function RootLayout({

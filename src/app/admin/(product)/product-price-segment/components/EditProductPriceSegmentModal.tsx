@@ -79,8 +79,8 @@ function EditProductPriceSegmentModal({
     if (priceSegmentDetail) {
       form.reset({
         name: priceSegmentDetail.name,
-        minPrice: priceSegmentDetail.minPrice,
-        maxPrice: priceSegmentDetail.maxPrice,
+        minPrice: priceSegmentDetail.minPrice.toString(),
+        maxPrice: priceSegmentDetail.maxPrice.toString(),
         code: priceSegmentDetail.code,
       });
     }

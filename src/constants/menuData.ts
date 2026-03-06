@@ -34,15 +34,35 @@ export const AdminSidebarGroups = [
     label: "Giám sát đơn hàng",
     items: [{ title: "Đơn hàng", url: "/admin/orders", icon: ClipboardList }],
   },
+
+  {
+    label: "Tài khoản nhân viên",
+    items: [
+      { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
+    ],
+  },
 ];
 
 export const AdminSidebarNested = [
   {
-    label: "Quản lý tài khoản",
+    label: "Quản lý đối tác",
     sub: [
-      { title: "Người dùng tài khoản", url: "/admin/users", icon: User },
-      { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
       { title: "Đối tác", url: "/admin/partners", icon: Users },
+      {
+        title: "Cấp bậc đối tác",
+        url: "/admin/partner-level",
+        icon: CircleStar,
+      },
+      {
+        title: "Bảng giá hoa hồng đối tác",
+        url: "/admin/price-table",
+        icon: CircleStar,
+      },
+      {
+        title: "Chính sách hoa hồng",
+        url: "/admin/commission-policy",
+        icon: CircleStar,
+      },
     ],
   },
 
@@ -109,21 +129,6 @@ export const AdminSidebarNested = [
   {
     label: "Khác",
     sub: [
-      {
-        title: "Cấp bậc đối tác",
-        url: "/admin/partner-level",
-        icon: CircleStar,
-      },
-      {
-        title: "Bảng giá hoa hồng đối tác",
-        url: "/admin/price-table",
-        icon: CircleStar,
-      },
-      {
-        title: "Chính sách hoa hồng",
-        url: "/admin/commission-policy",
-        icon: CircleStar,
-      },
       {
         title: "Danh sách thành phố",
         url: "/admin/city",
@@ -214,7 +219,7 @@ export const WarehouseManagerSidebarNested = [
     label: "storeManagement",
     sub: [
       { title: "stores", url: "/warehouse/stores", icon: Store },
-      { title: "cabinets", url: "/warehouse/cabinets", icon: Server },
+      { title: "Kệ", url: "/warehouse/cabinets", icon: Server },
     ],
   },
 ];
