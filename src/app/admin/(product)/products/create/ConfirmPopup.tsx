@@ -1,4 +1,7 @@
-import { ProductFormValues } from "@/src/schemas/product.schema";
+import {
+  ProductFormValues,
+  ProductUpdateFormValues,
+} from "@/src/schemas/product.schema";
 import ModelThreeDPreview from "@/src/styles/components/custom/ModelThreeDPreview";
 import { Button } from "@/src/styles/components/ui/button";
 import {
@@ -16,7 +19,7 @@ import { Check } from "lucide-react";
 interface ConfirmPopupProps {
   openVerifyCreateForm: boolean;
   setOpenVerifyCreateForm: Dispatch<SetStateAction<boolean>>;
-  previewData: ProductFormValues | null;
+  previewData: ProductUpdateFormValues | ProductFormValues | null;
   handleConfirmCreate: () => void;
   isLoading: boolean;
 }
@@ -74,7 +77,7 @@ function ConfirmPopup({
             <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
               <h3 className="text-sm font-semibold">Màu sắc & Media</h3>
 
-              {previewData.colors?.map((color, index) => (
+              {previewData?.colors?.map((color, index) => (
                 <div
                   key={index}
                   className="rounded-xl border bg-background p-4 space-y-3"

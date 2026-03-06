@@ -1,13 +1,16 @@
 import { useWatch, UseFormReturn } from "react-hook-form";
 import { Trash2 } from "lucide-react";
 import { SelectOption } from "../types/SubType";
-import { ProductFormValues } from "../schemas/product.schema";
+import {
+  ProductFormValues,
+  ProductUpdateFormValues,
+} from "../schemas/product.schema";
 import ModelThreeDPreview from "../styles/components/custom/ModelThreeDPreview";
 import { FormFieldCustom } from "../styles/components/custom/FormFieldCustom";
 
 interface ProductColorItemProps {
   index: number;
-  form: UseFormReturn<ProductFormValues>;
+  form: UseFormReturn<ProductUpdateFormValues | ProductFormValues>;
   remove: (index: number) => void;
   fieldsLength: number;
   colorOptions: SelectOption[];

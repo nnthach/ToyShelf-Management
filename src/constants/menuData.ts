@@ -31,7 +31,7 @@ export const AdminSidebarGroups = [
     ],
   },
   {
-    label: "Quản lý đơn hàng",
+    label: "Giám sát đơn hàng",
     items: [{ title: "Đơn hàng", url: "/admin/orders", icon: ClipboardList }],
   },
 ];
@@ -41,7 +41,7 @@ export const AdminSidebarNested = [
     label: "Quản lý tài khoản",
     sub: [
       { title: "Người dùng tài khoản", url: "/admin/users", icon: User },
-      { title: "Nhân viên tài khoản", url: "/admin/staffs", icon: UserStar },
+      { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
       { title: "Đối tác", url: "/admin/partners", icon: Users },
     ],
   },
@@ -50,8 +50,8 @@ export const AdminSidebarNested = [
     label: "Quản lý sản phẩm",
     sub: [
       { title: "Sản phẩm", url: "/admin/products", icon: User },
-      { title: "Màu sắc", url: "/admin/product-color", icon: Palette },
-      { title: "Danh mục", url: "/admin/product-type", icon: Funnel },
+      { title: "Màu sắc sản phẩm", url: "/admin/product-color", icon: Palette },
+      { title: "Danh mục sản phẩm", url: "/admin/product-type", icon: Funnel },
       {
         title: "Cấp bậc giá sản phẩm",
         url: "/admin/product-price-segment",
@@ -75,8 +75,32 @@ export const AdminSidebarNested = [
     label: "Yêu cầu",
     sub: [
       {
-        title: "Thêm sản phẩm",
+        title: "Bổ sung hàng hóa",
         url: "/admin/request/refill-stock",
+        icon: Store,
+      },
+
+      {
+        title: "Thanh toán hoa hồng",
+        url: "/admin/request/refill-stock",
+        icon: Store,
+      },
+
+      {
+        title: "Bổ sung kệ",
+        url: "/admin/request/refill-shelf",
+        icon: Store,
+      },
+
+      {
+        title: "Trả hàng",
+        url: "/admin/request/return-request",
+        icon: Store,
+      },
+
+      {
+        title: "Thu hồi tủ",
+        url: "/admin/request/return-shelf",
         icon: Store,
       },
     ],
@@ -126,7 +150,14 @@ export const PartnerAdminSidebarGroups = [
   },
   {
     label: "Quản lý cửa hàng",
-    items: [{ title: "Cửa hàng", url: "/partner/stores", icon: Store }],
+    items: [
+      { title: "Cửa hàng", url: "/partner/stores", icon: Store },
+      {
+        title: "Lời mời tham gia cửa hàng",
+        url: "/partner/store-invitation",
+        icon: Store,
+      },
+    ],
   },
   {
     label: "Quản lý nhân sự",
@@ -145,8 +176,13 @@ export const PartnerAdminSidebarNested = [
     label: "Quản lý yêu cầu",
     sub: [
       {
-        title: "Lời mời tham gia cửa hàng",
-        url: "/partner/stores",
+        title: "Bổ sung kệ",
+        url: "/partner/refill-shelf",
+        icon: Store,
+      },
+      {
+        title: "Báo cáo hằng ngày",
+        url: "/partner/daily-reports",
         icon: Store,
       },
     ],

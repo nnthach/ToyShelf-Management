@@ -50,7 +50,7 @@ function EditCommissionPolicyModal({
   });
 
   const formSchema = z.object({
-    partnerTierId: z.string().min(1, "Cấp độ đối tác là bắt buộc"),
+    partnerTierId: z.string().min(1, "Cấp bậc đối tác là bắt buộc"),
     priceSegmentId: z.string().min(1, "Phân khúc giá là bắt buộc"),
     commissionRate: z
       .string()
@@ -149,7 +149,7 @@ function EditCommissionPolicyModal({
       <form>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Chỉnh sửa cấp độ đối tác</DialogTitle>
+            <DialogTitle>Chỉnh sửa cấp bậc đối tác</DialogTitle>
             <DialogDescription>
               Make changes to your profile here. Click save when you&apos;re
               done.
@@ -164,8 +164,8 @@ function EditCommissionPolicyModal({
             >
               <FormFieldCustom
                 name="partnerTierId"
-                label="Cấp độ đối tác"
-                placeholder="Chọn cấp độ đối tác"
+                label="Cấp bậc đối tác"
+                placeholder="Chọn cấp bậc đối tác"
                 type="select"
                 selectData={partnerTierOptions}
               />

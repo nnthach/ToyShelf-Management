@@ -5,6 +5,9 @@ export interface QueryParams {
   search?: string;
   order?: string;
   isActive?: boolean;
+  partnerId?: string;
+  storeId?: string; 
+  storeRole?: string;
 }
 
 export interface SelectOption {

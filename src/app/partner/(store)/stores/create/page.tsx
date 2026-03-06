@@ -27,11 +27,12 @@ import { useAuth } from "@/src/hooks/useAuth";
 export default function PartnerCreateStorePage() {
   const router = useRouter();
 
-  const { user } = useAuth();
+  const { user, partner } = useAuth();
 
-  const userId = user?.id;
+  const partnerId = partner?.partnerId;
 
   console.log("user", user);
+  console.log("partner", partner);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -137,7 +138,7 @@ export default function PartnerCreateStorePage() {
     console.log("previewData", previewData);
     const payload = {
       ...previewData,
-      partnerId: userId || "",
+      partnerId: partnerId || "",
     };
     console.log("payload", payload);
 

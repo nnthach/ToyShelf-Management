@@ -1,6 +1,9 @@
 "use client";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
-import { ProductFormValues, productSchema } from "@/src/schemas/product.schema";
+import {
+  ProductUpdateFormValues,
+  productUpdateSchema,
+} from "@/src/schemas/product.schema";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Check } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -28,13 +31,12 @@ export default function EditProductPage() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [previewData, setPreviewData] = useState<ProductFormValues | null>(
-    null,
-  );
+  const [previewData, setPreviewData] =
+    useState<ProductUpdateFormValues | null>(null);
   const [openVerifyCreateForm, setOpenVerifyCreateForm] = useState(false);
 
-  const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
+  const form = useForm<ProductUpdateFormValues>({
+    resolver: zodResolver(productUpdateSchema),
     defaultValues: {
       productCategoryId: "",
       name: "",
@@ -43,6 +45,7 @@ export default function EditProductPage() {
       brand: "",
       material: "",
       originCountry: "",
+      isConsignment: false,
       ageRange: "",
       colors: [
         {
@@ -75,6 +78,7 @@ export default function EditProductPage() {
         material: productDetail.material,
         originCountry: productDetail.originCountry,
         ageRange: productDetail.ageRange,
+        isConsignment: productDetail.isConsignment,
         colors: productDetail.colors.map((color: ProductColorItem) => ({
           colorId: color.colorId,
           priceSegmentId: color.priceSegmentId,
@@ -113,7 +117,7 @@ export default function EditProductPage() {
     }),
   );
 
-  function onSubmit(data: ProductFormValues) {
+  function onSubmit(data: ProductUpdateFormValues) {
     console.log("data submit", data);
     const payload = {
       ...data,

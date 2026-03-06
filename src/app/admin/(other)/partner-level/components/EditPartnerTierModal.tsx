@@ -64,7 +64,7 @@ function EditPartnerTierModal({
     if (partnerTierDetail) {
       form.reset({
         name: partnerTierDetail.name,
-        priority: partnerTierDetail.priority,
+        priority: partnerTierDetail.priority.toString(),
       });
     }
   }, [partnerTierDetail, form]);
@@ -82,11 +82,11 @@ function EditPartnerTierModal({
       });
 
       form.reset();
-      toast.success("Chỉnh sửa cấp độ đối tác thành công");
+      toast.success("Chỉnh sửa cấp bậc đối tác thành công");
       onClose();
     } catch (error) {
       console.log("update partner tier err", error);
-      toast.error("Chỉnh sửa cấp độ đối tác thất bại");
+      toast.error("Chỉnh sửa cấp bậc đối tác thất bại");
     }
   }
 
@@ -100,7 +100,7 @@ function EditPartnerTierModal({
       <form>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Chỉnh sửa cấp độ đối tác</DialogTitle>
+            <DialogTitle>Chỉnh sửa cấp bậc đối tác</DialogTitle>
             <DialogDescription>
               Make changes to your profile here. Click save when you&apos;re
               done.
@@ -115,8 +115,8 @@ function EditPartnerTierModal({
             >
               <FormFieldCustom
                 name="name"
-                label="Tên cấp độ đối tác"
-                placeholder="Ví dụ: Cấp độ 1"
+                label="Tên cấp bậc đối tác"
+                placeholder="Ví dụ: Cấp bậc 1"
               />
               <FormFieldCustom
                 name="priority"
@@ -131,7 +131,7 @@ function EditPartnerTierModal({
               <Button variant="outline">Hủy</Button>
             </DialogClose>
             <Button type="submit" form="form-edit-partner-tier">
-              Chỉnh sửa
+              Lưu
             </Button>
           </DialogFooter>
         </DialogContent>

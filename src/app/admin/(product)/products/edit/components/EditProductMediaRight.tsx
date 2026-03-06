@@ -1,12 +1,12 @@
 import ProductColorItem from "@/src/components/ProductColorItem";
-import { ProductFormValues } from "@/src/schemas/product.schema";
+import { ProductFormValues, ProductUpdateFormValues } from "@/src/schemas/product.schema";
 import { Button } from "@/src/styles/components/ui/button";
 import { SelectOption } from "@/src/types/SubType";
 import { memo } from "react";
 import { useFieldArray, UseFormReturn } from "react-hook-form";
 
 interface EditProductMediaRightProps {
-  form: UseFormReturn<ProductFormValues>;
+  form: UseFormReturn<ProductUpdateFormValues>;
   colorOptions: SelectOption[];
   priceSegmentOptions: SelectOption[];
 }

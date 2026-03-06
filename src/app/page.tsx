@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import { setUser } from "@/src/redux/slice/authSlice";
+import { setPartner, setUser } from "@/src/redux/slice/authSlice";
 import { Button } from "@/src/styles/components/ui/button";
 import {
   Card,
@@ -26,7 +26,11 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import z from "zod";
-import { getMyProfileAPI, loginAPI } from "../services/user.service";
+import {
+  getMyPartnerProfileAPI,
+  getMyProfileAPI,
+  loginAPI,
+} from "../services/user.service";
 
 const formSchema = z.object({
   email: z.string("Not correct email format."),
@@ -61,10 +65,21 @@ export default function HomePage() {
       const token = res.data?.accessToken;
       const roles = res.data?.roles;
 
+      console.log("login roles", roles);
+
       localStorage.setItem("token", token);
       localStorage.setItem("roles", JSON.stringify(roles));
 
       const fetchProfileRes = await getMyProfileAPI();
+
+      if (roles.includes("PartnerAdmin")) {
+        const partnerDetail = await getMyPartnerProfileAPI({
+          userId: fetchProfileRes.data.id,
+        });
+        console.log("partnerDetail res", partnerDetail);
+
+        dispatch(setPartner(partnerDetail));
+      }
 
       const payload = {
         ...fetchProfileRes.data,
@@ -169,7 +184,10 @@ export default function HomePage() {
             </FieldGroup>
 
             <div className="text-right">
-              <span className="text-sm text-gray-500 hover:text-black cursor-pointer">
+              <span
+                onClick={() => router.push("/forgot-password")}
+                className="text-sm text-gray-500 hover:text-black cursor-pointer"
+              >
                 Quên mật khẩu?
               </span>
             </div>
@@ -201,6 +219,15 @@ export default function HomePage() {
             Đăng nhập
           </Button>
         </CardFooter>
+
+        <div className="text-center">
+          <span
+            onClick={() => router.push("/active-account")}
+            className="text-sm text-blue-500 hover:text-blue-700 cursor-pointer"
+          >
+            Kích hoạt tài khoản
+          </span>
+        </div>
       </Card>
     </div>
   );

@@ -76,7 +76,7 @@ export default function CreateProductPage() {
   const priceSegmentOptions: SelectOption[] = productPriceSegmentList.map(
     (c) => ({
       value: c.id,
-      label: c.name,
+      label: `${c.name} (${c.minPrice.toLocaleString()} - ${c.maxPrice.toLocaleString()} VND)`,
     }),
   );
 

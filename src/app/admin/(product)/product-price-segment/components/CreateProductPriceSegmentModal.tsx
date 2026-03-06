@@ -26,7 +26,7 @@ function CreateProductPriceSegmentModal() {
   const [open, setOpen] = useState(false);
 
   const formSchema = z.object({
-    name: z.string().min(1, "Tên cấp độ giá là bắt buộc"),
+    name: z.string().min(1, "Tên cấp bậc giá là bắt buộc"),
     minPrice: z
       .string()
       .min(1, "Giá tối thiểu là bắt buộc")
@@ -66,12 +66,12 @@ function CreateProductPriceSegmentModal() {
       });
 
       form.reset();
-      toast.success("Thêm cấp độ giá mới thành công");
+      toast.success("Thêm cấp bậc giá mới thành công");
 
       setOpen(false);
     } catch (error) {
       console.log("create price segment err", error);
-      toast.error("Thêm cấp độ giá mới thất bại");
+      toast.error("Thêm cấp bậc giá mới thất bại");
     }
   }
 
@@ -87,12 +87,12 @@ function CreateProductPriceSegmentModal() {
     >
       <DialogTrigger asChild>
         <Button className="btn-primary-gradient">
-          <Plus /> Thêm cấp độ giá sản phẩm
+          <Plus /> Thêm cấp bậc giá sản phẩm
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Thêm cấp độ giá sản phẩm</DialogTitle>
+          <DialogTitle>Thêm cấp bậc giá sản phẩm</DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
@@ -106,8 +106,8 @@ function CreateProductPriceSegmentModal() {
           >
             <FormFieldCustom
               name="name"
-              label="Tên cấp độ giá"
-              placeholder="Ví dụ: Cấp độ 1"
+              label="Tên cấp bậc giá"
+              placeholder="Ví dụ: Cấp bậc 1"
             />
 
             <FormFieldCustom

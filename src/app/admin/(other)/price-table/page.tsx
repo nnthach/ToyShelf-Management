@@ -82,7 +82,7 @@ export default function AdminPriceTable() {
 
   const handleDelete = (tierId: string) => {
     const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xóa cấp độ đối tác này không?",
+      "Bạn có chắc muốn xóa cấp bậc đối tác này không?",
     );
 
     if (!confirmDelete) return;

@@ -1,6 +1,16 @@
 "use client";
-import { Button } from "../../../../styles/components/ui/button";
-import { Calendar } from "../../../../styles/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/src/styles/components/ui/popover";
+import { Button } from "@/src/styles/components/ui/button";
+import { Calendar } from "@/src/styles/components/ui/calendar";
+
+import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
+import { format } from "date-fns";
+import { CalendarIcon, Star } from "lucide-react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -8,16 +18,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../../../styles/components/ui/card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../../../../styles/components/ui/popover";
-import { ScrollArea } from "../../../../styles/components/ui/scroll-area";
-import { format } from "date-fns";
-import { CalendarIcon, Star } from "lucide-react";
-import React, { useState } from "react";
+} from "@/src/styles/components/ui/card";
 
 interface Feedback {
   id: string;

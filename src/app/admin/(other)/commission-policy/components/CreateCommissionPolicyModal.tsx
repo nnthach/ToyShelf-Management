@@ -18,10 +18,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import {
-  createPartnerTierAPI,
-  getAllPartnerTierAPI,
-} from "@/src/services/partner-tier.service";
+import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
 import { createCommissionPolicyAPI } from "@/src/services/commission-policy.service";
 import { PartnerTier, ProductPriceSegment } from "@/src/types";
 import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
@@ -32,7 +29,7 @@ function CreateCommissionPolicyModal() {
   const [open, setOpen] = useState(false);
 
   const formSchema = z.object({
-    partnerTierId: z.string().min(1, "Cấp độ đối tác là bắt buộc"),
+    partnerTierId: z.string().min(1, "Cấp bậc đối tác là bắt buộc"),
     priceSegmentId: z.string().min(1, "Phân khúc giá là bắt buộc"),
     commissionRate: z
       .string()
@@ -98,12 +95,12 @@ function CreateCommissionPolicyModal() {
       });
 
       form.reset();
-      toast.success("Thêm cấp độ đối tác mới thành công");
+      toast.success("Thêm cấp bậc đối tác mới thành công");
 
       setOpen(false);
     } catch (error) {
       console.log("create commission policy err", error);
-      toast.error("Thêm cấp độ đối tác mới thất bại");
+      toast.error("Thêm cấp bậc đối tác mới thất bại");
     }
   }
 
@@ -138,8 +135,8 @@ function CreateCommissionPolicyModal() {
           >
             <FormFieldCustom
               name="partnerTierId"
-              label="Cấp độ đối tác"
-              placeholder="Chọn cấp độ đối tác"
+              label="Cấp bậc đối tác"
+              placeholder="Chọn cấp bậc đối tác"
               type="select"
               selectData={partnerTierOptions}
             />

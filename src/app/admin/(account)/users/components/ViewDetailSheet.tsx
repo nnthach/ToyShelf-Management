@@ -158,7 +158,7 @@ function ViewDetailSheet({ user }: { user: User }) {
                 {/* Membership Level */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                   <div>
-                    <p className="text-sm text-gray-500">Cấp độ thành viên:</p>
+                    <p className="text-sm text-gray-500">Cấp bậc thành viên:</p>
                     <p className="text-base font-medium">PREMIUM</p>
                   </div>
                 </div>

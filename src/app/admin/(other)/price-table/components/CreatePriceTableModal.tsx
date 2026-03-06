@@ -47,11 +47,11 @@ function CreatePriceTableModal() {
 
   const formSchema = z.object({
     name: z.string().min(1, "Tên bảng là bắt buộc"),
-    partnerTierId: z.string().min(1, "Cấp độ đối tác là bắt buộc"),
+    partnerTierId: z.string().min(1, "Cấp bậc đối tác là bắt buộc"),
     type: z.string().min(1, "Loại bảng giá là bắt buộc"),
     items: z.array(
       z.object({
-        priceSegmentId: z.string().min(1, "Cấp độ sản phẩm là bắt buộc"),
+        priceSegmentId: z.string().min(1, "Cấp bậc sản phẩm là bắt buộc"),
         commissionRate: z
           .string()
           .min(1, "Phần trăm hoa hồng là bắt buộc")
@@ -156,7 +156,7 @@ function CreatePriceTableModal() {
               <FormFieldCustom
                 name="name"
                 label="Tên bảng giá"
-                placeholder="Ví dụ: Bảng giá cấp độ 1"
+                placeholder="Ví dụ: Bảng giá cấp bậc 1"
               />
 
               <FormFieldCustom
@@ -169,8 +169,8 @@ function CreatePriceTableModal() {
 
               <FormFieldCustom
                 name="partnerTierId"
-                label="Cấp độ đối tác"
-                placeholder="Chọn cấp độ đối tác"
+                label="Cấp bậc đối tác"
+                placeholder="Chọn cấp bậc đối tác"
                 type="select"
                 selectData={partnerTierOptions}
               />

@@ -26,7 +26,7 @@ function CreatePartnerTierModal() {
   const [open, setOpen] = useState(false);
 
   const formSchema = z.object({
-    name: z.string().min(1, "Tên cấp độ đối tác là bắt buộc"),
+    name: z.string().min(1, "Tên cấp bậc đối tác là bắt buộc"),
     priority: z
       .string()
       .min(1, "Ưu tiên là bắt buộc")
@@ -52,12 +52,12 @@ function CreatePartnerTierModal() {
       });
 
       form.reset();
-      toast.success("Thêm cấp độ đối tác mới thành công");
+      toast.success("Thêm cấp bậc đối tác mới thành công");
 
       setOpen(false);
     } catch (error) {
       console.log("create partner tier err", error);
-      toast.error("Thêm cấp độ đối tác mới thất bại");
+      toast.error("Thêm cấp bậc đối tác mới thất bại");
     }
   }
 
@@ -73,12 +73,12 @@ function CreatePartnerTierModal() {
     >
       <DialogTrigger asChild>
         <Button className="btn-primary-gradient">
-          <Plus /> Thêm cấp độ đối tác
+          <Plus /> Thêm cấp bậc đối tác
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Thêm cấp độ đối tác</DialogTitle>
+          <DialogTitle>Thêm cấp bậc đối tác</DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
@@ -92,8 +92,8 @@ function CreatePartnerTierModal() {
           >
             <FormFieldCustom
               name="name"
-              label="Tên cấp độ đối tác"
-              placeholder="Ví dụ: Cấp độ 1"
+              label="Tên cấp bậc đối tác"
+              placeholder="Ví dụ: Cấp bậc 1"
             />
 
             <FormFieldCustom
@@ -108,7 +108,7 @@ function CreatePartnerTierModal() {
             <Button variant="outline">Hủy</Button>
           </DialogClose>
           <Button type="submit" form="form-create-partner-tier">
-            Thêm mới
+            Tạo
           </Button>
         </DialogFooter>
       </DialogContent>

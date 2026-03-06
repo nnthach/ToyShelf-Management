@@ -17,6 +17,7 @@ export interface User {
 
 export interface Partner {
   id: string;
+  partnerId: string;
   email: string;
   companyName: string;
   fullName: string;
@@ -24,6 +25,7 @@ export interface Partner {
   partnerTierName: string;
   isActive: boolean;
   createdAt: string;
+  partnerIsActive: boolean;
 }
 
 export interface Store {
@@ -179,4 +181,13 @@ export interface City {
   id: string;
   code: string;
   name: string;
+}
+
+export interface StoreInvite {
+  id: string;
+  storeId: string;
+  userId: string;
+  email: string;
+  storeRole: "Manager" | "Staff";
+  status: "Pending" | "Accepted" | "Rejected" | "Expired";
 }

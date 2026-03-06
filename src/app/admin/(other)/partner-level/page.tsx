@@ -56,7 +56,7 @@ export default function AdminPartnerLevel() {
 
   const handleDelete = (tierId: string) => {
     const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xóa cấp độ đối tác này không?",
+      "Bạn có chắc muốn xóa cấp bậc đối tác này không?",
     );
 
     if (!confirmDelete) return;
@@ -70,7 +70,7 @@ export default function AdminPartnerLevel() {
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý cấp độ đối tác</h1>
+        <h1 className="text-4xl font-bold ">Quản lý cấp bậc đối tác</h1>
         <CreatePartnerTierModal />
       </div>
       {/*Table */}

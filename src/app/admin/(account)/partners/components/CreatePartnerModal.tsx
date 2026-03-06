@@ -120,7 +120,7 @@ function CreatePartnerModal() {
               form="form-create-partner"
               // disabled={createPartnerMutation.isPending}
             >
-              Tạo đối tác
+              Tạo
             </Button>
           </DialogFooter>
         </DialogContent>

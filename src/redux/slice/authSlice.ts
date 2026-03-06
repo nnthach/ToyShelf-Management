@@ -1,9 +1,10 @@
-import { User } from "@/src/types";
+import { Partner, User } from "@/src/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthSlice {
   isAuthenticated: boolean;
   user: User | null;
+  partner: Partner | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -11,6 +12,7 @@ interface AuthSlice {
 const initialState: AuthSlice = {
   isAuthenticated: false,
   user: null,
+  partner: null,
   isLoading: false,
   error: null,
 };
@@ -32,8 +34,12 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    setPartner: (state, action: PayloadAction<Partner | null>) => {
+      state.partner = action.payload;
+    },
     logout: (state) => {
       state.user = null;
+      state.partner = null;
       state.isLoading = false;
       state.error = null;
       state.isAuthenticated = false;
@@ -42,6 +48,7 @@ export const authSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setLoading, setError, setUser, logout } = authSlice.actions;
+export const { setLoading, setError, setUser, setPartner, logout } =
+  authSlice.actions;
 
 export default authSlice.reducer;

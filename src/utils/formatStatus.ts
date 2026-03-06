@@ -38,22 +38,24 @@ export const formatStoreStatusColor = (isActive: boolean) => {
   }
 };
 
-export const formatCabinetStatusText = (isActive: boolean) => {
-  switch (isActive) {
-    case false:
-      return "Inactive";
-    case true:
-      return "Active";
+export const formatStoreInviteStatusText = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "Đang chờ";
+    case "Accepted":
+      return "Đã chấp nhận";
+    case "Rejected":
+      return "Đã từ chối";
   }
 };
 
-export const formatCabinetStatusColor = (status: string) => {
+export const formatStoreInviteStatusColor = (status: string) => {
   switch (status) {
-    case "MAINTENANCE":
+    case "Pending":
       return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
-    case "AVAILABLE":
+    case "Accepted":
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
-    case "CLOSED":
+    case "Rejected":
       return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
   }
 };

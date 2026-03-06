@@ -13,7 +13,7 @@ export const getCommissionPolicyColumns = (
 ): ColumnDef<CommissionPolicy>[] => [
   {
     accessorKey: "partnerTierName",
-    header: "Tên cấp độ đối tác",
+    header: "Tên cấp bậc đối tác",
   },
 
   {

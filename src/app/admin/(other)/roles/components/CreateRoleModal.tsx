@@ -26,8 +26,8 @@ function CreateRoleModal() {
   const [open, setOpen] = useState(false);
 
   const formSchema = z.object({
-    name: z.string().min(1, "Tên cấp độ vai trò là bắt buộc"),
-    description: z.string().min(1, "Mô tả cấp độ vai trò là bắt buộc"),
+    name: z.string().min(1, "Tên cấp bậc vai trò là bắt buộc"),
+    description: z.string().min(1, "Mô tả cấp bậc vai trò là bắt buộc"),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
@@ -48,12 +48,12 @@ function CreateRoleModal() {
       });
 
       form.reset();
-      toast.success("Thêm cấp độ vai trò mới thành công");
+      toast.success("Thêm cấp bậc vai trò mới thành công");
 
       setOpen(false);
     } catch (error) {
       console.log("create role err", error);
-      toast.error("Thêm cấp độ vai trò mới thất bại");
+      toast.error("Thêm cấp bậc vai trò mới thất bại");
     }
   }
 
@@ -69,12 +69,12 @@ function CreateRoleModal() {
     >
       <DialogTrigger asChild>
         <Button className="btn-primary-gradient">
-          <Plus /> Thêm cấp độ vai trò
+          <Plus /> Thêm cấp bậc vai trò
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Thêm cấp độ vai trò</DialogTitle>
+          <DialogTitle>Thêm cấp bậc vai trò</DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
@@ -88,8 +88,8 @@ function CreateRoleModal() {
           >
             <FormFieldCustom
               name="name"
-              label="Tên cấp độ vai trò"
-              placeholder="Ví dụ: Cấp độ 1"
+              label="Tên cấp bậc vai trò"
+              placeholder="Ví dụ: Cấp bậc 1"
             />
 
             <FormFieldCustom

@@ -1,24 +1,40 @@
 "use client";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { logout, setLoading, setUser } from "../redux/slice/authSlice";
-import { getMyProfileAPI } from "../services/user.service";
+import {
+  logout,
+  setLoading,
+  setPartner,
+  setUser,
+} from "../redux/slice/authSlice";
+import {
+  getMyPartnerProfileAPI,
+  getMyProfileAPI,
+} from "../services/user.service";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 export function useAuth() {
   const router = useRouter();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, partner } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const initAuth = async () => {
     const token = localStorage.getItem("token");
+    const roles = JSON.parse(localStorage.getItem("roles") || "[]");
 
     if (token && !user) {
       dispatch(setLoading(true));
       try {
         const userProfile = await getMyProfileAPI();
         const data = userProfile.data;
+
+        if (roles.includes("PartnerAdmin")) {
+          const partnerDetail = await getMyPartnerProfileAPI({
+            userId: userProfile.data.id,
+          });
+          dispatch(setPartner(partnerDetail));
+        }
 
         dispatch(setUser(data));
       } catch (error) {
@@ -46,5 +62,5 @@ export function useAuth() {
     router.replace("/");
   };
 
-  return { user, logout: logoutUser };
+  return { user, partner, logout: logoutUser };
 }

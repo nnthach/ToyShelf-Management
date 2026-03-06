@@ -16,7 +16,7 @@ import { getPartnerDetailAPI } from "@/src/services/partner.service";
 
 import PartnerFormSheet from "./PartnerFormSheet";
 import { Button } from "@/src/styles/components/ui/button";
-import CreatePartnerAccountModal from "./CreatePartnerAccountModal";
+import CreatePartnerAccountModal from "../[id]/components/CreatePartnerAccountModal";
 
 type ViewDetailSheetProps = {
   partnerId: string | null;

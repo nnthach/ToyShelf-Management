@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "../../../../styles/components/ui/card";
+} from "@/src/styles/components/ui/card";
 import { ShoppingCart, Users, DollarSign } from "lucide-react";
 
 const MostSellProduct = () => {

@@ -9,6 +9,8 @@ import BarChartExample from "./components/charts/BarChart";
 import { TargetRevenueChart } from "./components/charts/TargetRevenueChart";
 import { Button } from "@/src/styles/components/ui/button";
 import ViewPartnerSheet from "./components/ViewPartnerSheet";
+import CreatePartnerAccountModal from "./components/CreatePartnerAccountModal";
+import Image from "next/image";
 
 export default function ViewPartnerDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -35,51 +37,41 @@ export default function ViewPartnerDetailPage() {
       </div>
 
       {/* THÔNG TIN ĐỐI TÁC */}
-      <div className="bg-gradient-to-r from-[#223A8F] via-[#2B49B5] to-[#3A5BDB] text-white rounded-xl shadow-md px-6 py-5 mb-6">
-        <div className="flex items-center justify-between">
-          {/* BÊN TRÁI: Công ty + Người đại diện */}
-          <div className="flex flex-col">
-            {/* Tên công ty */}
-            <h2 className="text-xl font-semibold tracking-wide">
-              Maverik Studio Co., Ltd
-            </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        {/* Banner chào*/}
+        <div className="relative rounded-xl overflow-hidden shadow-md col-span-3">
+          {/* Background image */}
+          <Image
+            src="/images/banner_admin_hello.jpg"
+            alt="Banner"
+            fill
+            className="object-cover"
+          />
 
-            {/* Người đại diện */}
-            <p className="text-sm text-white/70">
-              Người đại diện: Nguyễn Ngọc Thạch
-            </p>
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-linear-to-r from-black/90  to-blue-700/70"></div>
 
-            {/* Email */}
-            <p className="text-sm text-white/50">nguyenthach@gmail.com</p>
-          </div>
+          {/* Content */}
+          <div className="relative z-10 px-6 py-6 text-white flex items-center justify-between">
+            {/* BÊN TRÁI */}
+            <div className="flex flex-col">
+              <h2 className="text-xl font-semibold tracking-wide">
+                Thông tin đối tác!
+              </h2>
 
-          {/* Ở GIỮA: Cấp bậc + Ngày tham gia */}
-          <div className="flex items-center gap-12 text-sm">
-            <div>
-              <p className="text-white/60">Cấp bậc đối tác</p>
-              <span className="inline-block mt-1 px-3 py-1 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-300/30 text-xs font-semibold">
-                Vàng
-              </span>
-            </div>
+              <p className="text-sm text-white/80">
+                Người đại diện: Nguyễn Ngọc Thạch
+              </p>
 
-            <div>
-              <p className="text-white/60">Ngày tham gia</p>
-              <p className="font-medium mt-1">12/01/2024</p>
+              <p className="text-sm text-white/60">nguyenthach@gmail.com</p>
             </div>
           </div>
+        </div>
 
-          {/* BÊN PHẢI: Trạng thái + Hành động */}
-          <div className="flex flex-col items-end gap-3">
-            <span className="px-3 py-1 text-xs rounded-full bg-green-400/20 text-green-300 border border-green-300/30">
-              Đang hoạt động
-            </span>
-
-            <ViewPartnerSheet>
-              <Button className="bg-white text-[#1E2A5A] hover:bg-gray-100 text-sm px-4 py-2">
-                Xem giao dịch
-              </Button>
-            </ViewPartnerSheet>
-          </div>
+        {/*Thông tin cá nhân */}
+        <div className="bg-background shadow-sm rounded-lg col-span-1 h-[30vh] w-full">
+          <h1>Alo alo</h1>
+          <CreatePartnerAccountModal />
         </div>
       </div>
 

@@ -5,6 +5,11 @@ export const getAllStoreAPI = async <T>(params: T) => {
   return res.data;
 };
 
+export const getAllPartnerStoreAPI = async <T>(params: T) => {
+  const res = await api.get("/store", { params });
+  return res.data;
+};
+
 export const getStoreDetailAPI = async (id: string) => {
   const res = await api.get(`/store/${id}`);
   return res.data;

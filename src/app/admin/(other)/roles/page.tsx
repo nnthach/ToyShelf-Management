@@ -59,7 +59,7 @@ export default function AdminManageRole() {
 
   const handleDelete = (roleId: string) => {
     const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xóa cấp độ vai trò này không?",
+      "Bạn có chắc muốn xóa cấp bậc vai trò này không?",
     );
 
     if (!confirmDelete) return;
@@ -73,7 +73,7 @@ export default function AdminManageRole() {
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý cấp độ vai trò</h1>
+        <h1 className="text-4xl font-bold ">Quản lý cấp bậc vai trò</h1>
         <CreateRoleModal />
       </div>
       {/*Table */}
