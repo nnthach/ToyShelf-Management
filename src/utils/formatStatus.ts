@@ -59,3 +59,25 @@ export const formatStoreInviteStatusColor = (status: string) => {
       return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
   }
 };
+
+export const formatStoreCreateRequestStatusText = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "Đang chờ";
+    case "Approved":
+      return "Đã chấp nhận";
+    case "Rejected":
+      return "Đã từ chối";
+  }
+};
+
+export const formatStoreCreateRequestStatusColor = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
+    case "Approved":
+      return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
+    case "Rejected":
+      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+  }
+};

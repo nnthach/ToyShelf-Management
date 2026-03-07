@@ -13,6 +13,7 @@ export interface User {
   status: UserStatus;
   createdAt: string;
   isActive: boolean;
+  roles: string[];
 }
 
 export interface Partner {

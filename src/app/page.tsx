@@ -19,7 +19,7 @@ import {
 } from "@/src/styles/components/ui/field";
 import { Input } from "@/src/styles/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LogIn } from "lucide-react";
+import { LogIn, Notebook } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -86,18 +86,21 @@ export default function HomePage() {
         roles,
       };
 
+      console.log("payload", payload);
+
       dispatch(setUser(payload));
 
       form.reset();
       toast.success("Đăng nhập thành công");
-
-      if (roles.includes("Admin")) {
-        router.replace("/admin/dashboard");
-      } else if (roles.includes("PartnerAdmin") && !roles.includes("Admin")) {
-        router.replace("/partner/dashboard");
-      } else if (roles.includes("Customer") && !roles.includes("Admin")) {
-        toast.error("Hệ thống dành cho quản trị viên!");
-      }
+      setTimeout(() => {
+        if (roles.includes("Admin")) {
+          router.replace("/admin/dashboard");
+        } else if (roles.includes("PartnerAdmin") && !roles.includes("Admin")) {
+          router.replace("/partner/dashboard");
+        } else if (roles.includes("Customer") && !roles.includes("Admin")) {
+          toast.error("Hệ thống dành cho quản trị viên!");
+        }
+      }, 1000);
     } catch (error) {
       console.log("login err", error);
       toast.error("Đăng nhập thất bại");
@@ -124,10 +127,10 @@ export default function HomePage() {
                 />
               </div>
               {/*#0D47A1 */}
-              <p className="text-[#1E88E5] font-bold text-xl">Toys Shelf</p>
+              <p className="text-[#1E88E5] font-bold text-xl">ToysShelf</p>
             </div>
           </CardTitle>
-          <CardDescription>Đăng nhập để tiếp tục</CardDescription>
+          <CardDescription>Đăng nhập</CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -194,40 +197,44 @@ export default function HomePage() {
           </form>
         </CardContent>
 
-        <CardFooter className="flex justify-between gap-3">
-          <Button
-            variant="outline"
-            type="button"
-            className="w-[50%] cursor-pointer"
-            disabled={isLoading}
-          >
-            <Image
-              src="/icons/google.png"
-              width={18}
-              height={18}
-              alt="Google Icon"
-            />
-            Google
-          </Button>
-          <Button
-            type="submit"
-            form="form-rhf-demo"
-            className="w-[50%] cursor-pointer"
-            disabled={isLoading}
-          >
-            <LogIn />
-            Đăng nhập
-          </Button>
-        </CardFooter>
+        <CardFooter className="flex flex-col gap-3">
+          <div className="flex w-full gap-3">
+            <Button
+              variant="outline"
+              type="button"
+              className="w-[50%]"
+              disabled={isLoading}
+            >
+              <Image
+                src="/icons/google.png"
+                width={18}
+                height={18}
+                alt="Google Icon"
+              />
+              Google
+            </Button>
 
-        <div className="text-center">
-          <span
-            onClick={() => router.push("/active-account")}
-            className="text-sm text-blue-500 hover:text-blue-700 cursor-pointer"
-          >
-            Kích hoạt tài khoản
-          </span>
-        </div>
+            <Button
+              type="submit"
+              form="form-rhf-demo"
+              className="w-[50%]"
+              disabled={isLoading}
+            >
+              <LogIn />
+              Đăng nhập
+            </Button>
+          </div>
+
+          <div className="text-sm text-gray-500 text-center">
+            Chưa kích hoạt tài khoản?{" "}
+            <span
+              onClick={() => router.push("/active-account")}
+              className="text-blue-500 hover:text-blue-700 cursor-pointer"
+            >
+              Kích hoạt ngay
+            </span>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );

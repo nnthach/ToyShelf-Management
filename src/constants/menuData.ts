@@ -87,6 +87,11 @@ export const AdminSidebarNested = [
     label: "Giám sát cửa hàng",
     sub: [
       { title: "Cửa hàng", url: "/admin/stores", icon: Store },
+      {
+        title: "Yêu cầu tạo cửa hàng",
+        url: "/admin/store-creation-request",
+        icon: Store,
+      },
       { title: "Kệ", url: "/admin/shelf", icon: Server },
     ],
   },
@@ -160,6 +165,11 @@ export const PartnerAdminSidebarGroups = [
       {
         title: "Lời mời tham gia cửa hàng",
         url: "/partner/store-invitation",
+        icon: Store,
+      },
+      {
+        title: "Yêu cầu tạo cửa hàng",
+        url: "/partner/store-creation-request",
         icon: Store,
       },
     ],

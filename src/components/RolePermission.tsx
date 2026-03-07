@@ -1,4 +1,5 @@
 "use client";
+
 import { useAppSelector } from "../redux/hooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,54 +13,47 @@ export const RolePermission: React.FC<RolePermissionProps> = ({
   allowedRoles,
   children,
 }) => {
-  const { user, isLoading } = useAppSelector((state) => state.auth);
+  const { isLoading } = useAppSelector((state) => state.auth);
   const router = useRouter();
-  const token = localStorage.getItem("token");
-  const roles: string[] = JSON.parse(localStorage.getItem("roles") ?? "[]");
 
-  const checkPermission = () => {
+  const [token] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return localStorage.getItem("token");
+  });
+
+  const [roles] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    return JSON.parse(localStorage.getItem("roles") ?? "[]");
+  });
+
+  useEffect(() => {
     if (isLoading) return;
 
-    if (!roles) return;
-
-    if (!user && token) return;
-    if (!user && !token) {
+    if (!token) {
       router.replace("/");
       return;
     }
 
-    const hasPermission =
-      user && roles.some((role) => allowedRoles.includes(role));
+    const hasPermission = roles.some((role) => allowedRoles.includes(role));
 
-    if (user && !hasPermission) {
-      if (roles?.includes("Supervisor")) {
+    if (!hasPermission) {
+      if (roles.includes("Supervisor")) {
         router.replace("/supervisor/dashboard");
-      } else if (roles?.includes("Admin")) {
+      } else if (roles.includes("Admin")) {
         router.replace("/admin/dashboard");
-      } else if (roles?.includes("PartnerAdmin")) {
+      } else if (roles.includes("PartnerAdmin")) {
         router.replace("/partner/dashboard");
       } else {
         router.replace("/");
       }
-      return;
     }
-  };
+  }, [roles, token, isLoading]);
 
-  useEffect(() => {
-    checkPermission();
-  }, [user, isLoading, allowedRoles, router]);
+  if (isLoading) return null;
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  const hasPermission = roles.some((role) => allowedRoles.includes(role));
 
-  if (!user || !allowedRoles.includes(user.role)) {
-    return null;
-  }
+  if (!hasPermission) return null;
 
   return <>{children}</>;
 };

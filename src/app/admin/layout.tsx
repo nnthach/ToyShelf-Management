@@ -13,13 +13,12 @@ export default async function AdminLayout({
 
   return (
     //bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-neutral-800 dark:via-neutral-800 dark:to-neutral-800
-    // <RolePermission allowedRoles={["Admin"]}>
-    // slate-100
-    <div className="flex bg-[#FAF9FE] dark:bg-neutral-800">
-      <SidebarProvider defaultOpen={defaultOpen}>
-        <AdminClientShell>{children}</AdminClientShell>
-      </SidebarProvider>
-    </div>
-    // </RolePermission>
+    <RolePermission allowedRoles={["Admin"]}>
+      <div className="flex bg-[#FAF9FE] dark:bg-neutral-800">
+        <SidebarProvider defaultOpen={defaultOpen}>
+          <AdminClientShell>{children}</AdminClientShell>
+        </SidebarProvider>
+      </div>
+    </RolePermission>
   );
 }
