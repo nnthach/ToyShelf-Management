@@ -15,7 +15,7 @@ import {
 } from "@/src/styles/components/ui/card";
 import { FieldGroup, FieldLabel } from "@/src/styles/components/ui/field";
 import { Input } from "@/src/styles/components/ui/input";
-import { LogIn } from "lucide-react";
+import { ArrowLeft, LogIn, Mail } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -94,7 +94,7 @@ export default function ForgotPasswordPage() {
                 />
               </div>
               {/*#0D47A1 */}
-              <p className="text-[#1E88E5] font-bold text-xl">Toys Shelf</p>
+              <p className="text-[#1E88E5] font-bold text-xl">ToysShelf</p>
             </div>
           </CardTitle>
           <CardDescription>Đặt lại mật khẩu</CardDescription>
@@ -172,15 +172,27 @@ export default function ForgotPasswordPage() {
 
         <CardFooter className="flex justify-between gap-3">
           {forgotPasswordStep === 1 ? (
-            <Button
-              type="submit"
-              form="form-rhf-demo"
-              className="w-full"
-              disabled={isLoading}
-            >
-              <LogIn />
-              Gửi mã OTP
-            </Button>
+            <>
+              <Button
+                type="button"
+                variant={"outline"}
+                className="w-[50%]"
+                disabled={isLoading}
+                onClick={() => router.replace("/")}
+              >
+                <LogIn />
+                Quay về
+              </Button>
+              <Button
+                type="submit"
+                form="form-rhf-demo"
+                className="w-[50%]"
+                disabled={isLoading}
+              >
+                <Mail />
+                Gửi mã OTP
+              </Button>
+            </>
           ) : (
             <>
               <Button
@@ -189,7 +201,7 @@ export default function ForgotPasswordPage() {
                 disabled={isLoading}
                 onClick={() => setForgotPasswordStep(1)}
               >
-                <LogIn />
+                <ArrowLeft />
                 Quay về
               </Button>
               <Button

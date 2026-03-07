@@ -107,6 +107,8 @@ export interface Order {
 export interface Warehouse {
   id: string;
   address: string;
+  latitude: number;
+  longitude: number;
   name: string;
   code: string;
   cityId: string;

@@ -11,6 +11,7 @@ import {
   MapPin,
   MessageSquare,
   Star,
+  Store,
   User,
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -19,58 +20,38 @@ import AreaChartExample from "../components/charts/AreaChart";
 import { TargetRevenueChart } from "../components/charts/TargetRevenueChart";
 import StoreFeedbackList from "../components/StoreFeebackList";
 import MostSellProduct from "../components/MostSellProduct";
-import { StaffFakeData } from "@/src/constants/fakeData";
-import ViewEverydayReportSheet from "./components/ViewEverydayReportSheet";
-import ViewStoreProductSheet from "./components/ViewStoreProductSheet";
-import ViewStoreFeedbackSheet from "./components/ViewStoreFeedbackSheet";
-import ViewStoreStaffSheet from "./components/ViewStoreStaffSheet";
 import { useQuery } from "@tanstack/react-query";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import { getStoreDetailAPI } from "@/src/services/store.service";
-import { formatStoreStatusColor, formatStoreStatusText } from "@/src/utils/formatStatus";
+import {
+  formatStoreStatusColor,
+  formatStoreStatusText,
+} from "@/src/utils/formatStatus";
+import StatCard from "@/src/components/StatCard";
+import EditStoreModal from "./components/EditStoreModal";
+import ViewStoreProductSheet from "./components/ViewStoreProductSheet";
+import { useAuth } from "@/src/hooks/useAuth";
+import { getAllStoreStaffAPI } from "@/src/services/user.service";
 
-
-interface StatCardProps {
-  title: string;
-  value: string | number;
-  icon: React.ComponentType<{ className?: string }>;
-  color: string;
-}
-
-const StatCard = ({ title, value, icon: Icon, color }: StatCardProps) => {
-  const [bgColor, textColor] = color.split(" ");
-
-  return (
-    <div
-      className={`flex flex-col justify-between rounded-2xl p-4 bg-white shadow-md border border-transparent hover:shadow-md transition-all duration-200`}
-    >
-      <div className="flex justify-between items-start">
-        <div>
-          <p className="text-base font-medium mb-2 text-gray-400">{title}</p>
-          <h3 className="text-3xl font-bold">{value}</h3>
-        </div>
-
-        <div
-          className={`p-2 rounded-xl ${bgColor} backdrop-blur-sm flex items-center justify-center`}
-        >
-          <Icon className={`w-6 h-6 ${textColor}`} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default function ViewStoreDetailPage() {
+export default function PartnerStoreDetailPage() {
   const params = useParams();
   const id = params.id as string;
 
   const router = useRouter();
+  const { partner } = useAuth();
 
   const { data: storeDetail, isLoading } = useQuery({
     queryKey: ["store", id],
     queryFn: () => getStoreDetailAPI(id!),
     select: (res) => res.data,
     enabled: !!id,
+  });
+
+  const { data: storeStaffList } = useQuery({
+    queryKey: ["storeStaffs", { partnerId: partner?.partnerId }],
+    queryFn: () =>
+      getAllStoreStaffAPI({ partnerId: partner?.partnerId, storeId: id }),
+    select: (res) => res.data,
   });
 
   if (!id) return null;
@@ -99,18 +80,6 @@ export default function ViewStoreDetailPage() {
         </div>
         {/*Right */}
         <div className="flex items-center gap-3">
-          <ViewStoreStaffSheet>
-            <Button
-              className="
-      bg-blue-500 text-white
-      dark:bg-blue-900 dark:text-blue-100
-      hover:bg-blue-600 dark:hover:bg-blue-800
-    "
-            >
-              <User className="h-4 w-4" />
-              Danh sách nhân viên
-            </Button>
-          </ViewStoreStaffSheet>
           <ViewStoreProductSheet>
             <Button
               className="
@@ -124,58 +93,37 @@ export default function ViewStoreDetailPage() {
             </Button>
           </ViewStoreProductSheet>
 
-          <ViewStoreFeedbackSheet>
-            <Button
-              className="
-      bg-amber-500 text-white
-      dark:bg-amber-900 dark:text-amber-100
-      hover:bg-amber-600 dark:hover:bg-amber-800
-    "
-            >
-              <MessageSquare className="h-4 w-4" />
-              Danh sách đánh giá
-            </Button>
-          </ViewStoreFeedbackSheet>
-
-          <Button
-            className="btn-primary-gradient"
-            onClick={() => router.push(`/admin/stores/${id}/edit`)}
-          >
-            <Check className="h-4 w-4" />
-            Chỉnh sửa
-          </Button>
-
-          <Button
-            className="btn-primary-gradient"
-            onClick={() => router.push(`/admin/stores/${id}/edit`)}
-          >
-            <Check className="h-4 w-4" />
-            Vô hiệu hóa
-          </Button>
-
-          <Button
-            className="btn-primary-gradient"
-            onClick={() => router.push(`/admin/stores/${id}/edit`)}
-          >
-            <Check className="h-4 w-4" />
-            Phục hồi
-          </Button>
+          <EditStoreModal storeId={id} />
         </div>
       </div>
 
-      {/*Stat card */}
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
+      {/*Statistic card */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
         <StatCard
-          title={`Tổng sản phẩm`}
-          value={250}
+          title="Doanh thu cửa hàng"
+          value="$250,520"
+          change="+$30,215"
+          changePercent="+12%"
           icon={Box}
-          color="bg-green-200 text-green-900"
+          color="bg-green-100 text-green-900"
         />
+
         <StatCard
-          title={`Đánh giá`}
-          value={4.8}
-          icon={Star}
-          color="bg-pink-200 text-pink-900"
+          title="Đơn hàng"
+          value="15"
+          change="+1,647"
+          changePercent="+15%"
+          icon={Store}
+          color="bg-yellow-100 text-yellow-900"
+        />
+
+        <StatCard
+          title="Tồn kho"
+          value="15"
+          change="+2,815"
+          changePercent="+18%"
+          icon={Box}
+          color="bg-blue-100 text-blue-900"
         />
       </div>
 
@@ -184,17 +132,6 @@ export default function ViewStoreDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
           {/* STORE INFO */}
           <div className="bg-background rounded-lg border col-span-1 w-full overflow-hidden shadow-sm">
-            {/* Store Image */}
-            <div className="relative h-40 w-full">
-              <img
-                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5"
-                alt="Store image"
-                className="h-full w-full object-cover"
-              />
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-black/20" />
-            </div>
-
             {/* Content */}
             <div className="p-5 py-3 space-y-2">
               {/* Name & Rating */}
@@ -275,64 +212,6 @@ export default function ViewStoreDetailPage() {
 
           <div className="bg-background p-4 rounded-lg h-[50vh]">
             <StoreFeedbackList />
-          </div>
-
-          <div className="bg-background rounded-lg border col-span-2 w-full overflow-hidden shadow-sm">
-            {/* List */}
-            <div className="overflow-x-auto border">
-              <table className="w-full text-sm">
-                {/* Header */}
-                <thead className="bg-gray-50 border-b">
-                  <tr className="text-left text-gray-600">
-                    <th className="px-4 py-3 font-medium">Full Name</th>
-                    <th className="px-4 py-3 font-medium">Email</th>
-                    <th className="px-4 py-3 font-medium">Role</th>
-                    <th className="px-4 py-3 font-medium">Status</th>
-                  </tr>
-                </thead>
-
-                {/* Body */}
-                <tbody className="divide-y">
-                  {StaffFakeData.map((staff) => (
-                    <tr key={staff.id} className="hover:bg-gray-50 transition">
-                      {/* Full name */}
-                      <td className="px-4 py-3 font-medium">
-                        {staff.fullName}
-                      </td>
-
-                      {/* Email */}
-                      <td className="px-4 py-3 text-gray-500">{staff.email}</td>
-
-                      {/* Role */}
-                      <td className="px-4 py-3">{staff.role}</td>
-
-                      {/* Status */}
-                      <td className="px-4 py-3">
-                        <span
-                          className={`px-2 py-1 text-xs rounded-md ${
-                            staff.status === "active"
-                              ? "bg-green-100 text-green-700"
-                              : staff.status === "inactive"
-                                ? "bg-gray-100 text-gray-600"
-                                : "bg-yellow-100 text-yellow-700"
-                          }`}
-                        >
-                          {staff.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {/*diver */}
-            <div className="h-px bg-gray-200 my-3" />
-            {/*Footer */}
-            <div className="flex justify-end">
-              <ViewEverydayReportSheet>
-                <Button>Các báo cáo hàng ngày</Button>
-              </ViewEverydayReportSheet>
-            </div>
           </div>
         </div>
       </div>

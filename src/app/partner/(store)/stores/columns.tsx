@@ -18,7 +18,7 @@ function StoreActionCell({ id }: { id: string }) {
 
   return (
     <button
-      onClick={() => router.push(`/admin/stores/${id}`)}
+      onClick={() => router.push(`/partner/stores/${id}`)}
       title="Detail"
       className="text-blue-500 hover:text-blue-700"
     >
@@ -29,32 +29,12 @@ function StoreActionCell({ id }: { id: string }) {
 
 export const getStoreColumns = (): ColumnDef<Store>[] => [
   {
-    accessorFn: (row) => row.images?.[0],
-    id: "image",
-    header: "Hình ảnh",
-    cell: ({ getValue }) => (
-      <img
-        src={getValue() as string}
-        className="w-12 h-12 object-cover rounded"
-      />
-    ),
-  },
-  {
     accessorKey: "name",
     header: "Tên",
-    cell: ({ row }) => {
-      const { name, partnerId } = row.original as {
-        name: string;
-        partnerId: string;
-      };
-
-      return (
-        <div>
-          <p>{name}</p>
-          <p>{partnerId}</p>
-        </div>
-      );
-    },
+  },
+  {
+    accessorKey: "phoneNumber",
+    header: "Số điện thoại",
   },
   {
     accessorKey: "storeAddress",
@@ -70,17 +50,6 @@ export const getStoreColumns = (): ColumnDef<Store>[] => [
     },
   },
 
-  {
-    header: "Thời gian làm việc",
-    cell: ({ row }) => {
-      const { openTime, closeTime, openDay } = row.original;
-      return (
-        <span>
-          {openDay}: {openTime} - {closeTime}
-        </span>
-      );
-    },
-  },
   {
     accessorKey: "isActive",
     header: "Trạng thái",

@@ -51,3 +51,8 @@ export const getAllPartnerStaffAPI = async <T>(params: T) => {
   const res = await api.get("/user/store-users", { params });
   return res.data;
 };
+
+export const getAllStoreStaffAPI = async <T>(params: T) => {
+  const res = await api.get("/user/store-users", { params });
+  return res.data;
+};

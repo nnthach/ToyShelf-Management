@@ -11,15 +11,12 @@ import {
   restoreWarehouseAPI,
   updateWarehouseAPI,
 } from "@/src/services/warehouse.service";
-
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import { City, Warehouse } from "@/src/types";
-import { formatToSlug } from "@/src/utils/format";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Lock, MapPin, RotateCcw, Trash2 } from "lucide-react";
+import { Lock, MapPin, RotateCcw, Save, Trash2 } from "lucide-react";
 import { ChangeEvent, memo, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -59,6 +56,8 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       address: "",
       code: "",
       cityId: "",
+      latitude: 0,
+      longitude: 0,
     },
   });
 
@@ -69,7 +68,15 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
         address: warehouse.address,
         code: warehouse.code,
         cityId: warehouse.cityId,
+        latitude: warehouse.latitude,
+        longitude: warehouse.longitude,
       });
+
+      window.dispatchEvent(
+        new CustomEvent("map:flyTo", {
+          detail: { lat: warehouse.latitude, lng: warehouse.longitude },
+        }),
+      );
     }
   }, [warehouse, form]);
 
@@ -206,8 +213,8 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
 
                         const { lat, lng, address } = detail;
                         form.setValue("address", address);
-                        // form.setValue("latitude", lat);
-                        // form.setValue("longitude", lng);
+                        form.setValue("latitude", lat);
+                        form.setValue("longitude", lng);
 
                         window.dispatchEvent(
                           new CustomEvent("map:flyTo", {
@@ -277,7 +284,8 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
             </div>
           )}
           <Button type="submit" form="form-update-warehouse" className="flex-1">
-            Lưu thay đổi
+            <Save />
+            Lưu
           </Button>
         </div>
       </div>

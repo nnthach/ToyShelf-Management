@@ -51,6 +51,8 @@ function CreateWarehouseModal() {
       address: "",
       code: "",
       cityId: "",
+      latitude: 0,
+      longitude: 0,
     },
   });
 
@@ -165,9 +167,10 @@ function CreateWarehouseModal() {
                             if (!detail) return;
 
                             const { lat, lng, address } = detail;
+
                             form.setValue("address", address);
-                            // form.setValue("latitude", lat);
-                            // form.setValue("longitude", lng);
+                            form.setValue("latitude", lat);
+                            form.setValue("longitude", lng);
 
                             window.dispatchEvent(
                               new CustomEvent("map:flyTo", {

@@ -19,7 +19,7 @@ import {
 } from "@/src/styles/components/ui/card";
 import { FieldGroup, FieldLabel } from "@/src/styles/components/ui/field";
 import { Input } from "@/src/styles/components/ui/input";
-import { LogIn } from "lucide-react";
+import { ArrowLeft, LogIn, Mail } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -98,7 +98,7 @@ export default function ActiveAccountPage() {
                 />
               </div>
               {/*#0D47A1 */}
-              <p className="text-[#1E88E5] font-bold text-xl">Toys Shelf</p>
+              <p className="text-[#1E88E5] font-bold text-xl">ToysShelf</p>
             </div>
           </CardTitle>
           <CardDescription>Kích hoạt tài khoản</CardDescription>
@@ -176,19 +176,32 @@ export default function ActiveAccountPage() {
 
         <CardFooter className="flex justify-between gap-3">
           {activeAccountStep === 1 ? (
-            <Button
-              type="submit"
-              form="form-rhf-demo"
-              className="w-full"
-              disabled={isLoading}
-            >
-              <LogIn />
-              Gửi mã OTP
-            </Button>
+            <>
+              <Button
+                type="button"
+                variant={"outline"}
+                className="w-[50%]"
+                disabled={isLoading}
+                onClick={() => router.replace("/")}
+              >
+                <ArrowLeft />
+                Quay về
+              </Button>
+              <Button
+                type="submit"
+                form="form-rhf-demo"
+                className="w-[50%]"
+                disabled={isLoading}
+              >
+                <Mail />
+                Gửi mã OTP
+              </Button>
+            </>
           ) : (
             <>
               <Button
                 type="button"
+                variant={"outline"}
                 className="w-[50%]"
                 disabled={isLoading}
                 onClick={() => setActiveAccountStep(1)}
