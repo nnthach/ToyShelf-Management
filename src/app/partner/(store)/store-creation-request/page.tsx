@@ -16,9 +16,11 @@ import {
 } from "@/src/services/store-create-request.service";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import ViewStoreCreateRequestModal from "./components/ViewStoreCreationRequestModal";
 
 export default function PartnerStoreCreationRequestManage() {
   const queryClient = useQueryClient();
+  const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
@@ -31,6 +33,10 @@ export default function PartnerStoreCreationRequestManage() {
     queryFn: () => getAllStoreCreationRequestAPI(query),
     select: (res) => res.data as Store[],
   });
+
+  const handleViewDetail = (requestId: string) => {
+    setSelectedRequestId(requestId);
+  };
 
   const deleteMutation = useMutation({
     mutationFn: deleteStoreCreationRequestAPI,
@@ -57,7 +63,7 @@ export default function PartnerStoreCreationRequestManage() {
     deleteMutation.mutate(cityId);
   };
 
-  const columns = getStoreCreateRequestColumns(handleDelete);
+  const columns = getStoreCreateRequestColumns(handleDelete, handleViewDetail);
 
   return (
     <>
@@ -101,7 +107,15 @@ export default function PartnerStoreCreationRequestManage() {
         </DataTable>
       </div>
 
-
+      {selectedRequestId && (
+        <ViewStoreCreateRequestModal
+          requestId={selectedRequestId}
+          isOpen={!!selectedRequestId}
+          onClose={() => {
+            setSelectedRequestId("");
+          }}
+        />
+      )}
     </>
   );
 }

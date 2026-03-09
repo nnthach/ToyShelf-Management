@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  WarehouseFormValues,
-  warehouseSchema,
-} from "@/src/schemas/warehouse.schema";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import {
@@ -17,8 +13,18 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { MapPin, Plus } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  MapIcon,
+  MapPin,
+  Navigation,
+  Phone,
+  Plus,
+  Search,
+  Send,
+  Sparkles,
+  Store,
+} from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -26,7 +32,6 @@ import { useMapCreate } from "@/src/hooks/useMapCreate";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import MapCreate from "@/src/components/MapCreate";
 import { StoreFormValues, storeSchema } from "@/src/schemas/store.schema";
-import { createStoreAPI } from "@/src/services/store.service";
 import { createStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
 
 function CreateStoreRequestModal() {
@@ -90,115 +95,162 @@ function CreateStoreRequestModal() {
       >
         <DialogTrigger asChild>
           <Button className="btn-primary-gradient">
-            <Plus /> Tạo cửa hàng
+            <Plus /> Tạo yêu cầu
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Tạo cửa hàng</DialogTitle>
-            <DialogDescription>
-              Thóng tin cửa hàng đơn giản cả cạp nhất khi lưu.
+
+        <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl">
+          {/* Header đồng bộ */}
+          <DialogHeader className="p-6 py-2 bg-slate-50/50 border-b">
+            <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <Store className="text-primary" size={24} />
+              Tạo yêu cầu cửa hàng mới
+            </DialogTitle>
+            <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
+              <Sparkles size={14} className="text-amber-500" />
+              Thông tin cửa hàng sẽ được cập nhật chính xác trên bản đồ khi lưu.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium">Bản đồ</p>
-            <div className="w-full h-[200px]">
-              <MapCreate />
+          {/* Form Body - Scrollable */}
+          <div className="p-6 py-0 max-h-[75vh] overflow-y-auto custom-scrollbar">
+            <div className="space-y-6">
+              {/* SECTION: BẢN ĐỒ */}
+              <div className="space-y-2">
+                <label className="text-[14px] font-semibold text-slate-700 flex items-center gap-2">
+                  <MapIcon size={16} className="text-primary" />
+                  Vị trí trên bản đồ
+                </label>
+                <div className="w-full h-[180px] rounded-xl overflow-hidden border-2 border-slate-100 shadow-inner bg-slate-50 relative group">
+                  <MapCreate />
+                  <div className="absolute top-2 right-2 px-2 py-1 bg-white/80 backdrop-blur-sm rounded text-[10px] font-bold text-slate-500 uppercase tracking-tight border shadow-sm">
+                    Live Preview
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION: FORM NHẬP LIỆU */}
+              <FormProvider {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                  id="form-create-store"
+                >
+                  {/* Tên cửa hàng */}
+                  <FormFieldCustom
+                    name="name"
+                    label="Tên cửa hàng"
+                    placeholder="Ví dụ: Cửa hàng Tiện lợi A"
+                    icon={<Store size={18} />}
+                  />
+
+                  {/* Số điện thoại */}
+                  <FormFieldCustom
+                    name="phoneNumber"
+                    label="Số điện thoại liên hệ"
+                    placeholder="Ví dụ: 0901234567"
+                    icon={<Phone size={18} />}
+                  />
+
+                  {/* Địa chỉ với Suggestions */}
+                  <div className="relative group">
+                    <FormFieldCustom
+                      name="storeAddress"
+                      label="Địa chỉ chi tiết"
+                      placeholder="Tìm kiếm địa chỉ từ bản đồ..."
+                      loading={isGeocoding}
+                      icon={<MapPin size={18} />}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        form.setValue("storeAddress", e.target.value);
+                        fetchSuggestions(e.target.value);
+                      }}
+                    />
+
+                    {/* SUGGESTIONS BOX */}
+                    {suggestions.length > 0 && (
+                      <div className="absolute border rounded-xl bg-white z-50 w-full shadow-xl mt-1 max-h-[200px] overflow-y-auto p-1 border-slate-200 animate-in fade-in zoom-in-95">
+                        {suggestions.map((item) => (
+                          <div
+                            key={item.properties.id}
+                            className="flex items-start gap-3 px-3 py-2.5 hover:bg-slate-50 cursor-pointer rounded-lg transition-colors group/item"
+                            onClick={async () => {
+                              const detail = await fetchPlaceDetail(
+                                item.properties.id,
+                              );
+                              if (!detail) return;
+                              const { lat, lng, address } = detail;
+                              form.setValue("storeAddress", address);
+                              form.setValue("latitude", lat);
+                              form.setValue("longitude", lng);
+                              window.dispatchEvent(
+                                new CustomEvent("map:flyTo", {
+                                  detail: { lat, lng },
+                                }),
+                              );
+                              setSuggestions([]);
+                            }}
+                          >
+                            <div className="mt-0.5 p-1.5 rounded-full bg-slate-100 group-hover/item:bg-primary/10 group-hover/item:text-primary transition-colors">
+                              <Search size={14} />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-sm font-medium text-slate-700 line-clamp-1">
+                                {item.properties.label}
+                              </span>
+                              <span className="text-xs text-slate-400 italic">
+                                Nhấn để chọn vị trí
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* COORDINATES GRID - Tọa độ tự động */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormFieldCustom
+                      name="latitude"
+                      label="Vĩ độ"
+                      placeholder="0.000000"
+                      type="number"
+                      readOnly={true}
+                      icon={<Navigation size={16} className="rotate-45" />}
+                      className="bg-white/50"
+                    />
+                    <FormFieldCustom
+                      name="longitude"
+                      label="Kinh độ"
+                      placeholder="0.000000"
+                      type="number"
+                      readOnly={true}
+                      icon={<Navigation size={16} />}
+                      className="bg-white/50"
+                    />
+                  </div>
+                </form>
+              </FormProvider>
             </div>
           </div>
 
-          <FormProvider {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-3"
-              id="form-create-store"
-            >
-              <FormFieldCustom
-                name="name"
-                label="Tên cửa hàng"
-                placeholder="Tên cửa hàng"
-              />
-
-              <FormFieldCustom
-                name="phoneNumber"
-                label="Số điện thoại"
-                placeholder="Số điện thoại"
-              />
-
-              <div className="relative">
-                <FormFieldCustom
-                  name="storeAddress"
-                  label="Địa chỉ"
-                  placeholder="Địa chỉ"
-                  loading={isGeocoding}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    form.setValue("storeAddress", e.target.value);
-                    fetchSuggestions(e.target.value);
-                  }}
-                />
-
-                {suggestions.length > 0 && (
-                  <div className="absolute border rounded-md bg-background z-10 w-full shadow max-h-[120px] overflow-y-auto">
-                    {suggestions.map((item) => (
-                      <div
-                        key={item.properties.id}
-                        className="px-3 py-2 hover:bg-muted cursor-pointer"
-                        onClick={async () => {
-                          const detail = await fetchPlaceDetail(
-                            item.properties.id,
-                          );
-
-                          if (!detail) return;
-
-                          const { lat, lng, address } = detail;
-
-                          form.setValue("storeAddress", address);
-                          form.setValue("latitude", lat);
-                          form.setValue("longitude", lng);
-
-                          window.dispatchEvent(
-                            new CustomEvent("map:flyTo", {
-                              detail: { lat, lng },
-                            }),
-                          );
-
-                          setSuggestions([]);
-                        }}
-                      >
-                        <div className="flex items-center gap-2">
-                          <MapPin size={18} />
-                          {item.properties.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="flex items-center gap-3">
-                <FormFieldCustom
-                  name="latitude"
-                  label="Vĩ độ"
-                  placeholder="Vũ độ"
-                  type="number"
-                  readOnly={true}
-                />
-                <FormFieldCustom
-                  name="longitude"
-                  label="Kinh độ"
-                  placeholder="Kinh độ"
-                  type="number"
-                  readOnly={true}
-                />
-              </div>
-            </form>
-          </FormProvider>
-          <DialogFooter>
+          {/* Footer đồng bộ */}
+          <DialogFooter className="p-4 py-2 bg-slate-50/50 border-t flex gap-3">
             <DialogClose asChild>
-              <Button variant="outline">Hủy bỏ</Button>
+              <Button
+                variant="ghost"
+                className="flex-1 font-medium text-slate-600 hover:bg-slate-200"
+              >
+                Hủy bỏ
+              </Button>
             </DialogClose>
-            <Button type="submit" form="form-create-store">
-              Tạo
+            <Button
+              type="submit"
+              form="form-create-store"
+              className="flex-1 min-w-[140px] gap-2 font-bold shadow-md active:scale-95 transition-all"
+              variant="success"
+            >
+              <Send size={16} />
+              Xác nhận tạo
             </Button>
           </DialogFooter>
         </DialogContent>

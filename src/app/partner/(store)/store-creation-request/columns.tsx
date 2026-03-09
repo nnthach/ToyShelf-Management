@@ -6,13 +6,14 @@ import {
   formatStoreCreateRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Eye, Trash } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export const getStoreCreateRequestColumns = (
   onDelete: (storeCreateRequestId: string) => void,
+  onView: (storeCreateRequestId: string) => void,
 ): ColumnDef<Store>[] => [
   {
     accessorKey: "name",
@@ -55,6 +56,14 @@ export const getStoreCreateRequestColumns = (
     cell: ({ row }) => {
       const storeCreateRequest = row.original;
       return (
+        <div className="flex items-center gap-3">
+          <span
+            onClick={() => onView(storeCreateRequest.id)}
+            title="Chi tiết"
+            className="cursor-pointer text-blue-400"
+          >
+            <Eye size={20} />
+          </span>
           <span
             onClick={() => onDelete(storeCreateRequest.id)}
             title="Xóa"
@@ -62,6 +71,7 @@ export const getStoreCreateRequestColumns = (
           >
             <Trash size={20} />
           </span>
+        </div>
       );
     },
   },

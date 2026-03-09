@@ -163,13 +163,13 @@ export const PartnerAdminSidebarGroups = [
     items: [
       { title: "Cửa hàng", url: "/partner/stores", icon: Store },
       {
-        title: "Lời mời tham gia cửa hàng",
-        url: "/partner/store-invitation",
+        title: "Yêu cầu tạo cửa hàng",
+        url: "/partner/store-creation-request",
         icon: Store,
       },
       {
-        title: "Yêu cầu tạo cửa hàng",
-        url: "/partner/store-creation-request",
+        title: "Lời mời tham gia cửa hàng",
+        url: "/partner/store-invitation",
         icon: Store,
       },
     ],
