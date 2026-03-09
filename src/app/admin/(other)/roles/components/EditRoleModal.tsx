@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { getRoleDetailAPI, updateRoleAPI } from "@/src/services/role.service";
+import { Edit, FileText, ShieldCheck, Sparkles } from "lucide-react";
 
 type EditRoleModalProps = {
   roleId: string;
@@ -85,44 +86,68 @@ function EditRoleModal({ roleId, isOpen, onClose }: EditRoleModalProps) {
         if (!value) onClose();
       }}
     >
-      <form>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Chỉnh sửa vai trò</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
-            </DialogDescription>
-          </DialogHeader>
+      <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden border-none shadow-2xl">
+        {/* Header đồng bộ: Sạch sẽ & Hiện đại */}
+        <DialogHeader className="p-6 bg-slate-50/50 border-b">
+          <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
+            Chỉnh sửa cấp bậc vai trò
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
+            <Sparkles size={14} className="text-indigo-500" />
+            Xác định các tầng quyền hạn cho người dùng trong hệ thống.
+          </DialogDescription>
+        </DialogHeader>
 
+        {/* Form Body: Thoáng & Dễ quét thông tin */}
+        <div className="p-6">
           <FormProvider {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-3 mb-2"
-              id="form-edit-role"
+              className="space-y-5"
+              id="form-create-role"
             >
+              {/* TÊN CẤP BẬC VAI TRÒ */}
               <FormFieldCustom
                 name="name"
-                label="Tên cấp độ vai trò"
-                placeholder="Ví dụ: Cấp độ 1"
+                label="Tên cấp bậc vai trò"
+                placeholder="Ví dụ: Quản trị viên cao cấp, Nhân viên..."
+                icon={<ShieldCheck size={18} />}
               />
+
+              {/* MÔ TẢ */}
               <FormFieldCustom
                 name="description"
-                label="Mô tả cấp độ vai trò"
-                placeholder="Ví dụ: Mô tả cấp độ 1"
+                label="Mô tả cấp độ"
+                placeholder="Mô tả ngắn gọn về phạm vi quyền hạn của cấp bậc này..."
+                type="textarea"
+                className="min-h-[100px]"
+                icon={<FileText size={18} />}
               />
             </form>
           </FormProvider>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Hủy</Button>
-            </DialogClose>
-            <Button type="submit" form="form-edit-role">
-              Chỉnh sửa
+        </div>
+
+        {/* Footer đồng bộ: Background nhạt & Button tràn viền */}
+        <DialogFooter className="p-4 bg-slate-50/50 border-t flex gap-3">
+          <DialogClose asChild>
+            <Button
+              variant="ghost"
+              className="flex-1 font-medium text-slate-600 hover:bg-slate-200"
+            >
+              Hủy
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+          </DialogClose>
+          <Button
+            type="submit"
+            form="form-create-role"
+            className="flex-1 min-w-[140px] gap-2 font-bold shadow-md active:scale-95 transition-all"
+            variant="success"
+          >
+            <Edit className="h-4 w-4" />
+            Lưu
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 }

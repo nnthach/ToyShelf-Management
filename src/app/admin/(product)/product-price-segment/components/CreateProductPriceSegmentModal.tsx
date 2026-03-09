@@ -11,7 +11,14 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import {
+  ArrowDownWideNarrow,
+  ArrowUpWideNarrow,
+  Layers,
+  Plus,
+  Send,
+  Sparkles,
+} from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -46,8 +53,8 @@ function CreateProductPriceSegmentModal() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      minPrice: "",
-      maxPrice: "",
+      minPrice: "0",
+      maxPrice: "0",
       code: "",
     },
   });
@@ -90,44 +97,77 @@ function CreateProductPriceSegmentModal() {
           <Plus /> Thêm cấp bậc giá sản phẩm
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Thêm cấp bậc giá sản phẩm</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+      <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden border-none shadow-2xl">
+        {/* Header đồng bộ */}
+        <DialogHeader className="p-6 bg-slate-50/50 border-b">
+          <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
+            Thêm cấp bậc giá sản phẩm
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
+            <Sparkles size={14} className="text-blue-500" />
+            Phân loại các khoảng giá để quản lý chính sách hoa hồng dễ dàng hơn.
           </DialogDescription>
         </DialogHeader>
 
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-3 mb-2"
-            id="form-create-price-segment"
-          >
-            <FormFieldCustom
-              name="name"
-              label="Tên cấp bậc giá"
-              placeholder="Ví dụ: Cấp bậc 1"
-            />
+        {/* Form Body */}
+        <div className="p-6">
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-5"
+              id="form-create-price-segment"
+            >
+              {/* TÊN CẤP BẬC */}
+              <FormFieldCustom
+                name="name"
+                label="Tên cấp bậc giá"
+                placeholder="Ví dụ: Phân khúc giá rẻ, Cao cấp..."
+                icon={<Layers size={18} />}
+              />
 
-            <FormFieldCustom
-              name="minPrice"
-              label="Giá tối thiểu"
-              placeholder="Ví dụ: 100000"
-            />
-            <FormFieldCustom
-              name="maxPrice"
-              label="Giá tối đa"
-              placeholder="Ví dụ: 1000000"
-            />
-          </form>
-        </FormProvider>
-        <DialogFooter>
+              <div className="grid grid-cols-2 gap-4 pt-2">
+                {/* GIÁ TỐI THIỂU */}
+                <FormFieldCustom
+                  name="minPrice"
+                  label="Giá tối thiểu"
+                  placeholder="0"
+                  type="number"
+                  labelNote="(VNĐ)"
+                  icon={<ArrowDownWideNarrow size={18} />}
+                />
+
+                {/* GIÁ TỐI ĐA */}
+                <FormFieldCustom
+                  name="maxPrice"
+                  label="Giá tối đa"
+                  placeholder="Ví dụ: 1,000,000"
+                  type="number"
+                  labelNote="(VNĐ)"
+                  icon={<ArrowUpWideNarrow size={18} />}
+                />
+              </div>
+            </form>
+          </FormProvider>
+        </div>
+
+        {/* Footer đồng bộ */}
+        <DialogFooter className="p-4 bg-slate-50/50 border-t flex gap-3">
           <DialogClose asChild>
-            <Button variant="outline">Hủy</Button>
+            <Button
+              variant="ghost"
+              className="flex-1 font-medium text-slate-600 hover:bg-slate-200"
+            >
+              Hủy
+            </Button>
           </DialogClose>
-          <Button type="submit" form="form-create-price-segment">
-            Thêm mới
+          <Button
+            type="submit"
+            form="form-create-price-segment"
+            className="flex-1 min-w-[140px] gap-2 font-bold shadow-md active:scale-95 transition-all"
+            variant="success"
+          >
+            <Send className="h-4 w-4" />
+            Xác nhận
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -11,21 +11,13 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { Building2, Plus, Send, Sparkles } from "lucide-react";
+import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import {
-  createPartnerTierAPI,
-  getAllPartnerTierAPI,
-} from "@/src/services/partner-tier.service";
-import { createPriceTableAPI } from "@/src/services/price-table.service";
-import { PriceTableType } from "@/src/enums/price-table-type.enum";
-import { PartnerTier, ProductPriceSegment } from "@/src/types";
-import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
 import { formatToInitials } from "@/src/utils/format";
 import { createCityAPI } from "@/src/services/city.service";
 
@@ -82,29 +74,54 @@ function CreateCityModal() {
           <Plus /> Thêm thành phố
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[300px]">
-        <DialogHeader>
-          <DialogTitle>Thêm thành phố</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+      <DialogContent className="sm:max-w-[380px] p-0 overflow-hidden border-none shadow-2xl">
+        {/* Header: Sạch sẽ, icon Building đại diện cho đô thị */}
+        <DialogHeader className="p-6 bg-slate-50/50 border-b">
+          <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
+            Thêm thành phố
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
+            <Sparkles size={14} className="text-sky-500" />
+            Bổ sung địa danh mới vào hệ thống quản lý khu vực.
           </DialogDescription>
         </DialogHeader>
 
-        <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} id="form-create-city">
-            <FormFieldCustom
-              name="name"
-              label="Tên thành phố"
-              placeholder="Ví dụ: TP.HCM"
-            />
-          </form>
-        </FormProvider>
-        <DialogFooter>
+        {/* Form Body: Padding rộng để trường nhập liệu nổi bật */}
+        <div className="p-6">
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              id="form-create-city"
+              className="space-y-4"
+            >
+              <FormFieldCustom
+                name="name"
+                label="Tên thành phố / Tỉnh"
+                placeholder="Ví dụ: TP. Hồ Chí Minh, Hà Nội..."
+                icon={<Building2 size={18} />}
+              />
+            </form>
+          </FormProvider>
+        </div>
+
+        {/* Footer: Nút bấm lớn, dễ thao tác */}
+        <DialogFooter className="p-4 bg-slate-50/50 border-t flex gap-3">
           <DialogClose asChild>
-            <Button variant="outline">Hủy</Button>
+            <Button
+              variant="ghost"
+              className="flex-1 font-medium text-slate-600 hover:bg-slate-200"
+            >
+              Hủy
+            </Button>
           </DialogClose>
-          <Button type="submit" form="form-create-city">
-            Tạo mới
+          <Button
+            type="submit"
+            form="form-create-city"
+            className="flex-1 min-w-[120px] gap-2 font-bold shadow-md active:scale-95 transition-all"
+            variant="success"
+          >
+            <Send className="h-4 w-4" />
+            Tạo
           </Button>
         </DialogFooter>
       </DialogContent>

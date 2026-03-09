@@ -1,5 +1,5 @@
 import { useWatch, UseFormReturn } from "react-hook-form";
-import { Trash2 } from "lucide-react";
+import { Banknote, Layers, Palette, Trash2 } from "lucide-react";
 import { SelectOption } from "../types/SubType";
 import {
   ProductFormValues,
@@ -56,12 +56,15 @@ function ProductColorItem({
                 placeholder="Chọn màu sắc"
                 type="select"
                 selectData={colorOptions}
+                icon={<Palette size={18} />} // Icon bảng màu
               />
+
               <FormFieldCustom
                 name={`colors.${index}.price`}
                 label="Giá sản phẩm"
-                placeholder="Giá sản phẩm"
+                placeholder="Nhập giá cho màu này"
                 type="number"
+                icon={<Banknote size={18} />} // Icon tiền mặt
               />
 
               <FormFieldCustom
@@ -70,6 +73,7 @@ function ProductColorItem({
                 placeholder="Chọn phân khúc giá"
                 type="select"
                 selectData={priceSegmentOptions}
+                icon={<Layers size={18} />} // Icon lớp/phân tầng
               />
             </div>
           </div>

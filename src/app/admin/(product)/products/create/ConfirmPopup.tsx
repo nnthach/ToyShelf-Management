@@ -153,8 +153,8 @@ function ConfirmPopup({
               disabled={isLoading}
               className="btn-primary-gradient"
             >
-              Xuất bản
               <Check />
+              Tạo
             </Button>
           </DialogFooter>
         </DialogContent>

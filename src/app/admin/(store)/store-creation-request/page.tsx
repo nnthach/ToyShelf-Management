@@ -9,7 +9,6 @@ import { QueryParams } from "@/src/types/SubType";
 import { Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreCreateRequestColumns } from "./columns";
-import CreateStoreRequestModal from "./components/CreateStoreCreationRequestModal";
 import {
   deleteStoreCreationRequestAPI,
   getAllStoreCreationRequestAPI,
@@ -71,7 +70,6 @@ export default function PartnerStoreCreationRequestManage() {
       {/*Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold">Yêu cầu tạo cửa hàng</h1>
-        <CreateStoreRequestModal />
       </div>
 
       {/*Table */}

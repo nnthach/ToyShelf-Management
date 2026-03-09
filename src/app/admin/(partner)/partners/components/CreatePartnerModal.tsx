@@ -19,7 +19,15 @@ import { PartnerTier } from "@/src/types";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import {
+  Building2,
+  Info,
+  Plus,
+  Save,
+  Send,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -76,55 +84,72 @@ function CreatePartnerModal() {
         }
       }}
     >
-      <form>
-        <DialogTrigger asChild>
-          <Button className="btn-primary-gradient">
-            <Plus /> Thêm đối tác
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Thêm đối tác mới</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
-            </DialogDescription>
-          </DialogHeader>
+      <DialogTrigger asChild>
+        <Button className="btn-primary-gradient">
+          <Plus /> Thêm đối tác
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[400px] p-0 overflow-hidden border-none shadow-2xl">
+        {/* Header với Background nhẹ */}
+        <DialogHeader className="p-6 bg-slate-50/50 border-b">
+          <DialogTitle className="text-xl font-bold text-slate-800">
+            Thêm đối tác mới
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 flex items-center gap-1 mt-0.5">
+            <Info size={14} /> Điền thông tin để thiết lập quan hệ đối tác mới.
+          </DialogDescription>
+        </DialogHeader>
 
+        {/* Form Body */}
+        <div className="p-6">
           <FormProvider {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-3"
+              className="space-y-5"
               id="form-create-partner"
             >
-              <FormFieldCustom
-                name="companyName"
-                label="Tên công ty"
-                placeholder="Tên công ty"
-              />
-              <FormFieldCustom
-                name="partnerTierId"
-                label="Cấp bậc"
-                placeholder="Chọn cấp bậc"
-                type="select"
-                selectData={partnerTierOptions}
-              />
+              <div className="grid gap-4">
+                <FormFieldCustom
+                  name="companyName"
+                  label="Tên công ty"
+                  icon={<Building2 size={18} />}
+                  placeholder="Nhập tên chính thức của doanh nghiệp..."
+                />
+
+                <FormFieldCustom
+                  name="partnerTierId"
+                  label="Phân cấp đối tác"
+                  icon={<ShieldCheck size={18} />}
+                  placeholder="Chọn hạng mức hợp tác"
+                  type="select"
+                  selectData={partnerTierOptions}
+                />
+              </div>
             </form>
           </FormProvider>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
+        </div>
+
+        {/* Footer với style sạch sẽ */}
+        <DialogFooter className="p-6 bg-slate-50/50 border-t flex gap-3 sm:gap-0">
+          <DialogClose asChild>
             <Button
-              type="submit"
-              form="form-create-partner"
-              // disabled={createPartnerMutation.isPending}
+              variant="ghost"
+              className="flex-1 sm:flex-none font-medium text-slate-600 hover:bg-slate-200"
             >
-              Tạo
+              Hủy bỏ
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+          </DialogClose>
+          <Button
+            type="submit"
+            form="form-create-partner"
+            className="flex-1 sm:flex-none min-w-[120px] gap-2 font-bold shadow-sm"
+            variant="success"
+          >
+            <Send className="h-4 w-4" />
+            Xác nhận tạo
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 }

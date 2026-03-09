@@ -1,20 +1,18 @@
 import { z } from "zod";
 
 export const productSchema = z.object({
-  name: z.string().min(1, "Tên sản phẩm là bắt buộc"),
-  description: z.string().min(1, "Mô tả là bắt buộc"),
   productCategoryId: z.string().min(1, "Danh mục sản phẩm là bắt buộc"),
+  name: z.string().min(1, "Tên sản phẩm là bắt buộc"),
   price: z.coerce.number().min(1, "Giá là bắt buộc"),
+  description: z.string().min(1, "Mô tả là bắt buộc"),
   brand: z.string().min(1, "Thương hiệu là bắt buộc"),
   material: z.string().min(1, "Chất liệu là bắt buộc"),
   originCountry: z.string().min(1, "Quốc gia sản xuất là bắt buộc"),
   ageRange: z.string().min(1, "Độ tuổi là bắt buộc"),
-  size: z.string().optional(),
-  length: z.number().min(1).optional(),
-  width: z.number().min(1).optional(),
-  height: z.number().min(1).optional(),
-  weight: z.coerce.number().optional(),
-  unit: z.string().optional(),
+  width: z.number(),
+  length: z.number(),
+  height: z.number(),
+  weight: z.coerce.number(),
   colors: z.array(
     z.object({
       name: z.string().optional(),
@@ -49,12 +47,10 @@ export const productUpdateSchema = z.object({
   material: z.string().min(1, "Chất liệu là bắt buộc"),
   originCountry: z.string().min(1, "Quốc gia sản xuất là bắt buộc"),
   ageRange: z.string().min(1, "Độ tuổi là bắt buộc"),
-  size: z.string().optional(),
-  length: z.number().min(1).optional(),
-  width: z.number().min(1).optional(),
-  height: z.number().min(1).optional(),
-  weight: z.coerce.number().optional(),
-  unit: z.string().optional(),
+  length: z.number(),
+  width: z.number(),
+  height: z.number(),
+  weight: z.coerce.number(),
   isConsignment: z.boolean().optional(),
   colors: z.array(
     z.object({

@@ -23,6 +23,7 @@ type FormFieldProps = CommonFieldProps & {
   placeholder?: string;
   selectData?: SelectOption[];
   loading?: boolean;
+  icon?: React.ReactNode;
 };
 
 const renderFieldByType = (
@@ -96,6 +97,7 @@ export function FormFieldCustom({
   name,
   label,
   labelNote,
+  icon,
   type = "text",
   placeholder,
   selectData,
@@ -111,8 +113,21 @@ export function FormFieldCustom({
         control={control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="gap-1">
-            <FieldLabel htmlFor={name}>
-              {label} {labelNote}
+            <FieldLabel
+              htmlFor={name}
+              className="flex items-center gap-1 text-[14px] font-semibold text-slate-700"
+            >
+              {icon && (
+                <span className="text-primary/80 group-data-[invalid=true]:text-red-500">
+                  {icon}
+                </span>
+              )}
+              <span>{label}</span>
+              {labelNote && (
+                <span className="text-xs font-normal text-muted-foreground ml-auto italic">
+                  ({labelNote})
+                </span>
+              )}
             </FieldLabel>
 
             {/* Wrapper để đặt spinner */}

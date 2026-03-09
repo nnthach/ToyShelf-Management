@@ -10,6 +10,19 @@ import { ProductCategory } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
 import { useQuery } from "@tanstack/react-query";
 import { memo } from "react";
+import {
+  Package,
+  Tags,
+  DollarSign,
+  Weight,
+  Box,
+  Flag,
+  Baby,
+  ArrowsUpFromLine,
+  ArrowRightLeft,
+  ArrowUpToLine,
+  FileText,
+} from "lucide-react";
 
 function EditProductInfoLeft() {
   // product category
@@ -33,12 +46,13 @@ function EditProductInfoLeft() {
           Vui lòng điền đầy đủ thông tin sản phẩm
         </p>
       </div>
-      <div className="space-y-3">
-        <div className="grid grid-cols-2 gap-3">
+      <div className="space-y-5">
+        <div className="grid grid-cols-2 gap-4">
           <FormFieldCustom
             name="name"
             label="Tên sản phẩm"
-            placeholder="Tên sản phẩm"
+            placeholder="Ví dụ: Giày Sneaker Nam A1"
+            icon={<Package size={18} />} // Icon Tên sản phẩm
           />
           <FormFieldCustom
             name="productCategoryId"
@@ -46,28 +60,25 @@ function EditProductInfoLeft() {
             placeholder="Chọn danh mục"
             type="select"
             selectData={categoryOptions}
+            icon={<Tags size={18} />} // Icon Danh mục
           />
         </div>
-        <div className="grid grid-cols-2 gap-3">
+
+        <div className="grid grid-cols-2 gap-4">
           <FormFieldCustom
             name="price"
-            label="Giá"
-            placeholder="Giá"
+            label="Giá bán"
+            placeholder="0"
             type="number"
-          />
-          <FormFieldCustom
-            name="size"
-            label="Kích thước"
-            placeholder="Chọn kích thước"
-            type="select"
-            selectData={categoryOptions}
+            icon={<DollarSign size={18} />} // Icon Giá
           />
           <FormFieldCustom
             name="weight"
             label="Cân nặng"
-            placeholder="Chọn cân nặng"
+            placeholder="0"
             labelNote="(gram)"
             type="number"
+            icon={<Weight size={18} />} // Icon Cân nặng
           />
           <FormFieldCustom
             name="material"
@@ -75,57 +86,65 @@ function EditProductInfoLeft() {
             placeholder="Chọn chất liệu"
             type="select"
             selectData={ProductMaterialOption}
+            icon={<Box size={18} />} // Icon Chất liệu
           />
-        </div>
-
-        <div className="grid grid-cols-3 gap-3">
           <FormFieldCustom
             name="brand"
             label="Thương hiệu"
             placeholder="Chọn thương hiệu"
             type="select"
             selectData={ProductBrandOption}
+            icon={<Tags size={18} />} // Icon Thương hiệu (dùng chung với Tag)
           />
           <FormFieldCustom
             name="originCountry"
-            label="Quốc gia sản xuất"
-            placeholder="Quốc gia sản xuất"
+            label="Quốc gia"
+            placeholder="Ví dụ: Việt Nam"
+            icon={<Flag size={18} />} // Icon Quốc gia
           />
           <FormFieldCustom
             name="ageRange"
             label="Độ tuổi"
-            placeholder="Độ tuổi"
+            placeholder="Ví dụ: 5-10"
+            icon={<Baby size={18} />} // Icon Độ tuổi
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
+        {/* Khối kích thước chi tiết */}
+        <div className="grid grid-cols-3 gap-4">
           <FormFieldCustom
             name="length"
             label="Chiều dài"
-            placeholder="Chiều dài"
+            placeholder="0"
             labelNote="(cm)"
             type="number"
+            icon={<ArrowRightLeft size={18} />} // Icon Chiều dài (ngang)
           />
           <FormFieldCustom
             name="width"
             label="Chiều rộng"
-            placeholder="Chiều rộng"
+            placeholder="0"
             labelNote="(cm)"
             type="number"
+            icon={<ArrowsUpFromLine size={18} />} // Icon Chiều rộng (sâu)
           />
           <FormFieldCustom
             name="height"
             label="Chiều cao"
+            placeholder="0"
             labelNote="(cm)"
-            placeholder="Chiều cao"
             type="number"
+            icon={<ArrowUpToLine size={18} />} // Icon Chiều cao (đứng)
           />
         </div>
+
         <FormFieldCustom
           name="description"
-          label="Mô tả"
-          placeholder="Mô tả"
+          label="Mô tả sản phẩm"
+          placeholder="Nhập mô tả chi tiết về sản phẩm, đặc điểm nổi bật..."
           type="textarea"
+          className="min-h-[120px]"
+          icon={<FileText size={18} />} // Icon Mô tả
         />
       </div>
     </div>

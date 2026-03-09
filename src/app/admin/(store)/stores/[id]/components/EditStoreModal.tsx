@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  WarehouseFormValues,
-  warehouseSchema,
-} from "@/src/schemas/warehouse.schema";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import {
@@ -18,18 +14,20 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { MapPin, Plus } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { Edit, MapPin, Plus } from "lucide-react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useMapCreate } from "@/src/hooks/useMapCreate";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import MapCreate from "@/src/components/MapCreate";
 import { StoreFormValues, storeSchema } from "@/src/schemas/store.schema";
-import { createStoreAPI } from "@/src/services/store.service";
-import { createStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
+import {
+  getStoreDetailAPI,
+  updateStoreAPI,
+} from "@/src/services/store.service";
 
-function CreateStoreRequestModal() {
+function EditStoreModal({ storeId }: { storeId: string }) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -55,21 +53,50 @@ function CreateStoreRequestModal() {
     },
   });
 
+  const { data: storeDetail, isLoading: isStoreLoading } = useQuery({
+    queryKey: ["store", storeId],
+    queryFn: () => getStoreDetailAPI(storeId),
+    select: (res) => res.data,
+    enabled: !!storeId,
+  });
+
+  useEffect(() => {
+    if (storeDetail) {
+      form.reset({
+        name: storeDetail.name,
+        storeAddress: storeDetail.storeAddress,
+        phoneNumber: storeDetail.phoneNumber,
+        latitude: storeDetail.latitude,
+        longitude: storeDetail.longitude,
+      });
+
+      window.dispatchEvent(
+        new CustomEvent("map:flyTo", {
+          detail: { lat: storeDetail.latitude, lng: storeDetail.longitude },
+        }),
+      );
+    }
+  }, [storeDetail, form]);
+
   async function onSubmit(data: StoreFormValues) {
     console.log("submit data", data);
     setIsLoading(true);
 
     try {
-      await createStoreCreationRequestAPI(data);
+      await updateStoreAPI(data, storeId);
       queryClient.invalidateQueries({
-        queryKey: ["storeRequests"],
+        queryKey: ["stores"],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["store", storeId],
       });
       form.reset();
-      toast.success("Tạo cửa hàng thành công");
+      toast.success("Cập nhật cửa hàng thành công");
       setOpen(false);
     } catch (error) {
-      console.log("create store err", error);
-      toast.error("Tạo cửa hàng thất bại");
+      console.log("update store err", error);
+      toast.error("Cập nhật cửa hàng thất bại");
     } finally {
       setIsLoading(false);
     }
@@ -90,12 +117,12 @@ function CreateStoreRequestModal() {
       >
         <DialogTrigger asChild>
           <Button className="btn-primary-gradient">
-            <Plus /> Tạo cửa hàng
+            <Edit /> Chỉnh sửa cửa hàng
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Tạo cửa hàng</DialogTitle>
+            <DialogTitle>Chỉnh sửa cửa hàng</DialogTitle>
             <DialogDescription>
               Thóng tin cửa hàng đơn giản cả cạp nhất khi lưu.
             </DialogDescription>
@@ -198,7 +225,7 @@ function CreateStoreRequestModal() {
               <Button variant="outline">Hủy bỏ</Button>
             </DialogClose>
             <Button type="submit" form="form-create-store">
-              Tạo
+              Lưu
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -207,4 +234,4 @@ function CreateStoreRequestModal() {
   );
 }
 
-export default CreateStoreRequestModal;
+export default EditStoreModal;

@@ -185,8 +185,8 @@ export default function CreateProductPage() {
           className="btn-primary-gradient"
           form="form-create-product"
         >
-          Xác nhận
           <Check />
+          Xác nhận
         </Button>
       </div>
 

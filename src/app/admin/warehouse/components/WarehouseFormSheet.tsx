@@ -16,7 +16,17 @@ import { Button } from "@/src/styles/components/ui/button";
 import { City, Warehouse } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Lock, MapPin, RotateCcw, Save, Trash2 } from "lucide-react";
+import {
+  Globe2,
+  Lock,
+  MapIcon,
+  MapPin,
+  Navigation,
+  RotateCcw,
+  Save,
+  Trash2,
+  Warehouse as WarehouseIcon,
+} from "lucide-react";
 import { ChangeEvent, memo, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -159,9 +169,12 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
 
   return (
     <div className="bg-background flex-1 border-t border-border flex flex-col">
-      <div className="grid flex-1 auto-rows-min gap-6 px-4 mt-4">
-        <div className="flex flex-col gap-2 mb-3">
-          <p className="text-sm font-medium">Bản đồ</p>
+      <div className="grid flex-1 auto-rows-min gap-4 px-4 mt-4">
+        <div className="flex flex-col gap-2 mb-2">
+          <label className="text-[14px] font-semibold text-slate-700 flex items-center gap-2">
+            <MapIcon size={16} className="text-primary" />
+            Vị trí trên bản đồ
+          </label>
           <div className="w-full h-[200px]">
             <MapCreate />
           </div>
@@ -176,6 +189,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
               name="name"
               label="Tên kho"
               placeholder="Tên kho"
+              icon={<WarehouseIcon size={18} />}
             />
 
             <FormFieldCustom
@@ -184,6 +198,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
               placeholder="Chọn thành phố"
               type="select"
               selectData={cityOptions}
+              icon={<Globe2 size={18} />}
             />
 
             <div className="relative">
@@ -192,6 +207,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
                 label="Địa chỉ"
                 placeholder="Địa chỉ"
                 loading={isGeocoding}
+                icon={<MapPin size={18} />}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   form.setValue("address", e.target.value);
                   fetchSuggestions(e.target.value);
@@ -238,16 +254,20 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
               <FormFieldCustom
                 name="latitude"
                 label="Vĩ độ"
-                placeholder="Vĩ độ"
+                placeholder="0.000000"
                 type="number"
                 readOnly={true}
+                icon={<Navigation size={16} className="rotate-45" />}
+                className="bg-white/50"
               />
               <FormFieldCustom
                 name="longitude"
                 label="Kinh độ"
-                placeholder="Kinh độ"
+                placeholder="0.000000"
                 type="number"
                 readOnly={true}
+                icon={<Navigation size={16} />}
+                className="bg-white/50"
               />
             </div>
           </form>

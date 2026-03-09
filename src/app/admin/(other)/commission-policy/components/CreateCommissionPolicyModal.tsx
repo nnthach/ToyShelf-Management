@@ -11,7 +11,15 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import {
+  Calendar,
+  Info,
+  Layers,
+  Percent,
+  Plus,
+  Send,
+  Trophy,
+} from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -119,55 +127,90 @@ function CreateCommissionPolicyModal() {
           <Plus /> Thêm chính sách hoa hồng
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Thêm chính sách hoa hồng</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+      <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden border-none shadow-2xl">
+        {/* Header tối giản */}
+        <DialogHeader className="p-6 bg-slate-50/50 border-b">
+          <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
+            Thêm chính sách hoa hồng
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
+            <Info size={14} />
+            Thiết lập mức chiết khấu hoa hồng theo từng phân khúc sản phẩm.
           </DialogDescription>
         </DialogHeader>
 
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-3 mb-2"
-            id="form-create-partner-tier"
-          >
-            <FormFieldCustom
-              name="partnerTierId"
-              label="Cấp bậc đối tác"
-              placeholder="Chọn cấp bậc đối tác"
-              type="select"
-              selectData={partnerTierOptions}
-            />
+        {/* Form Body */}
+        <div className="p-6">
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4"
+              id="form-create-commission-policy"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2 sm:col-span-1">
+                  <FormFieldCustom
+                    name="partnerTierId"
+                    label="Cấp bậc đối tác"
+                    placeholder="Chọn cấp bậc"
+                    type="select"
+                    selectData={partnerTierOptions}
+                    icon={<Trophy size={16} />}
+                  />
+                </div>
 
-            <FormFieldCustom
-              name={`priceSegmentId`}
-              label="Phân giá sản phẩm"
-              type="select"
-              selectData={priceSegmentOptions}
-            />
+                <div className="col-span-2 sm:col-span-1">
+                  <FormFieldCustom
+                    name="priceSegmentId"
+                    label="Phân giá sản phẩm"
+                    type="select"
+                    placeholder="Chọn phân giá"
+                    selectData={priceSegmentOptions}
+                    icon={<Layers size={16} />}
+                  />
+                </div>
 
-            <FormFieldCustom
-              name="commissionRate"
-              label="Tỷ lệ hoa hồng (%)"
-              placeholder="Ví dụ: 10"
-            />
+                <div className="col-span-2 sm:col-span-1">
+                  <FormFieldCustom
+                    name="commissionRate"
+                    label="Tỷ lệ hoa hồng (%)"
+                    placeholder="Ví dụ: 10"
+                    type="number"
+                    icon={<Percent size={16} />}
+                  />
+                </div>
 
-            <FormFieldCustom
-              name="effectiveDate"
-              label="Ngày hiệu lực"
-              type="date"
-              placeholder="Ví dụ: 2024-01-01"
-            />
-          </form>
-        </FormProvider>
-        <DialogFooter>
+                <div className="col-span-2 sm:col-span-1">
+                  <FormFieldCustom
+                    name="effectiveDate"
+                    label="Ngày hiệu lực"
+                    type="date"
+                    icon={<Calendar size={16} />}
+                  />
+                </div>
+              </div>
+            </form>
+          </FormProvider>
+        </div>
+
+        {/* Footer */}
+        <DialogFooter className="p-4 bg-slate-50/50 border-t flex gap-3">
           <DialogClose asChild>
-            <Button variant="outline">Hủy</Button>
+            <Button
+              variant="ghost"
+              className="flex-1 font-medium text-slate-600 hover:bg-slate-200"
+            >
+              Hủy
+            </Button>
           </DialogClose>
-          <Button type="submit" form="form-create-partner-tier">
-            Thêm mới
+          <Button
+            type="submit"
+            form="form-create-commission-policy"
+            className="flex-1 min-w-[140px] gap-2 font-bold shadow-md active:scale-95 transition-all"
+            variant="success"
+          >
+            <Send className="h-4 w-4" />
+            Xác nhận thêm
           </Button>
         </DialogFooter>
       </DialogContent>

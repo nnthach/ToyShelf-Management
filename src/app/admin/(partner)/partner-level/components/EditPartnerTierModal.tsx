@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import { Edit, Hash, Plus, Send, Sparkles, Trophy } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import {
@@ -97,45 +97,66 @@ function EditPartnerTierModal({
         if (!value) onClose();
       }}
     >
-      <form>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Chỉnh sửa cấp bậc đối tác</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
-            </DialogDescription>
-          </DialogHeader>
+      <DialogContent className="sm:max-w-[400px] p-0 overflow-hidden border-none shadow-2xl">
+        {/* Header với Icon khối đặc trưng */}
+        <DialogHeader className="p-6 bg-slate-50/50 border-b">
+          <DialogTitle className="text-xl font-bold text-slate-800">
+            Chỉnh sửa bậc đối tác
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
+            <Sparkles size={14} />
+            Chỉnh sửa thứ hạng và quyền ưu tiên cho đối tác.
+          </DialogDescription>
+        </DialogHeader>
 
+        {/* Form Body - Tăng khoảng cách để thoáng hơn */}
+        <div className="p-6">
           <FormProvider {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-3 mb-2"
-              id="form-edit-partner-tier"
+              className="space-y-5"
+              id="form-create-partner-tier"
             >
               <FormFieldCustom
                 name="name"
                 label="Tên cấp bậc đối tác"
-                placeholder="Ví dụ: Cấp bậc 1"
+                placeholder="Ví dụ: Vàng, Bạch Kim..."
+                icon={<Trophy size={18} />} // Icon nhỏ kế Label
               />
+
               <FormFieldCustom
                 name="priority"
-                label="Ưu tiên"
+                label="Mức độ ưu tiên"
+                labelNote="Số càng nhỏ ưu tiên càng cao"
                 placeholder="Ví dụ: 1"
                 type="number"
+                icon={<Hash size={18} />} // Icon nhỏ kế Label
               />
             </form>
           </FormProvider>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Hủy</Button>
-            </DialogClose>
-            <Button type="submit" form="form-edit-partner-tier">
-              Lưu
+        </div>
+
+        {/* Footer đồng bộ style */}
+        <DialogFooter className="p-4 bg-slate-50/50 border-t flex gap-3">
+          <DialogClose asChild>
+            <Button
+              variant="ghost"
+              className="flex-1 font-medium text-slate-600 hover:bg-slate-200"
+            >
+              Hủy
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+          </DialogClose>
+          <Button
+            type="submit"
+            form="form-create-partner-tier"
+            className="flex-1 min-w-[140px] gap-2 font-bold shadow-md active:scale-95 transition-all"
+            variant="success" // Dùng variant success bạn đã thêm trong button.tsx
+          >
+            <Edit className="h-4 w-4" />
+            Lưu
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 }

@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import { Hash, Plus, Send, Sparkles, Trophy } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -76,39 +76,63 @@ function CreatePartnerTierModal() {
           <Plus /> Thêm cấp bậc đối tác
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Thêm cấp bậc đối tác</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+      <DialogContent className="sm:max-w-[400px] p-0 overflow-hidden border-none shadow-2xl">
+        {/* Header với Icon khối đặc trưng */}
+        <DialogHeader className="p-6 bg-slate-50/50 border-b">
+          <DialogTitle className="text-xl font-bold text-slate-800">
+            Thêm cấp bậc đối tác
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
+            <Sparkles size={14} />
+            Thiết lập thứ hạng và quyền ưu tiên cho đối tác.
           </DialogDescription>
         </DialogHeader>
 
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-3 mb-2"
-            id="form-create-partner-tier"
-          >
-            <FormFieldCustom
-              name="name"
-              label="Tên cấp bậc đối tác"
-              placeholder="Ví dụ: Cấp bậc 1"
-            />
+        {/* Form Body - Tăng khoảng cách để thoáng hơn */}
+        <div className="p-6">
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-5"
+              id="form-create-partner-tier"
+            >
+              <FormFieldCustom
+                name="name"
+                label="Tên cấp bậc đối tác"
+                placeholder="Ví dụ: Vàng, Bạch Kim..."
+                icon={<Trophy size={18} />} // Icon nhỏ kế Label
+              />
 
-            <FormFieldCustom
-              name="priority"
-              label="Ưu tiên"
-              placeholder="Ví dụ: 1"
-            />
-          </form>
-        </FormProvider>
-        <DialogFooter>
+              <FormFieldCustom
+                name="priority"
+                label="Mức độ ưu tiên"
+                labelNote="Số càng nhỏ ưu tiên càng cao"
+                placeholder="Ví dụ: 1"
+                type="number"
+                icon={<Hash size={18} />} // Icon nhỏ kế Label
+              />
+            </form>
+          </FormProvider>
+        </div>
+
+        {/* Footer đồng bộ style */}
+        <DialogFooter className="p-4 bg-slate-50/50 border-t flex gap-3">
           <DialogClose asChild>
-            <Button variant="outline">Hủy</Button>
+            <Button
+              variant="ghost"
+              className="flex-1 font-medium text-slate-600 hover:bg-slate-200"
+            >
+              Hủy
+            </Button>
           </DialogClose>
-          <Button type="submit" form="form-create-partner-tier">
-            Tạo
+          <Button
+            type="submit"
+            form="form-create-partner-tier"
+            className="flex-1 min-w-[140px] gap-2 font-bold shadow-md active:scale-95 transition-all"
+            variant="success" // Dùng variant success bạn đã thêm trong button.tsx
+          >
+            <Send className="h-4 w-4" />
+            Xác nhận tạo
           </Button>
         </DialogFooter>
       </DialogContent>
