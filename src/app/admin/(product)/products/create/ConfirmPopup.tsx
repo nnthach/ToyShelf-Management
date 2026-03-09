@@ -67,7 +67,6 @@ function ConfirmPopup({
                     {previewData?.weight != null
                       ? Number(previewData.weight)
                       : "--"}{" "}
-                    {previewData?.unit}
                   </p>
                 </div>
               </div>
