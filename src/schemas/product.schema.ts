@@ -9,9 +9,9 @@ export const productSchema = z.object({
   material: z.string().min(1, "Chất liệu là bắt buộc"),
   originCountry: z.string().min(1, "Quốc gia sản xuất là bắt buộc"),
   ageRange: z.string().min(1, "Độ tuổi là bắt buộc"),
-  width: z.number(),
-  length: z.number(),
-  height: z.number(),
+  width: z.coerce.number(),
+  length: z.coerce.number(),
+  height: z.coerce.number(),
   weight: z.coerce.number(),
   colors: z.array(
     z.object({
@@ -47,9 +47,9 @@ export const productUpdateSchema = z.object({
   material: z.string().min(1, "Chất liệu là bắt buộc"),
   originCountry: z.string().min(1, "Quốc gia sản xuất là bắt buộc"),
   ageRange: z.string().min(1, "Độ tuổi là bắt buộc"),
-  length: z.number(),
-  width: z.number(),
-  height: z.number(),
+  length: z.coerce.number(),
+  width: z.coerce.number(),
+  height: z.coerce.number(),
   weight: z.coerce.number(),
   isConsignment: z.boolean().optional(),
   colors: z.array(
