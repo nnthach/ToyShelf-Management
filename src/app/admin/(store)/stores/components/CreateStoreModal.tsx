@@ -62,7 +62,6 @@ function CreateStoreModal() {
   });
 
   async function onSubmit(data: StoreFormValues) {
-    console.log("submit data", data);
     setIsLoading(true);
 
     const payload = {
@@ -79,7 +78,6 @@ function CreateStoreModal() {
       toast.success("Tạo cửa hàng thành công");
       setOpen(false);
     } catch (error) {
-      console.log("create store err", error);
       toast.error("Tạo cửa hàng thất bại");
     } finally {
       setIsLoading(false);

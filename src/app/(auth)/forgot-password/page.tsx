@@ -37,12 +37,9 @@ export default function ForgotPasswordPage() {
 
   async function onSubmit(data: typeof form) {
     setIsLoading(true);
-    console.log("data", data);
     if (forgotPasswordStep === 1) {
       try {
-        const res = await forgotPasswordRequestAPI(data.email);
-
-        console.log("res", res);
+        await forgotPasswordRequestAPI(data.email);
 
         toast.success("Mã OTP đã được gửi đến email của bạn");
 
@@ -54,9 +51,7 @@ export default function ForgotPasswordPage() {
       }
     } else {
       try {
-        const res = await forgotPasswordResetAPI(data);
-
-        console.log("res", res);
+        await forgotPasswordResetAPI(data);
 
         setForm({
           email: "",

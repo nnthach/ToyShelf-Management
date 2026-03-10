@@ -81,7 +81,6 @@ export default function CreateProductPage() {
   );
 
   function onSubmit(data: ProductFormValues) {
-    console.log("data submit", data);
     const payload = {
       ...data,
       colors: data.colors.map((i) => {

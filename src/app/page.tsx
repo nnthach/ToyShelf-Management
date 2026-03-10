@@ -45,10 +45,7 @@ export default function HomePage() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-
-  console.log("auth", auth);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,8 +62,6 @@ export default function HomePage() {
       const token = res.data?.accessToken;
       const roles = res.data?.roles;
 
-      console.log("login roles", roles);
-
       localStorage.setItem("token", token);
       localStorage.setItem("roles", JSON.stringify(roles));
 
@@ -76,7 +71,6 @@ export default function HomePage() {
         const partnerDetail = await getMyPartnerProfileAPI({
           userId: fetchProfileRes.data.id,
         });
-        console.log("partnerDetail res", partnerDetail);
 
         dispatch(setPartner(partnerDetail));
       }
@@ -85,8 +79,6 @@ export default function HomePage() {
         ...fetchProfileRes.data,
         roles,
       };
-
-      console.log("payload", payload);
 
       dispatch(setUser(payload));
 
@@ -102,7 +94,6 @@ export default function HomePage() {
         }
       }, 1000);
     } catch (error) {
-      console.log("login err", error);
       toast.error("Đăng nhập thất bại");
     } finally {
       setIsLoading(false);

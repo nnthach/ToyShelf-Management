@@ -122,7 +122,6 @@ function EditCommissionPolicyModal({
   }));
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log("update commission policy data", data);
     const payload = {
       ...data,
       commissionRate: Number(data.commissionRate) / 100,
@@ -131,7 +130,6 @@ function EditCommissionPolicyModal({
         : null,
     };
 
-    console.log("update commission policy payload", payload);
     try {
       await updateCommissionPolicyAPI(payload, commissionPolicyId);
 
@@ -147,7 +145,6 @@ function EditCommissionPolicyModal({
       toast.success("Chỉnh sửa chính sách hoa hồng thành công");
       onClose();
     } catch (error) {
-      console.log("update commission policy err", error);
       toast.error("Chỉnh sửa chính sách hoa hồng thất bại");
     }
   }

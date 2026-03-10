@@ -47,7 +47,6 @@ function CreateCategoryModal() {
       toast.success("Tạo danh mục thành công");
       setOpen(false);
     } catch (error) {
-      console.log("create product category err", error);
       toast.error("Tạo danh mục thất bại");
     }
   }

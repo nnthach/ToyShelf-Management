@@ -95,7 +95,6 @@ function EditProductColorModal({
       toast.success("Chỉnh sửa màu mới thành công");
       onClose();
     } catch (error) {
-      console.log("create color err", error);
       toast.error("Chỉnh sửa màu mới thất bại");
     }
   }

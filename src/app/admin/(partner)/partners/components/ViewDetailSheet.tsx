@@ -32,8 +32,6 @@ function ViewDetailSheet({ partnerId, isOpen, onClose }: ViewDetailSheetProps) {
     enabled: !!partnerId,
   });
 
-  console.log("partnerDetail", partnerDetail);
-
   if (!partnerId) return null;
 
   return (

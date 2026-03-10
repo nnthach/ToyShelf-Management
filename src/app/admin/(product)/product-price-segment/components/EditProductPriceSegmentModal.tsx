@@ -109,7 +109,6 @@ function EditProductPriceSegmentModal({
       toast.success("Chỉnh sửa cấp độ giá mới thành công");
       onClose();
     } catch (error) {
-      console.log("update price segment err", error);
       toast.error("Chỉnh sửa cấp độ giá mới thất bại");
     }
   }

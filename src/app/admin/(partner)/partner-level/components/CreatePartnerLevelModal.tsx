@@ -43,7 +43,6 @@ function CreatePartnerTierModal() {
   });
 
   async function onSubmit(data: z.output<typeof formSchema>) {
-    console.log("create partner tier data", data);
     try {
       await createPartnerTierAPI(data);
 
@@ -56,7 +55,6 @@ function CreatePartnerTierModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create partner tier err", error);
       toast.error("Thêm cấp bậc đối tác mới thất bại");
     }
   }

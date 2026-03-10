@@ -82,7 +82,6 @@ function EditCategoryModal({
       toast.success("Cập nhật danh mục thành công");
       onClose();
     } catch (error) {
-      console.log("update product category err", error);
       toast.error("Cập nhật danh mục thất bại");
     }
   }

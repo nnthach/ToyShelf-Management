@@ -11,7 +11,6 @@ const useFetchList = <T, P = void>(
     setLoading(true);
     try {
       const res = params ? await api(params) : await api();
-      console.log("useFetchList res", res);
 
       setData(res.data);
     } catch (err) {

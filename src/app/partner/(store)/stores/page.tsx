@@ -26,9 +26,6 @@ export default function PartnerStoreManage() {
     queryFn: () => getAllStoreAPI(query),
     select: (res) => res.data as Store[],
   });
-
-  console.log("storelist", storeList);
-
   const columns = getStoreColumns();
 
   return (

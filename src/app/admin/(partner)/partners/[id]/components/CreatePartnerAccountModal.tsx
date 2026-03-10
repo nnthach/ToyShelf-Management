@@ -71,7 +71,6 @@ function CreatePartnerAccountModal() {
       ...data,
       roleIds: partnerRole ? [partnerRole.id] : [],
     };
-    console.log("create partner account payload", payload);
     try {
       await createAllRoleAccountAPI(payload);
 
@@ -88,7 +87,6 @@ function CreatePartnerAccountModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create partner err", error);
       toast.error("Tạo đối tác thất bại");
     }
   }

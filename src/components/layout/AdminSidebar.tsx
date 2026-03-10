@@ -34,8 +34,6 @@ import { useAppSelector } from "@/src/redux/hooks";
 const AdminSidebar = () => {
   const { user } = useAppSelector((state) => state.auth);
 
-  console.log("user", user);
-
   return (
     <Sidebar
       collapsible="icon"

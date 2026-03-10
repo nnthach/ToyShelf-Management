@@ -37,7 +37,6 @@ function ProductFormSheet({ product, onClose }: ProductFormSheetProps) {
 
       toast.success("Vô hiệu hóa sản phẩm thành công");
     } catch (error) {
-      console.log("Disable product err", error);
       toast.error("Vô hiệu hóa sản phẩm thất bại");
     }
   }
@@ -56,7 +55,6 @@ function ProductFormSheet({ product, onClose }: ProductFormSheetProps) {
 
       toast.success("Khôi phục sản phẩm thành công");
     } catch (error) {
-      console.log("Restore product err", error);
       toast.error("Khôi phục sản phẩm thất bại");
     }
   }
@@ -72,7 +70,6 @@ function ProductFormSheet({ product, onClose }: ProductFormSheetProps) {
       onClose();
       toast.success("Xóa sản phẩm thành công");
     } catch (error) {
-      console.log("Delete product err", error);
       toast.error("Xóa sản phẩm thất bại");
     }
   }

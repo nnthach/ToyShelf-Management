@@ -75,7 +75,6 @@ function EditCityModal({ cityId, isOpen, onClose }: EditCityModalProps) {
       toast.success("Chỉnh sửa thành phố thành công");
       onClose();
     } catch (error) {
-      console.log("update city err", error);
       toast.error("Chỉnh sửa thành phố thất bại");
     }
   }

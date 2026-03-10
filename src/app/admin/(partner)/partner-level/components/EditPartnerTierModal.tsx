@@ -85,7 +85,6 @@ function EditPartnerTierModal({
       toast.success("Chỉnh sửa cấp bậc đối tác thành công");
       onClose();
     } catch (error) {
-      console.log("update partner tier err", error);
       toast.error("Chỉnh sửa cấp bậc đối tác thất bại");
     }
   }

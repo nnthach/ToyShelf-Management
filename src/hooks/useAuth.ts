@@ -38,7 +38,6 @@ export function useAuth() {
 
         dispatch(setUser(data));
       } catch (error) {
-        console.log("init auth err", error);
         dispatch(logout());
       } finally {
         dispatch(setLoading(false));

@@ -46,7 +46,6 @@ function CreateRoleModal() {
   });
 
   async function onSubmit(data: z.output<typeof formSchema>) {
-    console.log("create role data", data);
     try {
       await createRoleAPI(data);
 
@@ -59,7 +58,6 @@ function CreateRoleModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create role err", error);
       toast.error("Thêm cấp bậc vai trò mới thất bại");
     }
   }

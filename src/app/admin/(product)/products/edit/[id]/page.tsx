@@ -118,7 +118,6 @@ export default function EditProductPage() {
   );
 
   function onSubmit(data: ProductUpdateFormValues) {
-    console.log("data submit", data);
     const payload = {
       ...data,
       colors: data.colors.map((i) => {
@@ -147,8 +146,6 @@ export default function EditProductPage() {
 
   const handleConfirmUpdate = useCallback(async () => {
     if (!previewData) return;
-
-    console.log("preview data", previewData);
 
     setIsLoading(true);
     try {

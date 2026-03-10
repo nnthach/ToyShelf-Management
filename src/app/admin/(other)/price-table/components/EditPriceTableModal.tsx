@@ -152,7 +152,6 @@ function EditPriceTableModal({
       toast.success("Chỉnh sửa bảng giá hoa hồng đối tác thành công");
       onClose();
     } catch (error) {
-      console.log("update price table err", error);
       toast.error("Chỉnh sửa bảng giá hoa hồng đối tác thất bại");
     }
   }

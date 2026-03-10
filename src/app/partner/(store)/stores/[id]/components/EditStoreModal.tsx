@@ -79,7 +79,6 @@ function EditStoreModal({ storeId }: { storeId: string }) {
   }, [storeDetail, form]);
 
   async function onSubmit(data: StoreFormValues) {
-    console.log("submit data", data);
     setIsLoading(true);
 
     try {
@@ -95,7 +94,6 @@ function EditStoreModal({ storeId }: { storeId: string }) {
       toast.success("Cập nhật cửa hàng thành công");
       setOpen(false);
     } catch (error) {
-      console.log("update store err", error);
       toast.error("Cập nhật cửa hàng thất bại");
     } finally {
       setIsLoading(false);

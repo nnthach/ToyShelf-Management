@@ -39,10 +39,8 @@ function AccountAdminPasswordModal({
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(" data", data);
     try {
-      const res = await changePasswordRequestAPI(data);
-      //   console.log("res", res);
+       await changePasswordRequestAPI(data);
     } catch (error) {
       console.log("update profile err", error);
     }

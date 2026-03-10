@@ -74,7 +74,6 @@ function EditRoleModal({ roleId, isOpen, onClose }: EditRoleModalProps) {
       toast.success("Chỉnh sửa cấp độ vai trò thành công");
       onClose();
     } catch (error) {
-      console.log("update role err", error);
       toast.error("Chỉnh sửa cấp độ vai trò thất bại");
     }
   }

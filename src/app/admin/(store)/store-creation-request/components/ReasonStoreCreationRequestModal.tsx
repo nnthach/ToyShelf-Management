@@ -65,7 +65,6 @@ function ReasonStoreCreateRequestModal({
       onClose();
       onSuccess();
     } catch (error) {
-      console.log("update city err", error);
       toast.error("Cập nhật yêu cầu thất bại");
     }
   }

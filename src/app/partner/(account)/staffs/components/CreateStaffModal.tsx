@@ -52,7 +52,6 @@ function CreateStaffModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create staff err", error);
       toast.error("Tạo nhân viên thất bại");
     }
   }

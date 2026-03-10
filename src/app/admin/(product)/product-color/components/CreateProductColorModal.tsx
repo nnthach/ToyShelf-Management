@@ -42,7 +42,6 @@ function CreateProductColorModal() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log("partner dâta", data);
     try {
       await createProductColorAPI(data);
 
@@ -55,7 +54,6 @@ function CreateProductColorModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create color err", error);
       toast.error("Thêm màu mới thất bại");
     }
   }

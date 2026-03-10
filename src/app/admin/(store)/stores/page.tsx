@@ -28,8 +28,6 @@ export default function AdminStoreManage() {
     select: (res) => res.data as Store[],
   });
 
-  console.log("storelist", storeList);
-
   const columns = getStoreColumns();
 
   return (

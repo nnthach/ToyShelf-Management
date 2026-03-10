@@ -90,7 +90,6 @@ function CreatePriceTableModal() {
   });
 
   async function onSubmit(data: z.output<typeof formSchema>) {
-    console.log("create price table data", data);
 
     const payload = {
       ...data,
@@ -111,7 +110,6 @@ function CreatePriceTableModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create price table err", error);
       toast.error("Thêm bảng giá mới thất bại");
     }
   }

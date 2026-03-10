@@ -41,12 +41,9 @@ export default function ActiveAccountPage() {
 
   async function onSubmit(data: typeof form) {
     setIsLoading(true);
-    console.log("data", data);
     if (activeAccountStep === 1) {
       try {
-        const res = await activeAccountRequestAPI(data.email);
-
-        console.log("res", res);
+        await activeAccountRequestAPI(data.email);
 
         toast.success("Mã OTP đã được gửi đến email của bạn");
 
@@ -58,9 +55,7 @@ export default function ActiveAccountPage() {
       }
     } else {
       try {
-        const res = await activeAccountConfirmAPI(data);
-
-        console.log("res", res);
+        await activeAccountConfirmAPI(data);
 
         setForm({
           email: "",
@@ -69,11 +64,11 @@ export default function ActiveAccountPage() {
           confirmPassword: "",
         });
 
-        toast.success("Đặt lại mật khẩu thành công");
+        toast.success("Kích hoạt thành công");
 
         router.replace("/");
       } catch (error) {
-        toast.error("Đặt lại mật khẩu thất bại");
+        toast.error("Kích hoạt thất bại");
       } finally {
         setIsLoading(false);
       }

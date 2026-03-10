@@ -54,7 +54,6 @@ function CreateCityModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create city err", error);
       toast.error("Thêm thành phố mới thất bại");
     }
   }

@@ -64,7 +64,6 @@ function CreateProductPriceSegmentModal() {
       ...data,
       code: data.name,
     };
-    console.log("create price segment data", payload);
     try {
       await createProducePriceSegmentAPI(payload);
 
@@ -77,7 +76,6 @@ function CreateProductPriceSegmentModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create price segment err", error);
       toast.error("Thêm cấp bậc giá mới thất bại");
     }
   }

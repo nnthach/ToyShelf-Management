@@ -64,7 +64,6 @@ function CreatePartnerModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create partner err", error);
       toast.error("Tạo đối tác thất bại");
     }
   }

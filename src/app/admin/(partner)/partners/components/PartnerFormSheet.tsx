@@ -50,7 +50,6 @@ function PartnerFormSheet({ partner, onClose }: PartnerFormSheetProps) {
       form.reset();
       toast.success("Cập nhật đối tác thành công");
     } catch (error) {
-      console.log("Update partner err", error);
       toast.error("Cập nhật đối tác thất bại");
     }
   }

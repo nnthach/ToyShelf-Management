@@ -69,7 +69,6 @@ function CreateStoreInviteModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create staff err", error);
       toast.error("Mời nhân viên thất bại");
     }
   }

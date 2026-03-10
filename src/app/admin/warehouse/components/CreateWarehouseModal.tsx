@@ -78,7 +78,6 @@ function CreateWarehouseModal() {
   }));
 
   async function onSubmit(data: WarehouseFormValues) {
-    console.log("submit data", data);
     setIsLoading(true);
 
     try {
@@ -90,7 +89,6 @@ function CreateWarehouseModal() {
       toast.success("Tạo kho thành công");
       setOpen(false);
     } catch (error) {
-      console.log("create warehouse err", error);
       toast.error("Tạo kho thất bại");
     } finally {
       setIsLoading(false);

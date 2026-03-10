@@ -36,8 +36,6 @@ const uploadSingleFile = async (file: File, entity: UploadEntity) => {
   }
 
   const { folder, tags } = getUploadConfig(file, entity);
-  console.log("folder", folder);
-  console.log("tags", tags);
 
   const formData = new FormData();
   formData.append("file", file);

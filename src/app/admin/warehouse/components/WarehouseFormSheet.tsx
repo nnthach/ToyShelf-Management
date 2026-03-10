@@ -105,7 +105,6 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       form.reset();
       toast.success("Cập nhật kho thành công");
     } catch (error) {
-      console.log("Update warehouse err", error);
       toast.error("Cập nhật kho thất bại");
     }
   }
@@ -125,7 +124,6 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       form.reset();
       toast.success("Vô hiệu hóa kho thành công");
     } catch (error) {
-      console.log("Disable warehouse err", error);
       toast.error("Vô hiệu hóa kho thất bại");
     }
   }
@@ -145,7 +143,6 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       form.reset();
       toast.success("Khôi phục kho thành công");
     } catch (error) {
-      console.log("Restore warehouse err", error);
       toast.error("Khôi phục kho thất bại");
     }
   }
@@ -162,7 +159,6 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       onClose();
       toast.success("Xóa kho thành công");
     } catch (error) {
-      console.log("Delete warehouse err", error);
       toast.error("Xóa kho thất bại");
     }
   }

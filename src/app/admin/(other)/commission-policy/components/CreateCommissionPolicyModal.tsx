@@ -84,7 +84,6 @@ function CreateCommissionPolicyModal() {
   }));
 
   async function onSubmit(data: z.output<typeof formSchema>) {
-    console.log("create commission policy data", data);
     const payload = {
       ...data,
       commissionRate: Number(data.commissionRate) / 100,
@@ -92,8 +91,6 @@ function CreateCommissionPolicyModal() {
         ? new Date(data.effectiveDate).toISOString()
         : null,
     };
-
-    console.log("create commission policy payload", payload);
 
     try {
       await createCommissionPolicyAPI(payload);
@@ -107,7 +104,6 @@ function CreateCommissionPolicyModal() {
 
       setOpen(false);
     } catch (error) {
-      console.log("create commission policy err", error);
       toast.error("Thêm cấp bậc đối tác mới thất bại");
     }
   }

@@ -112,7 +112,6 @@ function AccountAdminProfileModal({
       toast.success("Cập nhật thông tin thành công");
       onClose();
     } catch (error) {
-      console.log("update profile err", error);
       toast.error("Cập nhật thông tin thất bại");
     } finally {
       setIsLoading(false);
