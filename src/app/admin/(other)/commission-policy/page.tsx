@@ -28,7 +28,11 @@ export default function AdminCommissionPolicy() {
     search: "",
   });
 
-  const { data: commissionPolicyList = [], isLoading: loading } = useQuery({
+  const {
+    data: commissionPolicyList = [],
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["commissionPolicies", query],
     queryFn: () => getAllCommissionPolicyAPI(query),
     select: (res) => res.data,
@@ -92,6 +96,7 @@ export default function AdminCommissionPolicy() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <Button variant={"outline"}>

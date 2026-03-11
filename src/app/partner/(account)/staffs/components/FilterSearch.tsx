@@ -1,4 +1,3 @@
-// import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { Button } from "@/src/styles/components/ui/button";
 import { Input } from "@/src/styles/components/ui/input";
@@ -10,7 +9,7 @@ import {
 } from "@/src/styles/components/ui/popover";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { Filter, Search, X, XCircle } from "lucide-react";
+import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type FilterBarProps = {
@@ -19,12 +18,15 @@ type FilterBarProps = {
   resultCount?: number;
   showStatus?: boolean;
   showOrder?: boolean;
+  storeOptions?: { label: string; value: string }[];
   onSearch: (val: string) => void;
   onApplyFilter: (val: {
-    isActive?: boolean;
+    storeId?: string;
+    storeRole?: string;
     order?: string;
-    // limit?: number;
+    isActive?: boolean;
   }) => void;
+  onRefresh?: () => void;
   onReset: () => void;
 };
 
@@ -32,10 +34,12 @@ export default function FilterSearch({
   query,
   loading,
   showStatus = true,
+  storeOptions,
   showOrder = true,
   onSearch,
   onApplyFilter,
   onReset,
+  onRefresh,
 }: FilterBarProps) {
   const [searchInput, setSearchInput] = useState(query.search ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
@@ -47,23 +51,28 @@ export default function FilterSearch({
   const [tempFilter, setTempFilter] = useState<{
     isActive?: boolean;
     order: string;
-    // limit: number;
+    storeId: string;
+    storeRole: string;
   }>({
     isActive: undefined,
     order: query.order ?? "",
-    // limit: query.limit ?? 10,
+    storeId: query.storeId ?? "",
+    storeRole: query.storeRole ?? "",
   });
 
   const isFiltered =
     query.search ||
     (showOrder && query.order !== "") ||
-    (showStatus && query.isActive !== undefined);
+    (showStatus && query.isActive !== undefined) ||
+    query.storeId !== "" ||
+    query.storeRole !== "";
 
   const handleApply = () => {
     onApplyFilter({
       isActive: tempFilter.isActive,
       order: tempFilter.order || undefined,
-      // limit: tempFilter.limit,
+      storeId: tempFilter.storeId || undefined,
+      storeRole: tempFilter.storeRole || undefined,
     });
   };
 
@@ -72,7 +81,8 @@ export default function FilterSearch({
     setTempFilter({
       isActive: undefined,
       order: "",
-      // limit: 10,
+      storeId: "",
+      storeRole: "",
     });
     onReset();
   };
@@ -139,6 +149,46 @@ export default function FilterSearch({
               </div>
             )}
 
+            {/*store */}
+            <div className="grid gap-2">
+              <Label>Cửa hàng</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.storeId}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    storeId: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {storeOptions?.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/*role */}
+            <div className="grid gap-2">
+              <Label>Chức vụ</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.storeRole}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    storeRole: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                <option value="Manager">Quản lý</option>
+              </select>
+            </div>
+
             <PopoverClose asChild>
               <Button onClick={handleApply}>Áp dụng</Button>
             </PopoverClose>
@@ -167,21 +217,14 @@ export default function FilterSearch({
       </div>
 
       {/* CLEAR */}
-      {isFiltered && !loading && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleResetAll}
-          className="
-      flex items-center gap-1
-      text-blue-600
-      hover:text-blue-700
-      hover:bg-blue-50
-      transition
-    "
-        >
+      {isFiltered && !loading ? (
+        <Button variant="outline" onClick={handleResetAll}>
           <XCircle className="w-4 h-4" />
           Xóa
+        </Button>
+      ) : (
+        <Button variant="outline" onClick={onRefresh}>
+          <RotateCcw />
         </Button>
       )}
     </div>

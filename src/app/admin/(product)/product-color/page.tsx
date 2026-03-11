@@ -26,7 +26,11 @@ export default function AdminProductColor() {
     search: "",
   });
 
-  const { data: productColorList = [], isLoading: loading } = useQuery({
+  const {
+    data: productColorList = [],
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["colors", query],
     queryFn: () => getAllProductColorAPI(query),
     select: (res) => res.data,
@@ -88,6 +92,7 @@ export default function AdminProductColor() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <Button variant={"outline"}>

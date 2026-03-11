@@ -28,7 +28,11 @@ export default function AdminProductManage() {
     search: "",
   });
 
-  const { data: productList = [], isLoading } = useQuery({
+  const {
+    data: productList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["products", query],
     queryFn: () => getAllProductAPI(query),
     select: (res) => res.data,
@@ -110,6 +114,7 @@ export default function AdminProductManage() {
               })
             }
             onReset={() => resetQuery()}
+            onRefresh={() => refetch()}
           />
         </ProductListView>
       ) : (
@@ -129,6 +134,7 @@ export default function AdminProductManage() {
               })
             }
             onReset={() => resetQuery()}
+            onRefresh={() => refetch()}
           />
         </ProductGridView>
       )}

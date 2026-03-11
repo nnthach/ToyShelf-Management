@@ -67,7 +67,7 @@ export default function CreateProductPage() {
   }));
 
   // product price segment
-  const { data: productPriceSegmentList = [], isLoading: loading } = useQuery({
+  const { data: productPriceSegmentList = [], isLoading: loading ,refetch} = useQuery({
     queryKey: ["productPriceSegments"],
     queryFn: () => getAllProducePriceSegmentAPI({}),
     select: (res) => res.data as ProductPriceSegment[],

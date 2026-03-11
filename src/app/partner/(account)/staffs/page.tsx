@@ -13,6 +13,8 @@ import CreateStaffModal from "./components/CreateStaffModal";
 import FilterSearch from "./components/FilterSearch";
 import { useAuth } from "@/src/hooks/useAuth";
 import { getAllPartnerStaffAPI } from "@/src/services/user.service";
+import { getAllStoreAPI } from "@/src/services/store.service";
+import { Store } from "@/src/types";
 
 export default function PartnerManageStaff() {
   const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
@@ -25,13 +27,30 @@ export default function PartnerManageStaff() {
     partnerId: partnerId || "",
     storeId: "",
     storeRole: "",
+    isActive: undefined,
+    order: "",
   });
 
-  const { data: staffList = [], isLoading } = useQuery({
+  const {
+    data: staffList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["staffs", query],
     queryFn: () => getAllPartnerStaffAPI(query),
     select: (res) => res.data,
   });
+
+  const { data: storeList = [] } = useQuery({
+    queryKey: ["stores"],
+    queryFn: () => getAllStoreAPI({}),
+    select: (res) => res.data as Store[],
+  });
+
+  const storeOptions = storeList.map((s) => ({
+    label: s.name,
+    value: s.id,
+  }));
 
   const handleViewDetail = (partnerId: string) => {
     setSelectedStaffId(partnerId);
@@ -59,6 +78,7 @@ export default function PartnerManageStaff() {
               query={query}
               loading={isLoading}
               resultCount={staffList.length}
+              storeOptions={storeOptions}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -66,6 +86,7 @@ export default function PartnerManageStaff() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <div className="space-x-3">

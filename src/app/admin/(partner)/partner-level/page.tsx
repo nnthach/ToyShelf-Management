@@ -29,7 +29,11 @@ export default function AdminPartnerLevel() {
     search: "",
   });
 
-  const { data: partnerTierList = [], isLoading: loading } = useQuery({
+  const {
+    data: partnerTierList = [],
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["partnerTiers", query],
     queryFn: () => getAllPartnerTierAPI(query),
     select: (res) => res.data,
@@ -93,6 +97,7 @@ export default function AdminPartnerLevel() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <Button variant={"outline"}>

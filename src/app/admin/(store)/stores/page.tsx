@@ -22,7 +22,11 @@ export default function AdminStoreManage() {
     search: "",
   });
 
-  const { data: storeList = [], isLoading } = useQuery({
+  const {
+    data: storeList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["stores", query],
     queryFn: () => getAllStoreAPI(query),
     select: (res) => res.data as Store[],
@@ -58,6 +62,7 @@ export default function AdminStoreManage() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <div className="space-x-3">

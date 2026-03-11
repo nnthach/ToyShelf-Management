@@ -17,7 +17,7 @@ export default function ViewPartnerDetailPage() {
   const { id: partnerId } = useParams<{ id: string }>();
   const router = useRouter();
 
-  const { data: partnerDetail, isLoading } = useQuery({
+  const { data: partnerDetail, isLoading ,refetch} = useQuery({
     queryKey: ["partner", partnerId],
     queryFn: () => getPartnerDetailAPI(partnerId!),
     select: (res) => res.data,

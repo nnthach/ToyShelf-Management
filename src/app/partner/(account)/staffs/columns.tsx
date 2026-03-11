@@ -19,26 +19,21 @@ export const getStaffColumns = (
   {
     accessorKey: "fullName",
     header: "Tên đầy đủ",
-    cell: ({ row }) => {
-      const fullname = row.getValue("fullName") as string;
-      const email = row.getValue("email") as string;
-      return (
-        <div>
-          <span>{fullname || 'Chưa có tên'}</span>
-          <span>{email}</span>
-        </div>
-      );
-    },
   },
 
   {
-    accessorKey: "companyName",
-    header: "Tên công ty",
+    accessorKey: "email",
+    header: "Email",
   },
 
   {
-    accessorKey: "partnerTierName",
-    header: "Cấp bậc",
+    accessorKey: "storeName",
+    header: "Cửa hàng",
+  },
+
+  {
+    accessorKey: "storeRole",
+    header: "Chức vụ",
   },
 
   {
@@ -52,15 +47,6 @@ export const getStaffColumns = (
           {formatUserStatusText(isActive)}
         </span>
       );
-    },
-  },
-
-  {
-    accessorKey: "createdAt",
-    header: "Ngày tạo",
-    cell: ({ row }) => {
-      const value = row.getValue("createdAt") as string;
-      return <span>{formatDateTime(value).full}</span>;
     },
   },
   {

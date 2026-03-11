@@ -1,4 +1,3 @@
-// import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { Button } from "@/src/styles/components/ui/button";
 import { Input } from "@/src/styles/components/ui/input";
@@ -10,7 +9,7 @@ import {
 } from "@/src/styles/components/ui/popover";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { Filter, Search, X, XCircle } from "lucide-react";
+import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type FilterBarProps = {
@@ -20,12 +19,9 @@ type FilterBarProps = {
   showStatus?: boolean;
   showOrder?: boolean;
   onSearch: (val: string) => void;
-  onApplyFilter: (val: {
-    status?: boolean;
-    order?: string;
-    limit?: number;
-  }) => void;
+  onApplyFilter: (val: { isActive?: boolean; order?: string }) => void;
   onReset: () => void;
+  onRefresh?: () => void;
 };
 
 export default function FilterSearch({
@@ -36,45 +32,43 @@ export default function FilterSearch({
   onSearch,
   onApplyFilter,
   onReset,
+  onRefresh,
 }: FilterBarProps) {
   const [searchInput, setSearchInput] = useState(query.search ?? "");
+
   const debouncedSearch = useDebounce(searchInput, 500);
 
   useEffect(() => {
-    onSearch(debouncedSearch);
+    if (debouncedSearch !== query.search) {
+      onSearch(debouncedSearch);
+    }
   }, [debouncedSearch]);
 
   const [tempFilter, setTempFilter] = useState<{
-    status: "" | "true" | "false";
+    isActive?: boolean;
     order: string;
-    limit: number;
   }>({
-    status:
-      query.status === true ? "true" : query.status === false ? "false" : "",
+    isActive: undefined,
     order: query.order ?? "",
-    limit: query.limit ?? 10,
   });
 
   const isFiltered =
     query.search ||
     (showOrder && query.order !== "") ||
-    (showStatus && typeof query.status === "boolean");
+    (showStatus && query.isActive !== undefined);
 
   const handleApply = () => {
     onApplyFilter({
-      status:
-        tempFilter.status === "" ? undefined : tempFilter.status === "true",
+      isActive: tempFilter.isActive,
       order: tempFilter.order || undefined,
-      limit: tempFilter.limit,
     });
   };
 
   const handleResetAll = () => {
     setSearchInput("");
     setTempFilter({
-      status: "",
+      isActive: undefined,
       order: "",
-      limit: 10,
     });
     onReset();
   };
@@ -119,21 +113,27 @@ export default function FilterSearch({
                 <Label>Trạng thái</Label>
                 <select
                   className="border rounded-md h-9 px-2"
-                  value={tempFilter.status}
+                  value={
+                    tempFilter.isActive === undefined
+                      ? "all"
+                      : String(tempFilter.isActive)
+                  }
                   onChange={(e) =>
                     setTempFilter((p) => ({
                       ...p,
-                      status: e.target.value as "" | "true" | "false",
+                      isActive:
+                        e.target.value === "all"
+                          ? undefined
+                          : e.target.value === "true",
                     }))
                   }
                 >
-                  <option value="">Tất cả</option>
+                  <option value="all">Tất cả</option>
                   <option value="true">Hoạt động</option>
                   <option value="false">Không hoạt động</option>
                 </select>
               </div>
             )}
-
             <PopoverClose asChild>
               <Button onClick={handleApply}>Áp dụng</Button>
             </PopoverClose>
@@ -162,21 +162,14 @@ export default function FilterSearch({
       </div>
 
       {/* CLEAR */}
-      {isFiltered && !loading && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleResetAll}
-          className="
-      flex items-center gap-1
-      text-blue-600
-      hover:text-blue-700
-      hover:bg-blue-50
-      transition
-    "
-        >
+      {isFiltered && !loading ? (
+        <Button variant="outline" onClick={handleResetAll}>
           <XCircle className="w-4 h-4" />
           Xóa
+        </Button>
+      ) : (
+        <Button variant="outline" onClick={onRefresh}>
+          <RotateCcw />
         </Button>
       )}
     </div>

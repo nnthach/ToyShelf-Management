@@ -13,24 +13,21 @@ import { QueryParams } from "@/src/types/SubType";
 import { User } from "@/src/types";
 import { getAllUserAPI } from "@/src/services/user.service";
 import useQueryParams from "@/src/hooks/useQueryParams";
+import { useQuery } from "@tanstack/react-query";
 
 export default function AdminUserManage() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
+    isActive: undefined,
     order: "",
     search: "",
   });
 
-  const debouncedSearch = useDebounce(query.search, 500);
-  const debouncedQuery = useMemo(
-    () => ({ ...query, search: debouncedSearch }),
-    [query, debouncedSearch],
-  );
+  const { data: staffList = [], isLoading, refetch } = useQuery({
+    queryKey: ["staffs", query],
+    queryFn: () => getAllUserAPI(query),
+    select: (res) => res.data,
+  });
 
-  const { data: staffList = [], loading } = useFetchList<User[], QueryParams>(
-    getAllUserAPI,
-    debouncedQuery,
-  );
   const columns = getStaffColumns();
 
   return (
@@ -42,12 +39,12 @@ export default function AdminUserManage() {
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={staffList ?? []} isLoading={loading}>
+        <DataTable columns={columns} data={staffList ?? []} isLoading={isLoading}>
           <div className="p-4 border-b flex justify-between items-center">
             {/*Filter search */}
             <FilterSearch
               query={query}
-              loading={loading}
+              loading={isLoading}
               resultCount={staffList.length}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
@@ -56,6 +53,8 @@ export default function AdminUserManage() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
+
             />
 
             <div className="space-x-3">

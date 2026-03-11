@@ -24,19 +24,7 @@ export const getStaffColumns = (): ColumnDef<User>[] => [
   },
 
   {
-    accessorKey: "workingArea",
-    header: "Khu vực làm việc",
-    cell: ({ row }) => {
-      // const workingArea = row.getValue("workingArea") as string;
-
-      return (
-        // <span className={`${formatUserStatusColor(workingArea)}`}>
-        <span>{/* {formatUserStatusText(status)} */}1</span>
-      );
-    },
-  },
-  {
-    accessorKey: "status",
+    accessorKey: "isActive",
     header: "Trạng thái",
     cell: ({ row }) => {
       const status = row.getValue("isActive") as boolean;

@@ -30,7 +30,11 @@ export default function AdminProductPriceLevel() {
     search: "",
   });
 
-  const { data: productPriceSegmentList = [], isLoading: loading } = useQuery({
+  const {
+    data: productPriceSegmentList = [],
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["productPriceSegments", query],
     queryFn: () => getAllProducePriceSegmentAPI(query),
     select: (res) => res.data,
@@ -92,6 +96,7 @@ export default function AdminProductPriceLevel() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <Button variant={"outline"}>

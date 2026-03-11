@@ -1,4 +1,3 @@
-// import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { Button } from "@/src/styles/components/ui/button";
 import { Input } from "@/src/styles/components/ui/input";
@@ -8,9 +7,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
+import { Store } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { Filter, Search, X, XCircle } from "lucide-react";
+import { Value } from "@radix-ui/react-select";
+import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type FilterBarProps = {
@@ -19,12 +20,14 @@ type FilterBarProps = {
   resultCount?: number;
   showStatus?: boolean;
   showOrder?: boolean;
+  storeOptions?: { label: string; value: string }[];
   onSearch: (val: string) => void;
   onApplyFilter: (val: {
-    isActive?: boolean;
+    status?: string;
     order?: string;
-    // limit?: number;
+    storeId?: string;
   }) => void;
+  onRefresh?: () => void;
   onReset: () => void;
 };
 
@@ -33,9 +36,11 @@ export default function FilterSearch({
   loading,
   showStatus = true,
   showOrder = true,
+  storeOptions,
   onSearch,
   onApplyFilter,
   onReset,
+  onRefresh,
 }: FilterBarProps) {
   const [searchInput, setSearchInput] = useState(query.search ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
@@ -45,34 +50,35 @@ export default function FilterSearch({
   }, [debouncedSearch]);
 
   const [tempFilter, setTempFilter] = useState<{
-    isActive?: boolean;
+    status: string;
+    storeId: string;
     order: string;
-    // limit: number;
   }>({
-    isActive: undefined,
+    status: String(query.status) ?? "",
     order: query.order ?? "",
-    // limit: query.limit ?? 10,
+    storeId: query.storeId ?? "",
   });
 
   const isFiltered =
     query.search ||
     (showOrder && query.order !== "") ||
-    (showStatus && query.isActive !== undefined);
+    query.status !== "" ||
+    query.storeId !== "";
 
   const handleApply = () => {
     onApplyFilter({
-      isActive: tempFilter.isActive,
+      status: tempFilter.status || undefined,
       order: tempFilter.order || undefined,
-      // limit: tempFilter.limit,
+      storeId: tempFilter.storeId || undefined,
     });
   };
 
   const handleResetAll = () => {
     setSearchInput("");
     setTempFilter({
-      isActive: undefined,
+      status: "",
+      storeId: "",
       order: "",
-      // limit: 10,
     });
     onReset();
   };
@@ -117,27 +123,44 @@ export default function FilterSearch({
                 <Label>Trạng thái</Label>
                 <select
                   className="border rounded-md h-9 px-2"
-                  value={
-                    tempFilter.isActive === undefined
-                      ? "all"
-                      : String(tempFilter.isActive)
-                  }
+                  value={tempFilter.status}
                   onChange={(e) =>
                     setTempFilter((p) => ({
                       ...p,
-                      isActive:
-                        e.target.value === "all"
-                          ? undefined
-                          : e.target.value === "true",
+                      status: e.target.value,
                     }))
                   }
                 >
-                  <option value="all">Tất cả</option>
-                  <option value="true">Hoạt động</option>
-                  <option value="false">Không hoạt động</option>
+                  <option value="">Tất cả</option>
+                  <option value="Pending">Đang chờ</option>
+                  <option value="Accepted">Đã chấp nhận</option>
+                  <option value="Rejected">Từ chối</option>
+                  <option value="Expired">Hết hạn</option>
                 </select>
               </div>
             )}
+
+            {/*store */}
+            <div className="grid gap-2">
+              <Label>Cửa hàng</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.storeId}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    storeId: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {storeOptions?.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <PopoverClose asChild>
               <Button onClick={handleApply}>Áp dụng</Button>
@@ -167,21 +190,14 @@ export default function FilterSearch({
       </div>
 
       {/* CLEAR */}
-      {isFiltered && !loading && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleResetAll}
-          className="
-      flex items-center gap-1
-      text-blue-600
-      hover:text-blue-700
-      hover:bg-blue-50
-      transition
-    "
-        >
+      {isFiltered && !loading ? (
+        <Button variant="outline" onClick={handleResetAll}>
           <XCircle className="w-4 h-4" />
           Xóa
+        </Button>
+      ) : (
+        <Button variant="outline" onClick={onRefresh}>
+          <RotateCcw />
         </Button>
       )}
     </div>

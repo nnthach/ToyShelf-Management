@@ -55,7 +55,11 @@ export default function AdminPriceTable() {
     search: "",
   });
 
-  const { data: priceTableList = [], isLoading: loading } = useQuery({
+  const {
+    data: priceTableList = [],
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["priceTables", query],
     queryFn: () => getAllPriceTableAPI(query),
     select: (res) => res.data as PriceTable[],
@@ -112,6 +116,7 @@ export default function AdminPriceTable() {
               })
             }
             onReset={() => resetQuery()}
+            onRefresh={() => refetch()}
           />
 
           <Button variant={"outline"}>

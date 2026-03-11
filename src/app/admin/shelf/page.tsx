@@ -26,7 +26,11 @@ export default function AdminCabinetManage() {
     search: undefined,
   });
 
-  const { data: shelfList = [], isLoading } = useQuery({
+  const {
+    data: shelfList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["shelfs", query],
     queryFn: () => getAllShelfAPI(query),
     select: (res) => res.data as Cabinet[],
@@ -73,6 +77,7 @@ export default function AdminCabinetManage() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <div className="space-x-3">

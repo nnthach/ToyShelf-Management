@@ -28,7 +28,11 @@ export default function AdminStoreCreationRequestManage() {
     search: "",
   });
 
-  const { data: storeCreateRequestList = [], isLoading } = useQuery({
+  const {
+    data: storeCreateRequestList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["storeRequests", query],
     queryFn: () => getAllStoreCreationRequestAPI(query),
     select: (res) => res.data as Store[],
@@ -92,6 +96,7 @@ export default function AdminStoreCreationRequestManage() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <div className="space-x-3">

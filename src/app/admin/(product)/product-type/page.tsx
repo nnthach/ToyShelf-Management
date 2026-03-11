@@ -11,7 +11,10 @@ import FilterSearch from "./components/FilterSearch";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CreateCategoryModal from "./components/CreateCategoryModal";
 import { QueryParams } from "@/src/types/SubType";
-import { deleteProductCategoryAPI, getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import {
+  deleteProductCategoryAPI,
+  getAllProductCategoryAPI,
+} from "@/src/services/product-category.service";
 import EditCategoryModal from "./components/EditCategoryModal";
 import { toast } from "react-toastify";
 
@@ -28,7 +31,11 @@ export default function AdminProductType() {
     search: "",
   });
 
-  const { data: categoryList = [], isLoading } = useQuery({
+  const {
+    data: categoryList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["categories", query],
     queryFn: () => getAllProductCategoryAPI(query),
     select: (res) => res.data,
@@ -54,7 +61,9 @@ export default function AdminProductType() {
   });
 
   const handleDelete = (categoryId: string) => {
-    const confirmDelete = window.confirm("Bạn có chắc muốn xóa danh mục này không?");
+    const confirmDelete = window.confirm(
+      "Bạn có chắc muốn xóa danh mục này không?",
+    );
 
     if (!confirmDelete) return;
 
@@ -90,6 +99,7 @@ export default function AdminProductType() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <Button variant={"outline"}>

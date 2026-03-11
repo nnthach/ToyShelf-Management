@@ -108,7 +108,11 @@ export default function EditProductPage() {
   }));
 
   // product price segment
-  const { data: productPriceSegmentList = [], isLoading: loading } = useQuery({
+  const {
+    data: productPriceSegmentList = [],
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["productPriceSegments"],
     queryFn: () => getAllProducePriceSegmentAPI({}),
     select: (res) => res.data as ProductPriceSegment[],
@@ -264,7 +268,7 @@ export default function EditProductPage() {
           setOpenVerifyCreateForm={setOpenVerifyCreateForm}
           previewData={previewData}
           handleConfirmCreate={handleConfirmUpdate}
-          type={'Update'}
+          type={"Update"}
         />
       )}
     </>

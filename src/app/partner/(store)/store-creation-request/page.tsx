@@ -28,7 +28,11 @@ export default function PartnerStoreCreationRequestManage() {
     search: "",
   });
 
-  const { data: storeCreateRequestList = [], isLoading } = useQuery({
+  const {
+    data: storeCreateRequestList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["storeRequests", query],
     queryFn: () => getAllStoreCreationRequestAPI(query),
     select: (res) => res.data as Store[],
@@ -93,6 +97,7 @@ export default function PartnerStoreCreationRequestManage() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <div className="space-x-3">

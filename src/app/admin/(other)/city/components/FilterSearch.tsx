@@ -10,7 +10,7 @@ import {
 import { QueryParams } from "@/src/types/SubType";
 
 import { PopoverClose } from "@radix-ui/react-popover";
-import { Filter, Search, X, XCircle } from "lucide-react";
+import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type FilterBarProps = {
@@ -26,6 +26,7 @@ type FilterBarProps = {
     limit?: number;
   }) => void;
   onReset: () => void;
+  onRefresh?: () => void;
 };
 
 export default function FilterSearch({
@@ -36,9 +37,8 @@ export default function FilterSearch({
   onSearch,
   onApplyFilter,
   onReset,
+  onRefresh,
 }: FilterBarProps) {
-
-
   const [searchInput, setSearchInput] = useState(query.search ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
 
@@ -164,21 +164,14 @@ export default function FilterSearch({
       </div>
 
       {/* CLEAR */}
-      {isFiltered && !loading && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleResetAll}
-          className="
-      flex items-center gap-1
-      text-blue-600
-      hover:text-blue-700
-      hover:bg-blue-50
-      transition
-    "
-        >
+      {isFiltered && !loading ? (
+        <Button variant="outline" onClick={handleResetAll}>
           <XCircle className="w-4 h-4" />
-          Clear
+          Xóa
+        </Button>
+      ) : (
+        <Button variant="outline" onClick={onRefresh}>
+          <RotateCcw />
         </Button>
       )}
     </div>

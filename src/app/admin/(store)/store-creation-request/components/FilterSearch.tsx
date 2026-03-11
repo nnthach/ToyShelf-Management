@@ -10,7 +10,7 @@ import {
 } from "@/src/styles/components/ui/popover";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { Filter, Search, X, XCircle } from "lucide-react";
+import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type FilterBarProps = {
@@ -20,10 +20,8 @@ type FilterBarProps = {
   showStatus?: boolean;
   showOrder?: boolean;
   onSearch: (val: string) => void;
-  onApplyFilter: (val: {
-    isActive?: boolean;
-    order?: string;
-  }) => void;
+  onApplyFilter: (val: { isActive?: boolean; order?: string }) => void;
+  onRefresh?: () => void;
   onReset: () => void;
 };
 
@@ -35,6 +33,7 @@ export default function FilterSearch({
   onSearch,
   onApplyFilter,
   onReset,
+  onRefresh,
 }: FilterBarProps) {
   const [searchInput, setSearchInput] = useState(query.search ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
@@ -162,21 +161,14 @@ export default function FilterSearch({
       </div>
 
       {/* CLEAR */}
-      {isFiltered && !loading && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleResetAll}
-          className="
-      flex items-center gap-1
-      text-blue-600
-      hover:text-blue-700
-      hover:bg-blue-50
-      transition
-    "
-        >
+      {isFiltered && !loading ? (
+        <Button variant="outline" onClick={handleResetAll}>
           <XCircle className="w-4 h-4" />
           Xóa
+        </Button>
+      ) : (
+        <Button variant="outline" onClick={onRefresh}>
+          <RotateCcw />
         </Button>
       )}
     </div>

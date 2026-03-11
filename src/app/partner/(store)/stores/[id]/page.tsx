@@ -40,7 +40,10 @@ export default function PartnerStoreDetailPage() {
   const router = useRouter();
   const { partner } = useAuth();
 
-  const { data: storeDetail, isLoading } = useQuery({
+  const {
+    data: storeDetail,
+    isLoading,
+  } = useQuery({
     queryKey: ["store", id],
     queryFn: () => getStoreDetailAPI(id!),
     select: (res) => res.data,

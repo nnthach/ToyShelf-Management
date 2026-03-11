@@ -4,7 +4,6 @@ export const formatUserStatusText = (status: boolean) => {
       return "Chưa kích hoạt";
     case true:
       return "Đã kích hoạt";
-
   }
 };
 
@@ -20,9 +19,9 @@ export const formatUserStatusColor = (status: boolean) => {
 export const formatStoreStatusText = (isActive: boolean) => {
   switch (isActive) {
     case false:
-      return "Inactive";
+      return "Chưa kích hoạt";
     case true:
-      return "Active";
+      return "Đã kích hoạt";
   }
 };
 

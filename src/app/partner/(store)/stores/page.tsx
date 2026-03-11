@@ -3,7 +3,6 @@
 import { Download, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
-import { useRouter } from "next/navigation";
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
@@ -13,15 +12,17 @@ import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreColumns } from "./columns";
 
 export default function PartnerStoreManage() {
-  const router = useRouter();
-
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
     search: "",
   });
 
-  const { data: storeList = [], isLoading } = useQuery({
+  const {
+    data: storeList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["stores", query],
     queryFn: () => getAllStoreAPI(query),
     select: (res) => res.data as Store[],
@@ -55,6 +56,7 @@ export default function PartnerStoreManage() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <div className="space-x-3">

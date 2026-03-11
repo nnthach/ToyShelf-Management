@@ -12,9 +12,28 @@ import StatCard from "@/src/components/StatCard";
 import { Box, Server, Store } from "lucide-react";
 import { useAuth } from "@/src/hooks/useAuth";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { getPartnerDetailAPI } from "@/src/services/partner.service";
 
 export default function AdminDashboard() {
-  const { user } = useAuth();
+  const { partner } = useAuth();
+
+  console.log("partner profile", partner);
+
+  const partnerId = partner?.partnerId;
+
+  const {
+    data: partnerDetail,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["partner", partnerId],
+    queryFn: () => getPartnerDetailAPI(partnerId!),
+    select: (res) => res.data,
+    enabled: !!partnerId,
+  });
+
+  console.log("partnerDetail", partnerDetail);
 
   return (
     <>
@@ -30,21 +49,34 @@ export default function AdminDashboard() {
           />
 
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-linear-to-r from-black/90  to-blue-700/70"></div>
+          <div className="absolute inset-0 bg-linear-to-r from-black/90 to-blue-700/70"></div>
 
           {/* Content */}
           <div className="relative z-10 px-6 py-6 text-white flex items-center justify-between">
-            {/* BÊN TRÁI */}
-            <div className="flex flex-col">
-              <h2 className="text-xl font-semibold tracking-wide">
-                Xin chào đối tác, {user?.fullName || "Đối tác"}!
+            <div className="flex flex-col gap-1 space-y-3">
+              {/* Company Name */}
+              <h2 className="text-2xl font-bold tracking-wide">
+                Xin chào, {partner?.fullName}
               </h2>
 
+              {/* Partner Tier */}
+              <div className="flex items-center gap-2 text-sm">
+                <span className="px-2 py-0.5 rounded-md bg-blue-500/80 text-white text-xs font-medium">
+                  {partnerDetail?.partnerTierName}
+                </span>
+
+                <span className="text-white/70 text-xs">
+                  Uư tiên: {partnerDetail?.partnerTierPriority}
+                </span>
+              </div>
+
+              {/* Representative */}
               <p className="text-sm text-white/80">
-                Người đại diện: Nguyễn Ngọc Thạch
+                Công ty: {partnerDetail?.companyName}
               </p>
 
-              <p className="text-sm text-white/60">nguyenthach@gmail.com</p>
+              {/* Email */}
+              <p className="text-sm text-white/60">{partner?.email}</p>
             </div>
           </div>
         </div>

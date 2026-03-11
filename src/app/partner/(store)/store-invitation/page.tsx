@@ -14,22 +14,42 @@ import { toast } from "react-toastify";
 import { deleteProductColorDetailAPI } from "@/src/services/product-color.service";
 import { getStoreInviteColumns } from "./columns";
 import { getStoreInvitesAPI } from "@/src/services/store-invite.service";
+import { useAuth } from "@/src/hooks/useAuth";
+import { getAllStoreAPI } from "@/src/services/store.service";
+import { Store } from "@/src/types";
 
 export default function PartnerManageStoreInvites() {
-  const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
+  const { partner } = useAuth();
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
+    status: "",
     order: "",
-    search: "",
+    storeId: "",
+    partnerId: partner?.partnerId,
   });
 
-  const { data: storeInviteList = [], isLoading } = useQuery({
+  const {
+    data: storeInviteList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["storeInvites", query],
     queryFn: () => getStoreInvitesAPI(query),
     select: (res) => res.data,
   });
+
+  const { data: storeList = [] } = useQuery({
+    queryKey: ["stores"],
+    queryFn: () => getAllStoreAPI({}),
+    select: (res) => res.data as Store[],
+  });
+
+  const storeOptions = storeList.map((s) => ({
+    label: s.name,
+    value: s.id,
+  }));
 
   const deleteMutation = useMutation({
     mutationFn: deleteProductColorDetailAPI,
@@ -80,6 +100,7 @@ export default function PartnerManageStoreInvites() {
               query={query}
               loading={isLoading}
               resultCount={storeInviteList.length}
+              storeOptions={storeOptions}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -87,6 +108,7 @@ export default function PartnerManageStoreInvites() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <div className="space-x-3">

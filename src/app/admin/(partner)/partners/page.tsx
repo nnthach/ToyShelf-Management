@@ -8,20 +8,21 @@ import { getPartnerColumns } from "./columns";
 import CreatePartnerModal from "./components/CreatePartnerModal";
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useState } from "react";
-import ViewDetailSheet from "./components/ViewDetailSheet";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllPartnerAPI } from "@/src/services/partner.service";
 
 export default function AdminPartnerManage() {
-
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
     search: "",
   });
 
-  const { data: partnerList = [], isLoading } = useQuery({
+  const {
+    data: partnerList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["partners", query],
     queryFn: () => getAllPartnerAPI(query),
     select: (res) => res.data,
@@ -56,6 +57,7 @@ export default function AdminPartnerManage() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <div className="space-x-3">

@@ -20,15 +20,9 @@ export default function AdminOrderManagement() {
     search: "",
   });
 
-  const debouncedSearch = useDebounce(query.search, 500);
-  const debouncedQuery = useMemo(
-    () => ({ ...query, search: debouncedSearch }),
-    [query, debouncedSearch],
-  );
-
   const { data: orderList = [], loading } = useFetchList<Order[], QueryParams>(
     getAllOrders,
-    debouncedQuery,
+    query,
   );
 
   const columns = getOrderColumns();

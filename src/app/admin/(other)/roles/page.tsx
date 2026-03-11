@@ -32,7 +32,11 @@ export default function AdminManageRole() {
     search: "",
   });
 
-  const { data: roleList = [], isLoading: loading } = useQuery({
+  const {
+    data: roleList = [],
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["roles", query],
     queryFn: () => getAllRoleAPI(query),
     select: (res) => res.data,
@@ -78,11 +82,7 @@ export default function AdminManageRole() {
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
-        <DataTable
-          columns={columns}
-          data={roleList ?? []}
-          isLoading={loading}
-        >
+        <DataTable columns={columns} data={roleList ?? []} isLoading={loading}>
           <div className="p-4 border-b flex justify-between items-center">
             {/*Filter search */}
             <FilterSearch
@@ -96,6 +96,7 @@ export default function AdminManageRole() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <Button variant={"outline"}>

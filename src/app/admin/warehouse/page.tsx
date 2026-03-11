@@ -24,7 +24,11 @@ export default function AdminWarehouseManagement() {
     search: "",
   });
 
-  const { data: warehouseList = [], isLoading } = useQuery({
+  const {
+    data: warehouseList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["warehouses", query],
     queryFn: () => getAllWarehouseAPI(query),
     select: (res) => res.data,
@@ -63,6 +67,7 @@ export default function AdminWarehouseManagement() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <div className="space-x-3">

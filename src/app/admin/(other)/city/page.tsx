@@ -9,13 +9,7 @@ import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import CreatePartnerTierModal from "./components/CreateCityModal";
-import {
-  deletePriceTableAPI,
-  getAllPriceTableAPI,
-} from "@/src/services/price-table.service";
-import { City, PriceTable } from "@/src/types";
-import EditPriceTableModal from "./components/EditCityModal";
+import { City } from "@/src/types";
 import { deleteCityAPI, getAllCityAPI } from "@/src/services/city.service";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getCityColumns } from "./columns";
@@ -31,7 +25,11 @@ export default function AdminManageCity() {
     search: "",
   });
 
-  const { data: cityList = [], isLoading: loading } = useQuery({
+  const {
+    data: cityList = [],
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["cities", query],
     queryFn: () => getAllCityAPI(query),
     select: (res) => res.data as City[],
@@ -91,6 +89,7 @@ export default function AdminManageCity() {
                 })
               }
               onReset={() => resetQuery()}
+              onRefresh={() => refetch()}
             />
 
             <Button variant={"outline"}>
