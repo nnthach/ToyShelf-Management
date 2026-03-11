@@ -79,6 +79,10 @@ export default function EditProductPage() {
         originCountry: productDetail.originCountry,
         ageRange: productDetail.ageRange,
         isConsignment: productDetail.isConsignment,
+        weight: productDetail.weight,
+        height: productDetail.height,
+        length: productDetail.length,
+        width: productDetail.width,
         colors: productDetail.colors.map((color: ProductColorItem) => ({
           colorId: color.colorId,
           priceSegmentId: color.priceSegmentId,
@@ -140,6 +144,7 @@ export default function EditProductPage() {
         };
       }),
     };
+    console.log("payload", payload);
     setPreviewData(payload);
     setOpenVerifyCreateForm(true);
   }
@@ -259,6 +264,7 @@ export default function EditProductPage() {
           setOpenVerifyCreateForm={setOpenVerifyCreateForm}
           previewData={previewData}
           handleConfirmCreate={handleConfirmUpdate}
+          type={'Update'}
         />
       )}
     </>

@@ -22,9 +22,13 @@ import {
   ArrowRightLeft,
   ArrowUpToLine,
   FileText,
+  Repeat,
 } from "lucide-react";
+import { Controller, useFormContext } from "react-hook-form";
+import { Switch } from "@/src/styles/components/ui/switch";
 
 function EditProductInfoLeft() {
+  const { control } = useFormContext();
   // product category
   const { data: categoryList = [] } = useQuery({
     queryKey: ["categories"],
@@ -37,14 +41,32 @@ function EditProductInfoLeft() {
     label: c.name,
   }));
   return (
-    <div className="bg-background rounded-lg p-4 border h-full overflow-y-auto">
-      <div className="mb-4">
-        <h1 className="text-md font-bold text-gray-950 dark:text-foreground">
-          Thông tin sản phẩm
-        </h1>
-        <p className="text-gray-500 text-sm">
-          Vui lòng điền đầy đủ thông tin sản phẩm
-        </p>
+    <div className="bg-background rounded-lg p-4 border h-full overflow-y-auto custom-scrollbar">
+      <div className="mb-4 flex items-center justify-between w-full">
+        <div>
+          <h1 className="text-md font-bold text-gray-950 dark:text-foreground">
+            Thông tin sản phẩm
+          </h1>
+          <p className="text-gray-500 text-sm">
+            Vui lòng điền đầy đủ thông tin sản phẩm
+          </p>
+        </div>
+
+        <Controller
+          name="isConsignment"
+          control={control}
+          render={({ field }) => (
+            <div className="flex items-center gap-2">
+              <Repeat size={18} className="text-muted-foreground" />
+              <span className="text-sm font-medium">Hàng ký gửi</span>
+              <Switch
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                className="data-[state=checked]:bg-orange-500"
+              />
+            </div>
+          )}
+        />
       </div>
       <div className="space-y-5">
         <div className="grid grid-cols-2 gap-4">

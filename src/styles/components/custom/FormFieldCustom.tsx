@@ -5,10 +5,18 @@ import { Controller, useFormContext } from "react-hook-form";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { SelectOption } from "@/src/types/SubType";
+import { Switch } from "../ui/switch";
 
 type RHFField = ControllerRenderProps<FieldValues, string>;
 
-type FieldType = "text" | "number" | "textarea" | "select" | "time" | "date";
+type FieldType =
+  | "text"
+  | "number"
+  | "textarea"
+  | "select"
+  | "time"
+  | "date"
+  | "switch";
 
 type CommonFieldProps =
   | React.InputHTMLAttributes<HTMLInputElement>
@@ -24,6 +32,7 @@ type FormFieldProps = CommonFieldProps & {
   selectData?: SelectOption[];
   loading?: boolean;
   icon?: React.ReactNode;
+  switchColor?: string;
 };
 
 const renderFieldByType = (
@@ -33,6 +42,7 @@ const renderFieldByType = (
   selectData?: SelectOption[],
   props?: CommonFieldProps,
   error?: string | undefined,
+  switchColor?: string,
 ) => {
   const invalidClass = error ? "border-red-500 focus:border-red-500" : "";
 
@@ -79,6 +89,16 @@ const renderFieldByType = (
         </select>
       );
 
+    case "switch":
+      return (
+        <Switch
+          id={field.name}
+          checked={field.value}
+          onCheckedChange={field.onChange}
+          className={switchColor}
+        />
+      );
+
     default:
       return (
         <Input
@@ -102,6 +122,7 @@ export function FormFieldCustom({
   placeholder,
   selectData,
   loading,
+  switchColor,
   ...props
 }: FormFieldProps) {
   const { control } = useFormContext();
@@ -144,6 +165,7 @@ export function FormFieldCustom({
                   }`,
                 },
                 fieldState.error?.message,
+                switchColor,
               )}
 
               {loading && (

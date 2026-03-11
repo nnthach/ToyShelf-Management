@@ -213,6 +213,7 @@ export default function CreateProductPage() {
           setOpenVerifyCreateForm={setOpenVerifyCreateForm}
           previewData={previewData}
           handleConfirmCreate={handleConfirmCreate}
+          type="Create"
         />
       )}
     </>
