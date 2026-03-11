@@ -10,12 +10,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Edit, FileText, Plus, Sparkles, Tag } from "lucide-react";
-import { memo, useEffect, useState } from "react";
+import { Edit, FileText, Sparkles, Tag } from "lucide-react";
+import { memo, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import {
@@ -23,13 +22,9 @@ import {
   productCateSchema,
 } from "@/src/schemas/product-category.schema";
 import {
-  createProductCategoryAPI,
-  getAllProductCategoryAPI,
   getProductCategoryDetailAPI,
   updateProductCategoryAPI,
 } from "@/src/services/product-category.service";
-import { SelectOption } from "@/src/types/SubType";
-import { ProductCategory } from "@/src/types";
 
 type EditProductCategoryModalProps = {
   categoryId: string;

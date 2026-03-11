@@ -8,13 +8,21 @@ import { useParams } from "next/navigation";
 import BarChartExample from "./components/charts/BarChart";
 import { TargetRevenueChart } from "./components/charts/TargetRevenueChart";
 import { Button } from "@/src/styles/components/ui/button";
-import ViewPartnerSheet from "./components/ViewPartnerSheet";
 import CreatePartnerAccountModal from "./components/CreatePartnerAccountModal";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { getPartnerDetailAPI } from "@/src/services/partner.service";
 
 export default function ViewPartnerDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const { id: partnerId } = useParams<{ id: string }>();
   const router = useRouter();
+
+  const { data: partnerDetail, isLoading } = useQuery({
+    queryKey: ["partner", partnerId],
+    queryFn: () => getPartnerDetailAPI(partnerId!),
+    select: (res) => res.data,
+    enabled: !!partnerId,
+  });
 
   return (
     <>
@@ -49,28 +57,44 @@ export default function ViewPartnerDetailPage() {
           />
 
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-linear-to-r from-black/90  to-blue-700/70"></div>
+          <div className="absolute inset-0 bg-linear-to-r from-black/90 to-blue-700/70"></div>
 
           {/* Content */}
           <div className="relative z-10 px-6 py-6 text-white flex items-center justify-between">
-            {/* BÊN TRÁI */}
-            <div className="flex flex-col">
-              <h2 className="text-xl font-semibold tracking-wide">
-                Thông tin đối tác!
+            <div className="flex flex-col gap-1 space-y-3">
+              {/* Company Name */}
+              <h2 className="text-2xl font-bold tracking-wide">
+                {partnerDetail?.companyName}
               </h2>
 
+              {/* Partner Tier */}
+              <div className="flex items-center gap-2 text-sm">
+                <span className="px-2 py-0.5 rounded-md bg-blue-500/80 text-white text-xs font-medium">
+                  {partnerDetail?.partnerTierName}
+                </span>
+
+                <span className="text-white/70 text-xs">
+                  Uư tiên: {partnerDetail?.partnerTierPriority}
+                </span>
+              </div>
+
+              {/* Representative */}
               <p className="text-sm text-white/80">
                 Người đại diện: Nguyễn Ngọc Thạch
               </p>
 
+              {/* Email */}
               <p className="text-sm text-white/60">nguyenthach@gmail.com</p>
             </div>
           </div>
         </div>
 
-        {/*Thông tin cá nhân */}
-        <div className="bg-background shadow-sm rounded-lg col-span-1 h-[30vh] w-full">
-          <h1>Alo alo</h1>
+        {/*Thông tin hợp đồng */}
+        <div className="bg-background shadow-sm rounded-lg col-span-1 h-[30vh] w-full flex flex-col items-center justify-center text-center gap-3">
+          <p className="text-sm text-muted-foreground">
+            Chưa có thông tin hợp đồng
+          </p>
+
           <CreatePartnerAccountModal />
         </div>
       </div>
@@ -113,6 +137,7 @@ export default function ViewPartnerDetailPage() {
           color="bg-blue-100 text-blue-900"
         />
       </div>
+      
       {/*Content */}
       <div className="mt-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">

@@ -54,7 +54,7 @@ export default function AdminProductManage() {
             onClick={() => router.push("/admin/products/create")}
           >
             <Plus />
-            Tạo sản phẩm
+            Thêm sản phẩm
           </Button>
           <div className="flex items-center gap-1 rounded-lg border">
             {/* List view */}

@@ -18,6 +18,17 @@ import {
   ClipboardList,
   Award,
   Warehouse,
+  Medal,
+  Table,
+  FileText,
+  FilePlus,
+  PackagePlus,
+  Wallet,
+  LayoutGrid,
+  RotateCcw,
+  ArchiveRestore,
+  MapPin,
+  ShieldCheck,
 } from "lucide-react";
 
 // Admin
@@ -51,17 +62,17 @@ export const AdminSidebarNested = [
       {
         title: "Cấp bậc đối tác",
         url: "/admin/partner-level",
-        icon: CircleStar,
+        icon: Medal,
       },
       {
         title: "Bảng giá hoa hồng đối tác",
         url: "/admin/price-table",
-        icon: CircleStar,
+        icon: Table,
       },
       {
         title: "Chính sách hoa hồng",
         url: "/admin/commission-policy",
-        icon: CircleStar,
+        icon: FileText,
       },
     ],
   },
@@ -90,7 +101,7 @@ export const AdminSidebarNested = [
       {
         title: "Yêu cầu tạo cửa hàng",
         url: "/admin/store-creation-request",
-        icon: Store,
+        icon: FilePlus,
       },
       { title: "Kệ", url: "/admin/shelf", icon: Server },
     ],
@@ -100,33 +111,32 @@ export const AdminSidebarNested = [
     label: "Yêu cầu",
     sub: [
       {
-        title: "Bổ sung hàng hóa",
-        url: "/admin/request/refill-stock",
-        icon: Store,
-      },
-
-      {
         title: "Thanh toán hoa hồng",
-        url: "/admin/request/refill-stock",
-        icon: Store,
+        url: "/admin/refill-stock",
+        icon: Wallet,
+      },
+      {
+        title: "Bổ sung hàng hóa",
+        url: "/admin/refill-stock",
+        icon: PackagePlus,
       },
 
       {
         title: "Bổ sung kệ",
-        url: "/admin/request/refill-shelf",
-        icon: Store,
+        url: "/admin/refill-shelf",
+        icon: LayoutGrid,
       },
 
       {
         title: "Trả hàng",
-        url: "/admin/request/return-request",
-        icon: Store,
+        url: "/admin/return-request",
+        icon: RotateCcw,
       },
 
       {
         title: "Thu hồi tủ",
-        url: "/admin/request/return-shelf",
-        icon: Store,
+        url: "/admin/return-shelf",
+        icon: ArchiveRestore,
       },
     ],
   },
@@ -137,12 +147,12 @@ export const AdminSidebarNested = [
       {
         title: "Danh sách thành phố",
         url: "/admin/city",
-        icon: CircleStar,
+        icon: MapPin,
       },
       {
         title: "Chức vụ",
         url: "/admin/roles",
-        icon: CircleStar,
+        icon: ShieldCheck,
       },
     ],
   },

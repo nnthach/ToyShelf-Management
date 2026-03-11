@@ -15,9 +15,9 @@ import {
 } from "@/src/services/store-create-request.service";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import UpdateStoreCreateRequestModal from "./components/UpdateStoreCreationRequestModal";
+import UpdateStoreCreateRequestModal from "./components/UpdateRefillRequestModal";
 
-export default function AdminStoreCreationRequestManage() {
+export default function AdminRefillRequestManage() {
   const queryClient = useQueryClient();
 
   const [selectedRequestId, setSelectedRequestId] = useState("");

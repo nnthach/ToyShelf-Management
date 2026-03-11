@@ -1,11 +1,10 @@
 export const formatUserStatusText = (status: boolean) => {
   switch (status) {
     case false:
-      return "Inactive";
+      return "Chưa kích hoạt";
     case true:
-      return "Active";
-    // case "BANNED":
-    //   return "Banned";
+      return "Đã kích hoạt";
+
   }
 };
 
@@ -15,8 +14,6 @@ export const formatUserStatusColor = (status: boolean) => {
       return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
     case true:
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
-    // case "BANNED":
-    //   return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
   }
 };
 
