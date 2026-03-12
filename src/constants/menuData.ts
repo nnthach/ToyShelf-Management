@@ -217,29 +217,67 @@ export const PartnerAdminSidebarNested = [
 // Warehouse manager
 export const WarehouseManagerSidebarGroups = [
   {
-    label: "application",
+    label: "Ứng dụng",
     items: [
       {
-        title: "dashboard",
+        title: "Tổng quan",
         url: "/warehouse/dashboard",
         icon: LayoutDashboard,
       },
-      { title: "notifications", url: "#", icon: Bell, badge: true },
-      { title: "settings", url: "#", icon: Settings },
+      { title: "Thông báo", url: "#", icon: Bell, badge: true },
+    ],
+  },
+
+  {
+    label: "Nhân viên",
+    items: [
+      {
+        title: "Tài khoản nhân viên",
+        url: "/warehouse/staffs",
+        icon: UserStar,
+      },
+    ],
+  },
+
+  {
+    label: "Yêu cầu",
+    items: [
+      {
+        title: "Bổ sung hàng hóa",
+        url: "/warehouse/refill-stock",
+        icon: PackagePlus,
+      },
+
+      {
+        title: "Bổ sung kệ",
+        url: "/warehouse/refill-shelf",
+        icon: LayoutGrid,
+      },
+
+      {
+        title: "Trả hàng",
+        url: "/warehouse/return-request",
+        icon: RotateCcw,
+      },
+
+      {
+        title: "Thu hồi tủ",
+        url: "/warehouse/return-shelf",
+        icon: ArchiveRestore,
+      },
     ],
   },
 ];
 
 export const WarehouseManagerSidebarNested = [
   {
-    label: "accountManagement",
-    sub: [{ title: "staffAccounts", url: "/warehouse/staffs", icon: UserStar }],
-  },
-  {
-    label: "storeManagement",
+    label: "Yêu cầu",
     sub: [
-      { title: "stores", url: "/warehouse/stores", icon: Store },
-      { title: "Kệ", url: "/warehouse/cabinets", icon: Server },
+      {
+        title: "Trả hàng",
+        url: "/admin/return-request",
+        icon: RotateCcw,
+      },
     ],
   },
 ];

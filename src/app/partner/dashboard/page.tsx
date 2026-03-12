@@ -25,7 +25,6 @@ export default function AdminDashboard() {
   const {
     data: partnerDetail,
     isLoading,
-    refetch,
   } = useQuery({
     queryKey: ["partner", partnerId],
     queryFn: () => getPartnerDetailAPI(partnerId!),

@@ -1,7 +1,7 @@
 import { SidebarProvider } from "../../styles/components/ui/sidebar";
 import { cookies } from "next/headers";
-import WarehouseSidebar from "@/src/components/layout/WarehouseSidebar";
-import WarehouseNavbar from "@/src/components/layout/WarehouseNavbar";
+import { RolePermission } from "@/src/components/RolePermission";
+import { WarehouseClientShell } from "@/src/components/layout/WarehouseClient";
 
 export default async function PartnerAdminLayout({
   children,
@@ -12,14 +12,12 @@ export default async function PartnerAdminLayout({
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   return (
-    <div className="flex bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-neutral-800 dark:via-neutral-800 dark:to-neutral-800">
+    // <RolePermission allowedRoles={["Warehouse"]}>
+    <div className="flex bg-[#FAF9FE] dark:bg-neutral-800">
       <SidebarProvider defaultOpen={defaultOpen}>
-        <WarehouseSidebar />
-        <main className="flex-1">
-          <WarehouseNavbar />
-          <div className="px-4 mt-4">{children}</div>
-        </main>
+        <WarehouseClientShell>{children}</WarehouseClientShell>
       </SidebarProvider>
     </div>
+    // </RolePermission>
   );
 }
