@@ -24,21 +24,17 @@ import { Partner, PartnerTier, Role } from "@/src/types";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  Building2,
-  Info,
-  Mail,
-  Plus,
-  Send,
-  User,
-  UserPlus,
-} from "lucide-react";
-import { useState } from "react";
+import { Info, Mail, Plus, Send, User, UserPlus } from "lucide-react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import z from "zod";
 
-function CreatePartnerAccountModal() {
+function CreateWarehouseManagerAccountModal({
+  warehouseId,
+}: {
+  warehouseId: string;
+}) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -47,7 +43,7 @@ function CreatePartnerAccountModal() {
     email: z.string().min(1, "Email là bắt buộc"),
     fullName: z.string().min(1, "Tên đối tác là bắt buộc"),
     roleIds: z.array(z.string()).optional(),
-    partnerId: z.string().min(1, "Sở hữu là bắt buộc"),
+    warehouseId: z.string().min(1, "Kho là bắt buộc"),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
@@ -56,14 +52,8 @@ function CreatePartnerAccountModal() {
       email: "",
       fullName: "",
       roleIds: [],
-      partnerId: "",
+      warehouseId: warehouseId,
     },
-  });
-
-  const { data: partnerList = [], isLoading } = useQuery({
-    queryKey: ["partners", { isActive: undefined }],
-    queryFn: () => getAllPartnerAPI({ isActive: undefined }),
-    select: (res) => res.data as Partner[],
   });
 
   const { data: roleList = [] } = useQuery({
@@ -73,21 +63,18 @@ function CreatePartnerAccountModal() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const partnerRole = roleList.find((r) => r.name === "PartnerAdmin");
+    const warehouseRole = roleList.find((r) => r.name === "Warehouse");
 
     const payload = {
       ...data,
-      roleIds: partnerRole ? [partnerRole.id] : [],
+      roleIds: warehouseRole ? [warehouseRole.id] : [],
     };
+
     try {
       await createAllRoleAccountAPI(payload);
 
       queryClient.invalidateQueries({
-        queryKey: ["partners"],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: ["partner"],
+        queryKey: ["warehouse"],
       });
 
       form.reset();
@@ -98,11 +85,6 @@ function CreatePartnerAccountModal() {
       toast.error("Tạo đối tác thất bại");
     }
   }
-
-  const partnerCompanyOptions = partnerList.map((s) => ({
-    value: s.id,
-    label: s.companyName,
-  }));
 
   return (
     <Dialog
@@ -116,7 +98,7 @@ function CreatePartnerAccountModal() {
     >
       <DialogTrigger asChild>
         <Button className="btn-primary-gradient">
-          <Plus /> Thêm tài khoản đối tác sở hữu
+          <Plus /> Thêm tài khoản quản lý kho
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[400px] p-0 overflow-hidden border-none shadow-2xl">
@@ -124,10 +106,10 @@ function CreatePartnerAccountModal() {
         <DialogHeader className="p-6 bg-slate-50/50 border-b">
           <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
             <UserPlus className="text-blue-600" size={22} />
-            Thêm tài khoản sở hữu
+            Thêm tài khoản quản lý
           </DialogTitle>
           <DialogDescription className="text-slate-500 flex items-center gap-1 mt-0.5">
-            <Info size={14} /> Thiết lập tài khoản và gán vào công ty quản lý.
+            <Info size={14} /> Cấp quyền truy cập hệ thống cho quản lý kho mới.
           </DialogDescription>
         </DialogHeader>
 
@@ -153,21 +135,12 @@ function CreatePartnerAccountModal() {
                   icon={<Mail size={18} />}
                   placeholder="example@gmail.com"
                 />
-
-                <FormFieldCustom
-                  name="partnerId"
-                  label="Công ty sở hữu"
-                  icon={<Building2 size={18} />}
-                  placeholder="Chọn công ty sở hữu"
-                  type="select"
-                  selectData={partnerCompanyOptions}
-                />
               </div>
             </form>
           </FormProvider>
         </div>
 
-        {/* Footer */}
+        {/* Footer với style sạch sẽ */}
         <DialogFooter className="p-6 bg-slate-50/50 border-t flex gap-3 sm:gap-0">
           <DialogClose asChild>
             <Button
@@ -192,4 +165,4 @@ function CreatePartnerAccountModal() {
   );
 }
 
-export default CreatePartnerAccountModal;
+export default CreateWarehouseManagerAccountModal;

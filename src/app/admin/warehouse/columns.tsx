@@ -8,10 +8,22 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Eye } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export const getWarehouseColumns = (
-  onViewDetail: (warehouseId: string) => void,
-): ColumnDef<Warehouse>[] => [
+const ActionCell = ({ id }: { id: string }) => {
+  const router = useRouter();
+
+  return (
+    <span
+      onClick={() => router.push(`/admin/warehouse/${id}`)}
+      className="cursor-pointer text-blue-400"
+    >
+      <Eye />
+    </span>
+  );
+};
+
+export const getWarehouseColumns = (): ColumnDef<Warehouse>[] => [
   {
     accessorKey: "name",
     header: "Tên",
@@ -50,17 +62,6 @@ export const getWarehouseColumns = (
   {
     accessorKey: "action",
     header: "Hành động",
-    cell: ({ row }) => {
-      const warehouse = row.original;
-      return (
-        <span
-          onClick={() => onViewDetail(warehouse.id)}
-          title="Detail"
-          className="cursor-pointer text-blue-400"
-        >
-          <Eye />
-        </span>
-      );
-    },
+    cell: ({ row }) => <ActionCell id={row.original.id} />,
   },
 ];

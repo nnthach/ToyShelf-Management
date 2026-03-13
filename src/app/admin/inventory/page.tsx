@@ -1,23 +1,17 @@
 "use client";
 
-import useQueryParams from "@/src/hooks/useQueryParams";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { useState } from "react";
-import FilterSearch from "./components/FilterSearch";
+import { getInventoryColumns } from "./columns";
 import { Button } from "@/src/styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
-import { getWarehouseColumns } from "./columns";
-import { useQuery } from "@tanstack/react-query";
-import ViewDetailSheet from "./components/ViewDetailSheet";
-import CreateWarehouseModal from "./components/CreateWarehouseModal";
+import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
-import { getAllWarehouseAPI } from "@/src/services/warehouse.service";
+import useQueryParams from "@/src/hooks/useQueryParams";
+import { useQuery } from "@tanstack/react-query";
+import CreateInventoryModal from "./components/CreateInventoryModal";
+import { getAllInventoryAPI } from "@/src/services/inventory.service";
 
-export default function AdminWarehouseManagement() {
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<string | null>(
-    null,
-  );
-
+export default function AdminInventoryManage() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
@@ -25,30 +19,29 @@ export default function AdminWarehouseManagement() {
   });
 
   const {
-    data: warehouseList = [],
+    data: inventoryList = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["warehouses", query],
-    queryFn: () => getAllWarehouseAPI(query),
+    queryKey: ["inventories", query],
+    queryFn: () => getAllInventoryAPI(query),
     select: (res) => res.data,
   });
 
-
-  const columns = getWarehouseColumns();
+  const columns = getInventoryColumns();
 
   return (
-    <>
+    <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Quản lý kho hàng</h1>
-        <CreateWarehouseModal />
+        <h1 className="text-4xl font-bold ">Quản lý hàng tồn kho</h1>
+        <CreateInventoryModal />
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={warehouseList ?? []}
+          data={inventoryList ?? []}
           isLoading={isLoading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -56,8 +49,8 @@ export default function AdminWarehouseManagement() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={warehouseList.length}
-              onSearch={(val) => updateQuery({ search: val || undefined })}
+              resultCount={inventoryList.length}
+              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,
@@ -69,21 +62,15 @@ export default function AdminWarehouseManagement() {
 
             <div className="space-x-3">
               <Button>
-                <Download /> Nhập khẩu
+                <Download /> Nhập dữ liệu
               </Button>
               <Button variant={"outline"}>
-                <Upload /> Xuất khẩu
+                <Upload /> Xuất dữ liệu
               </Button>
             </div>
           </div>
         </DataTable>
       </div>
-
-      <ViewDetailSheet
-        warehouseId={selectedWarehouseId}
-        isOpen={!!selectedWarehouseId}
-        onClose={() => setSelectedWarehouseId(null)}
-      />
-    </>
+    </div>
   );
 }

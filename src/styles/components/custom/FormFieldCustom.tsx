@@ -70,6 +70,19 @@ const renderFieldByType = (
         />
       );
 
+    case "number":
+      return (
+        <Input
+          {...field}
+          {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
+          id={field.name}
+          type="number"
+          placeholder={placeholder}
+          className={`${props?.className ?? ""} ${invalidClass}`}
+          onChange={(e) => field.onChange(e.target.valueAsNumber)}
+        />
+      );
+
     case "select":
       return (
         <select

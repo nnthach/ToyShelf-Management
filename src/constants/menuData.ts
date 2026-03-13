@@ -52,6 +52,17 @@ export const AdminSidebarGroups = [
       { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
     ],
   },
+
+  {
+    label: "Hàng của kho",
+    items: [
+      {
+        title: "Quản lý hàng của kho",
+        url: "/admin/inventory",
+        icon: UserStar,
+      },
+    ],
+  },
 ];
 
 export const AdminSidebarNested = [
@@ -234,6 +245,17 @@ export const WarehouseManagerSidebarGroups = [
       {
         title: "Tài khoản nhân viên",
         url: "/warehouse/staffs",
+        icon: UserStar,
+      },
+    ],
+  },
+
+  {
+    label: "Hàng tồn kho",
+    items: [
+      {
+        title: "Quản lý hàng tồn kho",
+        url: "/warehouse/inventory",
         icon: UserStar,
       },
     ],

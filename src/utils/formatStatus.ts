@@ -1,3 +1,22 @@
+export const formatBooleanIsActiveStatusText = (isActive: boolean) => {
+  switch (isActive) {
+    case false:
+      return "Chưa kích hoạt";
+    case true:
+      return "Đã kích hoạt";
+  }
+};
+
+export const formatBooleanIsActiveStatusColor = (isActive: boolean) => {
+  switch (isActive) {
+    case false:
+      return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
+    case true:
+      return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
+  }
+};
+
+
 export const formatUserStatusText = (status: boolean) => {
   switch (status) {
     case false:

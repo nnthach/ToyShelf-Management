@@ -34,3 +34,10 @@ export const restoreProductAPI = async (id: string) => {
   const res = await api.patch(`/product/${id}/restore`);
   return res.data;
 };
+
+// product color many to many
+
+export const getAllProductColorColorAPI = async <T>(params: T) => {
+  const res = await api.get("/ProductColor", { params });
+  return res.data;
+};

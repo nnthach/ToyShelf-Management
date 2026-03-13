@@ -89,6 +89,8 @@ export default function HomePage() {
           router.replace("/admin/dashboard");
         } else if (roles.includes("PartnerAdmin") && !roles.includes("Admin")) {
           router.replace("/partner/dashboard");
+        } else if (roles.includes("Warehouse") && !roles.includes("Admin")) {
+          router.replace("/warehouse/dashboard");
         } else if (roles.includes("Customer") && !roles.includes("Admin")) {
           toast.error("Hệ thống dành cho quản trị viên!");
         }
