@@ -37,7 +37,7 @@ function CreateProductInfoLeft() {
     label: c.name,
   }));
   return (
-    <div className="bg-background rounded-lg p-4 border h-full overflow-y-auto">
+    <div className="bg-background rounded-lg p-4 border h-full overflow-y-auto custom-scrollbar">
       <div className="mb-4">
         <h1 className="text-md font-bold text-gray-950 dark:text-foreground">
           Thông tin sản phẩm

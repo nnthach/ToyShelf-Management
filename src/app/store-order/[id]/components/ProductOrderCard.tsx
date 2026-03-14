@@ -20,8 +20,8 @@ function ProductOrderCard({
       {/* Image Container */}
       <div className="relative aspect-square rounded-lg bg-muted mb-3 overflow-hidden">
         <Image
-          src={selectedVariant.imageUrl || ""}
-          alt={product.name}
+          src={selectedVariant?.imageUrl || ""}
+          alt={product?.name}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority={false}
@@ -32,12 +32,12 @@ function ProductOrderCard({
         <div className="absolute top-2 left-2">
           <span
             className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
-              selectedVariant.isActive
+              selectedVariant?.isActive
                 ? "bg-green-100 text-green-700"
                 : "bg-red-100 text-red-700"
             }`}
           >
-            {selectedVariant.isActive ? "Còn hàng" : "Hết hàng"}
+            {selectedVariant?.isActive ? "Còn hàng" : "Hết hàng"}
           </span>
         </div>
       </div>
@@ -45,10 +45,10 @@ function ProductOrderCard({
       {/* Info */}
       <div className="flex-1">
         <h4 className="font-bold text-sm lg:text-base line-clamp-1">
-          {product.name}
+          {product?.name}
         </h4>
         <p className="text-xs text-muted-foreground mb-1">
-          {product.brand} - {product.material}
+          {product?.brand} - {product?.material}
         </p>
 
         {/* Price - Thay đổi theo màu */}

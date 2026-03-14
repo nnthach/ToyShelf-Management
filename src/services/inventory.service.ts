@@ -10,7 +10,7 @@ export const getInventoryDetailAPI = async (id: string) => {
   return res.data;
 };
 
-export const createInventoryAPI = async <T>(data: T) => {
+export const refillInventoryAPI = async <T>(data: T) => {
   const res = await api.post("/Inventory/refill", data);
   return res.data;
 };

@@ -194,3 +194,20 @@ export interface StoreInvite {
   storeRole: "Manager" | "Staff";
   status: "Pending" | "Accepted" | "Rejected" | "Expired";
 }
+
+export interface Inventory {
+  id: string;
+  inventoryLocationId: string;
+  productColorId: string;
+  dispositionId: string;
+  quantity: 0;
+}
+
+export interface InventoryLocation {
+  id: string;
+  type: string;
+  warehouseId: string;
+  storeId: string;
+  name: string;
+  isActive: boolean;
+}
