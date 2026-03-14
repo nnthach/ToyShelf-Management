@@ -54,10 +54,10 @@ export const AdminSidebarGroups = [
   },
 
   {
-    label: "Hàng của kho",
+    label: "Hàng tồn kho",
     items: [
       {
-        title: "Quản lý hàng của kho",
+        title: "Quản lý hàng tồn kho",
         url: "/admin/inventory",
         icon: UserStar,
       },
@@ -215,12 +215,7 @@ export const PartnerAdminSidebarNested = [
         title: "Bổ sung kệ",
         url: "/partner/refill-shelf",
         icon: Store,
-      },
-      {
-        title: "Báo cáo hằng ngày",
-        url: "/partner/daily-reports",
-        icon: Store,
-      },
+      }
     ],
   },
 ];

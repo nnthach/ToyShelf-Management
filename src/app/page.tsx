@@ -31,6 +31,7 @@ import {
   getMyProfileAPI,
   loginAPI,
 } from "../services/user.service";
+import { getMyStoreAPI } from "../services/store-invite.service";
 
 const formSchema = z.object({
   email: z.string("Not correct email format."),
@@ -75,6 +76,12 @@ export default function HomePage() {
         dispatch(setPartner(partnerDetail));
       }
 
+      // let myStoreId: string | null = null;
+      // if (roles.includes("Partner")) {
+      //   const storeRes = await getMyStoreAPI();
+      //   myStoreId = storeRes.data.storeId;
+      // }
+
       const payload = {
         ...fetchProfileRes.data,
         roles,
@@ -84,17 +91,45 @@ export default function HomePage() {
 
       form.reset();
       toast.success("Đăng nhập thành công");
-      setTimeout(() => {
-        if (roles.includes("Admin")) {
-          router.replace("/admin/dashboard");
-        } else if (roles.includes("PartnerAdmin") && !roles.includes("Admin")) {
-          router.replace("/partner/dashboard");
-        } else if (roles.includes("Warehouse") && !roles.includes("Admin")) {
-          router.replace("/warehouse/dashboard");
-        } else if (roles.includes("Customer") && !roles.includes("Admin")) {
-          toast.error("Hệ thống dành cho quản trị viên!");
-        }
-      }, 1000);
+
+      // setTimeout(() => {
+      //   if (roles.includes("Admin")) {
+      //     router.replace("/admin/dashboard");
+      //   } else if (roles.includes("PartnerAdmin")) {
+      //     router.replace("/partner/dashboard");
+      //   } else if (roles.includes("Warehouse")) {
+      //     router.replace("/warehouse/dashboard");
+      //   } else if (roles.includes("Partner") && myStoreId) {
+      //     router.replace(`/store-order/${myStoreId}`);
+      //   } else if (roles.includes("Customer")) {
+      //     toast.error("Hệ thống dành cho quản trị viên!");
+      //   }
+      // }, 1000);
+
+      if (roles.includes("Admin")) {
+        router.replace("/admin/dashboard");
+        return;
+      }
+
+      if (roles.includes("PartnerAdmin")) {
+        router.replace("/partner/dashboard");
+        return;
+      }
+
+      if (roles.includes("Warehouse")) {
+        router.replace("/warehouse/dashboard");
+        return;
+      }
+
+      if (roles.includes("Partner")) {
+        const storeRes = await getMyStoreAPI();
+        router.replace(`/store-order/${storeRes.data[0].storeId}`);
+        return;
+      }
+
+      if (roles.includes("Customer")) {
+        toast.error("Hệ thống dành cho quản trị viên!");
+      }
     } catch (error) {
       toast.error("Đăng nhập thất bại");
     } finally {

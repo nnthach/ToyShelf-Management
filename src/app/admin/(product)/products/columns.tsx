@@ -29,8 +29,8 @@ export const getProductColumns = (
   },
 
   {
-    accessorKey: "ageRange",
-    header: "Độ tuổi",
+    accessorKey: "brand",
+    header: "Thương hiệu",
   },
 
   {

@@ -6,12 +6,13 @@ export interface QueryParams {
   order?: string;
   isActive?: boolean;
   partnerId?: string;
-  storeId?: string; 
+  storeId?: string;
   storeRole?: string;
+  brand?: string;
 }
 
 export interface SelectOption {
-  value: string | number ;
+  value: string | number;
   label: string;
 }
 
