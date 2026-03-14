@@ -203,6 +203,12 @@ export interface Inventory {
   quantity: 0;
 }
 
+export interface InventoryDisposition {
+  id: string;
+  code: string;
+  description: string;
+}
+
 export interface InventoryLocation {
   id: string;
   type: string;

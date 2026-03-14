@@ -90,7 +90,13 @@ export default function StoreOrderPage() {
     console.log("payload", payload);
     try {
       const res = await paymentCheckoutAPI(payload);
-      console.log("res", res.data);
+      console.log("res", res.checkoutUrl);
+
+      const checkoutUrl = res?.checkoutUrl;
+
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      }
     } catch (error) {
       console.log("checkout err", error);
     }
