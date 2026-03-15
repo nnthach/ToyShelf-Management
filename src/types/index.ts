@@ -195,6 +195,13 @@ export interface StoreInvite {
   status: "Pending" | "Accepted" | "Rejected" | "Expired";
 }
 
+export interface MyStore {
+  storeId: string;
+  storeRole: string;
+  storeName: string;
+  storeCode: string;
+}
+
 export interface Inventory {
   id: string;
   inventoryLocationId: string;

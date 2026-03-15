@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   logout,
   setLoading,
+  setMyStore,
   setPartner,
   setUser,
 } from "../redux/slice/authSlice";
@@ -13,10 +14,11 @@ import {
 } from "../services/user.service";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { getMyStoreAPI } from "../services/store-invite.service";
 
 export function useAuth() {
   const router = useRouter();
-  const { user, partner } = useAppSelector((state) => state.auth);
+  const { user, partner, myStore } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const initAuth = async () => {
@@ -34,6 +36,11 @@ export function useAuth() {
             userId: userProfile.data.id,
           });
           dispatch(setPartner(partnerDetail));
+        }
+        if (roles.includes("Partner")) {
+          const myStoreRes = await getMyStoreAPI();
+          console.log("mystore", myStoreRes);
+          dispatch(setMyStore(myStoreRes.data[0]));
         }
 
         dispatch(setUser(data));
@@ -61,5 +68,5 @@ export function useAuth() {
     router.replace("/");
   };
 
-  return { user, partner, logout: logoutUser };
+  return { user, partner, myStore, logout: logoutUser };
 }

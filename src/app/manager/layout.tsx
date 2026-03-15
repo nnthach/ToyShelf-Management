@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { RolePermission } from "@/src/components/RolePermission";
 import { WarehouseClientShell } from "@/src/components/layout/WarehouseClient";
 
-export default async function WarehouseManagerLayout({
+export default async function StoreManagerLayout({
   children,
 }: {
   children: React.ReactNode;

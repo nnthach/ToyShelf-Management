@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import BarChartExample from "./components/charts/BarChart";
 import AreaChartExample from "./components/charts/AreaChart";
@@ -8,50 +10,53 @@ import FeedbackList from "./components/FeedbackList";
 import StatCard from "@/src/components/StatCard";
 import { Box, Server } from "lucide-react";
 import Image from "next/image";
+import { useAuth } from "@/src/hooks/useAuth";
 
-export default function WarehouseDashboard() {
+export default function StoreManagerDashboard() {
+  const { user, myStore } = useAuth();
+
+  console.log("user", user);
+  console.log("myStore", myStore);
+
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        {/* Banner chào*/}
-        <div className="relative rounded-xl overflow-hidden shadow-md col-span-3">
-          {/* Background image */}
+        <div className="relative rounded-xl overflow-hidden shadow-lg col-span-3 min-h-[180px] flex items-center">
+          {/* Background image với overlay chuyên nghiệp hơn */}
           <Image
             src="/images/banner_admin_hello.jpg"
-            alt="Banner"
+            alt="Manager Banner"
             fill
             className="object-cover"
           />
 
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-linear-to-r from-black/90 to-blue-700/70"></div>
+          {/* Gradient overlay: Chuyển từ Indigo sang Blue để tạo cảm giác quản lý tin cậy */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-blue-900/80 to-transparent"></div>
 
           {/* Content */}
-          <div className="relative z-10 px-6 py-6 text-white flex items-center justify-between">
-            <div className="flex flex-col gap-1 space-y-3">
-              {/* Company Name */}
+          <div className="relative z-10 px-8 py-6 text-white w-full flex justify-between items-center">
+            <div className="space-y-3">
+              {/* Lời chào & Tên Manager */}
               <h2 className="text-2xl font-bold tracking-wide">
-                {/* Xin chào, {partner?.fullName} */}
+                Xin chào, {user?.fullName}
               </h2>
 
-              {/* Partner Tier */}
-              <div className="flex items-center gap-2 text-sm">
-                <span className="px-2 py-0.5 rounded-md bg-blue-500/80 text-white text-xs font-medium">
-                  {/* {partnerDetail?.partnerTierName} */}
-                </span>
-
-                <span className="text-white/70 text-xs">
-                  {/* Uư tiên: {partnerDetail?.partnerTierPriority} */}
-                </span>
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Email */}
+                <span className="text-sm text-white italic">{user?.email}</span>
               </div>
 
-              {/* Representative */}
-              <p className="text-sm text-white/80">
-                {/* Công ty: {partnerDetail?.companyName} */}
-              </p>
-
-              {/* Email */}
-              {/* <p className="text-sm text-white/60">{partner?.email}</p> */}
+              {/* Tên Cửa hàng đang quản lý */}
+              <div className="flex items-center gap-2 pt-2">
+                <div>
+                  <p className="text-xs text-white/50 uppercase font-bold">
+                    Cửa hàng đang quản lý
+                  </p>
+                  <p className="text-lg font-semibold text-blue-100">
+                    {myStore?.storeName || "Chưa xác định cửa hàng"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

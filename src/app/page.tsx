@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import { setPartner, setUser } from "@/src/redux/slice/authSlice";
+import { setMyStore, setPartner, setUser } from "@/src/redux/slice/authSlice";
 import { Button } from "@/src/styles/components/ui/button";
 import {
   Card,
@@ -76,12 +76,11 @@ export default function HomePage() {
 
         dispatch(setPartner(partnerDetail));
       }
-
-      // let myStoreId: string | null = null;
-      // if (roles.includes("Partner")) {
-      //   const storeRes = await getMyStoreAPI();
-      //   myStoreId = storeRes.data.storeId;
-      // }
+      if (roles.includes("Partner")) {
+        const myStoreRes = await getMyStoreAPI();
+        console.log("mystore", myStoreRes);
+        dispatch(setMyStore(myStoreRes.data[0]));
+      }
 
       const payload = {
         ...fetchProfileRes.data,
@@ -92,20 +91,6 @@ export default function HomePage() {
 
       form.reset();
       toast.success("Đăng nhập thành công");
-
-      // setTimeout(() => {
-      //   if (roles.includes("Admin")) {
-      //     router.replace("/admin/dashboard");
-      //   } else if (roles.includes("PartnerAdmin")) {
-      //     router.replace("/partner/dashboard");
-      //   } else if (roles.includes("Warehouse")) {
-      //     router.replace("/warehouse/dashboard");
-      //   } else if (roles.includes("Partner") && myStoreId) {
-      //     router.replace(`/store-order/${myStoreId}`);
-      //   } else if (roles.includes("Customer")) {
-      //     toast.error("Hệ thống dành cho quản trị viên!");
-      //   }
-      // }, 1000);
 
       if (roles.includes("Admin")) {
         router.replace("/admin/dashboard");
@@ -123,8 +108,8 @@ export default function HomePage() {
       }
 
       if (roles.includes("Partner")) {
-        const storeRes = await getMyStoreAPI();
-        router.replace(`/store-order/${storeRes.data[0].storeId}`);
+        // router.replace(`/store-order/${storeRes.data[0].storeId}`);
+        router.replace("/manager/dashboard");
         return;
       }
 
