@@ -19,7 +19,7 @@ import {
 } from "@/src/styles/components/ui/field";
 import { Input } from "@/src/styles/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LogIn, Notebook } from "lucide-react";
+import { Eye, EyeOff, LogIn, Notebook } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -45,6 +45,7 @@ export default function HomePage() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isViewPassword, setIsViewPassword] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -198,14 +199,28 @@ export default function HomePage() {
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="gap-1">
                     <FieldLabel htmlFor="password">Mật khẩu</FieldLabel>
-                    <Input
-                      {...field}
-                      id="password"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="******"
-                      type="password"
-                      autoComplete="off"
-                    />
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        id="password"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="******"
+                        type={isViewPassword ? "text" : "password"}
+                        autoComplete="off"
+                        className="pr-10"
+                      />
+
+                      <span
+                        onClick={() => setIsViewPassword(!isViewPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                      >
+                        {isViewPassword ? (
+                          <EyeOff size={18} className="text-gray-500" />
+                        ) : (
+                          <Eye size={18} className="text-gray-500" />
+                        )}
+                      </span>
+                    </div>
                     {fieldState.error && (
                       <FieldError errors={[fieldState.error]} />
                     )}

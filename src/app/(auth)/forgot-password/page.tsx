@@ -15,7 +15,7 @@ import {
 } from "@/src/styles/components/ui/card";
 import { FieldGroup, FieldLabel } from "@/src/styles/components/ui/field";
 import { Input } from "@/src/styles/components/ui/input";
-import { ArrowLeft, LogIn, Mail } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, LogIn, Mail } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,6 +25,8 @@ export default function ForgotPasswordPage() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isViewPassword, setIsViewPassword] = useState(false);
+  const [isViewNewPassword, setIsViewNewPassword] = useState(false);
 
   const [forgotPasswordStep, setForgotPasswordStep] = useState(1);
 
@@ -131,34 +133,58 @@ export default function ForgotPasswordPage() {
                 </FieldGroup>
                 <FieldGroup className="gap-1">
                   <FieldLabel htmlFor="newPassword">Mật khẩu mới</FieldLabel>
-                  <Input
-                    type="password"
-                    value={form.newPassword}
-                    placeholder="******"
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        newPassword: e.target.value,
-                      }))
-                    }
-                  />
+                  <div className="relative">
+                    <Input
+                      type={isViewPassword ? "text" : "password"}
+                      value={form.newPassword}
+                      placeholder="******"
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          newPassword: e.target.value,
+                        }))
+                      }
+                    />
+                    <span
+                      onClick={() => setIsViewPassword(!isViewPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                    >
+                      {isViewPassword ? (
+                        <EyeOff size={18} className="text-gray-500" />
+                      ) : (
+                        <Eye size={18} className="text-gray-500" />
+                      )}
+                    </span>
+                  </div>
                 </FieldGroup>
 
                 <FieldGroup className="gap-1">
                   <FieldLabel htmlFor="confirmPassword">
                     Xác nhận mật khẩu mới
                   </FieldLabel>
-                  <Input
-                    type="password"
-                    value={form.confirmPassword}
-                    placeholder="******"
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        confirmPassword: e.target.value,
-                      }))
-                    }
-                  />
+                  <div className="relative">
+                    <Input
+                      type={isViewNewPassword ? "text" : "password"}
+                      value={form.confirmPassword}
+                      placeholder="******"
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          confirmPassword: e.target.value,
+                        }))
+                      }
+                    />
+                    <span
+                      onClick={() => setIsViewNewPassword(!isViewNewPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                    >
+                      {isViewNewPassword ? (
+                        <EyeOff size={18} className="text-gray-500" />
+                      ) : (
+                        <Eye size={18} className="text-gray-500" />
+                      )}
+                    </span>
+                  </div>
                 </FieldGroup>
               </>
             )}
