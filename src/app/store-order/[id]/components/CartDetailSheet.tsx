@@ -64,7 +64,7 @@ export default function CartDetailSheet({
         </Button>
       </SheetTrigger>
 
-      <SheetContent className="w-[420px] sm:w-[520px] flex flex-col">
+      <SheetContent className="w-full sm:w-[520px] flex flex-col">
         <SheetHeader>
           <SheetTitle>Giỏ hàng ({totalQuantity})</SheetTitle>
         </SheetHeader>

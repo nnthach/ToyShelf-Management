@@ -1,7 +1,10 @@
-import React from 'react'
+import { Suspense } from "react";
+import PaymentClient from "./PaymentClient";
 
 export default function PaymentPage() {
   return (
-    <div>PaymentPage</div>
-  )
+    <Suspense fallback={<div>Loading payment...</div>}>
+      <PaymentClient />
+    </Suspense>
+  );
 }

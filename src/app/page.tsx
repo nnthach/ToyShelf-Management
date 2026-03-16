@@ -74,7 +74,7 @@ export default function HomePage() {
           userId: fetchProfileRes.data.id,
         });
 
-        dispatch(setPartner(partnerDetail));
+        dispatch(setPartner(partnerDetail.data));
       }
       if (roles.includes("Partner")) {
         const myStoreRes = await getMyStoreAPI();
@@ -140,7 +140,7 @@ export default function HomePage() {
                 />
               </div>
               {/*#0D47A1 */}
-              <p className="text-[#1E88E5] font-bold text-xl">ToysShelf</p>
+              <p className="text-[#1E88E5] font-bold text-xl">ToyShelf</p>
             </div>
           </CardTitle>
           <CardDescription>Đăng nhập</CardDescription>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@/src/types";
+import { Product, RefillRequestProductColor } from "@/src/types";
 import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
 import {
   Sheet,
@@ -14,13 +14,8 @@ import { Button } from "@/src/styles/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 
-type CartItem = {
-  productColorId: string;
-  quantity: number;
-};
-
 type Props = {
-  cart: CartItem[];
+  cart: RefillRequestProductColor[];
   products: Product[];
   onAdd: (id: string) => void;
   onRemove: (id: string) => void;

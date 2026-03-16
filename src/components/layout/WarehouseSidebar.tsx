@@ -42,13 +42,13 @@ const WarehouseSidebar = () => {
           <div className="relative w-[50px] h-[50px]">
             <Image
               src="/images/finallogo.png"
-              alt="ToysShelf logo"
+              alt="ToyShelf logo"
               fill
               className="object-contain"
             />
           </div>
           {/*#0D47A1 */}
-          <p className="text-[#1E88E5] font-bold text-xl">ToysShelf</p>
+          <p className="text-[#1E88E5] font-bold text-xl">ToyShelf</p>
         </Link>
       </SidebarHeader>
 

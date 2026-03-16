@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
                 />
               </div>
               {/*#0D47A1 */}
-              <p className="text-[#1E88E5] font-bold text-xl">ToysShelf</p>
+              <p className="text-[#1E88E5] font-bold text-xl">ToyShelf</p>
             </div>
           </CardTitle>
           <CardDescription>Đặt lại mật khẩu</CardDescription>

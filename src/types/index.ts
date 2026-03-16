@@ -225,8 +225,13 @@ export interface InventoryLocation {
 }
 
 export interface RefillRequestProductColor {
-  productColorId: string;
+  productColorId?: string;
+  productName?: string;
+  sku?: string;
+  imageUrl?: string;
+  price?: number;
   quantity: number;
+  subTotal?: number;
 }
 
 export interface RefillRequest {
@@ -240,5 +245,16 @@ export interface RefillRequest {
   createdAt: string;
   approvedAt: string;
   rejectedAt: string;
+  items: RefillRequestProductColor[];
+}
+
+export interface Payment {
+  id: string;
+  orderCode: number;
+  totalAmount: number;
+  paymentMethod: string;
+  status: string;
+  createdAt: string;
+  storeName: string;
   items: RefillRequestProductColor[];
 }
