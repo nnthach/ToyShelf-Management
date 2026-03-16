@@ -4,18 +4,14 @@ import { Download, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
-import { Store } from "@/src/types";
+import { RefillRequest } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { getStoreCreateRequestColumns } from "./columns";
-import {
-  deleteStoreCreationRequestAPI,
-  getAllStoreCreationRequestAPI,
-} from "@/src/services/store-create-request.service";
-import { toast } from "react-toastify";
+import { getStoreRefillRequestColumns } from "./columns";
 import { useState } from "react";
-import UpdateStoreCreateRequestModal from "./components/UpdateRefillRequestModal";
+import { getAllRefillAPI } from "@/src/services/refill.service";
+import UpdateRefillRequestModal from "./components/UpdateRefillRequestModal";
 
 export default function AdminRefillRequestManage() {
   const queryClient = useQueryClient();
@@ -29,58 +25,33 @@ export default function AdminRefillRequestManage() {
   });
 
   const {
-    data: storeCreateRequestList = [],
+    data: refillRequestList = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["storeRequests", query],
-    queryFn: () => getAllStoreCreationRequestAPI(query),
-    select: (res) => res.data as Store[],
+    queryKey: ["refillRequests", query],
+    queryFn: () => getAllRefillAPI(query),
+    select: (res) => res.data as RefillRequest[],
   });
 
-  const handleEdit = (cityId: string) => {
-    setSelectedRequestId(cityId);
+  const handleEdit = (requestId: string) => {
+    setSelectedRequestId(requestId);
   };
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteStoreCreationRequestAPI,
-    onSuccess: () => {
-      toast.success("Xóa thành công");
-
-      // reload danh sách
-      queryClient.invalidateQueries({
-        queryKey: ["storeRequests"],
-      });
-    },
-    onError: () => {
-      toast.error("Xóa thất bại");
-    },
-  });
-
-  const handleDelete = (cityId: string) => {
-    const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xóa yêu cầu này không?",
-    );
-
-    if (!confirmDelete) return;
-
-    deleteMutation.mutate(cityId);
-  };
-
-  const columns = getStoreCreateRequestColumns(handleDelete, handleEdit);
+  const columns = getStoreRefillRequestColumns(handleEdit);
 
   return (
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Yêu cầu tạo cửa hàng</h1>
+        <h1 className="text-4xl font-bold">Yêu cầu bổ sung hàng</h1>
       </div>
 
       {/*Table */}
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={storeCreateRequestList ?? []}
+          data={refillRequestList ?? []}
           isLoading={isLoading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -88,7 +59,7 @@ export default function AdminRefillRequestManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={storeCreateRequestList.length}
+              resultCount={refillRequestList.length}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -112,7 +83,7 @@ export default function AdminRefillRequestManage() {
       </div>
 
       {selectedRequestId && (
-        <UpdateStoreCreateRequestModal
+        <UpdateRefillRequestModal
           requestId={selectedRequestId}
           isOpen={!!selectedRequestId}
           onClose={() => {

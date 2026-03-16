@@ -1,46 +1,38 @@
 "use client";
 
-import { Store } from "@/src/types";
+import { RefillRequest, Store } from "@/src/types";
 import {
   formatStoreCreateRequestStatusColor,
   formatStoreCreateRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Eye, Trash } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const getStoreCreateRequestColumns = (
-  onDelete: (tierId: string) => void,
-  onEdit: (tierId: string) => void,
-): ColumnDef<Store>[] => [
+export const getStoreRefillRequestColumns = (
+  onEdit: (requestId: string) => void,
+): ColumnDef<RefillRequest>[] => [
   {
-    accessorKey: "requestedByUserId",
-    header: "Người tạo",
+    accessorKey: "code",
+    header: "Mã",
   },
   {
-    accessorKey: "name",
-    header: "Tên cửa hàng",
-  },
-  {
-    accessorKey: "phoneNumber",
-    header: "Số điện thoại",
-  },
-  {
-    accessorKey: "storeAddress",
-    header: "Địa chỉ",
+    accessorKey: "storeLocationId",
+    header: "Địa chỉ yêu cầu",
     cell: ({ row }) => {
-      const storeAddress = row.getValue("storeAddress") as string;
+      const storeLocationId = row.getValue("storeLocationId") as string;
 
       return (
         <div className="w-[200px]">
-          <p className="text-sm text-gray-700 line-clamp-2">{storeAddress}</p>
+          <p className="text-sm text-gray-700 line-clamp-2">
+            {storeLocationId}
+          </p>
         </div>
       );
     },
   },
-
   {
     accessorKey: "status",
     header: "Trạng thái",
@@ -58,22 +50,15 @@ export const getStoreCreateRequestColumns = (
     accessorKey: "action",
     header: "Hành động",
     cell: ({ row }) => {
-      const storeCreateRequest = row.original;
+      const storeRefillRequest = row.original;
       return (
         <div className="flex items-center gap-3">
           <span
-            onClick={() => onEdit(storeCreateRequest.id)}
+            onClick={() => onEdit(storeRefillRequest.id)}
             title="Chi tiết"
             className="cursor-pointer text-blue-400"
           >
-            <Edit size={20} />
-          </span>
-          <span
-            onClick={() => onDelete(storeCreateRequest.id)}
-            title="Xóa"
-            className="cursor-pointer text-red-400"
-          >
-            <Trash size={20} />
+            <Eye size={20} />
           </span>
         </div>
       );

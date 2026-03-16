@@ -1,17 +1,17 @@
 "use client";
 
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { getStaffColumns } from "./columns";
+import { getShipperColumns } from "./columns";
 import { Button } from "@/src/styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
-import CreateStaffModal from "./components/CreateStaffModal";
+import CreateStaffModal from "./components/CreateShipperModal";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllUserAPI } from "@/src/services/user.service";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
 
-export default function WarehouseUserManage() {
+export default function WarehouseShipperManage() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
@@ -19,29 +19,29 @@ export default function WarehouseUserManage() {
   });
 
   const {
-    data: staffList = [],
+    data: shipperList = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["staffs", query],
+    queryKey: ["shippers", query],
     queryFn: () => getAllUserAPI(query),
     select: (res) => res.data,
   });
 
-  const columns = getStaffColumns();
+  const columns = getShipperColumns();
 
   return (
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý nhân viên</h1>
+        <h1 className="text-4xl font-bold ">Quản lý nhân viên giao hàng</h1>
         <CreateStaffModal />
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={staffList ?? []}
+          data={shipperList ?? []}
           isLoading={isLoading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -49,7 +49,7 @@ export default function WarehouseUserManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={staffList.length}
+              resultCount={shipperList.length}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({

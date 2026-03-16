@@ -1,4 +1,3 @@
-import { ProductStatus } from "../enums/product-status.enum";
 import { StoreStatus } from "../enums/store-status.enum";
 import { UserStatus } from "../enums/user-status.enum";
 
@@ -223,4 +222,23 @@ export interface InventoryLocation {
   storeId: string;
   name: string;
   isActive: boolean;
+}
+
+export interface RefillRequestProductColor {
+  productColorId: string;
+  quantity: number;
+}
+
+export interface RefillRequest {
+  id: string;
+  code: string;
+  storeLocationId: string;
+  requestedByUserId: string;
+  approvedByUserId: string;
+  rejectedByUserId: string;
+  status: string;
+  createdAt: string;
+  approvedAt: string;
+  rejectedAt: string;
+  items: RefillRequestProductColor[];
 }

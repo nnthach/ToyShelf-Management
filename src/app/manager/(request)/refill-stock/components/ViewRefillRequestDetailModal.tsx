@@ -18,7 +18,6 @@ import {
   formatStoreCreateRequestStatusColor,
   formatStoreCreateRequestStatusText,
 } from "@/src/utils/formatStatus";
-import ReasonStoreCreateRequestModal from "./ReasonRefillRequestModal";
 import { useState } from "react";
 import {
   Store,
@@ -29,44 +28,25 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
+import { getRefillDetailAPI } from "@/src/services/refill.service";
 
-type UpdateRefillRequestModalProps = {
+type ViewRefillRequestModalDetailProps = {
   requestId: string;
   isOpen: boolean;
   onClose: () => void;
 };
 
-function UpdateRefillRequestModal({
+function ViewRefillRequestModalDetail({
   requestId,
   isOpen,
   onClose,
-}: UpdateRefillRequestModalProps) {
-  const queryClient = useQueryClient();
-
-  const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
-
+}: ViewRefillRequestModalDetailProps) {
   const { data: requestDetail, isLoading } = useQuery({
     queryKey: ["requestDetail", requestId],
-    queryFn: () => getStoreCreationRequestDetailAPI(requestId!),
+    queryFn: () => getRefillDetailAPI(requestId!),
     select: (res) => res.data,
     enabled: !!requestId,
   });
-
-  async function handleApprove() {
-    try {
-      await reviewStoreCreationRequestAPI({ status: "Approved" }, requestId);
-
-      queryClient.invalidateQueries({
-        queryKey: ["storeRequests"],
-      });
-
-      toast.success("Chấp nhận yêu cầu thành công");
-
-      onClose();
-    } catch {
-      toast.error("Chấp nhận yêu cầu thất bại");
-    }
-  }
 
   const isPending = requestDetail?.status === "Pending";
   const isRejected = requestDetail?.status === "Rejected";
@@ -81,9 +61,9 @@ function UpdateRefillRequestModal({
       >
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Chi tiết yêu cầu tạo cửa hàng</DialogTitle>
+            <DialogTitle>Chi tiết yêu cầu bổ sung hàng</DialogTitle>
             <DialogDescription>
-              Xem thông tin yêu cầu trước khi phê duyệt.
+              Xem thông tin yêu cầu.
             </DialogDescription>
           </DialogHeader>
 
@@ -172,56 +152,10 @@ function UpdateRefillRequestModal({
               )}
             </div>
           )}
-
-          {/* Actions */}
-          {isPending && (
-            <DialogFooter className="gap-2 pt-4">
-              <Button
-                variant={"error"}
-                onClick={() => setIsOpenRejectModal(true)}
-              >
-                <XCircle />
-                Từ chối
-              </Button>
-              <Button variant={"success"} onClick={handleApprove}>
-                <CheckCircle2 />
-                Chấp nhận
-              </Button>
-            </DialogFooter>
-          )}
-
-          {isRejected && (
-            <DialogFooter className="gap-2">
-              <Button variant={"success"} onClick={handleApprove}>
-                <CheckCircle2 />
-                Chấp nhận
-              </Button>
-            </DialogFooter>
-          )}
-
-          {!isRejected && !isPending && (
-            <DialogFooter className="gap-2">
-              <Button
-                variant={"error"}
-                onClick={() => setIsOpenRejectModal(true)}
-              >
-                <XCircle />
-                Từ chối
-              </Button>
-            </DialogFooter>
-          )}
         </DialogContent>
       </Dialog>
-
-      {/* Reject reason modal */}
-      <ReasonStoreCreateRequestModal
-        requestId={requestId}
-        isOpen={isOpenRejectModal}
-        onClose={() => setIsOpenRejectModal(false)}
-        onSuccess={onClose}
-      />
     </>
   );
 }
 
-export default UpdateRefillRequestModal;
+export default ViewRefillRequestModalDetail;

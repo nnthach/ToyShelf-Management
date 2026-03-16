@@ -13,7 +13,7 @@ import { formatDateTime } from "@/src/utils/format";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const getStaffColumns = (): ColumnDef<User>[] => [
+export const getShipperColumns = (): ColumnDef<User>[] => [
   {
     accessorKey: "fullName",
     header: "Tên đầy đủ",

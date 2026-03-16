@@ -1,7 +1,7 @@
 import { SidebarProvider } from "../../styles/components/ui/sidebar";
 import { cookies } from "next/headers";
 import { RolePermission } from "@/src/components/RolePermission";
-import { WarehouseClientShell } from "@/src/components/layout/WarehouseClient";
+import { StoreManagerClientShell } from "@/src/components/layout/StoreManagerClient";
 
 export default async function StoreManagerLayout({
   children,
@@ -15,7 +15,7 @@ export default async function StoreManagerLayout({
     // <RolePermission allowedRoles={["Warehouse"]}>
     <div className="flex bg-[#FAF9FE] dark:bg-neutral-800">
       <SidebarProvider defaultOpen={defaultOpen}>
-        <WarehouseClientShell>{children}</WarehouseClientShell>
+        <StoreManagerClientShell>{children}</StoreManagerClientShell>
       </SidebarProvider>
     </div>
     // </RolePermission>

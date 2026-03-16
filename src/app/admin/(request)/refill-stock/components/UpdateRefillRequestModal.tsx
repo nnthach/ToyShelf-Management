@@ -11,15 +11,9 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
-  getStoreCreationRequestDetailAPI,
-  reviewStoreCreationRequestAPI,
-} from "@/src/services/store-create-request.service";
-import {
   formatStoreCreateRequestStatusColor,
   formatStoreCreateRequestStatusText,
 } from "@/src/utils/formatStatus";
-import ReasonStoreCreateRequestModal from "./ReasonRefillRequestModal";
-import { useState } from "react";
 import {
   Store,
   MapPin,
@@ -29,6 +23,11 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
+import {
+  approveRefillRequestAPI,
+  getRefillDetailAPI,
+  rejectRefillRequestAPI,
+} from "@/src/services/refill.service";
 
 type UpdateRefillRequestModalProps = {
   requestId: string;
@@ -43,21 +42,19 @@ function UpdateRefillRequestModal({
 }: UpdateRefillRequestModalProps) {
   const queryClient = useQueryClient();
 
-  const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
-
   const { data: requestDetail, isLoading } = useQuery({
     queryKey: ["requestDetail", requestId],
-    queryFn: () => getStoreCreationRequestDetailAPI(requestId!),
+    queryFn: () => getRefillDetailAPI(requestId!),
     select: (res) => res.data,
     enabled: !!requestId,
   });
 
   async function handleApprove() {
     try {
-      await reviewStoreCreationRequestAPI({ status: "Approved" }, requestId);
+      await approveRefillRequestAPI(requestId);
 
       queryClient.invalidateQueries({
-        queryKey: ["storeRequests"],
+        queryKey: ["refillRequests"],
       });
 
       toast.success("Chấp nhận yêu cầu thành công");
@@ -65,6 +62,22 @@ function UpdateRefillRequestModal({
       onClose();
     } catch {
       toast.error("Chấp nhận yêu cầu thất bại");
+    }
+  }
+
+  async function handleReject() {
+    try {
+      await rejectRefillRequestAPI(requestId);
+
+      queryClient.invalidateQueries({
+        queryKey: ["refillRequests"],
+      });
+
+      toast.success("Từ chối yêu cầu thành công");
+
+      onClose();
+    } catch {
+      toast.error("Từ chối yêu cầu thất bại");
     }
   }
 
@@ -81,7 +94,7 @@ function UpdateRefillRequestModal({
       >
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Chi tiết yêu cầu tạo cửa hàng</DialogTitle>
+            <DialogTitle>Chi tiết yêu cầu bổ sung hàng</DialogTitle>
             <DialogDescription>
               Xem thông tin yêu cầu trước khi phê duyệt.
             </DialogDescription>
@@ -104,7 +117,7 @@ function UpdateRefillRequestModal({
                       {requestDetail?.name}
                     </h3>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Yêu cầu tạo cửa hàng mới
+                      Yêu cầu bổ sung hàng
                     </p>
                   </div>
                 </div>
@@ -176,10 +189,7 @@ function UpdateRefillRequestModal({
           {/* Actions */}
           {isPending && (
             <DialogFooter className="gap-2 pt-4">
-              <Button
-                variant={"error"}
-                onClick={() => setIsOpenRejectModal(true)}
-              >
+              <Button variant={"error"} onClick={handleReject}>
                 <XCircle />
                 Từ chối
               </Button>
@@ -201,10 +211,7 @@ function UpdateRefillRequestModal({
 
           {!isRejected && !isPending && (
             <DialogFooter className="gap-2">
-              <Button
-                variant={"error"}
-                onClick={() => setIsOpenRejectModal(true)}
-              >
+              <Button variant={"error"} onClick={handleReject}>
                 <XCircle />
                 Từ chối
               </Button>
@@ -212,14 +219,6 @@ function UpdateRefillRequestModal({
           )}
         </DialogContent>
       </Dialog>
-
-      {/* Reject reason modal */}
-      <ReasonStoreCreateRequestModal
-        requestId={requestId}
-        isOpen={isOpenRejectModal}
-        onClose={() => setIsOpenRejectModal(false)}
-        onSuccess={onClose}
-      />
     </>
   );
 }

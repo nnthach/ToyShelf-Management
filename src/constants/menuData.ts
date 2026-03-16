@@ -240,11 +240,11 @@ export const WarehouseManagerSidebarGroups = [
   },
 
   {
-    label: "Nhân viên",
+    label: "Nhân viên giao hàng",
     items: [
       {
-        title: "Tài khoản nhân viên",
-        url: "/warehouse/staffs",
+        title: "Tài khoản nhân viên giao hàng",
+        url: "/warehouse/shipper",
         icon: UserStar,
       },
     ],
@@ -298,6 +298,74 @@ export const WarehouseManagerSidebarNested = [
       {
         title: "Trả hàng",
         url: "/admin/return-request",
+        icon: RotateCcw,
+      },
+    ],
+  },
+];
+
+// Store manager
+export const StoreManagerSidebarGroups = [
+  {
+    label: "Ứng dụng",
+    items: [
+      {
+        title: "Tổng quan",
+        url: "/manager/dashboard",
+        icon: LayoutDashboard,
+      },
+      { title: "Thông báo", url: "#", icon: Bell, badge: true },
+    ],
+  },
+
+  {
+    label: "Hàng tồn kho",
+    items: [
+      {
+        title: "Quản lý hàng tồn kho",
+        url: "/manager/inventory",
+        icon: UserStar,
+      },
+    ],
+  },
+
+  {
+    label: "Yêu cầu",
+    items: [
+      {
+        title: "Bổ sung hàng hóa",
+        url: "/manager/refill-stock",
+        icon: PackagePlus,
+      },
+
+      {
+        title: "Bổ sung kệ",
+        url: "/manager/refill-shelf",
+        icon: LayoutGrid,
+      },
+
+      {
+        title: "Trả hàng",
+        url: "/manager/return-request",
+        icon: RotateCcw,
+      },
+
+      {
+        title: "Thu hồi tủ",
+        url: "/manager/return-shelf",
+        icon: ArchiveRestore,
+      },
+    ],
+  },
+];
+
+export const StoreManagerSidebarNested = [
+  {
+    label: "Yêu cầu",
+    sub: [
+      {
+        title: "Trả hàng",
+        url: "/manager/return-request",
         icon: RotateCcw,
       },
     ],

@@ -78,7 +78,6 @@ export default function HomePage() {
       }
       if (roles.includes("Partner")) {
         const myStoreRes = await getMyStoreAPI();
-        console.log("mystore", myStoreRes);
         dispatch(setMyStore(myStoreRes.data[0]));
       }
 

@@ -15,7 +15,7 @@ import { Mail, Plus, Send, Sparkles, User } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 
-function CreateStaffModal() {
+function CreateShipperModal() {
   const formSchema = z.object({
     fullname: z.string("").min(1, "Tên đầy đủ bắt buộc phải nhập"),
     adminOfStore: z.string("").min(1, "Của cửa hàng bắt buộc phải nhập"),
@@ -46,14 +46,14 @@ function CreateStaffModal() {
     >
       <DialogTrigger asChild>
         <Button className="btn-primary-gradient">
-          <Plus /> Thêm nhân viên
+          <Plus /> Tài khoản nhân viên giao hàng
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden border-none shadow-2xl">
         {/* Header: Chuyên nghiệp với icon Sparkles */}
         <DialogHeader className="p-6 bg-slate-50/50 border-b">
           <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
-            Thêm nhân viên mới
+            Tạo tài khoản nhân viên giao hàng
           </DialogTitle>
           <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
             <Sparkles size={14} className="text-violet-500" />
@@ -111,4 +111,4 @@ function CreateStaffModal() {
   );
 }
 
-export default CreateStaffModal;
+export default CreateShipperModal;
