@@ -1,5 +1,6 @@
 "use client";
 
+import { getAllRoleAPI } from "@/src/services/role.service";
 import { inviteToStoreAPI } from "@/src/services/store-invite.service";
 import { getAllPartnerStoreAPI } from "@/src/services/store.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
@@ -14,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import { Store } from "@/src/types";
+import { Role, Store } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,7 +42,7 @@ function CreateStoreInviteModal() {
     defaultValues: {
       email: "",
       storeId: "",
-      storeRole: "Manager",
+      storeRole: "",
     },
   });
 
@@ -55,6 +56,14 @@ function CreateStoreInviteModal() {
     value: store.id,
     label: store.name,
   }));
+
+  const roleOptions = [
+    { value: "Staff", label: "Nhân viên cửa hàng" },
+    {
+      value: "Manager",
+      label: "Quản lý cửa hàng",
+    },
+  ];
 
   async function onSubmit(data: z.input<typeof formSchema>) {
     try {
@@ -124,6 +133,15 @@ function CreateStoreInviteModal() {
                 label="Email người nhận"
                 placeholder="đia-chi-email@gmail.com"
                 icon={<Mail size={18} />}
+              />
+
+              <FormFieldCustom
+                name="storeRole"
+                label="Chức vụ"
+                placeholder="Chọn chức vụ"
+                type="select"
+                selectData={roleOptions}
+                icon={<StoreIcon size={18} />}
               />
 
               <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100">

@@ -377,3 +377,39 @@ export const StoreManagerSidebarNested = [
     ],
   },
 ];
+
+export const StoreStaffSidebarGroups = [
+  {
+    label: "Ứng dụng",
+    items: [
+      {
+        title: "Tổng quan",
+        url: "/manager/dashboard",
+        icon: LayoutDashboard,
+      },
+      { title: "Thông báo", url: "#", icon: Bell, badge: true },
+    ],
+  },
+
+  {
+    label: "Hàng tồn kho",
+    items: [
+      {
+        title: "Quản lý hàng tồn kho",
+        url: "/staff/inventory",
+        icon: UserStar,
+      },
+    ],
+  },
+
+  {
+    label: "Đơn hàng",
+    items: [
+      {
+        title: "Danh sách đơn hàng",
+        url: "/staff/order",
+        icon: UserStar,
+      },
+    ],
+  },
+];
