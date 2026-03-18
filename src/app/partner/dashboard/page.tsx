@@ -22,10 +22,7 @@ export default function AdminDashboard() {
 
   const partnerId = partner?.partnerId;
 
-  const {
-    data: partnerDetail,
-    isLoading,
-  } = useQuery({
+  const { data: partnerDetail, isLoading } = useQuery({
     queryKey: ["partner", partnerId],
     queryFn: () => getPartnerDetailAPI(partnerId!),
     select: (res) => res.data,
@@ -82,7 +79,7 @@ export default function AdminDashboard() {
 
         {/*Thông tin cá nhân */}
         <div className="bg-background shadow-sm rounded-lg col-span-1 h-[30vh] w-full">
-          <h1>Alo alo</h1>
+          <h1>thong tin hop dong</h1>
         </div>
       </div>
 

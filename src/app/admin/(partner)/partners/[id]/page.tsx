@@ -17,7 +17,11 @@ export default function ViewPartnerDetailPage() {
   const { id: partnerId } = useParams<{ id: string }>();
   const router = useRouter();
 
-  const { data: partnerDetail, isLoading ,refetch} = useQuery({
+  const {
+    data: partnerDetail,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["partner", partnerId],
     queryFn: () => getPartnerDetailAPI(partnerId!),
     select: (res) => res.data,
@@ -80,11 +84,13 @@ export default function ViewPartnerDetailPage() {
 
               {/* Representative */}
               <p className="text-sm text-white/80">
-                Người đại diện: Nguyễn Ngọc Thạch
+                Người đại diện: {partnerDetail?.partnerAccount?.fullName}
               </p>
 
               {/* Email */}
-              <p className="text-sm text-white/60">nguyenthach@gmail.com</p>
+              <p className="text-sm text-white/60">
+                {partnerDetail?.partnerAccount?.email}
+              </p>
             </div>
           </div>
         </div>
@@ -94,8 +100,13 @@ export default function ViewPartnerDetailPage() {
           <p className="text-sm text-muted-foreground">
             Chưa có thông tin hợp đồng
           </p>
-
-          <CreatePartnerAccountModal />
+          {partnerDetail?.partnerAccount ? (
+            <p className="text-sm text-white/60">
+              {partnerDetail?.partnerAccount?.email}
+            </p>
+          ) : (
+            <CreatePartnerAccountModal />
+          )}
         </div>
       </div>
 
@@ -137,7 +148,7 @@ export default function ViewPartnerDetailPage() {
           color="bg-blue-100 text-blue-900"
         />
       </div>
-      
+
       {/*Content */}
       <div className="mt-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">

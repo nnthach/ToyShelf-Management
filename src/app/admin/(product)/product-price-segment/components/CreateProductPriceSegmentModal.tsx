@@ -128,7 +128,7 @@ function CreateProductPriceSegmentModal() {
                   label="Giá tối thiểu"
                   placeholder="0"
                   type="number"
-                  labelNote="(VNĐ)"
+                  labelNote="VNĐ"
                   icon={<ArrowDownWideNarrow size={18} />}
                 />
 
@@ -138,7 +138,7 @@ function CreateProductPriceSegmentModal() {
                   label="Giá tối đa"
                   placeholder="Ví dụ: 1,000,000"
                   type="number"
-                  labelNote="(VNĐ)"
+                  labelNote="VNĐ"
                   icon={<ArrowUpWideNarrow size={18} />}
                 />
               </div>
