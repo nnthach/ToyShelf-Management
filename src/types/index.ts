@@ -76,6 +76,7 @@ export interface ProductColorItem {
   qrCode: string;
   model3DUrl: string;
   imageUrl: string;
+  hexcode: string;
   isActive: boolean;
 }
 

@@ -89,7 +89,7 @@ function EditProductInfoLeft() {
         <div className="grid grid-cols-2 gap-4">
           <FormFieldCustom
             name="price"
-            label="Giá bán"
+            label="Giá sản phẩm"
             placeholder="0"
             type="number"
             icon={<DollarSign size={18} />} // Icon Giá

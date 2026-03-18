@@ -48,46 +48,57 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
         >
           <div className="bg-white/90 backdrop-blur-sm px-3 py-2 text-xs">
             <div className="flex justify-between">
-              <span className="text-gray-500">SKU</span>
+              <span className="text-gray-500">Mã sản phẩm</span>
               <span className="font-medium text-gray-900">
                 {selectedColor?.sku}
               </span>
             </div>
+
             <div className="flex justify-between">
-              <span className="text-gray-500">Giá</span>
+              <span className="text-gray-500">Chất liệu</span>
               <span className="font-medium text-gray-900">
-                {selectedColor?.price.toLocaleString()}đ
+                {product?.material}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-500">Hãng</span>
+              <span className="font-medium text-gray-900">
+                {product?.brand}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="text-gray-500">Độ tuổi</span>
+              <span className="font-medium text-gray-900">
+                {product?.ageRange}+
               </span>
             </div>
           </div>
         </div>
       </div>
-      {/* Name */}
-      <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
-        {product.name}
-      </h3>
-      {/* Base price nếu cần */}
-      <p className="text-sm text-gray-600 mb-2">
-        {product.price.toLocaleString()}đ
-      </p>
-      {/* Color selector */}
-      <div className="flex items-center gap-2">
-        {product.colors?.map((color, index) => (
-          <button
-            key={color.id}
-            onClick={() => setSelectedColorIndex(index)}
-            className={`w-4 h-4 rounded-full border-2 transition
-              ${
-                selectedColorIndex === index
-                  ? "border-black scale-110"
-                  : "border-gray-300"
-              }`}
-            style={{
-              backgroundColor: "#ccc", // nếu sau này bạn có màu thật thì thay bằng color.hex
-            }}
-          />
-        ))}
-      </div>{" "}
+      <div className="flex justify-between items-start">
+        <div>
+          {/* Name */}
+          <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
+            {product.name}
+          </h3>
+          {/* Base price nếu cần */}
+          <p className="text-sm text-gray-600 mb-2">
+            {selectedColor?.price.toLocaleString()}đ
+          </p>
+        </div>
+        {/* Color selector */}
+        <div className="flex items-center gap-2">
+          {product.colors?.map((color, index) => (
+            <button
+              key={color.id}
+              onClick={() => setSelectedColorIndex(index)}
+              className="w-5 h-5 rounded-full border-2 transition"
+              style={{ backgroundColor: color.hexcode }}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

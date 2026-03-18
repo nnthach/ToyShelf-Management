@@ -61,7 +61,7 @@ function ProductColorItem({
 
               <FormFieldCustom
                 name={`colors.${index}.price`}
-                label="Giá sản phẩm"
+                label="Giá theo màu"
                 placeholder="Nhập giá cho màu này"
                 type="number"
                 icon={<Banknote size={18} />} // Icon tiền mặt

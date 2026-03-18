@@ -328,6 +328,12 @@ export const StoreManagerSidebarGroups = [
       },
     ],
   },
+  {
+    label: "Nhân viên cửa hàng",
+    items: [
+      { title: "Tài khoản nhân viên", url: "/manager/staffs", icon: UserStar },
+    ],
+  },
 
   {
     label: "Yêu cầu",
