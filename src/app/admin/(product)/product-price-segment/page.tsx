@@ -2,15 +2,12 @@
 
 import useQueryParams from "@/src/hooks/useQueryParams";
 
-import { useMemo, useState } from "react";
+import {useState } from "react";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { Button } from "@/src/styles/components/ui/button";
 import { Upload } from "lucide-react";
-import { useDebounce } from "@/src/hooks/useDebounce";
-import useFetchList from "@/src/hooks/useFetchList";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
-import { ProductPriceSegment } from "@/src/types";
 import {
   deleteProducePriceSegmentAPI,
   getAllProducePriceSegmentAPI,

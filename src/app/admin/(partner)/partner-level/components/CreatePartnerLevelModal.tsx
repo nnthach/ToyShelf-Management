@@ -27,18 +27,18 @@ function CreatePartnerTierModal() {
 
   const formSchema = z.object({
     name: z.string().min(1, "Tên cấp bậc đối tác là bắt buộc"),
-    priority: z
-      .string()
-      .min(1, "Ưu tiên là bắt buộc")
-      .refine((val) => !isNaN(Number(val)), "Ưu tiên phải là số")
-      .refine((val) => Number(val) >= 1, "Ưu tiên phải >= 1"),
+    priority: z.number().min(1, "Hãy nhập độ ưu tiên"),
+    // .string()
+    // .min(1, "Ưu tiên là bắt buộc")
+    // .refine((val) => !isNaN(Number(val)), "Ưu tiên phải là số")
+    // .refine((val) => Number(val) >= 1, "Ưu tiên phải >= 1"),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      priority: "1",
+      priority: 1,
     },
   });
 

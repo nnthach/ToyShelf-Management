@@ -34,16 +34,14 @@ function CreateProductPriceSegmentModal() {
 
   const formSchema = z.object({
     name: z.string().min(1, "Tên cấp bậc giá là bắt buộc"),
-    minPrice: z
-      .string()
-      .min(1, "Giá tối thiểu là bắt buộc")
-      .refine((val) => !isNaN(Number(val)), "Giá tối thiểu phải là số")
-      .refine((val) => Number(val) >= 1, "Giá tối thiểu phải >= 1"),
-    maxPrice: z
-      .string()
-      .min(1, "Giá tối đa là bắt buộc")
-      .refine((val) => !isNaN(Number(val)), "Giá tối đa phải là số")
-      .refine((val) => Number(val) >= 1, "Giá tối đa phải >= 1"),
+    minPrice: z.number().min(0, "Hãy nhập giá tối thiếu"),
+    // .min(1, "Giá tối thiểu là bắt buộc")
+    // .refine((val) => !isNaN(Number(val)), "Giá tối thiểu phải là số")
+    // .refine((val) => Number(val) >= 1, "Giá tối thiểu phải >= 1"),
+    maxPrice: z.number().min(1, "Hãy nhập giá tối đa"),
+    // .min(1, "Giá tối đa là bắt buộc")
+    // .refine((val) => !isNaN(Number(val)), "Giá tối đa phải là số")
+    // .refine((val) => Number(val) >= 1, "Giá tối đa phải >= 1"),
     code: z.string().optional(),
   });
 
@@ -53,8 +51,8 @@ function CreateProductPriceSegmentModal() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      minPrice: "0",
-      maxPrice: "0",
+      minPrice: 0,
+      maxPrice: 0,
       code: "",
     },
   });

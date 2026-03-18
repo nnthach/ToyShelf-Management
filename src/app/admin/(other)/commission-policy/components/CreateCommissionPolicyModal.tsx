@@ -39,14 +39,14 @@ function CreateCommissionPolicyModal() {
   const formSchema = z.object({
     partnerTierId: z.string().min(1, "Cấp bậc đối tác là bắt buộc"),
     priceSegmentId: z.string().min(1, "Phân khúc giá là bắt buộc"),
-    commissionRate: z
-      .string()
-      .min(1, "Tỷ lệ hoa hồng là bắt buộc")
-      .refine((val) => !isNaN(Number(val)), "Tỷ lệ hoa hồng phải là số")
-      .refine(
-        (val) => Number(val) >= 0 && Number(val) <= 100,
-        "Tỷ lệ hoa hồng phải từ 0 đến 100",
-      ),
+    commissionRate: z.number().min(1, "Hãy nhập phần trăm hoa hồng"),
+    // .string()
+    // .min(1, "Tỷ lệ hoa hồng là bắt buộc")
+    // .refine((val) => !isNaN(Number(val)), "Tỷ lệ hoa hồng phải là số")
+    // .refine(
+    //   (val) => Number(val) >= 0 && Number(val) <= 100,
+    //   "Tỷ lệ hoa hồng phải từ 0 đến 100",
+    // ),
     effectiveDate: z.string(),
   });
 
@@ -55,7 +55,7 @@ function CreateCommissionPolicyModal() {
     defaultValues: {
       partnerTierId: "",
       priceSegmentId: "",
-      commissionRate: "",
+      commissionRate: 0,
       effectiveDate: "",
     },
   });

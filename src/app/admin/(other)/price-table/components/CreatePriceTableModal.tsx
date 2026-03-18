@@ -60,11 +60,11 @@ function CreatePriceTableModal() {
     items: z.array(
       z.object({
         priceSegmentId: z.string().min(1, "Cấp bậc sản phẩm là bắt buộc"),
-        commissionRate: z
-          .string()
-          .min(1, "Phần trăm hoa hồng là bắt buộc")
-          .refine((val) => !isNaN(Number(val)), "Phần trăm hoa hồng phải là số")
-          .refine((val) => Number(val) >= 1, "Phần trăm hoa hồng phải >= 1"),
+        commissionRate: z.number().min(1, "Hãy nhập phần trăm hoa hồng"),
+        // .string()
+        // .min(1, "Phần trăm hoa hồng là bắt buộc")
+        // .refine((val) => !isNaN(Number(val)), "Phần trăm hoa hồng phải là số")
+        // .refine((val) => Number(val) >= 1, "Phần trăm hoa hồng phải >= 1"),
       }),
     ),
   });
@@ -78,7 +78,7 @@ function CreatePriceTableModal() {
       items: [
         {
           priceSegmentId: "",
-          commissionRate: "",
+          commissionRate: 0,
         },
       ],
     },
@@ -90,7 +90,6 @@ function CreatePriceTableModal() {
   });
 
   async function onSubmit(data: z.output<typeof formSchema>) {
-
     const payload = {
       ...data,
       items: data.items.map((i) => ({
@@ -253,7 +252,7 @@ function CreatePriceTableModal() {
                   variant="outline"
                   className="w-full border-dashed border-2 py-6 hover:bg-slate-50 hover:border-primary/50 text-slate-500 hover:text-primary transition-all gap-2"
                   onClick={() =>
-                    append({ priceSegmentId: "", commissionRate: "" })
+                    append({ priceSegmentId: "", commissionRate: 0 })
                   }
                 >
                   <Plus size={18} />
