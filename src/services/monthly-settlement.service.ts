@@ -1,26 +1,24 @@
 import api from "../config/axios";
 
-export const getAllCityAPI = async <T>(params: T) => {
-  const res = await api.get("/City", { params });
+export const getAllMonthlySettlementAPI = async <T>(params: T) => {
+  const res = await api.get("/MonthlySettlement", { params });
   return res.data;
 };
 
-export const getCityDetailAPI = async (id: string) => {
-  const res = await api.get(`/City/${id}`);
+export const getMonthlySettlementDetailAPI = async (id: string) => {
+  const res = await api.get(`/MonthlySettlement/${id}`);
   return res.data;
 };
 
-export const createCityAPI = async <T>(data: T) => {
-  const res = await api.post("/City", data);
+export const createMonthlySettlementGenerateAPI = async (
+  year: number,
+  month: number,
+) => {
+  const res = await api.post(`/MonthlySettlement/generate/${year}/${month}`);
   return res.data;
 };
 
-export const updateCityAPI = async <T>(data: T, id: string) => {
-  const res = await api.put(`/City/${id}`, data);
-  return res.data;
-};
-
-export const deleteCityAPI = async (id: string) => {
-  const res = await api.delete(`/City/${id}/delete`);
+export const updateMonthlySettlementAPI = async (id: string) => {
+  const res = await api.patch(`/MonthlySettlement/${id}/pay`);
   return res.data;
 };

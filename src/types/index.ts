@@ -259,3 +259,24 @@ export interface Payment {
   storeName: string;
   items: RefillRequestProductColor[];
 }
+
+export interface MonthlySettlement {
+  id: string;
+  partnerId: string;
+  partnerName: string;
+  month: number;
+  year: number;
+  totalItems: number;
+  totalCommissionAmount: number;
+  status: string;
+  createdAt: string;
+  histories: MonthlySettlementHistory[];
+}
+
+export interface MonthlySettlementHistory {
+  id: string;
+  orderItemId: string;
+  appliedRate: number;
+  commissionAmount: number;
+  createdAt: string;
+}

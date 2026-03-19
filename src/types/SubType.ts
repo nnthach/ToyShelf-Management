@@ -9,6 +9,8 @@ export interface QueryParams {
   storeId?: string;
   storeRole?: string;
   brand?: string;
+  month?: number;
+  year?: number;
 }
 
 export interface SelectOption {

@@ -41,6 +41,17 @@ export const AdminSidebarGroups = [
   },
 
   {
+    label: "Thanh toán hoa hồng",
+    items: [
+      {
+        title: "Danh sách thanh toán",
+        url: "/admin/monthly-settlement",
+        icon: ClipboardList,
+      },
+    ],
+  },
+
+  {
     label: "Tài khoản nhân viên",
     items: [
       { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
@@ -54,7 +65,7 @@ export const AdminSidebarGroups = [
         title: "Quản lý bổ sung hàng",
         url: "/admin/inventory",
         icon: UserStar,
-      }
+      },
     ],
   },
 ];
