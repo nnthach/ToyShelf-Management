@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/src/hooks/useAuth";
 import {
   Avatar,
   AvatarFallback,
@@ -15,21 +16,16 @@ import {
   DropdownMenuTrigger,
 } from "../../styles/components/ui/dropdown-menu";
 import { useSidebar } from "../../styles/components/ui/sidebar";
-import {
-  ChevronLeft,
-  LogOut,
-  Menu,
-  Moon,
-  Settings,
-  Sun,
-  User,
-} from "lucide-react";
+import { ChevronLeft, Lock, LogOut, Menu, Moon, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
 import React from "react";
+import { useAccountAdminModal } from "@/src/context/AccountAdminModalContext";
 
 const WarehouseNavbar = () => {
   const { theme, setTheme } = useTheme();
   const { open, toggleSidebar } = useSidebar();
+  const { logout, user } = useAuth();
+  const { openProfile, openChangePassword } = useAccountAdminModal();
 
   return (
     <nav className="p-4 flex items-center justify-between bg-white dark:bg-sidebar">
@@ -39,7 +35,7 @@ const WarehouseNavbar = () => {
           {open ? <ChevronLeft /> : <Menu />}
         </Button>
 
-        <h5 className="font-bold text-lg">Bảng điều khển</h5>
+        <h5 className="font-semibold text-lg">Hệ thống dành cho quản lý kho</h5>
       </div>
       {/*right */}
       <div className="flex items-center gap-4">
@@ -52,26 +48,35 @@ const WarehouseNavbar = () => {
           <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
           <span className="sr-only">Toggle theme</span>
         </Button>
-
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer">
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <Avatar className="border border-black/50 shadow-sm">
+              <AvatarImage
+                src={user?.avatarUrl || "https://github.com/shadcn.png"}
+                alt="@shadcn"
+              />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={10} className="mr-2">
             <DropdownMenuLabel>Tài khoản</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem onClick={openProfile} className="cursor-pointer">
               <User />
-              Hồ sơ
+              Thông tin
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <Settings />
-              Cài đặt
+            <DropdownMenuItem
+              onClick={openChangePassword}
+              className="cursor-pointer"
+            >
+              <Lock />
+              Đặt lại mật khẩu
             </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive" className="cursor-pointer">
+            <DropdownMenuItem
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={logout}
+            >
               <LogOut />
               Đăng xuất
             </DropdownMenuItem>

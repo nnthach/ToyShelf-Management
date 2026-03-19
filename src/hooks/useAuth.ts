@@ -18,7 +18,9 @@ import { getMyStoreAPI } from "../services/store-invite.service";
 
 export function useAuth() {
   const router = useRouter();
-  const { user, partner, myStore } = useAppSelector((state) => state.auth);
+  const { user, partner, myStore, isLoading } = useAppSelector(
+    (state) => state.auth,
+  );
   const dispatch = useAppDispatch();
 
   const initAuth = async () => {
@@ -35,7 +37,7 @@ export function useAuth() {
           const partnerDetail = await getMyPartnerProfileAPI({
             userId: userProfile.data.id,
           });
-          dispatch(setPartner(partnerDetail));
+          dispatch(setPartner(partnerDetail.data));
         }
         if (roles.includes("Partner")) {
           const myStoreRes = await getMyStoreAPI();
@@ -68,5 +70,5 @@ export function useAuth() {
     router.replace("/");
   };
 
-  return { user, partner, myStore, logout: logoutUser };
+  return { user, partner, myStore, isLoading, logout: logoutUser };
 }

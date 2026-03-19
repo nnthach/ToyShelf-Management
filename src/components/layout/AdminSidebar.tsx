@@ -137,7 +137,7 @@ const AdminSidebar = () => {
             <SidebarMenuButton className="flex items-center gap-3 p-2 hover:bg-accent rounded-xl h-11">
               <Avatar className="h-10 w-10 rounded-full">
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src={user?.avatarUrl || "https://github.com/shadcn.png"}
                   alt="@shadcn"
                   className="rounded-full"
                 />
@@ -146,7 +146,7 @@ const AdminSidebar = () => {
               <div className="flex flex-col text-left">
                 <span className="font-medium text-sm">{user?.fullName}</span>
                 <span className="text-xs text-muted-foreground">
-                  Administrator
+                  Quản trị viên
                 </span>
               </div>
             </SidebarMenuButton>

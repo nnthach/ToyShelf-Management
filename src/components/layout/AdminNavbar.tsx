@@ -34,7 +34,9 @@ const AdminNavbar = () => {
           {open ? <ChevronLeft /> : <Menu />}
         </Button>
 
-        <h5 className="font-bold text-lg">Bảng điều khển</h5>
+        <h5 className="font-semibold text-lg">
+          Hệ thống dành cho quản trị viên
+        </h5>
       </div>
       {/*right */}
       <div className="flex items-center gap-4">

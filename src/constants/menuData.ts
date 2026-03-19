@@ -1,20 +1,14 @@
-// constants/menuData.ts
 import {
   Bell,
-  Calendar,
   LayoutDashboard,
-  Search,
   Settings,
-  Package,
   Store,
   User,
   UserStar,
   Users,
   Server,
-  CircleStar,
   Palette,
   Funnel,
-  Receipt,
   ClipboardList,
   Award,
   Warehouse,
@@ -60,12 +54,7 @@ export const AdminSidebarGroups = [
         title: "Quản lý bổ sung hàng",
         url: "/admin/inventory",
         icon: UserStar,
-      },
-      {
-        title: "Trạng thái hàng tồn kho",
-        url: "/admin/inventory-disposition",
-        icon: ShieldCheck,
-      },
+      }
     ],
   },
 ];

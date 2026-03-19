@@ -16,16 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "../../styles/components/ui/dropdown-menu";
 import { useSidebar } from "../../styles/components/ui/sidebar";
-import {
-  ChevronLeft,
-  Lock,
-  LogOut,
-  Menu,
-  Moon,
-  Settings,
-  Sun,
-  User,
-} from "lucide-react";
+import { ChevronLeft, Lock, LogOut, Menu, Moon, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useAccountAdminModal } from "@/src/context/AccountAdminModalContext";
 
@@ -43,7 +34,7 @@ const PartnerAdminNavbar = () => {
           {open ? <ChevronLeft /> : <Menu />}
         </Button>
 
-        <h5 className="font-bold text-lg">Bảng điều khển</h5>
+        <h5 className="font-semibold text-lg">Hệ thống dành cho đối tác</h5>
       </div>
       {/*right */}
       <div className="flex items-center gap-4">

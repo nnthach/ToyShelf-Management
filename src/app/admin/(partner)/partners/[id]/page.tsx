@@ -2,7 +2,7 @@
 
 import StatCard from "@/src/components/StatCard";
 import { StoreFakeData } from "@/src/constants/fakeData";
-import { ArrowLeft, Box, Eye, Server, Store } from "lucide-react";
+import { ArrowLeft, Box, Eye, Server, Store, UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import BarChartExample from "./components/charts/BarChart";
@@ -96,16 +96,52 @@ export default function ViewPartnerDetailPage() {
         </div>
 
         {/*Thông tin hợp đồng */}
-        <div className="bg-background shadow-sm rounded-lg col-span-1 h-[30vh] w-full flex flex-col items-center justify-center text-center gap-3">
-          <p className="text-sm text-muted-foreground">
-            Chưa có thông tin hợp đồng
-          </p>
+        <div className="bg-white dark:bg-zinc-900 shadow-md rounded-xl col-span-1 h-full w-full flex flex-col items-center justify-center p-6 border border-zinc-100 dark:border-zinc-800 relative overflow-hidden group">
+          {/* Decor trang trí nhẹ ở góc */}
+          <div className="absolute -top-4 -right-4 w-16 h-16 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all"></div>
+
           {partnerDetail?.partnerAccount ? (
-            <p className="text-sm text-white/60">
-              {partnerDetail?.partnerAccount?.email}
-            </p>
+            <div className="flex flex-col items-center gap-3">
+              <div className="relative w-20 h-20 rounded-full bg-linear-to-tr from-blue-500 to-indigo-600 p-0.5 shadow-lg">
+                <div className="w-full h-full rounded-full bg-white dark:bg-zinc-800 flex items-center justify-center overflow-hidden">
+                  {partnerDetail.partnerAccount.avatarUrl ? (
+                    <Image
+                      src={partnerDetail.partnerAccount.avatarUrl}
+                      alt="avatar"
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <span className="text-2xl font-bold text-blue-600">
+                      {partnerDetail.partnerAccount.fullName?.charAt(0)}
+                    </span>
+                  )}
+                </div>
+                {/* Trạng thái Online/Active */}
+                <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-zinc-900 rounded-full"></div>
+              </div>
+
+              <div className="text-center">
+                <p className="font-bold text-zinc-800 dark:text-zinc-100">
+                  {partnerDetail.partnerAccount.fullName}
+                </p>
+                <p className="text-xs text-zinc-500 truncate max-w-[150px]">
+                  {partnerDetail.partnerAccount.email}
+                </p>
+              </div>
+            </div>
           ) : (
-            <CreatePartnerAccountModal />
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center border-2 border-dashed border-zinc-200 dark:border-zinc-700">
+                <UserPlus className="text-zinc-300" size={32} />
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-zinc-500">
+                  Chưa cấp tài khoản
+                </p>
+                <CreatePartnerAccountModal />
+              </div>
+            </div>
           )}
         </div>
       </div>
