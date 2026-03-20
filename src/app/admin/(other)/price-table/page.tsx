@@ -98,7 +98,7 @@ export default function AdminPriceTable() {
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý bảng giá</h1>
+        <h1 className="text-4xl font-bold ">Quản lý bảng giá hoa hồng</h1>
         <CreatePartnerTierModal />
       </div>
       {/*Table */}

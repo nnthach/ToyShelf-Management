@@ -87,8 +87,6 @@ export default function ManagerCreateRefillRequestPage() {
 
   const handleSubmit = async () => {
     const payload = {
-      storeLocationId: storeLocationId[0]?.id,
-      requestedByUserId: user?.id,
       items: cart,
     };
     try {

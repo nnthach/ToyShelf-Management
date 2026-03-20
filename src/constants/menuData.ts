@@ -52,7 +52,7 @@ export const AdminSidebarGroups = [
   },
 
   {
-    label: "Tài khoản nhân viên",
+    label: "Quản lý nhân viên",
     items: [
       { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
     ],

@@ -11,38 +11,54 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 
 import { reviewStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
-import { AlertCircle, Send, XCircle } from "lucide-react";
+import { AlertCircle, Layers, Send, XCircle } from "lucide-react";
+import { assignShipperShipmentAssignAPI } from "@/src/services/shipment-assignment.service";
+import { getAllUserAPI } from "@/src/services/user.service";
+import { User } from "@/src/types";
+import { Value } from "@radix-ui/react-select";
+import { memo } from "react";
 
-type ReasonRefillRequestModalProps = {
+type AssignShipperModalProps = {
   requestId: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 };
 
-function ReasonRefillRequestModal({
+function AssignShipperModal({
   requestId,
   isOpen,
   onClose,
   onSuccess,
-}: ReasonRefillRequestModalProps) {
+}: AssignShipperModalProps) {
   const queryClient = useQueryClient();
 
+  const { data: userList = [] } = useQuery({
+    queryKey: ["shipper", {}],
+    queryFn: () => getAllUserAPI({}),
+    select: (res) => res.data as User[],
+  });
+
+  const userOptions = userList.map((s) => ({
+    value: s.id,
+    label: s.fullName,
+  }));
+
   const formSchema = z.object({
-    rejectReason: z.string().min(1, "Lý do là bắt buộc"),
-    status: z.string().min(1, "Trạng thái là bắt buộc"),
+    shipmentAssignmentId: z.string(),
+    shipperId: z.string().min(1, "Hãy chọn nhân viên giao hàng"),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      status: "Rejected",
-      rejectReason: "",
+      shipmentAssignmentId: requestId,
+      shipperId: "",
     },
   });
 
@@ -50,22 +66,26 @@ function ReasonRefillRequestModal({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
-      await reviewStoreCreationRequestAPI(data, requestId);
+      await assignShipperShipmentAssignAPI(data);
 
       queryClient.invalidateQueries({
-        queryKey: ["storeRequests"],
+        queryKey: ["shipmentAssignRequests"],
       });
 
-      await queryClient.invalidateQueries({
-        queryKey: ["requestDetail", requestId],
+      queryClient.invalidateQueries({
+        queryKey: ["shipmentAssignRequest", requestId],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["shipment", requestId],
       });
 
       form.reset();
-      toast.success("Cập nhật yêu cầu thành công");
+      toast.success("Giao nhiệm vụ thành công");
       onClose();
       onSuccess();
     } catch (error) {
-      toast.error("Cập nhật yêu cầu thất bại");
+      toast.error("Giao nhiệm vụ thất bại");
     }
   }
 
@@ -88,7 +108,7 @@ function ReasonRefillRequestModal({
 
           <div className="text-center space-y-1">
             <DialogTitle className="text-xl font-bold text-red-700">
-              Từ chối yêu cầu
+              Chọn nhân viên giao hàng
             </DialogTitle>
             <DialogDescription>
               Vui lòng cung cấp lý do cụ thể để chủ cửa hàng có thể điều chỉnh
@@ -100,15 +120,17 @@ function ReasonRefillRequestModal({
         <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            id="form-reject-request"
+            id="form-assign-shipper"
             className="py-4"
           >
             <div className="relative group">
               <FormFieldCustom
-                name="rejectReason"
-                label="Lý do từ chối"
-                placeholder="Ví dụ: Địa chỉ cửa hàng không chính xác hoặc thiếu giấy phép..."
-                // Bạn có thể truyền className vào FormFieldCustom nếu nó hỗ trợ để custom textarea
+                name="shipperId"
+                label="Nhân viên giao hàng"
+                type="select"
+                placeholder="Chọn nhân viên"
+                selectData={userOptions}
+                icon={<Layers size={16} />}
               />
             </div>
           </form>
@@ -118,14 +140,17 @@ function ReasonRefillRequestModal({
           <Button
             type="button"
             variant="ghost"
-            onClick={onClose}
+            onClick={() => {
+              form.reset();
+              onClose();
+            }}
             className="flex-1 gap-2"
           >
             <XCircle className="h-4 w-4" /> Huỷ
           </Button>
           <Button
             type="submit"
-            form="form-reject-request"
+            form="form-assign-shipper"
             disabled={isSubmitting}
             className="flex-1 gap-2 bg-red-600 hover:bg-red-700 text-white"
           >
@@ -142,4 +167,4 @@ function ReasonRefillRequestModal({
   );
 }
 
-export default ReasonRefillRequestModal;
+export default memo(AssignShipperModal);

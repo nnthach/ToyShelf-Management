@@ -233,6 +233,10 @@ export interface RefillRequestProductColor {
   price?: number;
   quantity: number;
   subTotal?: number;
+  color?: string;
+  fulfilledQuantity?: number;
+  expectedQuantity?:number
+  receivedQuantity?:number
 }
 
 export interface RefillRequest {
@@ -279,4 +283,21 @@ export interface MonthlySettlementHistory {
   appliedRate: number;
   commissionAmount: number;
   createdAt: string;
+}
+
+export interface ShipmentAssign {
+  id: string;
+  storeOrderId: string;
+  storeOrderCode: string;
+  warehouseLocationId: string;
+  warehouseLocationName: string;
+  storeLocationId: string;
+  storeLocationName: string;
+  shipperName: string;
+  createdByName: string;
+  assignedByName: string;
+  status: string;
+  createdAt: string;
+  respondedAt: string;
+  items: RefillRequestProductColor[];
 }

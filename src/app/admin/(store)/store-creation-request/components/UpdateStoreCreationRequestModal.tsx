@@ -117,6 +117,14 @@ function UpdateStoreCreateRequestModal({
 
               {/* Main Details Grid */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-1">
+                  <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
+                    <Phone className="h-3 w-3" /> Đối tác yêu cầu
+                  </p>
+                  <p className="text-sm font-semibold">
+                    {requestDetail?.partnerId}
+                  </p>
+                </div>
                 <div className="sm:col-span-2 space-y-1">
                   <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
                     <MapPin className="h-3 w-3" /> Địa chỉ kinh doanh

@@ -1,46 +1,35 @@
 "use client";
 
-import { Store } from "@/src/types";
+import { ShipmentAssign, Store } from "@/src/types";
 import {
-  formatStoreCreateRequestStatusColor,
-  formatStoreCreateRequestStatusText,
+  formatShipmentAssignStatusColor,
+  formatShipmentAssignStatusText,
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Eye } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const getStoreCreateRequestColumns = (
-  onDelete: (tierId: string) => void,
-  onEdit: (tierId: string) => void,
-): ColumnDef<Store>[] => [
+export const getShipmentAssignColumnColumns = (
+  onEdit: (shipmentAssignId: string) => void,
+): ColumnDef<ShipmentAssign>[] => [
   {
-    accessorKey: "requestedByUserId",
-    header: "Người tạo",
+    accessorKey: "warehouseLocationName",
+    header: "Kho",
   },
   {
-    accessorKey: "name",
-    header: "Tên cửa hàng",
+    accessorKey: "storeLocationName",
+    header: "Cửa hàng",
   },
   {
-    accessorKey: "phoneNumber",
-    header: "Số điện thoại",
+    accessorKey: "createdByName",
+    header: "Người duyệt đơn",
   },
   {
-    accessorKey: "storeAddress",
-    header: "Địa chỉ",
-    cell: ({ row }) => {
-      const storeAddress = row.getValue("storeAddress") as string;
-
-      return (
-        <div className="w-[200px]">
-          <p className="text-sm text-gray-700 line-clamp-2">{storeAddress}</p>
-        </div>
-      );
-    },
+    accessorKey: "shipperName",
+    header: "Người giao hàng",
   },
-
   {
     accessorKey: "status",
     header: "Trạng thái",
@@ -48,8 +37,8 @@ export const getStoreCreateRequestColumns = (
       const status = row.getValue("status") as string;
 
       return (
-        <span className={`${formatStoreCreateRequestStatusColor(status)}`}>
-          {formatStoreCreateRequestStatusText(status)}
+        <span className={`${formatShipmentAssignStatusColor(status)}`}>
+          {formatShipmentAssignStatusText(status)}
         </span>
       );
     },
@@ -58,22 +47,17 @@ export const getStoreCreateRequestColumns = (
     accessorKey: "action",
     header: "Hành động",
     cell: ({ row }) => {
-      const storeCreateRequest = row.original;
+      const shipmentAssignRequest = row.original;
       return (
         <div className="flex items-center gap-3">
           <span
-            onClick={() => onEdit(storeCreateRequest.id)}
+            onClick={() =>
+              onEdit(shipmentAssignRequest.id)
+            }
             title="Chi tiết"
             className="cursor-pointer text-blue-400"
           >
-            <Edit size={20} />
-          </span>
-          <span
-            onClick={() => onDelete(storeCreateRequest.id)}
-            title="Xóa"
-            className="cursor-pointer text-red-400"
-          >
-            <Trash size={20} />
+            <Eye size={20} />
           </span>
         </div>
       );

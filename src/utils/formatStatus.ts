@@ -16,7 +16,6 @@ export const formatBooleanIsActiveStatusColor = (isActive: boolean) => {
   }
 };
 
-
 export const formatUserStatusText = (status: boolean) => {
   switch (status) {
     case false:
@@ -91,6 +90,28 @@ export const formatStoreCreateRequestStatusColor = (status: string) => {
     case "Pending":
       return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
     case "Approved":
+      return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
+    case "Rejected":
+      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+  }
+};
+
+export const formatShipmentAssignStatusText = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "Đang chờ";
+    case "Accepted":
+      return "Đã chấp nhận";
+    case "Rejected":
+      return "Đã từ chối";
+  }
+};
+
+export const formatShipmentAssignStatusColor = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
+    case "Accepted":
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
     case "Rejected":
       return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";

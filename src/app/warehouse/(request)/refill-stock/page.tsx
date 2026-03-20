@@ -4,22 +4,16 @@ import { Download, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
-import { Store } from "@/src/types";
+import { ShipmentAssign } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { getStoreCreateRequestColumns } from "./columns";
-import {
-  deleteStoreCreationRequestAPI,
-  getAllStoreCreationRequestAPI,
-} from "@/src/services/store-create-request.service";
-import { toast } from "react-toastify";
+import { getShipmentAssignColumnColumns } from "./columns";
 import { useState } from "react";
-import UpdateStoreCreateRequestModal from "./components/UpdateRefillRequestModal";
+import { getAllShipmentAssignAPI } from "@/src/services/shipment-assignment.service";
+import UpdateShipmentAssignRefillRequestModal from "./components/UpdateShipmentAssignRefillRequestModal";
 
 export default function WarehouseRefillRequestManage() {
-  const queryClient = useQueryClient();
-
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
@@ -29,45 +23,20 @@ export default function WarehouseRefillRequestManage() {
   });
 
   const {
-    data: storeCreateRequestList = [],
+    data: shipmentAssignList = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["storeRequests", query],
-    queryFn: () => getAllStoreCreationRequestAPI(query),
-    select: (res) => res.data as Store[],
+    queryKey: ["shipmentAssignRequests", query],
+    queryFn: () => getAllShipmentAssignAPI(query),
+    select: (res) => res.data as ShipmentAssign[],
   });
 
-  const handleEdit = (cityId: string) => {
-    setSelectedRequestId(cityId);
+  const handleEdit = (shipmentAssignId: string) => {
+    setSelectedRequestId(shipmentAssignId);
   };
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteStoreCreationRequestAPI,
-    onSuccess: () => {
-      toast.success("Xóa thành công");
-
-      // reload danh sách
-      queryClient.invalidateQueries({
-        queryKey: ["storeRequests"],
-      });
-    },
-    onError: () => {
-      toast.error("Xóa thất bại");
-    },
-  });
-
-  const handleDelete = (cityId: string) => {
-    const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xóa yêu cầu này không?",
-    );
-
-    if (!confirmDelete) return;
-
-    deleteMutation.mutate(cityId);
-  };
-
-  const columns = getStoreCreateRequestColumns(handleDelete, handleEdit);
+  const columns = getShipmentAssignColumnColumns(handleEdit);
 
   return (
     <>
@@ -80,7 +49,7 @@ export default function WarehouseRefillRequestManage() {
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={storeCreateRequestList ?? []}
+          data={shipmentAssignList ?? []}
           isLoading={isLoading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -88,7 +57,7 @@ export default function WarehouseRefillRequestManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={storeCreateRequestList.length}
+              resultCount={shipmentAssignList.length}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -112,7 +81,7 @@ export default function WarehouseRefillRequestManage() {
       </div>
 
       {selectedRequestId && (
-        <UpdateStoreCreateRequestModal
+        <UpdateShipmentAssignRefillRequestModal
           requestId={selectedRequestId}
           isOpen={!!selectedRequestId}
           onClose={() => {
