@@ -14,18 +14,22 @@ import { useQuery } from "@tanstack/react-query";
 import ViewDetailSheet from "./components/ViewDetailSheet";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllProductAPI } from "@/src/services/product.service";
+import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 
 export default function AdminProductManage() {
   const router = useRouter();
 
-  const [productView, setProductView] = useState<"list" | "grid">("list");
+  const [productView, setProductView] = useState<"list" | "grid">("grid");
 
   const [selectedProductId, setSelectProductId] = useState<string | null>(null);
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
-    search: "",
+    searchItem: "",
+    categoryId: "",
+    pageNumber: 1,
+    pageSize: 10,
   });
 
   const {
@@ -41,6 +45,12 @@ export default function AdminProductManage() {
   const handleViewDetail = (productId: string) => {
     setSelectProductId(productId);
   };
+
+  const { data: categoryList = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({ isActive: true }),
+    select: (res) => res.data,
+  });
 
   return (
     <>
@@ -61,22 +71,6 @@ export default function AdminProductManage() {
             Thêm sản phẩm
           </Button>
           <div className="flex items-center gap-1 rounded-lg border">
-            {/* List view */}
-            <Button
-              type="button"
-              title="Danh sách"
-              onClick={() => setProductView("list")}
-              variant="ghost"
-              className={cn(
-                "flex items-center gap-2 rounded-md p-2 text-sm transition-all hover:text-blue-400 dark:hover:text-white",
-                productView === "list"
-                  ? "bg-white dark:bg-sidebar text-blue-600 shadow dark:bg-white dark:text-black"
-                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700",
-              )}
-            >
-              <List />
-            </Button>
-
             {/* Grid view */}
             <Button
               type="button"
@@ -92,6 +86,21 @@ export default function AdminProductManage() {
             >
               <LayoutGrid className="h-4 w-4" />
             </Button>
+            {/* List view */}
+            <Button
+              type="button"
+              title="Danh sách"
+              onClick={() => setProductView("list")}
+              variant="ghost"
+              className={cn(
+                "flex items-center gap-2 rounded-md p-2 text-sm transition-all hover:text-blue-400 dark:hover:text-white",
+                productView === "list"
+                  ? "bg-white dark:bg-sidebar text-blue-600 shadow dark:bg-white dark:text-black"
+                  : "text-neutral-400 bg-gray-100 dark:bg-neutral-700",
+              )}
+            >
+              <List />
+            </Button>
           </div>
         </div>
       </div>
@@ -100,17 +109,21 @@ export default function AdminProductManage() {
       {productView === "list" ? (
         <ProductListView
           handleViewDetail={handleViewDetail}
-          productList={productList ?? []}
+          productList={productList.items ?? []}
           isLoading={isLoading}
+          query={query}
+          updateQuery={updateQuery}
         >
           <FilterSearch
             query={query}
             loading={isLoading}
-            resultCount={productList.length}
-            onSearch={(val) => updateQuery({ search: val })}
+            resultCount={productList.totalCount}
+            categoryList={categoryList}
+            onSearch={(val) => updateQuery({ searchItem: val })}
             onApplyFilter={(filter) =>
               updateQuery({
                 ...filter,
+                pageNumber: 1,
               })
             }
             onReset={() => resetQuery()}
@@ -119,18 +132,22 @@ export default function AdminProductManage() {
         </ProductListView>
       ) : (
         <ProductGridView
-          productList={productList ?? []}
+          productList={productList.items ?? []}
           isLoading={isLoading}
           handleViewDetail={handleViewDetail}
+          query={query}
+          updateQuery={updateQuery}
+          totalItems={productList.totalCount}
         >
           <FilterSearch
             query={query}
             loading={isLoading}
-            resultCount={productList.length}
-            onSearch={(val) => updateQuery({ search: val })}
+            resultCount={productList.totalCount}
+            onSearch={(val) => updateQuery({ searchItem: val })}
             onApplyFilter={(filter) =>
               updateQuery({
                 ...filter,
+                pageNumber: 1,
               })
             }
             onReset={() => resetQuery()}

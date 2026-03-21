@@ -101,10 +101,6 @@ export default function AdminProductType() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <Button variant={"outline"}>
-              <Upload /> Xuất dữ liệu
-            </Button>
           </div>
         </DataTable>
       </div>

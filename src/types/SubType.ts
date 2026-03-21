@@ -11,6 +11,10 @@ export interface QueryParams {
   brand?: string;
   month?: number;
   year?: number;
+  categoryId?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  searchItem?: string;
 }
 
 export interface SelectOption {

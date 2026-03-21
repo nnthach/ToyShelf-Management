@@ -17,8 +17,12 @@ export const getProductCategoryColumns = (
   onDelete: (categoryId: string) => void,
 ): ColumnDef<ProductCategory>[] => [
   {
+    accessorKey: "code",
+    header: "Mã danh mục",
+  },
+  {
     accessorKey: "name",
-    header: "Tên cấp độ giá sản phẩm",
+    header: "Tên danh mục",
   },
 
   {

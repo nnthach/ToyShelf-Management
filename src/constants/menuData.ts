@@ -128,7 +128,7 @@ export const AdminSidebarNested = [
     sub: [
       {
         title: "Thanh toán hoa hồng",
-        url: "/admin/refill-stock",
+        url: "/admin/monthly-settlement",
         icon: Wallet,
       },
       {

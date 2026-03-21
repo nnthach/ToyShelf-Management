@@ -88,7 +88,7 @@ function EditProductInfoLeft() {
 
         <div className="grid grid-cols-2 gap-4">
           <FormFieldCustom
-            name="price"
+            name="basePrice"
             label="Giá sản phẩm"
             placeholder="0"
             type="number"

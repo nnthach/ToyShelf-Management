@@ -7,15 +7,23 @@ export const ProductBrandOption = [
     value: "Gundam",
     label: "Gundam",
   },
+  {
+    value: "52Toys",
+    label: "52Toys",
+  },
 ];
 
 export const ProductMaterialOption = [
   {
-    value: "Plastic",
-    label: "Plastic",
+    value: "Nhựa",
+    label: "Nhựa",
   },
   {
-    value: "Metal",
-    label: "Metal",
+    value: "Kim loại",
+    label: "Kim loại",
+  },
+  {
+    value: "Chưa xác định",
+    label: "Chưa xác định",
   },
 ];

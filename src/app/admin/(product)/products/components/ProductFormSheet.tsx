@@ -105,7 +105,7 @@ function ProductFormSheet({ product, onClose }: ProductFormSheetProps) {
         {/* price */}
         <div className="p-4">
           <p className="text-sm text-gray-500 dark:text-gray-400">Gía</p>
-          <p className="text-base font-bold">{product?.price}</p>
+          <p className="text-base font-bold">{product?.basePrice}</p>
         </div>
         {/* brand */}
         <div className="p-4">

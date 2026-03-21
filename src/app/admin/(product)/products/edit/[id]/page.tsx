@@ -24,6 +24,7 @@ import EditProductInfoLeft from "../components/EditProductInfoLeft";
 import EditProductMediaRight from "../components/EditProductMediaRight";
 import ConfirmPopup from "../../create/ConfirmPopup";
 import { uploadFileToCloudinary } from "@/src/config/cloundinary";
+import { formatColorName } from "@/src/utils/format";
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -40,7 +41,7 @@ export default function EditProductPage() {
     defaultValues: {
       productCategoryId: "",
       name: "",
-      price: 0,
+      basePrice: 0,
       description: "",
       brand: "",
       material: "",
@@ -73,7 +74,7 @@ export default function EditProductPage() {
         name: productDetail.name,
         description: productDetail.description,
         productCategoryId: productDetail.productCategoryId,
-        price: productDetail.price,
+        basePrice: productDetail.basePrice,
         brand: productDetail.brand,
         material: productDetail.material,
         originCountry: productDetail.originCountry,
@@ -103,16 +104,14 @@ export default function EditProductPage() {
 
   const colorOptions = colorList.map((c) => ({
     value: c.id,
-    label: c.name.charAt(0).toUpperCase() + c.name.slice(1).toLowerCase(),
+    label: formatColorName(
+      c.name.charAt(0).toUpperCase() + c.name.slice(1).toLowerCase(),
+    ),
     hexCode: c.hexCode,
   }));
 
   // product price segment
-  const {
-    data: productPriceSegmentList = [],
-    isLoading: loading,
-    refetch,
-  } = useQuery({
+  const { data: productPriceSegmentList = [], refetch } = useQuery({
     queryKey: ["productPriceSegments"],
     queryFn: () => getAllProducePriceSegmentAPI({}),
     select: (res) => res.data as ProductPriceSegment[],

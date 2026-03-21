@@ -19,6 +19,7 @@ import { SelectOption } from "@/src/types/SubType";
 import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
 import { useQuery } from "@tanstack/react-query";
 import { uploadFileToCloudinary } from "@/src/config/cloundinary";
+import { formatColorName } from "@/src/utils/format";
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function CreateProductPage() {
     defaultValues: {
       productCategoryId: "",
       name: "",
-      price: 0,
+      basePrice: 0,
       description: "",
       brand: "",
       material: "",
@@ -62,16 +63,14 @@ export default function CreateProductPage() {
 
   const colorOptions = colorList.map((c) => ({
     value: c.id,
-    label: c.name.charAt(0).toUpperCase() + c.name.slice(1).toLowerCase(),
+    label: formatColorName(
+      c.name.charAt(0).toUpperCase() + c.name.slice(1).toLowerCase(),
+    ),
     hexCode: c.hexCode,
   }));
 
   // product price segment
-  const {
-    data: productPriceSegmentList = [],
-    isLoading: loading,
-    refetch,
-  } = useQuery({
+  const { data: productPriceSegmentList = [] } = useQuery({
     queryKey: ["productPriceSegments"],
     queryFn: () => getAllProducePriceSegmentAPI({}),
     select: (res) => res.data as ProductPriceSegment[],
@@ -135,9 +134,12 @@ export default function CreateProductPage() {
           }
 
           return {
-            ...color,
             imageUrl,
             model3DUrl,
+            colorId: color.colorId,
+            priceSegmentId: color.priceSegmentId,
+            price: color.price,
+            name: color.name,
           };
         }),
       );

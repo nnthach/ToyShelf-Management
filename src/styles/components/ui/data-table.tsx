@@ -26,6 +26,7 @@ interface DataTableProps<TData, TValue> {
   pageSize?: number;
   children?: React.ReactNode;
   isLoading?: boolean;
+  onPageChange?: (pageIndex: number) => void; // <--- thêm
 }
 
 export function DataTable<TData, TValue>({
@@ -34,6 +35,7 @@ export function DataTable<TData, TValue>({
   children,
   pageSize = 10,
   isLoading,
+  onPageChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -88,7 +90,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Loading...
+                  Đang tải...
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
@@ -114,30 +116,79 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Không tìm thấy
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
+        <div className="flex items-center justify-between px-4 py-4 border-t">
+          {/* LEFT: Info */}
+          <div className="text-sm text-muted-foreground">
+            Hiển thị{" "}
+            <span className="font-medium">
+              {table.getState().pagination.pageIndex * pageSize + 1}
+            </span>{" "}
+            -{" "}
+            <span className="font-medium">
+              {Math.min(
+                (table.getState().pagination.pageIndex + 1) * pageSize,
+                data.length,
+              )}
+            </span>{" "}
+            / {data.length} mục
+          </div>
 
-        <div className="flex items-center justify-end space-x-2 py-4 px-4 border-t">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+          {/* RIGHT: Pagination */}
+          <div className="flex items-center gap-1">
+            {/* Prev */}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                table.previousPage();
+                onPageChange?.(table.getState().pagination.pageIndex);
+              }}
+              disabled={!table.getCanPreviousPage()}
+            >
+              ←
+            </Button>
+
+            {/* Page numbers */}
+            {Array.from({ length: table.getPageCount() }, (_, i) => {
+              const isActive = i === table.getState().pagination.pageIndex;
+
+              return (
+                <Button
+                  key={i}
+                  variant={isActive ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => {
+                    table.setPageIndex(i);
+                    onPageChange?.(i); // <--- gọi callback
+                  }}
+                  className={`px-3 pb-0.5 ${
+                    isActive ? "bg-blue-500 text-white hover:bg-blue-600" : ""
+                  }`}
+                >
+                  {i + 1}
+                </Button>
+              );
+            })}
+
+            {/* Next */}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                table.nextPage();
+                onPageChange?.(table.getState().pagination.pageIndex);
+              }}
+              disabled={!table.getCanNextPage()}
+            >
+              →
+            </Button>
+          </div>
         </div>
       </div>
     </div>

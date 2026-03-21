@@ -1,6 +1,7 @@
 import { Button } from "@/src/styles/components/ui/button";
 import { Product } from "@/src/types";
 import { Eye } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 interface ProductCardProps {
@@ -14,18 +15,18 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
   const image = selectedColor?.imageUrl;
 
   return (
-    <div className="group rounded-xl border border-gray-200 bg-white p-4 hover:shadow-lg transition">
+    <div className="group rounded-xl border border-gray-100 bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300">
       {/* Image */}
-      <div className="relative rounded-lg overflow-hidden bg-gray-100 mb-3">
-        <div className="aspect-square">
-          {image && (
-            <img
-              src={image}
-              alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          )}
-        </div>
+      <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+        {image && (
+          <Image
+            src={image}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
+          />
+        )}
 
         {/* Eye Button */}
         <Button
@@ -42,18 +43,17 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
         {/* Hover info */}
         <div
           className="absolute inset-x-0 bottom-0 z-10
-          translate-y-full opacity-0
-          group-hover:translate-y-0 group-hover:opacity-100
-          transition-all duration-300 ease-out"
+    translate-y-full opacity-0
+    group-hover:translate-y-0 group-hover:opacity-100
+    transition-all duration-300 ease-out"
         >
-          <div className="bg-white/90 backdrop-blur-sm px-3 py-2 text-xs">
+          <div className="bg-white/90 backdrop-blur-sm px-3 py-2 text-xs rounded-b-lg">
             <div className="flex justify-between">
               <span className="text-gray-500">Mã sản phẩm</span>
               <span className="font-medium text-gray-900">
                 {selectedColor?.sku}
               </span>
             </div>
-
             <div className="flex justify-between">
               <span className="text-gray-500">Chất liệu</span>
               <span className="font-medium text-gray-900">
@@ -66,7 +66,6 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
                 {product?.brand}
               </span>
             </div>
-
             <div className="flex justify-between">
               <span className="text-gray-500">Độ tuổi</span>
               <span className="font-medium text-gray-900">

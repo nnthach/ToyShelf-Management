@@ -3,7 +3,7 @@ import { z } from "zod";
 export const productSchema = z.object({
   productCategoryId: z.string().min(1, "Danh mục sản phẩm là bắt buộc"),
   name: z.string().min(1, "Tên sản phẩm là bắt buộc"),
-  price: z.coerce.number().min(1, "Giá là bắt buộc"),
+  basePrice: z.coerce.number().min(1, "Giá là bắt buộc"),
   description: z.string().min(1, "Mô tả là bắt buộc"),
   brand: z.string().min(1, "Thương hiệu là bắt buộc"),
   material: z.string().min(1, "Chất liệu là bắt buộc"),
@@ -42,7 +42,7 @@ export const productUpdateSchema = z.object({
   name: z.string().min(1, "Tên sản phẩm là bắt buộc"),
   description: z.string().min(1, "Mô tả là bắt buộc"),
   productCategoryId: z.string().min(1, "Danh mục sản phẩm là bắt buộc"),
-  price: z.coerce.number().min(1, "Giá là bắt buộc"),
+  basePrice: z.coerce.number().min(1, "Giá là bắt buộc"),
   brand: z.string().min(1, "Thương hiệu là bắt buộc"),
   material: z.string().min(1, "Chất liệu là bắt buộc"),
   originCountry: z.string().min(1, "Quốc gia sản xuất là bắt buộc"),

@@ -1,7 +1,7 @@
 import api from "../config/axios";
 
 export const getAllProductAPI = async <T>(params: T) => {
-  const res = await api.get("/product", { params });
+  const res = await api.get("/product/paginated", { params });
   return res.data;
 };
 

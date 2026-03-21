@@ -50,3 +50,28 @@ export const formatToInitials = (data: string) => {
     .join("")
     .toUpperCase();
 };
+
+export const formatColorName = (data: string) => {
+  switch (data) {
+    case "Orange":
+      return "Cam";
+    case "Red":
+      return "Đỏ";
+    case "Blue":
+      return "Xanh dương";
+    case "Green":
+      return "Xanh lá";
+    case "Purple":
+      return "Tím";
+    case "Yellow":
+      return "Vàng";
+    case "Black":
+      return "Đen";
+    case "White":
+      return "Trắng";
+    case "Grey":
+      return "Xám";
+    default:
+      return "";
+  }
+};

@@ -87,6 +87,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  basePrice: number;
   brand: string;
   material: string;
   originCountry: string;
@@ -235,8 +236,8 @@ export interface RefillRequestProductColor {
   subTotal?: number;
   color?: string;
   fulfilledQuantity?: number;
-  expectedQuantity?:number
-  receivedQuantity?:number
+  expectedQuantity?: number;
+  receivedQuantity?: number;
 }
 
 export interface RefillRequest {

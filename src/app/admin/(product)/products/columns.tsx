@@ -34,7 +34,7 @@ export const getProductColumns = (
   },
 
   {
-    accessorKey: "price",
+    accessorKey: "basePrice",
     header: "Gía tiền",
   },
   {
