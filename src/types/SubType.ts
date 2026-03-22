@@ -17,6 +17,13 @@ export interface QueryParams {
   searchItem?: string;
 }
 
+export interface LoginRes {
+  data: {
+    accessToken: string;
+    roles: string;
+  };
+}
+
 export interface SelectOption {
   value: string | number;
   label: string;

@@ -5,6 +5,7 @@ import { ThemeProvider } from "../styles/components/providers/theme-provider";
 import Providers from "./providers";
 import { ToastContainer } from "react-toastify";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,11 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
         suppressHydrationWarning
       >
+        <Script
+          src="https://accounts.google.com/gsi/client"
+          strategy="afterInteractive"
+        />
+
         <Providers>
           <ThemeProvider
             attribute="class"

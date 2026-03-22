@@ -15,6 +15,7 @@ import {
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { getMyStoreAPI } from "../services/store-invite.service";
+import { LoginRes } from "../types/SubType";
 
 export function useAuth() {
   const router = useRouter();
@@ -58,6 +59,61 @@ export function useAuth() {
     }
   };
 
+  const handleLoginSuccess = async (res: LoginRes) => {
+    const token = res.data?.accessToken;
+    const roles = res.data?.roles;
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("roles", JSON.stringify(roles));
+
+    const fetchProfileRes = await getMyProfileAPI();
+
+    if (roles.includes("PartnerAdmin")) {
+      const partnerDetail = await getMyPartnerProfileAPI({
+        userId: fetchProfileRes.data.id,
+      });
+
+      dispatch(setPartner(partnerDetail.data));
+    }
+    if (roles.includes("Partner")) {
+      const myStoreRes = await getMyStoreAPI();
+      dispatch(setMyStore(myStoreRes.data[0]));
+    }
+
+    const payload = {
+      ...fetchProfileRes.data,
+      roles,
+    };
+
+    dispatch(setUser(payload));
+
+    toast.success("Đăng nhập thành công");
+
+    if (roles.includes("Admin")) {
+      router.replace("/admin/dashboard");
+      return;
+    }
+
+    if (roles.includes("PartnerAdmin")) {
+      router.replace("/partner/dashboard");
+      return;
+    }
+
+    if (roles.includes("Warehouse")) {
+      router.replace("/warehouse/dashboard");
+      return;
+    }
+
+    if (roles.includes("Partner")) {
+      router.replace("/manager/dashboard");
+      return;
+    }
+
+    if (roles.includes("Customer")) {
+      toast.error("Hệ thống dành cho quản trị viên!");
+    }
+  };
+
   useEffect(() => {
     initAuth();
   }, []);
@@ -70,5 +126,12 @@ export function useAuth() {
     router.replace("/");
   };
 
-  return { user, partner, myStore, isLoading, logout: logoutUser };
+  return {
+    user,
+    partner,
+    myStore,
+    isLoading,
+    logout: logoutUser,
+    handleLoginSuccess,
+  };
 }

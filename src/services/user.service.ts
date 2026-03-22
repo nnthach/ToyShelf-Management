@@ -5,6 +5,11 @@ export const loginAPI = async <T>(data: T) => {
   return res.data;
 };
 
+export const loginGoogleAPI = async <T>(data: T) => {
+  const res = await api.post("/account/login-google", data);
+  return res.data;
+};
+
 export const forgotPasswordRequestAPI = async (email: string) => {
   const res = await api.post("/ForgotPassword/request", null, {
     params: { email },

@@ -32,6 +32,9 @@ import {
   loginAPI,
 } from "../services/user.service";
 import { getMyStoreAPI } from "../services/store-invite.service";
+import { GoogleLogin } from "@react-oauth/google";
+import GoogleLoginButton from "../components/GoogleLoginButton";
+import { useAuth } from "../hooks/useAuth";
 
 const formSchema = z.object({
   email: z.string("Not correct email format."),
@@ -43,11 +46,10 @@ const formSchema = z.object({
 
 export default function HomePage() {
   const router = useRouter();
+  const { handleLoginSuccess } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isViewPassword, setIsViewPassword] = useState(false);
-
-  const dispatch = useAppDispatch();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,64 +63,12 @@ export default function HomePage() {
     setIsLoading(true);
     try {
       const res = await loginAPI(data);
-      const token = res.data?.accessToken;
-      const roles = res.data?.roles;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("roles", JSON.stringify(roles));
-
-      const fetchProfileRes = await getMyProfileAPI();
-
-      if (roles.includes("PartnerAdmin")) {
-        const partnerDetail = await getMyPartnerProfileAPI({
-          userId: fetchProfileRes.data.id,
-        });
-
-        dispatch(setPartner(partnerDetail.data));
-      }
-      if (roles.includes("Partner")) {
-        const myStoreRes = await getMyStoreAPI();
-        dispatch(setMyStore(myStoreRes.data[0]));
-      }
-
-      const payload = {
-        ...fetchProfileRes.data,
-        roles,
-      };
-
-      dispatch(setUser(payload));
-
-      form.reset();
-      toast.success("Đăng nhập thành công");
-
-      if (roles.includes("Admin")) {
-        router.replace("/admin/dashboard");
-        return;
-      }
-
-      if (roles.includes("PartnerAdmin")) {
-        router.replace("/partner/dashboard");
-        return;
-      }
-
-      if (roles.includes("Warehouse")) {
-        router.replace("/warehouse/dashboard");
-        return;
-      }
-
-      if (roles.includes("Partner")) {
-        // router.replace(`/store-order/${storeRes.data[0].storeId}`);
-        router.replace("/manager/dashboard");
-        return;
-      }
-
-      if (roles.includes("Customer")) {
-        toast.error("Hệ thống dành cho quản trị viên!");
-      }
+      await handleLoginSuccess(res);
     } catch (error) {
       toast.error("Đăng nhập thất bại");
     } finally {
       setIsLoading(false);
+      form.reset();
     }
   }
 
@@ -136,6 +86,7 @@ export default function HomePage() {
                   src="/images/finallogo.png"
                   alt="ToyShelf logo"
                   fill
+                  sizes="50px"
                   className="object-contain"
                 />
               </div>
@@ -226,20 +177,7 @@ export default function HomePage() {
 
         <CardFooter className="flex flex-col gap-3">
           <div className="flex w-full gap-3">
-            <Button
-              variant="outline"
-              type="button"
-              className="w-[50%]"
-              disabled={isLoading}
-            >
-              <Image
-                src="/icons/google.png"
-                width={18}
-                height={18}
-                alt="Google Icon"
-              />
-              Google
-            </Button>
+            <GoogleLoginButton />
 
             <Button
               type="submit"
