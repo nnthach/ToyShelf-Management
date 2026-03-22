@@ -43,9 +43,6 @@ const AdminSidebar = () => {
     >
       {/* Header */}
       <SidebarHeader className="min-h-[50px] p-0">
-        {/* <SidebarMenu className="h-full"> */}
-        {/* <SidebarMenuItem> */}
-        {/* <SidebarMenuButton asChild> */}
         <Link href={"/admin/dashboard"} className="p-2 flex items-center gap-2">
           <div className="relative w-[50px] h-[50px]">
             <Image
@@ -58,9 +55,6 @@ const AdminSidebar = () => {
           {/*#0D47A1 */}
           <p className="text-[#1E88E5] font-bold text-xl">ToyShelf</p>
         </Link>
-        {/* </SidebarMenuButton> */}
-        {/* </SidebarMenuItem> */}
-        {/* </SidebarMenu> */}
       </SidebarHeader>
 
       <SidebarSeparator />

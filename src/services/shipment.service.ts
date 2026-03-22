@@ -10,6 +10,11 @@ export const getShipmentDetailByAssignmentIdAPI = async (id: string) => {
   return res.data;
 };
 
+export const getShipmentDetailByIdAPI = async (id: string) => {
+  const res = await api.get(`/Shipment/${id}`);
+  return res.data;
+};
+
 export const createShipmentAPI = async <T>(data: T) => {
   const res = await api.post("/Shipment", data);
   return res.data;
@@ -25,7 +30,7 @@ export const deliveryShipmentAPI = async <T>(id: string, data: T) => {
   return res.data;
 };
 
-export const receiveShipmentAPI = async (id: string) => {
-  const res = await api.patch(`/Shipment/${id}/receive`);
+export const receiveShipmentAPI = async <T>(id: string, data: T) => {
+  const res = await api.patch(`/Shipment/${id}/receive`, data);
   return res.data;
 };

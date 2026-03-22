@@ -4,20 +4,18 @@ import { Download, Plus, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
 import { RefillRequest } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillRequestColumns } from "./columns";
-import { deleteStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
-import { toast } from "react-toastify";
 import { useState } from "react";
 import { getAllRefillAPI } from "@/src/services/refill.service";
 import ViewRefillRequestModalDetail from "./components/ViewRefillRequestDetailModal";
 import { useRouter } from "next/navigation";
+import CreateRefillOrderModal from "./components/CreateRefillOrderModal";
 
 export default function ManagerRefillRequestManage() {
-  const queryClient = useQueryClient();
   const router = useRouter();
 
   const [selectedRequestId, setSelectedRequestId] = useState("");
@@ -49,13 +47,7 @@ export default function ManagerRefillRequestManage() {
       {/*Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold">Yêu cầu bổ sung hàng</h1>
-        <Button
-          className="btn-primary-gradient"
-          onClick={() => router.push("/manager/refill-stock/create")}
-        >
-          <Plus />
-          Tạo yêu cầu
-        </Button>
+        <CreateRefillOrderModal />
       </div>
 
       {/*Table */}

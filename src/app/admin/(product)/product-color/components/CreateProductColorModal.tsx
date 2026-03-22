@@ -18,7 +18,7 @@ import { SketchPicker } from "react-color";
 import namer from "color-namer";
 import { createProductColorAPI } from "@/src/services/product-color.service";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 
@@ -163,4 +163,4 @@ function CreateProductColorModal() {
   );
 }
 
-export default CreateProductColorModal;
+export default memo(CreateProductColorModal);

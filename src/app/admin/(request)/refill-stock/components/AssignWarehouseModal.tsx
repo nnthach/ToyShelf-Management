@@ -18,6 +18,7 @@ import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom"
 import { reviewStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
 import { AlertCircle, Send, XCircle } from "lucide-react";
 import { approveRefillRequestAPI } from "@/src/services/refill.service";
+import { memo } from "react";
 
 type AssignWarehouseModalProps = {
   requestId: string;
@@ -138,4 +139,4 @@ function AssignWarehouseModal({
   );
 }
 
-export default AssignWarehouseModal;
+export default memo(AssignWarehouseModal);

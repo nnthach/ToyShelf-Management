@@ -17,6 +17,8 @@ import {
 import {
   formatStoreCreateRequestStatusColor,
   formatStoreCreateRequestStatusText,
+  formatStoreOrderRefillRequestStatusColor,
+  formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { useState } from "react";
 import {
@@ -27,8 +29,17 @@ import {
   Clock,
   CheckCircle2,
   XCircle,
+  Package,
 } from "lucide-react";
 import { getRefillDetailAPI } from "@/src/services/refill.service";
+import { RefillRequestProductColor, Shipment } from "@/src/types";
+import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
+import { getShipmentAssignDetailByIdAPI } from "@/src/services/shipment-assignment.service";
+import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
+import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
+import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";
+import ShipmentProductListComponent from "@/src/components/ShipmentComponent/ShipmentProductListComponent";
+import ConfirmReceiveModal from "./ConfirmReceiveModal";
 
 type ViewRefillRequestModalDetailProps = {
   requestId: string;
@@ -41,11 +52,29 @@ function ViewRefillRequestModalDetail({
   isOpen,
   onClose,
 }: ViewRefillRequestModalDetailProps) {
+  const [isOpenConfirmReceive, setIsOpenConfirmReceive] = useState(false);
+
   const { data: requestDetail, isLoading } = useQuery({
     queryKey: ["requestDetail", requestId],
     queryFn: () => getRefillDetailAPI(requestId!),
     select: (res) => res.data,
     enabled: !!requestId,
+  });
+
+  const assignmentId = requestDetail?.shipmentAssignmentIds?.[0];
+  const { data: shipmentAssignDetail } = useQuery({
+    queryKey: ["shipmentAssignDetail", assignmentId],
+    queryFn: () => getShipmentAssignDetailByIdAPI(assignmentId!),
+    select: (res) => res.data,
+    enabled: !!assignmentId,
+  });
+
+  const shipmentId = requestDetail?.shipmentIds?.[0];
+  const { data: shipmentDetail } = useQuery({
+    queryKey: ["shipmentDetail", shipmentId],
+    queryFn: () => getShipmentDetailByIdAPI(shipmentId!),
+    select: (res) => res.data as Shipment,
+    enabled: !!shipmentId,
   });
 
   const isPending = requestDetail?.status === "Pending";
@@ -59,101 +88,89 @@ function ViewRefillRequestModalDetail({
           if (!value) onClose();
         }}
       >
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Chi tiết yêu cầu bổ sung hàng</DialogTitle>
-            <DialogDescription>
-              Xem thông tin yêu cầu.
-            </DialogDescription>
-          </DialogHeader>
-
-          {isLoading ? (
-            <div className="flex h-40 items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div>
-          ) : (
-            <div className="space-y-6 py-2">
-              {/* Header Info: Store Name & Status */}
-              <div className="flex items-center justify-between border-b pb-4">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Store className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold leading-none">
-                      {requestDetail?.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Yêu cầu tạo cửa hàng mới
-                    </p>
-                  </div>
+        <DialogContent className="sm:max-w-[1000px] h-[90vh] flex flex-col p-0 overflow-hidden">
+          <div className="p-6 border-b bg-slate-50/50">
+            <DialogHeader>
+              <div className="flex justify-between items-start">
+                <div>
+                  <DialogTitle className="text-xl">
+                    Chi tiết bổ sung hàng
+                  </DialogTitle>
+                  <DialogDescription className="mt-1">
+                    Mã hệ thống:{" "}
+                    <span className="font-mono font-bold text-primary">
+                      {requestDetail?.code}
+                    </span>
+                  </DialogDescription>
                 </div>
-                <span
-                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors ${formatStoreCreateRequestStatusColor(requestDetail?.status)}`}
+                <div
+                  className={`px-4 py-1.5 mr-4 rounded-full text-sm font-bold shadow-sm ${formatStoreOrderRefillRequestStatusColor(requestDetail?.status)}`}
                 >
-                  {formatStoreCreateRequestStatusText(requestDetail?.status)}
-                </span>
+                  {formatStoreOrderRefillRequestStatusText(
+                    requestDetail?.status,
+                  )}
+                </div>
+              </div>
+            </DialogHeader>
+          </div>
+
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            <div className="grid grid-cols-12 h-full">
+              {/* CỘT TRÁI: THÔNG TIN LUỒNG XỬ LÝ (7 columns) */}
+              <div className="col-span-7 p-6 space-y-8 border-r">
+                {/* Section 1: Thông tin yêu cầu gốc */}
+                <StoreOrderDetailSection storeOrderDetail={requestDetail} />
+
+                {/* Section 2: Thông tin điều phối (Assignment) */}
+                <ShipmentAssignDetailSection
+                  shipmentAssignDetail={shipmentAssignDetail}
+                />
+
+                {/* Section 3: Thông tin vận chuyển (Shipment) */}
+                <ShipmentDetailSection shipmentDetail={shipmentDetail} />
               </div>
 
-              {/* Main Details Grid */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="sm:col-span-2 space-y-1">
-                  <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
-                    <MapPin className="h-3 w-3" /> Địa chỉ kinh doanh
-                  </p>
-                  <p className="text-sm font-medium leading-snug bg-muted/30 p-2 rounded-md border border-dashed">
-                    {requestDetail?.storeAddress}
-                  </p>
-                </div>
-
-                <div className="space-y-1">
-                  <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
-                    <Phone className="h-3 w-3" /> Số điện thoại
-                  </p>
-                  <p className="text-sm font-semibold">
-                    {requestDetail?.phoneNumber}
-                  </p>
-                </div>
-
-                {/* Thông tin xét duyệt (Nếu có) */}
-                {!isPending && (
-                  <>
-                    <div className="space-y-1">
-                      <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
-                        <User className="h-3 w-3" /> Người duyệt
-                      </p>
-                      <p className="text-sm font-semibold text-blue-600">
-                        {requestDetail?.reviewedByUserId}
-                      </p>
-                    </div>
-                    <div className="sm:col-span-2 space-y-1 border-t pt-3 mt-1">
-                      <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
-                        <Clock className="h-3 w-3" /> Thời gian xử lý
-                      </p>
-                      <p className="text-sm italic text-muted-foreground">
-                        {requestDetail?.reviewedAt}
-                      </p>
-                    </div>
-                  </>
-                )}
+              {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
+              <div className="col-span-5 flex flex-col bg-slate-50/50 overflow-hidden">
+                <ShipmentProductListComponent
+                  shipmentDetail={shipmentDetail}
+                  storeOrderDetail={requestDetail}
+                />
               </div>
-
-              {/* Reject Reason Section */}
-              {isRejected && (
-                <div className="relative overflow-hidden rounded-lg border border-destructive/20 bg-destructive/5 p-4">
-                  <div className="absolute left-0 top-0 h-full w-1 bg-destructive"></div>
-                  <p className="text-xs font-bold uppercase text-destructive mb-1">
-                    Lý do từ chối
-                  </p>
-                  <p className="text-sm leading-relaxed text-destructive/90 italic">
-                    {requestDetail?.rejectReason}
-                  </p>
-                </div>
-              )}
             </div>
-          )}
+          </div>
+
+          <div className="p-4 border-t bg-white">
+            <DialogFooter className="gap-2">
+              {!isRejected && !isPending && (
+                <Button variant="outline" onClick={onClose}>
+                  Đóng cửa sổ
+                </Button>
+              )}
+
+              {/* {shipmentDetail?.status === "Shipping" &&
+                shipmentDetail.deliveredAt && ( */}
+              <Button
+                variant="success"
+                onClick={() => setIsOpenConfirmReceive(true)}
+              >
+                Xác nhận đã nhận hàng
+              </Button>
+              {/* )} */}
+            </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
+
+      <ConfirmReceiveModal
+        shipmentId={shipmentId}
+        shipmentAssignId={assignmentId}
+        requestId={requestId}
+        items={shipmentAssignDetail?.items || []}
+        isOpen={isOpenConfirmReceive}
+        onClose={() => setIsOpenConfirmReceive(false)}
+        onSuccess={onClose}
+      />
     </>
   );
 }

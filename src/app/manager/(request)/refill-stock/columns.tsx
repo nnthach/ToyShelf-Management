@@ -4,6 +4,8 @@ import { RefillRequest, Store } from "@/src/types";
 import {
   formatStoreCreateRequestStatusColor,
   formatStoreCreateRequestStatusText,
+  formatStoreOrderRefillRequestStatusColor,
+  formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, Eye, Trash } from "lucide-react";
@@ -19,19 +21,13 @@ export const getStoreRefillRequestColumns = (
     header: "Mã",
   },
   {
-    accessorKey: "storeLocationId",
-    header: "Địa chỉ yêu cầu",
-    cell: ({ row }) => {
-      const storeLocationId = row.getValue("storeLocationId") as string;
+    accessorKey: "storeName",
+    header: "Cửa hàng yêu cầu",
+  },
 
-      return (
-        <div className="w-[200px]">
-          <p className="text-sm text-gray-700 line-clamp-2">
-            {storeLocationId}
-          </p>
-        </div>
-      );
-    },
+  {
+    accessorKey: "requestName",
+    header: "Tài khoản yêu cầu",
   },
   {
     accessorKey: "status",
@@ -40,8 +36,8 @@ export const getStoreRefillRequestColumns = (
       const status = row.getValue("status") as string;
 
       return (
-        <span className={`${formatStoreCreateRequestStatusColor(status)}`}>
-          {formatStoreCreateRequestStatusText(status)}
+        <span className={`${formatStoreOrderRefillRequestStatusColor(status)}`}>
+          {formatStoreOrderRefillRequestStatusText(status)}
         </span>
       );
     },

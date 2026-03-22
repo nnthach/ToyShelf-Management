@@ -117,3 +117,33 @@ export const formatShipmentAssignStatusColor = (status: string) => {
       return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
   }
 };
+
+export const formatStoreOrderRefillRequestStatusText = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "Đang chờ";
+    case "Approved":
+      return "Đã chấp nhận";
+    case "Rejected":
+      return "Đã từ chối";
+    case "PartiallyFulfilled":
+      return "Đã giao một phần";
+    case "Rejected":
+      return "Đã giao đủ";
+  }
+};
+
+export const formatStoreOrderRefillRequestStatusColor = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
+    case "Approved":
+      return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
+    case "Rejected":
+      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+    case "PartiallyFulfilled":
+      return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl";
+    case "PartiallyFulfilled":
+      return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
+  }
+};

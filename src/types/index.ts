@@ -78,6 +78,7 @@ export interface ProductColorItem {
   imageUrl: string;
   hexcode: string;
   isActive: boolean;
+  colorName?: string;
 }
 
 export interface Product {
@@ -247,6 +248,9 @@ export interface RefillRequest {
   requestedByUserId: string;
   approvedByUserId: string;
   rejectedByUserId: string;
+  storeName: string;
+  requestName: string;
+  storeAddress: string;
   status: string;
   createdAt: string;
   approvedAt: string;
@@ -300,5 +304,22 @@ export interface ShipmentAssign {
   status: string;
   createdAt: string;
   respondedAt: string;
+  items: RefillRequestProductColor[];
+}
+
+export interface Shipment {
+  id: string;
+  code: string;
+  storeOrderId: string;
+  toLocationId: string;
+  toLocationName: string;
+  fromLocationId: string;
+  fromLocationName: string;
+  shipperName: string;
+  status: string;
+  createdAt?: string;
+  pickedUpAt?: string;
+  deliveredAt?: string;
+  receivedAt?: string;
   items: RefillRequestProductColor[];
 }
