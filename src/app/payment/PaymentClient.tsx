@@ -16,7 +16,9 @@ export default function PaymentClient() {
       try {
         const res = await checkPaymentAPI({ orderCode: Number(orderCode) });
 
-        if (res.data.status === "COMPLETED") {
+        console.log("res checkout", res);
+
+        if (res.status === "PAID") {
           router.replace(`/payment/success?orderCode=${orderCode}`);
         } else {
           router.replace(`/payment/fail?orderCode=${orderCode}`);
