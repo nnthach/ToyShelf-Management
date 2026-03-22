@@ -94,7 +94,7 @@ function CreatePriceTableModal() {
       ...data,
       items: data.items.map((i) => ({
         ...i,
-        commissionRate: Number(i.commissionRate),
+        commissionRate: Number(i.commissionRate)/100,
       })),
     };
     try {

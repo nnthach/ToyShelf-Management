@@ -135,7 +135,7 @@ function EditPriceTableModal({
         type: data.type.charAt(0) + data.type.slice(1).toLowerCase(),
         items: data.items.map((item) => ({
           ...item,
-          commissionRate: Number(item.commissionRate),
+          commissionRate: Number(item.commissionRate) / 100,
         })),
       };
       await updatePriceTableAPI(payload, priceTableId);
