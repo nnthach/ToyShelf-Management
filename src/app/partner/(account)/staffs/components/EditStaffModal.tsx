@@ -1,5 +1,4 @@
 "use client";
-import { PARTNER_LEVEL_OPTIONS } from "@/src/constants/partner-level";
 import { PartnerFormValues, partnerSchema } from "@/src/schemas/partner.schema";
 import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
 import { createPartnerAPI } from "@/src/services/partner.service";
@@ -13,13 +12,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { PartnerTier } from "@/src/types";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Edit, Mail, Plus, Sparkles, User } from "lucide-react";
+import { Edit, Mail, Sparkles, User } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";

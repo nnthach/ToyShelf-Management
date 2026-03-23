@@ -61,10 +61,6 @@ function CreatePriceTableModal() {
       z.object({
         priceSegmentId: z.string().min(1, "Cấp bậc sản phẩm là bắt buộc"),
         commissionRate: z.number().min(1, "Hãy nhập phần trăm hoa hồng"),
-        // .string()
-        // .min(1, "Phần trăm hoa hồng là bắt buộc")
-        // .refine((val) => !isNaN(Number(val)), "Phần trăm hoa hồng phải là số")
-        // .refine((val) => Number(val) >= 1, "Phần trăm hoa hồng phải >= 1"),
       }),
     ),
   });

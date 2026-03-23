@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  WarehouseFormValues,
-  warehouseSchema,
-} from "@/src/schemas/warehouse.schema";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import {
@@ -17,7 +13,7 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { MapPin, Plus } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";

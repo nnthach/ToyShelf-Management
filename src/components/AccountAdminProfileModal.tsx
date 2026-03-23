@@ -4,13 +4,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../styles/components/ui/dialog";
 import { FormFieldCustom } from "../styles/components/custom/FormFieldCustom";
 import { Button } from "../styles/components/ui/button";

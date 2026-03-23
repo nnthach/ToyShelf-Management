@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import { StoreFakeData } from "@/src/constants/fakeData";
 import "./StoreMap.css";
 import { useTheme } from "next-themes";
 import { useQuery } from "@tanstack/react-query";
@@ -85,7 +84,7 @@ function StoreMap() {
     return () => {
       storeMarkers.forEach((marker) => marker.remove());
     };
-  }, [StoreFakeData]);
+  }, [storeList]);
 
   return (
     <div className="relative w-full h-full">

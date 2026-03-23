@@ -1,5 +1,4 @@
 "use client";
-import { PARTNER_LEVEL_OPTIONS } from "@/src/constants/partner-level";
 import { PartnerFormValues, partnerSchema } from "@/src/schemas/partner.schema";
 import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
 import { createPartnerAPI } from "@/src/services/partner.service";
@@ -23,10 +22,8 @@ import {
   Building2,
   Info,
   Plus,
-  Save,
   Send,
   ShieldCheck,
-  Users,
 } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";

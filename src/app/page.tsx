@@ -1,7 +1,5 @@
 "use client";
 
-import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
-import { setMyStore, setPartner, setUser } from "@/src/redux/slice/authSlice";
 import { Button } from "@/src/styles/components/ui/button";
 import {
   Card,
@@ -19,20 +17,14 @@ import {
 } from "@/src/styles/components/ui/field";
 import { Input } from "@/src/styles/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, LogIn, Notebook } from "lucide-react";
+import { Eye, EyeOff, LogIn } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import z from "zod";
-import {
-  getMyPartnerProfileAPI,
-  getMyProfileAPI,
-  loginAPI,
-} from "../services/user.service";
-import { getMyStoreAPI } from "../services/store-invite.service";
-import { GoogleLogin } from "@react-oauth/google";
+import { loginAPI } from "../services/user.service";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { useAuth } from "../hooks/useAuth";
 
