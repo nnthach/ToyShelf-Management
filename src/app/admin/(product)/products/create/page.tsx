@@ -19,7 +19,7 @@ import { SelectOption } from "@/src/types/SubType";
 import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
 import { useQuery } from "@tanstack/react-query";
 import { uploadFileToCloudinary } from "@/src/config/cloundinary";
-import { formatColorName } from "@/src/utils/format";
+import { formatColorNameToVN } from "@/src/utils/format";
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -63,7 +63,7 @@ export default function CreateProductPage() {
 
   const colorOptions = colorList.map((c) => ({
     value: c.id,
-    label: formatColorName(
+    label: formatColorNameToVN(
       c.name.charAt(0).toUpperCase() + c.name.slice(1).toLowerCase(),
     ),
     hexCode: c.hexCode,

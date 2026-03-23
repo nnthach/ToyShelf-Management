@@ -24,7 +24,7 @@ import EditProductInfoLeft from "../components/EditProductInfoLeft";
 import EditProductMediaRight from "../components/EditProductMediaRight";
 import ConfirmPopup from "../../create/ConfirmPopup";
 import { uploadFileToCloudinary } from "@/src/config/cloundinary";
-import { formatColorName } from "@/src/utils/format";
+import { formatColorNameToVN } from "@/src/utils/format";
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -104,7 +104,7 @@ export default function EditProductPage() {
 
   const colorOptions = colorList.map((c) => ({
     value: c.id,
-    label: formatColorName(
+    label: formatColorNameToVN(
       c.name.charAt(0).toUpperCase() + c.name.slice(1).toLowerCase(),
     ),
     hexCode: c.hexCode,

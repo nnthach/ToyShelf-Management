@@ -43,7 +43,7 @@ function AssignWarehouseModal({
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      warehouseLocationId: "Rejected",
+      warehouseLocationId: "",
       storeOrderId: "",
     },
   });

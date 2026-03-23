@@ -84,6 +84,7 @@ export interface ProductColorItem {
 export interface Product {
   id: string;
   productCategoryId: string;
+  productCategoryName: string;
   sku: string;
   name: string;
   description: string;

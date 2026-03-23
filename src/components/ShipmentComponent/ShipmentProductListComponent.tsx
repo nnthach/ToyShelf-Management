@@ -3,6 +3,7 @@ import {
   RefillRequestProductColor,
   Shipment,
 } from "@/src/types";
+import { formatColorNameToVN } from "@/src/utils/format";
 import { Package } from "lucide-react";
 
 interface ShipmentProductListComponentProps {
@@ -67,8 +68,8 @@ function ShipmentProductListComponent({
                       {item.productName}
                     </p>
                   </div>
-                  <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full border font-bold uppercase font-mono">
-                    {item.color}
+                  <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full border font-bold">
+                    {formatColorNameToVN(item?.color as string)}
                   </span>
                 </div>
 

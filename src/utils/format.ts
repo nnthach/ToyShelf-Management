@@ -51,25 +51,27 @@ export const formatToInitials = (data: string) => {
     .toUpperCase();
 };
 
-export const formatColorName = (data: string) => {
-  switch (data) {
-    case "Orange":
+export const formatColorNameToVN = (data: string) => {
+  const color = data.toLowerCase();
+
+  switch (color) {
+    case "orange":
       return "Cam";
-    case "Red":
+    case "red":
       return "Đỏ";
-    case "Blue":
+    case "blue":
       return "Xanh dương";
-    case "Green":
+    case "green":
       return "Xanh lá";
-    case "Purple":
+    case "purple":
       return "Tím";
-    case "Yellow":
+    case "yellow":
       return "Vàng";
-    case "Black":
+    case "black":
       return "Đen";
-    case "White":
+    case "white":
       return "Trắng";
-    case "Grey":
+    case "grey":
       return "Xám";
     default:
       return "";
