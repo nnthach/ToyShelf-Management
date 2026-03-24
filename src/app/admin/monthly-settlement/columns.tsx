@@ -15,10 +15,15 @@ export const getMonthlySettlementColumns =
       header: "Đối tác",
     },
     {
-      accessorKey: "month",
-      header: "Tháng",
-    },
+      accessorKey: "month-year",
+      header: "Tháng năm",
+      cell: ({ row }) => {
+        const month = row.original.month;
+        const year = row.original.year;
 
+        return `${month}/${year}`;
+      },
+    },
     {
       accessorKey: "totalItems",
       header: "Tổng sản phẩm",
@@ -27,6 +32,11 @@ export const getMonthlySettlementColumns =
     {
       accessorKey: "totalCommissionAmount",
       header: "Tổng tiền hoa hồng",
+    },
+
+    {
+      accessorKey: "finalAmount",
+      header: "Tổng tiền nhận được",
     },
 
     {

@@ -70,6 +70,10 @@ function ConfirmReceiveModal({
     console.log("data", data);
     try {
       await receiveShipmentAPI(shipmentId, data);
+
+      queryClient.invalidateQueries({
+        queryKey: ["refillRequests"],
+      });
       queryClient.invalidateQueries({
         queryKey: ["requestDetail", requestId],
       });
@@ -84,7 +88,7 @@ function ConfirmReceiveModal({
       form.reset();
       toast.success("Xác nhận thành công");
       onClose();
-      onSuccess();
+      // onSuccess();
     } catch (error) {
       toast.error("Xác nhận thất bại");
     }

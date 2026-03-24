@@ -240,6 +240,8 @@ export interface RefillRequestProductColor {
   fulfilledQuantity?: number;
   expectedQuantity?: number;
   receivedQuantity?: number;
+  displayExpected?: number;
+  displayReceived?: number;
 }
 
 export interface RefillRequest {

@@ -32,6 +32,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import {
+  approveRefillRequestAPI,
   getRefillDetailAPI,
   rejectRefillRequestAPI,
 } from "@/src/services/refill.service";
@@ -104,8 +105,27 @@ function UpdateRefillRequestModal({
     }
   }
 
+  async function handleApprove() {
+    try {
+      await approveRefillRequestAPI(requestId);
+
+      queryClient.invalidateQueries({
+        queryKey: ["refillRequests"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["requestDetail", requestId],
+      });
+
+      toast.success("Hãy điều phối kho thực hiện");
+    } catch {
+      toast.error("Chấp nhận yêu cầu thất bại");
+    }
+  }
+
   const isPending = requestDetail?.status === "Pending";
   const isRejected = requestDetail?.status === "Rejected";
+  const isApproved = requestDetail?.status === "Approved";
 
   return (
     <>
@@ -169,6 +189,9 @@ function UpdateRefillRequestModal({
 
           <div className="p-4 border-t bg-white">
             <DialogFooter className="gap-2">
+              <Button variant="outline" onClick={onClose} className="border-2">
+                Đóng cửa sổ
+              </Button>
               {isPending && (
                 <>
                   <Button
@@ -180,25 +203,29 @@ function UpdateRefillRequestModal({
                   </Button>
                   <Button
                     variant="success"
-                    onClick={() => setIsOpenAssignWarehouseModal(true)}
-                    className="px-8 shadow-lg shadow-green-200"
+                    onClick={handleApprove}
+                    className="px-8 border-2"
                   >
-                    <CheckCircle2 className="h-4 w-4 mr-2" /> Duyệt & Điều phối
-                    kho
+                    <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
                   </Button>
                 </>
               )}
               {isRejected && (
                 <Button
                   variant="success"
-                  onClick={() => setIsOpenAssignWarehouseModal(true)}
+                  onClick={handleApprove}
+                  className="px-8 border-2"
                 >
-                  <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận lại
+                  <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
                 </Button>
               )}
-              {!isRejected && !isPending && (
-                <Button variant="outline" onClick={onClose}>
-                  Đóng cửa sổ
+              {isApproved && !assignmentId && (
+                <Button
+                  variant="success"
+                  onClick={() => setIsOpenAssignWarehouseModal(true)}
+                  className="px-8 shadow-lg shadow-green-200"
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-2" /> Điều phối kho
                 </Button>
               )}
             </DialogFooter>

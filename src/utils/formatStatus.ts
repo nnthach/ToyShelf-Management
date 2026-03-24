@@ -4,6 +4,8 @@ export const formatBooleanIsActiveStatusText = (isActive: boolean) => {
       return "Chưa kích hoạt";
     case true:
       return "Đã kích hoạt";
+    default:
+      return "N/A";
   }
 };
 
@@ -22,6 +24,8 @@ export const formatUserStatusText = (status: boolean) => {
       return "Chưa kích hoạt";
     case true:
       return "Đã kích hoạt";
+    default:
+      return "N/A";
   }
 };
 
@@ -40,6 +44,8 @@ export const formatStoreStatusText = (isActive: boolean) => {
       return "Chưa kích hoạt";
     case true:
       return "Đã kích hoạt";
+    default:
+      return "N/A";
   }
 };
 
@@ -60,6 +66,8 @@ export const formatStoreInviteStatusText = (status: string) => {
       return "Đã chấp nhận";
     case "Rejected":
       return "Đã từ chối";
+    default:
+      return "N/A";
   }
 };
 
@@ -82,6 +90,8 @@ export const formatStoreCreateRequestStatusText = (status: string) => {
       return "Đã chấp nhận";
     case "Rejected":
       return "Đã từ chối";
+    default:
+      return "N/A";
   }
 };
 
@@ -101,9 +111,11 @@ export const formatShipmentAssignStatusText = (status: string) => {
     case "Pending":
       return "Đang chờ";
     case "Accepted":
-      return "Đã chấp nhận";
+      return "Nhân viên giao hàng chấp nhận";
     case "Rejected":
       return "Đã từ chối";
+    default:
+      return "N/A";
   }
 };
 
@@ -118,6 +130,44 @@ export const formatShipmentAssignStatusColor = (status: string) => {
   }
 };
 
+export const formatShipmentStatusText = (status: string) => {
+  switch (status) {
+    case "Draft":
+      return "Chờ giao hàng";
+    case "Approved":
+      return "Xác nhận từ nhân viên giao hàng";
+    case "Rejected":
+      return "Nhân viên đã từ chối";
+    case "Shipping":
+      return "Đang giao hàng";
+    case "Received":
+      return "Hoàn thành đơn";
+    case "Cancelled":
+      return "Đã hủy";
+    default:
+      return "N/A";
+  }
+};
+
+export const formatShipmentStatusColor = (status: string) => {
+  switch (status) {
+    case "Draft":
+      return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
+    case "Accepted":
+      return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
+    case "Rejected":
+      return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl";
+    case "Shipping":
+      return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl";
+    case "Received":
+      return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
+    case "Cancelled":
+      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+    default:
+      return "N/A";
+  }
+};
+
 export const formatStoreOrderRefillRequestStatusText = (status: string) => {
   switch (status) {
     case "Pending":
@@ -128,7 +178,7 @@ export const formatStoreOrderRefillRequestStatusText = (status: string) => {
       return "Đã từ chối";
     case "PartiallyFulfilled":
       return "Đã giao một phần";
-    case "Rejected":
+    case "Fulfilled":
       return "Đã giao đủ";
   }
 };
@@ -143,7 +193,7 @@ export const formatStoreOrderRefillRequestStatusColor = (status: string) => {
       return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
     case "PartiallyFulfilled":
       return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl";
-    case "PartiallyFulfilled":
+    case "Fulfilled":
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
   }
 };

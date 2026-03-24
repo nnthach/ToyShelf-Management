@@ -11,14 +11,14 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-
-import { reviewStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
-import { AlertCircle, Send, XCircle } from "lucide-react";
-import { approveRefillRequestAPI } from "@/src/services/refill.service";
+import { AlertCircle, Send, Warehouse, XCircle } from "lucide-react";
 import { memo } from "react";
+import { getAllInventoryLocationAPI } from "@/src/services/inventory-location.service";
+import { InventoryLocation } from "@/src/types";
+import { createShipmentAssignWarehouseAPI } from "@/src/services/shipment-assignment.service";
 
 type AssignWarehouseModalProps = {
   requestId: string;
@@ -44,26 +44,44 @@ function AssignWarehouseModal({
     resolver: zodResolver(formSchema),
     defaultValues: {
       warehouseLocationId: "",
-      storeOrderId: "",
+      storeOrderId: requestId,
     },
+  });
+
+  const { data: inventoryLocationList } = useQuery({
+    queryKey: ["inventoryLocations"],
+    queryFn: () => getAllInventoryLocationAPI({}),
+    select: (res) => res.data as InventoryLocation[],
+  });
+
+  const inventoryLocationOptions = inventoryLocationList?.map((item) => {
+    return {
+      label: item.name,
+      value: item.id,
+    };
   });
 
   const isSubmitting = form.formState.isSubmitting;
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
-      await approveRefillRequestAPI(requestId);
+      await createShipmentAssignWarehouseAPI(data);
 
       queryClient.invalidateQueries({
-        queryKey: ["refillRequests"],
+        queryKey: ["requestDetail", requestId],
       });
 
+      queryClient.invalidateQueries({
+        queryKey: ["shipmentAssignDetail"],
+      });
+
+      toast.success("Điều phối kho thành công");
+
       form.reset();
-      toast.success("Cập nhật yêu cầu thành công");
       onClose();
-      onSuccess();
+      // onSuccess();
     } catch (error) {
-      toast.error("Cập nhật yêu cầu thất bại");
+      toast.error("Điều phối kho thất bại");
     }
   }
 
@@ -89,8 +107,7 @@ function AssignWarehouseModal({
               Chọn kho thực hiện
             </DialogTitle>
             <DialogDescription>
-              Vui lòng cung cấp lý do cụ thể để chủ cửa hàng có thể điều chỉnh
-              lại thông tin.
+              Vui lòng chọn kho để thực hiện điều phối đơn hàng.
             </DialogDescription>
           </div>
         </DialogHeader>
@@ -103,9 +120,12 @@ function AssignWarehouseModal({
           >
             <div className="relative group">
               <FormFieldCustom
-                name="rejectReason"
-                label="Lý do từ chối"
-                placeholder="Ví dụ: Địa chỉ cửa hàng không chính xác hoặc thiếu giấy phép..."
+                name="warehouseLocationId"
+                label="Kho hàng"
+                placeholder="Chọn kho"
+                type="select"
+                selectData={inventoryLocationOptions}
+                icon={<Warehouse size={16} />}
               />
             </div>
           </form>

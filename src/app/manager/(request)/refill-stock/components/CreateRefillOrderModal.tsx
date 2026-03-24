@@ -20,7 +20,7 @@ import { Product, ProductColorItem } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Send, Sparkles, Store, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { memo, useEffect, useRef, useState } from "react";
@@ -28,6 +28,8 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 function CreateRefillOrderModal() {
+  const queryClient = useQueryClient();
+
   const searchRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState(false);
@@ -84,6 +86,10 @@ function CreateRefillOrderModal() {
 
     try {
       await createRefillAPI(payload);
+
+      queryClient.invalidateQueries({
+        queryKey: ["refillRequests"],
+      });
       toast.success("Tạo yêu cầu thành công");
       form.reset();
       setSearchTerm("");

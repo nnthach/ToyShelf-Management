@@ -4,6 +4,8 @@ import { ShipmentAssign, Store } from "@/src/types";
 import {
   formatShipmentAssignStatusColor,
   formatShipmentAssignStatusText,
+  formatShipmentStatusColor,
+  formatShipmentStatusText,
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, Eye } from "lucide-react";
@@ -16,11 +18,11 @@ export const getShipmentAssignColumnColumns = (
 ): ColumnDef<ShipmentAssign>[] => [
   {
     accessorKey: "warehouseLocationName",
-    header: "Kho",
+    header: "Từ kho",
   },
   {
     accessorKey: "storeLocationName",
-    header: "Cửa hàng",
+    header: "Đến cửa hàng",
   },
   {
     accessorKey: "createdByName",
@@ -43,6 +45,20 @@ export const getShipmentAssignColumnColumns = (
       );
     },
   },
+
+  {
+    accessorKey: "shipmentStatus",
+    header: "Trạng thái giao hàng",
+    cell: ({ row }) => {
+      const shipmentStatus = row.getValue("shipmentStatus") as string;
+
+      return (
+        <span className={`${formatShipmentStatusColor(shipmentStatus)}`}>
+          {formatShipmentStatusText(shipmentStatus)}
+        </span>
+      );
+    },
+  },
   {
     accessorKey: "action",
     header: "Hành động",
@@ -51,9 +67,7 @@ export const getShipmentAssignColumnColumns = (
       return (
         <div className="flex items-center gap-3">
           <span
-            onClick={() =>
-              onEdit(shipmentAssignRequest.id)
-            }
+            onClick={() => onEdit(shipmentAssignRequest.id)}
             title="Chi tiết"
             className="cursor-pointer text-blue-400"
           >

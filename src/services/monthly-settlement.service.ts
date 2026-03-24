@@ -18,7 +18,15 @@ export const createMonthlySettlementGenerateAPI = async (
   return res.data;
 };
 
-export const updateMonthlySettlementAPI = async (id: string) => {
+export const updateMonthlySettlementBankedAPI = async (id: string) => {
   const res = await api.patch(`/MonthlySettlement/${id}/pay`);
+  return res.data;
+};
+
+export const updateMonthlySettlementAdditionalFeeAPI = async <T>(
+  data: T,
+  id: string,
+) => {
+  const res = await api.put(`/MonthlySettlement/${id}/deduction`, data);
   return res.data;
 };

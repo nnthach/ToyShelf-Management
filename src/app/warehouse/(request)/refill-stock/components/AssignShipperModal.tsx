@@ -14,13 +14,10 @@ import z from "zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-
-import { reviewStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
 import { AlertCircle, Layers, Send, XCircle } from "lucide-react";
 import { assignShipperShipmentAssignAPI } from "@/src/services/shipment-assignment.service";
 import { getAllUserAPI } from "@/src/services/user.service";
 import { User } from "@/src/types";
-import { Value } from "@radix-ui/react-select";
 import { memo } from "react";
 
 type AssignShipperModalProps = {
@@ -76,16 +73,12 @@ function AssignShipperModal({
         queryKey: ["shipmentAssignRequest", requestId],
       });
 
-      queryClient.invalidateQueries({
-        queryKey: ["shipment", requestId],
-      });
-
       form.reset();
-      toast.success("Giao nhiệm vụ thành công");
+      toast.success("Điều phối giao hàng vụ thành công");
       onClose();
-      onSuccess();
+      // onSuccess();
     } catch (error) {
-      toast.error("Giao nhiệm vụ thất bại");
+      toast.error("Điều phối giao hàng vụ thất bại");
     }
   }
 
