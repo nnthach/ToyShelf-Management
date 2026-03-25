@@ -1,6 +1,7 @@
 "use client";
 
 import { RefillRequest, Store } from "@/src/types";
+import { formatDateTime } from "@/src/utils/format";
 import {
   formatStoreCreateRequestStatusColor,
   formatStoreCreateRequestStatusText,
@@ -31,7 +32,7 @@ export const getStoreRefillRequestColumns = (
   },
   {
     accessorKey: "status",
-    header: "Trạng thái",
+    header: "Trạng thái đơn",
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
 
@@ -40,6 +41,16 @@ export const getStoreRefillRequestColumns = (
           {formatStoreOrderRefillRequestStatusText(status)}
         </span>
       );
+    },
+  },
+
+  {
+    accessorKey: "createdAt",
+    header: "Ngày tạo",
+    cell: ({ row }) => {
+      const createdAt = row.getValue("createdAt") as string;
+
+      return <span>{formatDateTime(createdAt).full}</span>;
     },
   },
   {

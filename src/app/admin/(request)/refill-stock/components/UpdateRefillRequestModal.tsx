@@ -11,40 +11,23 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
-  formatShipmentAssignStatusText,
-  formatStoreCreateRequestStatusColor,
-  formatStoreCreateRequestStatusText,
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import {
-  Store,
-  MapPin,
-  User,
-  Clock,
   CheckCircle2,
   XCircle,
-  Package,
-  Calendar,
-  UserCheck,
-  Warehouse,
-  Truck,
-  ArrowRight,
 } from "lucide-react";
 import {
   approveRefillRequestAPI,
   getRefillDetailAPI,
   rejectRefillRequestAPI,
 } from "@/src/services/refill.service";
-import { RefillRequestProductColor, Shipment } from "@/src/types";
+import { Shipment } from "@/src/types";
 import { useState } from "react";
 import AssignWarehouseModal from "./AssignWarehouseModal";
 import { getShipmentAssignDetailByIdAPI } from "@/src/services/shipment-assignment.service";
 import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
-import { formatDateTime } from "@/src/utils/format";
-import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
-import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
-import EmptySection from "@/src/components/ShipmentComponent/EmptySection";
 import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
 import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
 import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";

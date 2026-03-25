@@ -90,6 +90,7 @@ function CreateRefillOrderModal() {
       queryClient.invalidateQueries({
         queryKey: ["refillRequests"],
       });
+      
       toast.success("Tạo yêu cầu thành công");
       form.reset();
       setSearchTerm("");

@@ -22,7 +22,6 @@ import { toast } from "react-toastify";
 type ConfirmReceiveModalProps = {
   shipmentId: string;
   requestId: string;
-  shipmentAssignId: string;
   isOpen: boolean;
   items: RefillRequestProductColor[];
   onClose: () => void;
@@ -32,7 +31,6 @@ type ConfirmReceiveModalProps = {
 function ConfirmReceiveModal({
   shipmentId,
   requestId,
-  shipmentAssignId,
   isOpen,
   items,
   onClose,
@@ -76,9 +74,6 @@ function ConfirmReceiveModal({
       });
       queryClient.invalidateQueries({
         queryKey: ["requestDetail", requestId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["shipmentAssignDetail", shipmentAssignId],
       });
 
       queryClient.invalidateQueries({

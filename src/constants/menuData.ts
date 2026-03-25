@@ -57,17 +57,6 @@ export const AdminSidebarGroups = [
       { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
     ],
   },
-
-  {
-    label: "Hàng tồn kho",
-    items: [
-      {
-        title: "Quản lý bổ sung hàng",
-        url: "/admin/inventory",
-        icon: UserStar,
-      },
-    ],
-  },
 ];
 
 export const AdminSidebarNested = [
@@ -120,6 +109,26 @@ export const AdminSidebarNested = [
         icon: FilePlus,
       },
       { title: "Kệ", url: "/admin/shelf", icon: Server },
+    ],
+  },
+  {
+    label: "Quản lý hàng tồn kho",
+    sub: [
+      {
+        title: "Quản lý bổ sung hàng",
+        url: "/admin/inventory",
+        icon: UserStar,
+      },
+      {
+        title: "Hàng tồn kho tại kho",
+        url: "/admin/inventory-warehouse",
+        icon: UserStar,
+      },
+      {
+        title: "Hàng tồn kho tại cửa hàng",
+        url: "/admin/inventory-store",
+        icon: UserStar,
+      },
     ],
   },
 

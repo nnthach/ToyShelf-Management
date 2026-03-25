@@ -171,7 +171,7 @@ export const formatShipmentStatusColor = (status: string) => {
 export const formatStoreOrderRefillRequestStatusText = (status: string) => {
   switch (status) {
     case "Pending":
-      return "Đang chờ";
+      return "Đang chờ duyệt";
     case "Approved":
       return "Đã chấp nhận";
     case "Rejected":
