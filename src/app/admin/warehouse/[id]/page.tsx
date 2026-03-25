@@ -1,11 +1,9 @@
 "use client";
 
 import StatCard from "@/src/components/StatCard";
-import { ArrowLeft, Box, Server, Store } from "lucide-react";
+import { ArrowLeft, Box, Server, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
-import BarChartExample from "./components/charts/BarChart";
-import { TargetRevenueChart } from "./components/charts/TargetRevenueChart";
 import { Button } from "@/src/styles/components/ui/button";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
@@ -13,6 +11,9 @@ import { getWarehouseDetailAPI } from "@/src/services/warehouse.service";
 import { formatBooleanIsActiveStatusText } from "@/src/utils/formatStatus";
 import UpdateWarehouseModal from "../components/UpdateWarehouseModal";
 import CreateWarehouseManagerAccountModal from "./components/CreateWarehouseManagerAccountModal";
+import TotalShipOrderBarChart from "./components/charts/TotalShipOrderBarChart";
+import WarehouseStatCard from "./components/WarehouseStatCard";
+import ViewInventorySheet from "./components/ViewInventorySheet";
 
 export default function ViewWarehouseDetailPage() {
   const { id: warehouseId } = useParams<{ id: string }>();
@@ -139,60 +140,50 @@ export default function ViewWarehouseDetailPage() {
 
       {/*Statistic card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <StatCard
-          title="Doanh thu"
-          value="$250,520"
-          change="+$30,215"
+        <WarehouseStatCard
+          title="Đơn hàng"
+          value="100"
+          change="+10"
           changePercent="+12%"
           icon={Box}
           color="bg-green-100 text-green-900"
         />
 
-        <StatCard
-          title="Cửa hàng"
-          value="15"
-          change="+1,647"
-          changePercent="+15%"
-          icon={Store}
-          color="bg-yellow-100 text-yellow-900"
-        />
-
-        <StatCard
-          title="Kệ"
+        <WarehouseStatCard
+          title="Kệ Tồn Kho"
           value="10"
-          change="+2,815"
+          change="+2"
           changePercent="+18%"
           icon={Server}
           color="bg-pink-100 text-pink-900"
         />
 
-        <StatCard
-          title="Tồn kho"
-          value="15"
-          change="+2,815"
+        <WarehouseStatCard
+          title="Hàng Tồn kho"
+          value="150"
+          change="+20"
           changePercent="+18%"
           icon={Box}
           color="bg-blue-100 text-blue-900"
+          action={<ViewInventorySheet warehouseId={warehouseId} />}
+        />
+        <WarehouseStatCard
+          title="Nhân viên giao hàng"
+          value="15"
+          change="+0"
+          changePercent="+18%"
+          icon={User}
+          color="bg-yellow-100 text-yellow-900"
         />
       </div>
 
       {/*Content */}
       <div className="mt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
-          {/*Chart total revenue */}
-          <div className="bg-background shadow-sm rounded-lg col-span-3 h-[60vh] w-full">
-            <BarChartExample />
-          </div>
-          {/*Chart target value */}
-          <div className="bg-background rounded-lg col-span-1 w-full">
-            <TargetRevenueChart />
+        <div className="grid grid-cols-1 mb-4">
+          <div className="bg-background shadow-sm rounded-lg col-span-3 h-[70vh] w-full">
+            <TotalShipOrderBarChart />
           </div>
         </div>
-      </div>
-
-      {/*Store */}
-      <div>
-        <h1 className="text-xl font-bold mb-4">Danh sách cửa hàng</h1>
       </div>
     </>
   );

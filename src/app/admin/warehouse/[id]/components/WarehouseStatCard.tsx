@@ -1,22 +1,24 @@
 import { ArrowUpRight } from "lucide-react";
 
-type StatCardProps = {
+type WarehouseStatCardProps = {
   title: string;
   value: string;
   change: string;
   changePercent: string;
   color?: string | null;
   icon: React.ComponentType<{ className?: string }>;
+  action?: React.ReactNode;
 };
 
-function StatCard({
+function WarehouseStatCard({
   title,
   value,
   change,
   changePercent,
   icon: Icon,
   color,
-}: StatCardProps) {
+  action,
+}: WarehouseStatCardProps) {
   const safeColor = color ?? "bg-gray-100 text-gray-500";
   const [bgColor, textColor] = safeColor.split(" ");
 
@@ -25,29 +27,29 @@ function StatCard({
       {/* Header */}
       <div className="flex items-center justify-between text-sm text-gray-500">
         <div className="flex items-center gap-2">
-          <div
-            className={`p-2 rounded-xl ${bgColor} backdrop-blur-sm flex items-center justify-center`}
-          >
+          <div className={`p-2 rounded-xl ${bgColor}`}>
             <Icon className={`w-6 h-6 ${textColor}`} />
           </div>
           <span className="font-bold text-black">{title}</span>
         </div>
+
         <span className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-0.5 rounded-full text-xs font-medium">
           <ArrowUpRight className="w-3 h-3" />
           {changePercent}
         </span>
       </div>
 
-      {/* Value */}
       <div className="text-2xl font-bold text-gray-900">{value}</div>
 
-      {/* Footer */}
-      <div className="text-sm text-gray-500">
-        <span className="text-green-600 font-medium">{change}</span> so với
-        tháng trước
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-gray-500">
+          <span className="text-green-600 font-medium">{change}</span> so với
+          tháng trước
+        </div>
+
+        {action && action}
       </div>
     </div>
   );
 }
-
-export default StatCard;
+export default WarehouseStatCard;

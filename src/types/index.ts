@@ -88,12 +88,15 @@ export interface Product {
   sku: string;
   name: string;
   description: string;
-  price: number;
   basePrice: number;
   brand: string;
   material: string;
   originCountry: string;
   ageRange: string;
+  length: number;
+  width: number;
+  height: number;
+  weight: number;
   isActive: boolean;
   isConsignment: boolean;
   createdAt: string;

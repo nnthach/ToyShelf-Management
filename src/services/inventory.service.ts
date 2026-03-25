@@ -15,12 +15,17 @@ export const refillInventoryAPI = async <T>(data: T) => {
   return res.data;
 };
 
-export const updateInventoryAPI = async <T>(data: T, id: string) => {
-  const res = await api.put(`/Inventory/${id}`, data);
+export const getInventoryOfWarehouseByIdAPI = async (id: string) => {
+  const res = await api.get(`/Inventory/warehouse/${id}/inventory`);
   return res.data;
 };
 
-export const deleteInventoryAPI = async (id: string) => {
-  const res = await api.delete(`/Inventory/${id}/delete`);
+export const getInventoryByLocationIdAPI = async (id: string) => {
+  const res = await api.get(`/Inventory/location/${id}/inventory-overview`);
+  return res.data;
+};
+
+export const getInventoryGlobalAPI = async () => {
+  const res = await api.get(`/Inventory/global`);
   return res.data;
 };

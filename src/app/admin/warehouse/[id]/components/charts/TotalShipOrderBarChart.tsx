@@ -5,7 +5,6 @@ import {
   Legend,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Bar,
   ResponsiveContainer,
@@ -15,45 +14,45 @@ import {
 const data = [
   {
     name: "Jan",
-    Membership: 4000,
-    QRScan: 2400,
+    RefillStock: 4000,
+    RefillShelf: 2400,
   },
   {
     name: "Feb",
-    Membership: 3000,
-    QRScan: 1398,
+    RefillStock: 3000,
+    RefillShelf: 1398,
   },
   {
     name: "Mar",
-    Membership: 2000,
-    QRScan: 9800,
+    RefillStock: 2000,
+    RefillShelf: 9800,
   },
   {
     name: "Apr",
-    Membership: 2780,
-    QRScan: 3908,
+    RefillStock: 2780,
+    RefillShelf: 3908,
   },
   {
     name: "Jun",
-    Membership: 1890,
-    QRScan: 4800,
+    RefillStock: 1890,
+    RefillShelf: 4800,
   },
   {
     name: "Jul",
-    Membership: 2390,
-    QRScan: 3800,
+    RefillStock: 2390,
+    RefillShelf: 3800,
   },
   {
     name: "Aug",
-    Membership: 3490,
-    QRScan: 4300,
+    RefillStock: 3490,
+    RefillShelf: 4300,
   },
 ];
 
 // #endregion
-const BarChartExample = ({ isAnimationActive = true }) => (
+const TotalShipOrderBarChart = ({ isAnimationActive = true }) => (
   <div className="flex flex-col h-full">
-    <h1 className="font-bold w-full m-4 text-lg">Total Revenue</h1>
+    <h1 className="font-bold w-full m-4 text-lg">Thống kế số lượng đơn hàng</h1>
     <div className="flex-1 m-4 mt-0">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
@@ -65,14 +64,16 @@ const BarChartExample = ({ isAnimationActive = true }) => (
           <Tooltip />
           <Legend />
           <Bar
-            dataKey="Membership"
+            dataKey="RefillStock"
             fill="blue"
             isAnimationActive={isAnimationActive}
+            name="Nhập hàng"
           />
           <Bar
-            dataKey="QRScan"
+            dataKey="RefillShelf"
             fill="lightblue"
             isAnimationActive={isAnimationActive}
+            name="Nhập kệ"
           />
         </BarChart>
       </ResponsiveContainer>
@@ -80,4 +81,4 @@ const BarChartExample = ({ isAnimationActive = true }) => (
   </div>
 );
 
-export default BarChartExample;
+export default TotalShipOrderBarChart;
