@@ -9,13 +9,14 @@ import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import CreatePartnerTierModal from "./components/CreatePriceTableModal";
+import CreatePartnerTierModal from "./components/CreateCommisionTableModal";
 import {
-  deletePriceTableAPI,
-  getAllPriceTableAPI,
-} from "@/src/services/price-table.service";
-import { PriceTable } from "@/src/types";
-import EditPriceTableModal from "./components/EditPriceTableModal";
+  deleteCommissionTableAPI,
+  getAllCommissionTableAPI,
+} from "@/src/services/commission-table.service";
+import { CommissionTable } from "@/src/types";
+import EditPriceTableModal from "./components/EditCommissionTableModal";
+import CreateCommissionTableModal from "./components/CreateCommisionTableModal";
 
 const getTypeStyle = (type: string) => {
   switch (type) {
@@ -46,8 +47,9 @@ const getTypeStyle = (type: string) => {
   }
 };
 
-export default function AdminPriceTable() {
-  const [selectedPriceTableId, setSelectedPriceTableId] = useState("");
+export default function AdminCommissionTable() {
+  const [selectedCommissionTableId, setSelectedCommissionTableId] =
+    useState("");
   const queryClient = useQueryClient();
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
@@ -56,27 +58,26 @@ export default function AdminPriceTable() {
   });
 
   const {
-    data: priceTableList = [],
+    data: commissionTableList = [],
     isLoading: loading,
     refetch,
   } = useQuery({
-    queryKey: ["priceTables", query],
-    queryFn: () => getAllPriceTableAPI(query),
-    select: (res) => res.data as PriceTable[],
+    queryKey: ["commissionTables", query],
+    queryFn: () => getAllCommissionTableAPI(query),
+    select: (res) => res.data as CommissionTable[],
   });
 
-  const handleEdit = (tierId: string) => {
-    setSelectedPriceTableId(tierId);
+  const handleEdit = (commissionId: string) => {
+    setSelectedCommissionTableId(commissionId);
   };
 
   const deleteMutation = useMutation({
-    mutationFn: deletePriceTableAPI,
+    mutationFn: deleteCommissionTableAPI,
     onSuccess: () => {
       toast.success("Xóa thành công");
 
-      // reload danh sách
       queryClient.invalidateQueries({
-        queryKey: ["priceTables"],
+        queryKey: ["commissionTables"],
       });
     },
     onError: () => {
@@ -84,22 +85,22 @@ export default function AdminPriceTable() {
     },
   });
 
-  const handleDelete = (tierId: string) => {
+  const handleDelete = (commissionId: string) => {
     const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xóa cấp bậc đối tác này không?",
+      "Bạn có chắc muốn xóa bảng giá này không?",
     );
 
     if (!confirmDelete) return;
 
-    deleteMutation.mutate(tierId);
+    deleteMutation.mutate(commissionId);
   };
 
   return (
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý bảng giá hoa hồng</h1>
-        <CreatePartnerTierModal />
+        <h1 className="text-4xl font-bold ">Quản lý bảng hoa hồng</h1>
+        <CreateCommissionTableModal />
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
@@ -108,7 +109,7 @@ export default function AdminPriceTable() {
           <FilterSearch
             query={query}
             loading={loading}
-            resultCount={priceTableList?.length || 0}
+            resultCount={commissionTableList?.length || 0}
             onSearch={(val) => updateQuery({ search: val })}
             onApplyFilter={(filter) =>
               updateQuery({
@@ -126,7 +127,7 @@ export default function AdminPriceTable() {
 
         {/*render card price table */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
-          {priceTableList.map((table) => {
+          {commissionTableList.map((table) => {
             const style = getTypeStyle(table.type);
 
             return (
@@ -148,21 +149,6 @@ export default function AdminPriceTable() {
                   >
                     {table.type}
                   </span>
-                </div>
-
-                {/* Items */}
-                <div className="mt-4 space-y-2">
-                  {table.items.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex justify-between text-sm bg-white p-2 rounded-md"
-                    >
-                      <span>{item.priceSegmentName}</span>
-                      <span className="font-medium">
-                        {item.commissionRate}%
-                      </span>
-                    </div>
-                  ))}
                 </div>
 
                 {/* Actions */}
@@ -189,12 +175,12 @@ export default function AdminPriceTable() {
         </div>
       </div>
 
-      {selectedPriceTableId && (
+      {selectedCommissionTableId && (
         <EditPriceTableModal
-          priceTableId={selectedPriceTableId}
-          isOpen={!!selectedPriceTableId}
+          commissionTableId={selectedCommissionTableId}
+          isOpen={!!selectedCommissionTableId}
           onClose={() => {
-            setSelectedPriceTableId("");
+            setSelectedCommissionTableId("");
           }}
         />
       )}

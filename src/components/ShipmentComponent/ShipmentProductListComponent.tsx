@@ -5,6 +5,7 @@ import {
 } from "@/src/types";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { Package } from "lucide-react";
+import Image from "next/image";
 
 interface ShipmentProductListComponentProps {
   shipmentDetail: Shipment | undefined;
@@ -48,83 +49,92 @@ function ShipmentProductListComponent({
       </div>
 
       {/* Danh sách sản phẩm */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
         {itemsWithQuantities?.map(
           (item: RefillRequestProductColor, index: number) => {
             const expected = item?.expectedQuantity ?? 0;
             const received = item?.receivedQuantity ?? 0;
-
             const isShortfall = received < expected;
 
             return (
               <div
                 key={item.productColorId || index}
-                className="bg-white border rounded-xl p-3 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white border rounded-xl p-3 shadow-sm hover:shadow-md transition-all flex items-center gap-4"
               >
-                {/* Header sản phẩm */}
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <p className="font-bold text-[13px] uppercase text-slate-800 leading-tight">
-                      {item.productName}
-                    </p>
+                {/* BÊN TRÁI: THÔNG TIN SẢN PHẨM (Chiếm phần lớn diện tích) */}
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="h-12 w-12 rounded-lg border bg-slate-50 flex-shrink-0 overflow-hidden relative shadow-sm">
+                    {item?.imageUrl ? (
+                      <Image
+                        src={item.imageUrl}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="48px"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full w-full bg-slate-100">
+                        <Package className="h-5 w-5 text-slate-300" />
+                      </div>
+                    )}
                   </div>
-                  <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full border font-bold">
-                    {formatColorNameToVN(item?.color as string)}
-                  </span>
+
+                  <div className="min-w-0">
+                    <h5 className="font-bold text-[13px] uppercase text-slate-800 leading-tight truncate">
+                      {item.productName}
+                    </h5>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-[10px] font-mono text-slate-400 font-medium">
+                        {item.sku || "N/A"}
+                      </span>
+                      <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 leading-none">
+                        {formatColorNameToVN(item?.color as string)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
-                {/* 3 Cột số lượng */}
-                <div className="grid grid-cols-3 gap-1 bg-slate-50 rounded-lg p-2 border border-slate-100 relative">
-                  {/* 1. Số lượng Yêu cầu */}
-                  <div className="text-center">
-                    <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter">
+                {/* BÊN PHẢI: 3 NHÓM SỐ LIỆU (Gom cụm đối soát) */}
+                <div className="flex items-center gap-4 shrink-0 pr-2">
+                  {/* Yêu cầu */}
+                  <div className="flex flex-col items-center min-w-[45px]">
+                    <span className="text-[8px] text-slate-400 uppercase font-bold tracking-tighter mb-0.5">
                       Yêu cầu
-                    </p>
-                    <p className="font-bold text-lg text-slate-600">
+                    </span>
+                    <span className="text-sm font-semibold text-slate-500">
                       {item.quantity}
-                    </p>
+                    </span>
                   </div>
 
-                  {/* 2. Số lượng Kho chuẩn bị */}
-                  <div className="text-center relative">
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[1px] h-8 bg-slate-200"></div>
-
-                    <p className="text-[9px] text-blue-500 uppercase font-bold tracking-tighter">
-                      Kho giao
-                    </p>
-                    <p
-                      className={`font-bold text-lg ${expected > 0 ? "text-blue-600" : "text-slate-300"}`}
+                  {/* Kho giao */}
+                  <div className="flex flex-col items-center min-w-[45px] border-l border-slate-100 pl-4">
+                    <span className="text-[8px] text-blue-500 uppercase font-bold tracking-tighter mb-0.5">
+                      Xuất kho
+                    </span>
+                    <span
+                      className={`text-sm font-bold ${expected > 0 ? "text-blue-600" : "text-slate-300"}`}
                     >
-                      {item.expectedQuantity}
-                    </p>
+                      {expected}
+                    </span>
                   </div>
 
-                  {/* 3. Số lượng Thực nhận */}
-                  <div className="text-center relative">
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[1px] h-8 bg-slate-200"></div>
-
-                    <p
-                      className={`text-[9px] uppercase font-bold tracking-tighter ${isShortfall && received > 0 ? "text-destructive" : "text-green-600"}`}
+                  {/* Thực nhận */}
+                  <div className="flex flex-col items-center min-w-[45px] border-l border-slate-100 pl-4">
+                    <span
+                      className={`text-[8px] uppercase font-bold tracking-tighter mb-0.5 ${isShortfall && received > 0 ? "text-destructive" : "text-green-600"}`}
                     >
-                      Thực nhận
-                    </p>
-                    <p
-                      className={`font-bold text-lg ${isShortfall && received > 0 ? "text-destructive" : received > 0 ? "text-green-600" : "text-slate-300"}`}
+                      Nhận
+                    </span>
+                    <span
+                      className={`text-sm font-bold ${isShortfall && received > 0 ? "text-destructive" : received > 0 ? "text-green-600" : "text-slate-300"}`}
                     >
-                      {item.receivedQuantity}
-                    </p>
+                      {received}
+                    </span>
                   </div>
                 </div>
               </div>
             );
           },
-        )}
-
-        {(!itemsWithQuantities || itemsWithQuantities.length === 0) && (
-          <div className="flex flex-col items-center justify-center py-12 text-slate-300">
-            <Package className="h-12 w-12 mb-2 opacity-20" />
-            <p className="text-sm italic">Không có dữ liệu sản phẩm</p>
-          </div>
         )}
       </div>
     </>

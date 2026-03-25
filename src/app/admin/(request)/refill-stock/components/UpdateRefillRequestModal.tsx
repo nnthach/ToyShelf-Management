@@ -14,10 +14,7 @@ import {
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
-import {
-  CheckCircle2,
-  XCircle,
-} from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import {
   approveRefillRequestAPI,
   getRefillDetailAPI,
@@ -144,18 +141,16 @@ function UpdateRefillRequestModal({
             </DialogHeader>
           </div>
 
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <div className="flex-1 overflow-hidden">
             <div className="grid grid-cols-12 h-full">
               {/* CỘT TRÁI: THÔNG TIN LUỒNG XỬ LÝ (7 columns) */}
-              <div className="col-span-7 p-6 space-y-8 border-r">
+              <div className="col-span-7 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
                 {/* Section 1: Thông tin yêu cầu gốc */}
                 <StoreOrderDetailSection storeOrderDetail={requestDetail} />
-
                 {/* Section 2: Thông tin điều phối (Assignment) */}
                 <ShipmentAssignDetailSection
                   shipmentAssignDetail={shipmentAssignDetail}
                 />
-
                 {/* Section 3: Thông tin vận chuyển (Shipment) */}
                 <ShipmentDetailSection shipmentDetail={shipmentDetail} />
               </div>

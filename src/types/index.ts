@@ -152,21 +152,21 @@ export interface Role {
   description: string;
 }
 
-export interface PriceTableItem {
+export interface CommissionTableItem {
   id: string;
-  priceSegmentId: string;
-  priceSegmentName: string;
+  appliedCategories: ProductCategory[];
+  productCategoryIds: ProductCategory[];
   commissionRate: number;
 }
 
-export interface PriceTable {
+export interface CommissionTable {
   id: string;
   name: string;
   type: string;
   partnerTierId: string;
   partnerTierName: string;
   isActive: boolean;
-  items: PriceTableItem[];
+  items: CommissionTableItem[];
 }
 
 export interface CommissionPolicy {
