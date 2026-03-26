@@ -32,7 +32,7 @@ export default function AdminCommissionPolicy() {
     refetch,
   } = useQuery({
     queryKey: ["commissionPolicies", query],
-    queryFn: () =>getAllCommissionTableAPI(query),
+    queryFn: () => getAllCommissionTableAPI(query),
     select: (res) => res.data,
   });
 
@@ -40,16 +40,13 @@ export default function AdminCommissionPolicy() {
     setSelectedCommissionPolicyId(commissionPolicyId);
   };
 
-
-
-
   const columns = getCommissionPolicyColumns(handleEdit);
 
   return (
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý chính sách hoa hồng</h1>
+        <h1 className="text-4xl font-bold ">Quản lý bảng hoa hồng áp dụng</h1>
         <CreateCommissionPolicyModal />
       </div>
       {/*Table */}

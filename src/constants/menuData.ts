@@ -118,16 +118,6 @@ export const AdminSidebarNested = [
         url: "/admin/inventory",
         icon: UserStar,
       },
-      {
-        title: "Hàng tồn kho tại kho",
-        url: "/admin/inventory-warehouse",
-        icon: UserStar,
-      },
-      {
-        title: "Hàng tồn kho tại cửa hàng",
-        url: "/admin/inventory-store",
-        icon: UserStar,
-      },
     ],
   },
 

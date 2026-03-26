@@ -144,7 +144,7 @@ function UpdateRefillRequestModal({
           <div className="flex-1 overflow-hidden">
             <div className="grid grid-cols-12 h-full">
               {/* CỘT TRÁI: THÔNG TIN LUỒNG XỬ LÝ (7 columns) */}
-              <div className="col-span-7 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
+              <div className="col-span-6 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
                 {/* Section 1: Thông tin yêu cầu gốc */}
                 <StoreOrderDetailSection storeOrderDetail={requestDetail} />
                 {/* Section 2: Thông tin điều phối (Assignment) */}
@@ -156,7 +156,7 @@ function UpdateRefillRequestModal({
               </div>
 
               {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
-              <div className="col-span-5 flex flex-col bg-slate-50/50 overflow-hidden">
+              <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
                 <ShipmentProductListComponent
                   shipmentDetail={shipmentDetail}
                   storeOrderDetail={requestDetail}

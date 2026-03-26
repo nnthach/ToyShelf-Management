@@ -123,6 +123,8 @@ export const formatShipmentAssignStatusText = (status: string) => {
   switch (status) {
     case "Pending":
       return "Đang chờ";
+    case "Assigned":
+      return "Đã điều phối giao hàng";
     case "Accepted":
       return "Nhân viên giao hàng chấp nhận";
     case "Rejected":
@@ -136,6 +138,8 @@ export const formatShipmentAssignStatusColor = (status: string) => {
   switch (status) {
     case "Pending":
       return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
+    case "Assigned":
+      return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl";
     case "Accepted":
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
     case "Rejected":
@@ -146,7 +150,7 @@ export const formatShipmentAssignStatusColor = (status: string) => {
 export const formatShipmentStatusText = (status: string) => {
   switch (status) {
     case "Draft":
-      return "Chờ giao hàng";
+      return "Chưa giao hàng";
     case "Approved":
       return "Xác nhận từ nhân viên giao hàng";
     case "Rejected":

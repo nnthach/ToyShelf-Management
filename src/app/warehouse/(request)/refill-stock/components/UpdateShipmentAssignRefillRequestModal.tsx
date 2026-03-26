@@ -14,20 +14,8 @@ import {
   formatShipmentAssignStatusColor,
   formatShipmentAssignStatusText,
 } from "@/src/utils/formatStatus";
-import { memo, ReactNode, useState } from "react";
-import {
-  Store,
-  User,
-  CheckCircle2,
-  XCircle,
-  UserCheck,
-  Truck,
-  ArrowRight,
-  Package,
-  Calendar,
-  Info,
-  Warehouse,
-} from "lucide-react";
+import { memo, useState } from "react";
+import { CheckCircle2, XCircle, Truck, Info } from "lucide-react";
 import {
   getShipmentAssignDetailByIdAPI,
   rejectShipmentAssignAPI,
@@ -129,7 +117,7 @@ function UpdateShipmentAssignRefillRequestModal({
           <div className="flex-1 overflow-hidden bg-white">
             <div className="grid grid-cols-12 h-full">
               {/* CỘT TRÁI: THÔNG TIN CHI TIẾT (7 columns) */}
-              <div className="col-span-7 p-6 space-y-8 border-r overflow-y-auto custom-scrollbar">
+              <div className="col-span-6 p-6 space-y-8 border-r overflow-y-auto custom-scrollbar">
                 {/* Section 1: Thông tin Điều phối (Shipment Assign) */}
                 <WarehouseShipmentStoreInfo
                   shipmentAssignDetail={shipmentAssignDetail}
@@ -142,7 +130,7 @@ function UpdateShipmentAssignRefillRequestModal({
               </div>
 
               {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
-              <div className="col-span-5 flex flex-col bg-slate-50/50 overflow-hidden">
+              <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
                 <WarehouseShipmentProductList
                   shipmentAssignDetail={shipmentAssignDetail}
                   shipmentDetail={shipmentDetail}

@@ -24,3 +24,8 @@ export const rejectRefillRequestAPI = async (id: string) => {
   const res = await api.patch(`/StoreOrder/${id}/reject`);
   return res.data;
 };
+
+export const getStoreOrderAvailableWarehouseAPI = async (id: string) => {
+  const res = await api.get(`/StoreOrder/${id}/available-warehouses`);
+  return res.data;
+};

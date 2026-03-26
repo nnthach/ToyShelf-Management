@@ -1,3 +1,4 @@
+import { cn } from "@/src/styles/lib/utils";
 import { memo, ReactNode } from "react";
 
 function ShipInfoItem({
@@ -17,7 +18,12 @@ function ShipInfoItem({
         {icon} {label}
       </p>
       <p
-        className={`text-sm font-semibold truncate ${isStatus ? "text-blue-600" : "text-slate-700"}`}
+        className={cn(
+          "text-sm font-bold px-2.5 py-1 rounded-lg w-fit transition-all",
+          isStatus
+            ? "bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-sm"
+            : "text-slate-700 bg-slate-50 border border-transparent",
+        )}
       >
         {value || "---"}
       </p>

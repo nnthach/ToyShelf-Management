@@ -14,10 +14,18 @@ import z from "zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import { AlertCircle, Layers, Send, XCircle } from "lucide-react";
+import {
+  UserCheck,
+  Send,
+  XCircle,
+  Truck,
+  User,
+  ShieldCheck,
+  Info,
+} from "lucide-react";
 import { assignShipperShipmentAssignAPI } from "@/src/services/shipment-assignment.service";
 import { getAllUserAPI } from "@/src/services/user.service";
-import { User } from "@/src/types";
+import { User as UserType } from "@/src/types";
 import { memo } from "react";
 
 type AssignShipperModalProps = {
@@ -31,14 +39,14 @@ function AssignShipperModal({
   requestId,
   isOpen,
   onClose,
-  onSuccess,
 }: AssignShipperModalProps) {
   const queryClient = useQueryClient();
 
   const { data: userList = [] } = useQuery({
     queryKey: ["shipper", {}],
     queryFn: () => getAllUserAPI({}),
-    select: (res) => res.data as User[],
+    select: (res) => res.data as UserType[],
+    enabled: isOpen,
   });
 
   const userOptions = userList.map((s) => ({
@@ -51,7 +59,7 @@ function AssignShipperModal({
     shipperId: z.string().min(1, "Hãy chọn nhân viên giao hàng"),
   });
 
-  const form = useForm<z.input<typeof formSchema>>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       shipmentAssignmentId: requestId,
@@ -64,21 +72,16 @@ function AssignShipperModal({
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
       await assignShipperShipmentAssignAPI(data);
-
-      queryClient.invalidateQueries({
-        queryKey: ["shipmentAssignRequests"],
-      });
-
+      queryClient.invalidateQueries({ queryKey: ["shipmentAssignRequests"] });
       queryClient.invalidateQueries({
         queryKey: ["shipmentAssignRequest", requestId],
       });
 
       form.reset();
-      toast.success("Điều phối giao hàng vụ thành công");
+      toast.success("Điều phối giao hàng thành công");
       onClose();
-      // onSuccess();
     } catch (error) {
-      toast.error("Điều phối giao hàng vụ thất bại");
+      toast.error("Điều phối giao hàng thất bại");
     }
   }
 
@@ -92,67 +95,69 @@ function AssignShipperModal({
         }
       }}
     >
-      <DialogContent className="sm:max-w-[400px] border-red-100">
-        <DialogHeader className="space-y-3">
-          {/* Icon Header */}
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-            <AlertCircle className="h-6 w-6 text-red-600" />
-          </div>
-
-          <div className="text-center space-y-1">
-            <DialogTitle className="text-xl font-bold text-red-700">
-              Chọn nhân viên giao hàng
-            </DialogTitle>
-            <DialogDescription>
-              Vui lòng cung cấp lý do cụ thể để chủ cửa hàng có thể điều chỉnh
-              lại thông tin.
-            </DialogDescription>
+      <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden border-none shadow-2xl">
+        {/* Header với Background Gradient nhẹ */}
+        <DialogHeader className="p-6 bg-gradient-to-b from-blue-50 to-white">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-200 animate-in zoom-in duration-300">
+              <Truck className="h-6 w-6" />
+            </div>
+            <div className="text-left space-y-1">
+              <DialogTitle className="text-xl font-black text-slate-800 uppercase tracking-tight">
+                Điều phối vận chuyển
+              </DialogTitle>
+              <DialogDescription className="text-xs font-medium text-slate-500">
+                Giao nhiệm vụ cho nhân viên giao hàng phù hợp
+              </DialogDescription>
+            </div>
           </div>
         </DialogHeader>
 
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            id="form-assign-shipper"
-            className="py-4"
-          >
-            <div className="relative group">
+        <div className="px-6 py-2">
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              id="form-assign-shipper"
+              className="space-y-6 py-4"
+            >
               <FormFieldCustom
                 name="shipperId"
-                label="Nhân viên giao hàng"
+                label="Nhân viên phụ trách"
                 type="select"
-                placeholder="Chọn nhân viên"
+                placeholder="Tìm kiếm hoặc chọn nhân viên..."
                 selectData={userOptions}
-                icon={<Layers size={16} />}
+                icon={<User size={16} />}
               />
-            </div>
-          </form>
-        </FormProvider>
 
-        <DialogFooter className="flex sm:justify-between gap-3 border-t pt-4">
+            </form>
+          </FormProvider>
+        </div>
+
+        <DialogFooter className="p-6 bg-slate-50 border-t flex gap-3">
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             onClick={() => {
               form.reset();
               onClose();
             }}
-            className="flex-1 gap-2"
+            className="flex-1 h-11 font-bold border-slate-200 hover:bg-slate-100 text-slate-600 rounded-xl transition-all"
           >
-            <XCircle className="h-4 w-4" /> Huỷ
+            <XCircle className="h-4 w-4 mr-2" /> Huỷ
           </Button>
           <Button
             type="submit"
             form="form-assign-shipper"
             disabled={isSubmitting}
-            className="flex-1 gap-2 bg-red-600 hover:bg-red-700 text-white"
+            className="flex-1 h-11 font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md shadow-blue-100 transition-all active:scale-95"
           >
             {isSubmitting ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
             ) : (
-              <Send className="h-4 w-4" />
+              <>
+                Xác nhận điều phối <Send className="ml-2 h-4 w-4" />
+              </>
             )}
-            Xác nhận
           </Button>
         </DialogFooter>
       </DialogContent>

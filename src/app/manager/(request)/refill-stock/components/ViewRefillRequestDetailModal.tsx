@@ -170,7 +170,7 @@ function ViewRefillRequestModalDetail({
                   </span>
                 </div>
 
-                <div className="flex flex-col divide-y bg-muted/20 p-4 rounded-xl border border-dashed gap-4">
+                <div className="flex flex-col divide-y bg-muted/20 p-4 rounded-xl border border-dashed gap-4 max-h-[300px] overflow-y-auto custom-scrollbar">
                   {itemsWithQuantities?.map(
                     (item: RefillRequestProductColor, index: number) => {
                       const expected = item.quantity || 0;
@@ -264,11 +264,13 @@ function ViewRefillRequestModalDetail({
                     <Truck className="h-4 w-4" /> 3. Trạng thái vận chuyển
                   </div>
                   {/* Status Badge - Bạn có thể map màu theo status ở đây */}
-                  <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-700 border border-green-200">
-                    {shipmentDetail?.status === "Received"
-                      ? "Đã nhận hàng"
-                      : shipmentDetail?.status}
-                  </span>
+                  {shipmentDetail?.status && (
+                    <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-700 border border-green-200">
+                      {shipmentDetail?.status === "Received"
+                        ? "Đã nhận hàng"
+                        : shipmentDetail?.status}
+                    </span>
+                  )}
                 </div>
 
                 {shipmentDetail ? (
@@ -328,8 +330,8 @@ function ViewRefillRequestModalDetail({
                     </div>
                   </div>
                 ) : (
-                  <div className="p-12 text-center text-slate-400 italic text-sm">
-                    Chưa có dữ liệu vận chuyển
+                  <div className="p-12 text-center text-slate-400 italic text-sm bg-slate-100 rounded-xl">
+                    Chưa có thông tin vận chuyển
                   </div>
                 )}
               </section>

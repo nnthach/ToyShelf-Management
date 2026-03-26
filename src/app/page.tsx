@@ -33,7 +33,7 @@ const formSchema = z.object({
   password: z
     .string()
     .min(6, "Mật khẩu phải tối thiểu 6 ký tự.")
-    .max(20, "Mật khẩu phải tối đa 6 ký tự."),
+    .max(20, "Mật khẩu phải tối đa 20 ký tự."),
 });
 
 export default function HomePage() {

@@ -234,6 +234,7 @@ export interface RefillRequestProductColor {
   receivedQuantity?: number;
   displayExpected?: number;
   displayReceived?: number;
+  availableQuantity?:number
 }
 
 export interface RefillRequest {
@@ -318,3 +319,4 @@ export interface Shipment {
   receivedAt?: string;
   items: RefillRequestProductColor[];
 }
+

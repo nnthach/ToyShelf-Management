@@ -2,6 +2,7 @@ import { RefillRequest } from "@/src/types";
 import { MapPin, Store, User } from "lucide-react";
 import ShipInfoItem from "./ShipInfoItem";
 import { memo } from "react";
+import { cn } from "@/src/styles/lib/utils";
 
 interface StoreOrderDetailSectionProps {
   storeOrderDetail: RefillRequest | undefined;

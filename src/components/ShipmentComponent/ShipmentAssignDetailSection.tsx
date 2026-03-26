@@ -31,7 +31,7 @@ function ShipmentAssignDetailSection({
             icon={<Warehouse className="h-3 w-3" />}
           />
           <ShipInfoItem
-            label="Người điều phối"
+            label="Quản lý kho điều phối"
             value={shipmentAssignDetail.assignedByName}
             icon={<UserCheck className="h-3 w-3" />}
           />
