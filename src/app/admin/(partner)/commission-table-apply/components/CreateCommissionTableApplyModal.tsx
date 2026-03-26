@@ -27,8 +27,15 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
-import { PartnerTier, ProductPriceSegment } from "@/src/types";
+import {
+  CommissionTable,
+  Partner,
+  PartnerTier,
+  ProductPriceSegment,
+} from "@/src/types";
 import { getAllCommissionTableAPI } from "@/src/services/commission-table.service";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
+import { createCommissionTableApplyAPI } from "@/src/services/commission-table-apply.service";
 
 function CreateCommissionPolicyModal() {
   const queryClient = useQueryClient();
@@ -36,73 +43,60 @@ function CreateCommissionPolicyModal() {
   const [open, setOpen] = useState(false);
 
   const formSchema = z.object({
-    partnerTierId: z.string().min(1, "Cấp bậc đối tác là bắt buộc"),
-    priceSegmentId: z.string().min(1, "Phân khúc giá là bắt buộc"),
-    commissionRate: z.number().min(1, "Hãy nhập phần trăm hoa hồng"),
-    // .string()
-    // .min(1, "Tỷ lệ hoa hồng là bắt buộc")
-    // .refine((val) => !isNaN(Number(val)), "Tỷ lệ hoa hồng phải là số")
-    // .refine(
-    //   (val) => Number(val) >= 0 && Number(val) <= 100,
-    //   "Tỷ lệ hoa hồng phải từ 0 đến 100",
-    // ),
-    effectiveDate: z.string(),
+    partnerId: z.string().min(1, "Đối tác là bắt buộc"),
+    priceTableId: z.string().min(1, "Bảng giá là bắt buộc"),
+    name: z.string().min(1, "Tên là bắt buộc"),
+    startDate: z.string().min(1, "Ngày bắt đầu là bắt buộc"),
+    endDate: z.string().min(1, "Ngày kết thúc là bắt buộc"),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      partnerTierId: "",
-      priceSegmentId: "",
-      commissionRate: 0,
-      effectiveDate: "",
+      partnerId: "",
+      priceTableId: "",
+      name: "",
+      startDate: "",
+      endDate: "",
     },
   });
 
-  const { data: partnerTierList = [], isLoading } = useQuery({
-    queryKey: ["partnerTiers", { isActive: undefined }],
-    queryFn: () => getAllPartnerTierAPI({ isActive: undefined }),
-    select: (res) => res.data as PartnerTier[],
+  const { data: partnerList } = useQuery({
+    queryKey: ["partners"],
+    queryFn: () => getAllPartnerAPI({}),
+    select: (res) => res.data as Partner[],
   });
 
-  const { data: priceSegmentList = [], isLoading: isPriceSegmentLoading } =
-    useQuery({
-      queryKey: ["priceSegments", { isActive: undefined }],
-      queryFn: () => getAllCommissionTableAPI({ isActive: undefined }),
-      select: (res) => res.data as ProductPriceSegment[],
-    });
+  const { data: commissionTableList } = useQuery({
+    queryKey: ["commissionTables"],
+    queryFn: () => getAllCommissionTableAPI({}),
+    select: (res) => res.data as CommissionTable[],
+  });
 
-  const partnerTierOptions = partnerTierList.map((s) => ({
+  const partnerOptions = partnerList?.map((s) => ({
+    value: s.id,
+    label: s.companyName,
+  }));
+
+  const commissionTableOptions = commissionTableList?.map((s) => ({
     value: s.id,
     label: s.name,
   }));
 
-  const priceSegmentOptions = priceSegmentList.map((s) => ({
-    value: s.id,
-    label: `${s.name} ( ${s.minPrice.toLocaleString("vi-VN")}đ - ${s.maxPrice.toLocaleString("vi-VN")}đ )`,
-  }));
-
   async function onSubmit(data: z.output<typeof formSchema>) {
-    const payload = {
-      ...data,
-      commissionRate: Number(data.commissionRate) / 100,
-      effectiveDate: data.effectiveDate
-        ? new Date(data.effectiveDate).toISOString()
-        : null,
-    };
-
     try {
+      await createCommissionTableApplyAPI(data);
 
       queryClient.invalidateQueries({
-        queryKey: ["commissionPolicies"],
+        queryKey: ["commissionTableApplies"],
       });
 
       form.reset();
-      toast.success("Thêm cấp bậc đối tác mới thành công");
+      toast.success("Áp dụng bảng hoa hồng thành công");
 
       setOpen(false);
     } catch (error) {
-      toast.error("Thêm cấp bậc đối tác mới thất bại");
+      toast.error("Áp dụng bảng hoa hồng thất bại");
     }
   }
 
@@ -118,14 +112,14 @@ function CreateCommissionPolicyModal() {
     >
       <DialogTrigger asChild>
         <Button className="btn-primary-gradient">
-          <Plus /> Thêm chính sách hoa hồng
+          <Plus /> Áp dụng bảng hoa hồng
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden border-none shadow-2xl">
         {/* Header tối giản */}
         <DialogHeader className="p-6 bg-slate-50/50 border-b">
           <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
-            Thêm chính sách hoa hồng
+            Áp dụng bảng hoa hồng
           </DialogTitle>
           <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
             <Info size={14} />
@@ -144,44 +138,45 @@ function CreateCommissionPolicyModal() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2 sm:col-span-1">
                   <FormFieldCustom
-                    name="partnerTierId"
-                    label="Cấp bậc đối tác"
-                    placeholder="Chọn cấp bậc"
+                    name="partnerId"
+                    label="Đối tác"
+                    placeholder="Chọn đối tác"
                     type="select"
-                    selectData={partnerTierOptions}
+                    selectData={partnerOptions}
                     icon={<Trophy size={16} />}
                   />
                 </div>
 
                 <div className="col-span-2 sm:col-span-1">
                   <FormFieldCustom
-                    name="priceSegmentId"
-                    label="Phân giá sản phẩm"
+                    name="priceTableId"
+                    label="Bảng hoa hồng"
                     type="select"
-                    placeholder="Chọn phân giá"
-                    selectData={priceSegmentOptions}
+                    placeholder="Chọn bảng hoa hồng"
+                    selectData={commissionTableOptions}
                     icon={<Layers size={16} />}
                   />
                 </div>
 
-                <div className="col-span-2 sm:col-span-1">
-                  <FormFieldCustom
-                    name="commissionRate"
-                    label="Tỷ lệ hoa hồng (%)"
-                    placeholder="Ví dụ: 10"
-                    type="number"
-                    icon={<Percent size={16} />}
-                  />
-                </div>
+                <FormFieldCustom
+                  name="name"
+                  label="Tên"
+                  placeholder="Tên"
+                  icon={<Trophy size={16} />}
+                />
 
-                <div className="col-span-2 sm:col-span-1">
-                  <FormFieldCustom
-                    name="effectiveDate"
-                    label="Ngày hiệu lực"
-                    type="date"
-                    icon={<Calendar size={16} />}
-                  />
-                </div>
+                <FormFieldCustom
+                  name="startDate"
+                  label="Ngày bắt đầu"
+                  type="date"
+                  icon={<Calendar size={16} />}
+                />
+                <FormFieldCustom
+                  name="endDate"
+                  label="Ngày kết thúc"
+                  type="date"
+                  icon={<Calendar size={16} />}
+                />
               </div>
             </form>
           </FormProvider>

@@ -72,6 +72,7 @@ export interface ProductColorItem {
 
 export interface Product {
   id: string;
+  productId?: string;
   productCategoryId: string;
   productCategoryName: string;
   sku: string;
@@ -158,14 +159,16 @@ export interface CommissionTable {
   items: CommissionTableItem[];
 }
 
-export interface CommissionPolicy {
+export interface CommissionTableApply {
   id: string;
-  partnerTierId: string;
-  partnerTierName: string;
-  priceSegmentId: string;
-  priceSegmentName: string;
-  commissionRate: number;
-  effectiveDate: string;
+  partnerId: string;
+  partnerName: string;
+  priceTableId: string;
+  priceTableName: string;
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+  name: string;
 }
 
 export interface Report {
@@ -234,7 +237,7 @@ export interface RefillRequestProductColor {
   receivedQuantity?: number;
   displayExpected?: number;
   displayReceived?: number;
-  availableQuantity?:number
+  availableQuantity?: number;
 }
 
 export interface RefillRequest {
@@ -319,4 +322,3 @@ export interface Shipment {
   receivedAt?: string;
   items: RefillRequestProductColor[];
 }
-

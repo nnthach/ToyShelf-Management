@@ -15,7 +15,6 @@ import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import ProductCardOrder from "./components/ProductCardOrder";
 import Pagination from "@/src/components/Pagination";
 import { Product } from "@/src/types";
-import { RefillOrderFormValues } from "@/src/schemas/refill-order.schema";
 import { createRefillAPI } from "@/src/services/refill.service";
 import { toast } from "react-toastify";
 

@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getPartnerDetailAPI } from "@/src/services/partner.service";
 import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
+import PartnerDetailStoreList from "./components/storelist/PartnerDetailStoreList";
 
 export default function ViewPartnerDetailPage() {
   const { id: partnerId } = useParams<{ id: string }>();
@@ -29,7 +30,7 @@ export default function ViewPartnerDetailPage() {
   });
 
   return (
-    <>
+    <div className="pb-6">
       {/*Header */}
       <div className="flex items-center justify-between mb-6">
         {/*Left */}
@@ -204,9 +205,7 @@ export default function ViewPartnerDetailPage() {
       </div>
 
       {/*Store */}
-      <div>
-        <h1 className="text-xl font-bold mb-4">Danh sách cửa hàng</h1>
-      </div>
-    </>
+      <PartnerDetailStoreList partnerId={partnerId} />
+    </div>
   );
 }

@@ -9,15 +9,13 @@ import { Upload } from "lucide-react";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
 
-import { getCommissionPolicyColumns } from "./columns";
-import EditCommissionPolicyModal from "./components/EditCommissionPolicyModal";
-import CreateCommissionPolicyModal from "./components/CreateCommissionPolicyModal";
-import { getAllCommissionTableAPI } from "@/src/services/commission-table.service";
+import { getCommissionTableApplyColumns } from "./columns";
+import CreateCommissionPolicyModal from "./components/CreateCommissionTableApplyModal";
+import { getAllCommissionTableApplyAPI } from "@/src/services/commission-table-apply.service";
 
-export default function AdminCommissionPolicy() {
-  const [selectedCommissionPolicyId, setSelectedCommissionPolicyId] =
+export default function AdminCommissionTableApply() {
+  const [selectedCommissionTableApplyId, setSelectedCommissionTableApplyId] =
     useState("");
   const queryClient = useQueryClient();
 
@@ -27,20 +25,20 @@ export default function AdminCommissionPolicy() {
   });
 
   const {
-    data: commissionPolicyList = [],
+    data: commissionTableApplyList = [],
     isLoading: loading,
     refetch,
   } = useQuery({
-    queryKey: ["commissionPolicies", query],
-    queryFn: () => getAllCommissionTableAPI(query),
+    queryKey: ["commissionTableApplies", query],
+    queryFn: () => getAllCommissionTableApplyAPI(query),
     select: (res) => res.data,
   });
 
-  const handleEdit = (commissionPolicyId: string) => {
-    setSelectedCommissionPolicyId(commissionPolicyId);
+  const handleEdit = (commissionTableApplyId: string) => {
+    setSelectedCommissionTableApplyId(commissionTableApplyId);
   };
 
-  const columns = getCommissionPolicyColumns(handleEdit);
+  const columns = getCommissionTableApplyColumns(handleEdit);
 
   return (
     <div>
@@ -53,7 +51,7 @@ export default function AdminCommissionPolicy() {
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={commissionPolicyList ?? []}
+          data={commissionTableApplyList ?? []}
           isLoading={loading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -61,7 +59,7 @@ export default function AdminCommissionPolicy() {
             <FilterSearch
               query={query}
               loading={loading}
-              resultCount={commissionPolicyList.length}
+              resultCount={commissionTableApplyList.length}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -78,16 +76,6 @@ export default function AdminCommissionPolicy() {
           </div>
         </DataTable>
       </div>
-
-      {selectedCommissionPolicyId && (
-        <EditCommissionPolicyModal
-          commissionPolicyId={selectedCommissionPolicyId}
-          isOpen={!!selectedCommissionPolicyId}
-          onClose={() => {
-            setSelectedCommissionPolicyId("");
-          }}
-        />
-      )}
     </div>
   );
 }

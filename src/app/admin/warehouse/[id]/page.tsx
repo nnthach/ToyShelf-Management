@@ -1,6 +1,5 @@
 "use client";
 
-import StatCard from "@/src/components/StatCard";
 import { ArrowLeft, Box, Server, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
@@ -13,7 +12,6 @@ import UpdateWarehouseModal from "../components/UpdateWarehouseModal";
 import CreateWarehouseManagerAccountModal from "./components/CreateWarehouseManagerAccountModal";
 import TotalShipOrderBarChart from "./components/charts/TotalShipOrderBarChart";
 import WarehouseStatCard from "./components/WarehouseStatCard";
-import ViewInventorySheet from "./components/ViewInventorySheet";
 
 export default function ViewWarehouseDetailPage() {
   const { id: warehouseId } = useParams<{ id: string }>();
@@ -165,7 +163,15 @@ export default function ViewWarehouseDetailPage() {
           changePercent="+18%"
           icon={Box}
           color="bg-blue-100 text-blue-900"
-          action={<ViewInventorySheet warehouseId={warehouseId} />}
+          action={
+            <Button
+              onClick={() =>
+                router.push(`/admin/warehouse/${warehouseId}/inventory`)
+              }
+            >
+              Chi tiết
+            </Button>
+          }
         />
         <WarehouseStatCard
           title="Nhân viên giao hàng"

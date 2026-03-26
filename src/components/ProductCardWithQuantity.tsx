@@ -14,7 +14,7 @@ function ProductCardWithQuantity({
 }: ProductCardWithQuantityProps) {
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
 
-  const selectedColor = product.colors?.[selectedColorIndex];
+  const selectedColor = product?.colors?.[selectedColorIndex];
   const image = selectedColor?.imageUrl;
 
   return (
@@ -84,10 +84,6 @@ function ProductCardWithQuantity({
           <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
             {product.name}
           </h3>
-          {/* Base price nếu cần */}
-          <p className="text-sm text-gray-600 mb-2">
-            {selectedColor?.price.toLocaleString()}đ
-          </p>
         </div>
         {/* Color selector */}
         <div className="flex items-center gap-2">

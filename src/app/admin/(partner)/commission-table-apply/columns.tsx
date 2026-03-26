@@ -1,42 +1,47 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { CommissionPolicy } from "@/src/types";
+import { CommissionTableApply } from "@/src/types";
 import { Edit, Trash } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const getCommissionPolicyColumns = (
+export const getCommissionTableApplyColumns = (
   onEdit: (commissionPolicyId: string) => void,
-): ColumnDef<CommissionPolicy>[] => [
+): ColumnDef<CommissionTableApply>[] => [
   {
-    accessorKey: "partnerTierName",
-    header: "Cấp bậc đối tác",
+    accessorKey: "partnerName",
+    header: "Đối tác",
   },
 
   {
-    accessorKey: "priceSegmentName",
-    header: "Phân khúc giá",
+    accessorKey: "priceTableName",
+    header: "Bảng hoa hồng",
   },
 
   {
-    accessorKey: "commissionRate",
-    header: "Tỷ lệ hoa hồng",
+    accessorKey: "name",
+    header: "Tên",
+  },
+
+  {
+    accessorKey: "startDate",
+    header: "Ngày bắt đầu",
     cell: ({ row }) => {
-      const commissionPolicy = row.original;
-      return `${(commissionPolicy.commissionRate * 100).toFixed(0)}%`;
+      const commissionTableApply = row.original;
+      return new Date(commissionTableApply.startDate).toLocaleDateString(
+        "vi-VN",
+      );
     },
   },
 
   {
-    accessorKey: "effectiveDate",
-    header: "Ngày hiệu lực",
+    accessorKey: "endDate",
+    header: "Ngày kết thúc",
     cell: ({ row }) => {
-      const commissionPolicy = row.original;
-      return new Date(commissionPolicy.effectiveDate).toLocaleDateString(
-        "vi-VN",
-      );
+      const commissionTableApply = row.original;
+      return new Date(commissionTableApply.endDate).toLocaleDateString("vi-VN");
     },
   },
 
@@ -54,7 +59,6 @@ export const getCommissionPolicyColumns = (
           >
             <Edit size={20} />
           </span>
-        
         </div>
       );
     },
