@@ -110,15 +110,7 @@ function StoreMap() {
             </p>
           </div>
 
-          {/* Body */}
-          <div className="p-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="text-yellow-500 text-base">★</span>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {selectStore.rating}
-              </span>
-            </div>
-          </div>
+          
         </div>
       )}
     </div>

@@ -31,12 +31,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import {
-  getCommissionPolicyDetailAPI,
-  updateCommissionPolicyAPI,
-} from "@/src/services/commission-policy.service";
+
 import { PartnerTier, ProductPriceSegment } from "@/src/types";
-import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
+import { getCommissionTableDetailAPI } from "@/src/services/commission-table.service";
 
 type EditCommissionPolicyModalProps = {
   commissionPolicyId: string;
@@ -53,7 +50,7 @@ function EditCommissionPolicyModal({
 
   const { data: commissionPolicyDetail, isLoading } = useQuery({
     queryKey: ["commissionPolicy", commissionPolicyId],
-    queryFn: () => getCommissionPolicyDetailAPI(commissionPolicyId!),
+    queryFn: () => getCommissionTableDetailAPI(commissionPolicyId!),
     select: (res) => res.data,
     enabled: !!commissionPolicyId,
   });
@@ -104,22 +101,13 @@ function EditCommissionPolicyModal({
       select: (res) => res.data as PartnerTier[],
     });
 
-  const { data: priceSegmentList = [], isLoading: isPriceSegmentLoading } =
-    useQuery({
-      queryKey: ["priceSegments", { isActive: undefined }],
-      queryFn: () => getAllProducePriceSegmentAPI({ isActive: undefined }),
-      select: (res) => res.data as ProductPriceSegment[],
-    });
 
   const partnerTierOptions = partnerTierList.map((s) => ({
     value: s.id,
     label: s.name,
   }));
 
-  const priceSegmentOptions = priceSegmentList.map((s) => ({
-    value: s.id,
-    label: `${s.name} ( ${s.minPrice.toLocaleString("vi-VN")}đ - ${s.maxPrice.toLocaleString("vi-VN")}đ )`,
-  }));
+
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const payload = {
@@ -131,7 +119,6 @@ function EditCommissionPolicyModal({
     };
 
     try {
-      await updateCommissionPolicyAPI(payload, commissionPolicyId);
 
       queryClient.invalidateQueries({
         queryKey: ["commissionPolicies"],
@@ -188,16 +175,7 @@ function EditCommissionPolicyModal({
                   />
                 </div>
 
-                <div className="col-span-2 sm:col-span-1">
-                  <FormFieldCustom
-                    name="priceSegmentId"
-                    label="Phân giá sản phẩm"
-                    type="select"
-                    placeholder="Chọn phân giá"
-                    selectData={priceSegmentOptions}
-                    icon={<Layers size={16} />}
-                  />
-                </div>
+
 
                 <div className="col-span-2 sm:col-span-1">
                   <FormFieldCustom

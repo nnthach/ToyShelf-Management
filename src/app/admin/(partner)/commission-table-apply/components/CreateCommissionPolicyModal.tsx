@@ -27,9 +27,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
-import { createCommissionPolicyAPI } from "@/src/services/commission-policy.service";
 import { PartnerTier, ProductPriceSegment } from "@/src/types";
-import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
+import { getAllCommissionTableAPI } from "@/src/services/commission-table.service";
 
 function CreateCommissionPolicyModal() {
   const queryClient = useQueryClient();
@@ -69,7 +68,7 @@ function CreateCommissionPolicyModal() {
   const { data: priceSegmentList = [], isLoading: isPriceSegmentLoading } =
     useQuery({
       queryKey: ["priceSegments", { isActive: undefined }],
-      queryFn: () => getAllProducePriceSegmentAPI({ isActive: undefined }),
+      queryFn: () => getAllCommissionTableAPI({ isActive: undefined }),
       select: (res) => res.data as ProductPriceSegment[],
     });
 
@@ -93,7 +92,6 @@ function CreateCommissionPolicyModal() {
     };
 
     try {
-      await createCommissionPolicyAPI(payload);
 
       queryClient.invalidateQueries({
         queryKey: ["commissionPolicies"],

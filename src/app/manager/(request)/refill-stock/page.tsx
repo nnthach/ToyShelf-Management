@@ -46,8 +46,14 @@ export default function ManagerRefillRequestManage() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Yêu cầu bổ sung hàng</h1>
-        <CreateRefillOrderModal />
+        <h1 className="text-4xl font-bold">Yêu cầu đặt hàng</h1>
+        {/* <CreateRefillOrderModal /> */}
+        <Button
+          className="btn-primary-gradient"
+          onClick={() => router.push("/manager/refill-stock/create")}
+        >
+          <Plus /> Tạo yêu cầu
+        </Button>
       </div>
 
       {/*Table */}

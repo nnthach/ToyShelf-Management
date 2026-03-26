@@ -9,7 +9,6 @@ import { Edit, Trash } from "lucide-react";
 
 export const getCommissionPolicyColumns = (
   onEdit: (commissionPolicyId: string) => void,
-  onDelete: (commissionPolicyId: string) => void,
 ): ColumnDef<CommissionPolicy>[] => [
   {
     accessorKey: "partnerTierName",
@@ -55,13 +54,7 @@ export const getCommissionPolicyColumns = (
           >
             <Edit size={20} />
           </span>
-          <span
-            onClick={() => onDelete(commissionPolicy.id)}
-            title="Xóa"
-            className="cursor-pointer text-red-400"
-          >
-            <Trash size={20} />
-          </span>
+        
         </div>
       );
     },

@@ -50,7 +50,6 @@ function EditProductMediaRight({
             append({
               name: "",
               colorId: "",
-              priceSegmentId: "",
               price: 0,
               model3DUrl: "",
               imageUrl: "",

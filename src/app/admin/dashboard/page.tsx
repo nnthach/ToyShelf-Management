@@ -3,8 +3,6 @@ import BarChartExample from "./components/charts/BarChart";
 import AreaChartExample from "./components/charts/AreaChart";
 import { PieChartExample } from "./components/charts/PieChart";
 import MostSellStore from "./components/MostSellStore";
-import BadFeedBackStore from "./components/BadFeedbackStore";
-import FeedbackList from "./components/FeedbackList";
 import StoreMap from "./components/StoreMap";
 import { Box, ClipboardList, Star } from "lucide-react";
 import StatCard from "@/src/components/StatCard";
@@ -75,15 +73,11 @@ export default function AdminDashboard() {
         <div className="bg-background p-4 rounded-lg shadow-sm">
           <PieChartExample />
         </div>
-        <div className="bg-background p-4 rounded-lg min-h-[50vh] shadow-sm">
-          <FeedbackList />
-        </div>
+
         <div className="bg-background p-4 rounded-lg lg:col-span-2 xl:col-span-1 2xl:col-span-2 min-h-[50vh] shadow-sm">
           <BarChartExample />
         </div>
-        <div className="bg-background p-4 rounded-lg shadow-sm">
-          <BadFeedBackStore />
-        </div>
+
       </div>
     </>
   );

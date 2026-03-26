@@ -1,6 +1,6 @@
 "use client";
 
-import { Cabinet } from "@/src/types";
+import { Store } from "@/src/types";
 import { formatUserStatusColor, formatUserStatusText } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -11,7 +11,7 @@ import { Eye } from "lucide-react";
 
 export const getCabinetColumns = (
   onViewDetail: (cabinetId: string) => void,
-): ColumnDef<Cabinet>[] => [
+): ColumnDef<Store>[] => [
   {
     accessorKey: "name",
     header: "Tên",

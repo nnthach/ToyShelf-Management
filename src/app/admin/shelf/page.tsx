@@ -12,7 +12,6 @@ import { DataTable } from "@/src/styles/components/ui/data-table";
 import { useState } from "react";
 import ViewDetailSheet from "./components/ViewDetailSheet";
 import { QueryParams } from "@/src/types/SubType";
-import { Cabinet } from "@/src/types";
 import { getAllShelfAPI } from "@/src/services/shelf.service";
 
 export default function AdminCabinetManage() {
@@ -33,7 +32,7 @@ export default function AdminCabinetManage() {
   } = useQuery({
     queryKey: ["shelfs", query],
     queryFn: () => getAllShelfAPI(query),
-    select: (res) => res.data as Cabinet[],
+    select: (res) => res.data ,
   });
 
   const handleViewDetail = (productId: string) => {

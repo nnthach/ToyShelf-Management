@@ -10,13 +10,11 @@ import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import {
-  deleteCommissionPolicyAPI,
-  getAllCommissionPolicyAPI,
-} from "@/src/services/commission-policy.service";
+
 import { getCommissionPolicyColumns } from "./columns";
 import EditCommissionPolicyModal from "./components/EditCommissionPolicyModal";
 import CreateCommissionPolicyModal from "./components/CreateCommissionPolicyModal";
+import { getAllCommissionTableAPI } from "@/src/services/commission-table.service";
 
 export default function AdminCommissionPolicy() {
   const [selectedCommissionPolicyId, setSelectedCommissionPolicyId] =
@@ -34,7 +32,7 @@ export default function AdminCommissionPolicy() {
     refetch,
   } = useQuery({
     queryKey: ["commissionPolicies", query],
-    queryFn: () => getAllCommissionPolicyAPI(query),
+    queryFn: () =>getAllCommissionTableAPI(query),
     select: (res) => res.data,
   });
 
@@ -42,32 +40,10 @@ export default function AdminCommissionPolicy() {
     setSelectedCommissionPolicyId(commissionPolicyId);
   };
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteCommissionPolicyAPI,
-    onSuccess: () => {
-      toast.success("Xóa thành công");
 
-      // reload danh sách
-      queryClient.invalidateQueries({
-        queryKey: ["commissionPolicies"],
-      });
-    },
-    onError: () => {
-      toast.error("Xóa thất bại");
-    },
-  });
 
-  const handleDelete = (commissionPolicyId: string) => {
-    const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xóa chính sách hoa hồng này không?",
-    );
 
-    if (!confirmDelete) return;
-
-    deleteMutation.mutate(commissionPolicyId);
-  };
-
-  const columns = getCommissionPolicyColumns(handleEdit, handleDelete);
+  const columns = getCommissionPolicyColumns(handleEdit);
 
   return (
     <div>

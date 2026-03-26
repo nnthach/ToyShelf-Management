@@ -8,7 +8,6 @@ import {
 } from "@/src/styles/components/ui/sheet";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import CabinetFormSheet from "./CabinetFormSheet";
 import { getShelfDetailAPI } from "@/src/services/shelf.service";
 
 type ViewDetailSheetProps = {
@@ -46,8 +45,6 @@ function ViewDetailSheet({ cabinetId, isOpen, onClose }: ViewDetailSheetProps) {
           {/*Left */}
           <div className="w-[70%] p-4">{/* Tabs content */}</div>
 
-          {/*Right */}
-          <CabinetFormSheet cabinet={cabinetDetail} onClose={onClose} />
         </div>
       </SheetContent>
     </Sheet>
