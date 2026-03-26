@@ -4,11 +4,14 @@ import { Eye } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
-interface ProductCardProps {
+interface ProductCardWithQuantityProps {
   product: Product;
   handleViewDetail: (productId: string) => void;
 }
-function ProductCard({ product, handleViewDetail }: ProductCardProps) {
+function ProductCardWithQuantity({
+  product,
+  handleViewDetail,
+}: ProductCardWithQuantityProps) {
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
 
   const selectedColor = product.colors?.[selectedColorIndex];
@@ -20,7 +23,7 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
       <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
         {image && (
           <Image
-            src={image}
+            src={image || ""}
             alt={product.name}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -102,4 +105,4 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
   );
 }
 
-export default ProductCard;
+export default ProductCardWithQuantity;

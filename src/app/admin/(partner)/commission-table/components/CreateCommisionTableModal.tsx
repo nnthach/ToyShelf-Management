@@ -39,6 +39,7 @@ import { PartnerTier, ProductCategory } from "@/src/types";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import { createCommissionTableAPI } from "@/src/services/commission-table.service";
 import { cn } from "@/src/styles/lib/utils";
+import { formatCommissionTableTypeToVN } from "@/src/utils/format";
 
 function CreateCommissionTableModal() {
   const queryClient = useQueryClient();
@@ -145,7 +146,7 @@ function CreateCommissionTableModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[1000px] p-0 overflow-hidden border-none shadow-2xl">
+      <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden border-none shadow-2xl">
         <DialogHeader className="p-6 bg-slate-50 border-b">
           <DialogTitle className="text-xl font-bold">
             Cấu hình bảng hoa hồng
@@ -155,142 +156,168 @@ function CreateCommissionTableModal() {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="p-6 max-h-[75vh] overflow-y-auto bg-white">
+        <div className="p-6 max-h-[60vh] overflow-y-auto bg-white">
           <FormProvider {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               id="form-create-commission-table"
-              className="grid grid-cols-12 gap-8"
+              className="max-w-4xl mx-auto space-y-10" // Căn giữa và tạo khoảng cách lớn giữa các section
             >
-              {/* CỘT TRÁI: INFO CHUNG */}
-              <div className="col-span-4 space-y-4 border-r pr-6">
-                {/* ... (giữ nguyên FormFieldCustom cho name, type, partnerTierId) */}
-                <h3 className="text-xs font-bold uppercase text-slate-400 tracking-widest">
-                  Thông tin chung
-                </h3>
-                <FormFieldCustom
-                  name="name"
-                  label="Tên bảng giá"
-                  icon={<ClipboardList size={18} />}
-                />
-                <FormFieldCustom
-                  name="type"
-                  label="Loại"
-                  type="select"
-                  selectData={Object.values(PriceTableType).map((v) => ({
-                    value: v,
-                    label: v,
-                  }))}
-                />
-                <FormFieldCustom
-                  name="partnerTierId"
-                  label="Cấp đối tác"
-                  type="select"
-                  selectData={partnerTierList.map((t) => ({
-                    value: t.id,
-                    label: t.name,
-                  }))}
-                />
-              </div>
-
-              {/* CỘT PHẢI: DANH SÁCH HẠNG MỤC */}
-              <div className="col-span-8 space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-xs font-bold uppercase text-slate-400 tracking-widest">
-                    Cấu hình chi tiết
+              {/* PHẦN 1: THÔNG TIN CHUNG */}
+              <section className="space-y-6">
+                <div className="flex items-center gap-2 pb-2 border-b">
+                  <div className="p-1.5 bg-slate-100 rounded-lg text-slate-500">
+                    <ClipboardList size={20} />
+                  </div>
+                  <h3 className="text-sm font-bold uppercase text-slate-600 tracking-widest">
+                    Thông tin chung
                   </h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <FormFieldCustom
+                    name="name"
+                    label="Tên bảng giá"
+                    placeholder="Nhập tên bảng giá..."
+                  />
+                  <FormFieldCustom
+                    name="type"
+                    label="Loại chính sách"
+                    type="select"
+                    selectData={Object.values(PriceTableType).map((v) => ({
+                      value: v,
+                      label: formatCommissionTableTypeToVN(v),
+                    }))}
+                  />
+                  <FormFieldCustom
+                    name="partnerTierId"
+                    label="Cấp đối tác áp dụng"
+                    type="select"
+                    selectData={partnerTierList.map((t) => ({
+                      value: t.id,
+                      label: t.name,
+                    }))}
+                  />
+                </div>
+              </section>
+
+              {/* PHẦN 2: CẤU HÌNH CHI TIẾT */}
+              <section className="space-y-6">
+                <div className="flex justify-between items-center pb-2 border-b">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-blue-50 rounded-lg text-blue-600">
+                      <Plus size={20} />
+                    </div>
+                    <h3 className="text-sm font-bold uppercase text-slate-600 tracking-widest">
+                      Cấu hình hoa hồng theo danh mục
+                    </h3>
+                  </div>
                   <Button
                     type="button"
                     size="sm"
                     variant="outline"
+                    className="border-blue-200 text-blue-600 hover:bg-blue-50"
                     onClick={() =>
                       append({ selectedCategoryIds: [], commissionRate: 0 })
                     }
                   >
-                    <Plus size={14} className="mr-1" /> Thêm dòng
+                    <Plus size={14} className="mr-1" /> Thêm cấu hình
                   </Button>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {fields.map((field, index) => (
                     <div
                       key={field.id}
-                      className="relative p-5 rounded-2xl bg-slate-50 border border-slate-100 group transition-all hover:shadow-md"
+                      className="relative p-6 rounded-2xl bg-white border border-slate-200 shadow-sm group transition-all hover:border-blue-200"
                     >
-                      <div className="mb-4">
-                        <label className="text-sm font-medium text-slate-600 mb-3 block">
-                          Chọn các danh mục áp dụng:
-                        </label>
-                        <Controller
-                          control={form.control}
-                          name={`items.${index}.selectedCategoryIds`}
-                          render={({ field: { value = [], onChange } }) => {
-                            const unavailableIds = getUnavailableIds(index); // Lấy IDs từ các dòng khác
-
-                            return (
-                              <div className="flex flex-wrap gap-2">
-                                {productCategoryList.map((cat) => {
-                                  const isSelected = value.includes(cat.id);
-                                  const isDisabled = unavailableIds.includes(
-                                    cat.id,
-                                  ); // Đã chọn ở dòng khác
-
-                                  return (
-                                    <button
-                                      key={cat.id}
-                                      type="button"
-                                      disabled={isDisabled} // Ngăn click
-                                      onClick={() => {
-                                        const newValue = isSelected
-                                          ? value.filter(
-                                              (id: string) => id !== cat.id,
-                                            )
-                                          : [...value, cat.id];
-                                        onChange(newValue);
-                                      }}
-                                      className={cn(
-                                        "px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 border",
-                                        isSelected
-                                          ? "bg-blue-600 border-blue-600 text-white shadow-sm"
-                                          : isDisabled
-                                            ? "bg-slate-100 border-slate-100 text-slate-300 cursor-not-allowed opacity-50" // Style cho nút bị disable
-                                            : "bg-white border-slate-200 text-slate-600 hover:border-blue-400 hover:text-blue-500",
-                                      )}
-                                    >
-                                      {isSelected && <Check size={12} />}
-                                      {cat.name}
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            );
-                          }}
-                        />
+                      {/* Header của từng dòng cấu hình */}
+                      <div className="flex justify-between items-center mb-4">
+                        <span className="text-xs font-bold text-slate-400 px-2 py-1 bg-slate-100 rounded">
+                          DÒNG #{index + 1}
+                        </span>
+                        {fields.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="text-slate-300 hover:text-red-500 transition-colors p-1"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        )}
                       </div>
 
-                      <div className="w-1/3">
-                        <FormFieldCustom
-                          name={`items.${index}.commissionRate`}
-                          label="Mức hoa hồng (%)"
-                          type="number"
-                          placeholder="10"
-                          icon={<Percent size={14} />}
-                        />
-                      </div>
+                      <div className="space-y-6">
+                        {/* Chọn danh mục */}
+                        <div>
+                          <label className="text-sm font-semibold text-slate-700 mb-3 block">
+                            Danh mục sản phẩm áp dụng
+                          </label>
+                          <Controller
+                            control={form.control}
+                            name={`items.${index}.selectedCategoryIds`}
+                            render={({ field: { value = [], onChange } }) => {
+                              const unavailableIds = getUnavailableIds(index);
+                              return (
+                                <div className="flex flex-wrap gap-2">
+                                  {productCategoryList.map((cat) => {
+                                    const isSelected = value.includes(cat.id);
+                                    const isDisabled = unavailableIds.includes(
+                                      cat.id,
+                                    );
 
-                      {fields.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => remove(index)}
-                          className="absolute top-4 right-4 text-slate-300 hover:text-red-500 transition-colors"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      )}
+                                    return (
+                                      <button
+                                        key={cat.id}
+                                        type="button"
+                                        disabled={isDisabled}
+                                        onClick={() => {
+                                          const newValue = isSelected
+                                            ? value.filter(
+                                                (id: string) => id !== cat.id,
+                                              )
+                                            : [...value, cat.id];
+                                          onChange(newValue);
+                                        }}
+                                        className={cn(
+                                          "px-4 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 border",
+                                          isSelected
+                                            ? "bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-100"
+                                            : isDisabled
+                                              ? "bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed"
+                                              : "bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600 shadow-sm",
+                                        )}
+                                      >
+                                        {isSelected ? (
+                                          <Check size={14} />
+                                        ) : (
+                                          <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                                        )}
+                                        {cat.name}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              );
+                            }}
+                          />
+                        </div>
+
+                        {/* Nhập hoa hồng */}
+                        <div className="max-w-[240px]">
+                          <FormFieldCustom
+                            name={`items.${index}.commissionRate`}
+                            label="Tỷ lệ hoa hồng (%)"
+                            type="number"
+                            placeholder="Ví dụ: 10"
+                            icon={<Percent size={14} />}
+                          />
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             </form>
           </FormProvider>
         </div>

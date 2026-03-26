@@ -18,6 +18,19 @@ export const formatBooleanIsActiveStatusColor = (isActive: boolean) => {
   }
 };
 
+export const formatPartnerTierTextColor = (text: string) => {
+  switch (text) {
+    case "Vàng":
+      return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
+    case "Đồng":
+      return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl";
+    case "Bạc":
+      return "bg-slate-100 text-slate-800 px-3 py-1 rounded-2xl";
+    default:
+      return "bg-gray-100 text-gray-800 px-3 py-1 rounded-2xl";
+  }
+};
+
 export const formatUserStatusText = (status: boolean) => {
   switch (status) {
     case false:

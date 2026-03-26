@@ -24,6 +24,10 @@ export const getStoreCreateRequestColumns = (
     header: "Số điện thoại",
   },
   {
+    accessorKey: "cityName",
+    header: "Thành phố",
+  },
+  {
     accessorKey: "storeAddress",
     header: "Địa chỉ",
     cell: ({ row }) => {

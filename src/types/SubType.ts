@@ -15,6 +15,10 @@ export interface QueryParams {
   pageNumber?: number;
   pageSize?: number;
   searchItem?: string;
+  keyword?: string;
+  cityId?: string;
+  ownerId?: string;
+  companyid?: string;
 }
 
 export interface LoginRes {

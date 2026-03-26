@@ -24,3 +24,13 @@ export const deleteCommissionTableAPI = async (id: string) => {
   const res = await api.delete(`/CommissionTable/${id}/delete`);
   return res.data;
 };
+
+export const disableCommissionTableAPI = async (id: string) => {
+  const res = await api.patch(`/CommissionTable/${id}/disable`);
+  return res.data;
+};
+
+export const restoreCommissionTableAPI = async (id: string) => {
+  const res = await api.patch(`/CommissionTable/${id}/restore`);
+  return res.data;
+};

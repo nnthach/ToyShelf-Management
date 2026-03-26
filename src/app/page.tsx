@@ -32,8 +32,8 @@ const formSchema = z.object({
   email: z.string("Not correct email format."),
   password: z
     .string()
-    .min(6, "Password must be at least 6 characters.")
-    .max(20, "Password must be at most 20 characters."),
+    .min(6, "Mật khẩu phải tối thiểu 6 ký tự.")
+    .max(20, "Mật khẩu phải tối đa 6 ký tự."),
 });
 
 export default function HomePage() {

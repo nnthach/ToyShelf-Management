@@ -131,7 +131,7 @@ function CreateStoreInviteModal() {
               <FormFieldCustom
                 name="email"
                 label="Email người nhận"
-                placeholder="đia-chi-email@gmail.com"
+                placeholder="email@gmail.com"
                 icon={<Mail size={18} />}
               />
 

@@ -11,6 +11,7 @@ import CreatePartnerAccountModal from "./components/CreatePartnerAccountModal";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getPartnerDetailAPI } from "@/src/services/partner.service";
+import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
 
 export default function ViewPartnerDetailPage() {
   const { id: partnerId } = useParams<{ id: string }>();
@@ -72,7 +73,9 @@ export default function ViewPartnerDetailPage() {
 
               {/* Partner Tier */}
               <div className="flex items-center gap-2 text-sm">
-                <span className="px-2 py-0.5 rounded-md bg-blue-500/80 text-white text-xs font-medium">
+                <span
+                  className={`font-bold text-[10px] uppercase tracking-wide shadow-sm ${formatPartnerTierTextColor(partnerDetail?.partnerTierName || "")}`}
+                >
                   {partnerDetail?.partnerTierName}
                 </span>
 
@@ -83,7 +86,8 @@ export default function ViewPartnerDetailPage() {
 
               {/* Representative */}
               <p className="text-sm text-white/80">
-                Người đại diện: {partnerDetail?.partnerAccount?.fullName}
+                Người đại diện:{" "}
+                {partnerDetail?.partnerAccount?.fullName || "Chưa có"}
               </p>
 
               {/* Email */}
@@ -124,18 +128,19 @@ export default function ViewPartnerDetailPage() {
                 <p className="font-bold text-zinc-800 dark:text-zinc-100">
                   {partnerDetail.partnerAccount.fullName}
                 </p>
-                <p className="text-xs text-zinc-500 truncate max-w-[150px]">
+                <p className="text-xs text-zinc-500 truncate">
                   {partnerDetail.partnerAccount.email}
                 </p>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center justify-center gap-4 w-full">
               <div className="w-16 h-16 rounded-2xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center border-2 border-dashed border-zinc-200 dark:border-zinc-700">
                 <UserPlus className="text-zinc-300" size={32} />
               </div>
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-zinc-500">
+
+              <div className="space-y-1 flex flex-col items-center">
+                <p className="text-sm font-medium text-zinc-500 text-center">
                   Chưa cấp tài khoản
                 </p>
                 <CreatePartnerAccountModal />

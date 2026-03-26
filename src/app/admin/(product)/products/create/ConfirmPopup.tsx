@@ -50,10 +50,17 @@ function ConfirmPopup({
               {/* CỘT TRÁI: THÔNG TIN CHI TIẾT (3/5) */}
               <div className=" space-y-4">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs font-bold rounded uppercase">
+                  <div className="flex items-center flex-wrap gap-2">
+                    {/* Brand */}
+                    <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase tracking-tight">
                       {previewData?.brand || "Popmart"}
                     </span>
+
+                    {/* Product Category - Thêm vào đây */}
+                    <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded border border-blue-100 uppercase tracking-tight">
+                      {previewData?.productCategoryName || "Blind Box"}
+                    </span>
+
                     <span className="text-sm text-muted-foreground italic">
                       Tuổi: {previewData?.ageRange}+
                     </span>
@@ -149,13 +156,13 @@ function ConfirmPopup({
                 </div>
               </div>
               {/* CỘT PHẢI: BIẾN THỂ MÀU SẮC (2/5) */}
-              <div className=" space-y-4">
+              <div className="space-y-4 flex flex-col max-h-[420px]">
                 <h3 className="text-sm font-bold uppercase tracking-wider flex items-center gap-2">
-                  <Box className="w-4 h-4" /> Phiên bản & Media (
+                  <Box className="w-4 h-4" /> Phiên bản màu & Hình ảnh (
                   {previewData?.colors?.length || 0})
                 </h3>
 
-                <div className="space-y-4 overflow-y-visible">
+                <div className="flex-1 overflow-y-auto custom-scrollbar space-y-4">
                   {previewData?.colors?.map((color, index: number) => (
                     <div
                       key={index}
@@ -171,15 +178,6 @@ function ConfirmPopup({
                             {color.colorName}
                           </span>
                         </div>
-                        <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                            color.priceSegmentName === "Rẻ"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-blue-100 text-blue-700"
-                          }`}
-                        >
-                          {color.priceSegmentName}
-                        </span>
                       </div>
 
                       <div className="p-3 grid grid-cols-2 gap-2">
@@ -192,7 +190,7 @@ function ConfirmPopup({
                             />
                           ) : (
                             <span className="text-[10px] text-muted-foreground italic">
-                              No Image
+                              Không hình ảnh
                             </span>
                           )}
                         </div>
@@ -204,7 +202,7 @@ function ConfirmPopup({
                             />
                           ) : (
                             <div className="flex items-center justify-center h-full text-[10px] text-muted-foreground">
-                              No 3D
+                              Không 3D
                             </div>
                           )}
                         </div>
@@ -212,7 +210,7 @@ function ConfirmPopup({
 
                       <div className="px-3 pb-3 flex justify-between items-baseline">
                         <span className="text-xs text-muted-foreground italic font-mono">
-                          Price
+                          Gía theo màu
                         </span>
                         <span className="text-base font-black text-primary">
                           {Number(color.price).toLocaleString()}{" "}

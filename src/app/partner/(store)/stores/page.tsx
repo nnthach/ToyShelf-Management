@@ -10,12 +10,16 @@ import { getAllStoreAPI } from "@/src/services/store.service";
 import { Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreColumns } from "./columns";
+import { useAuth } from "@/src/hooks/useAuth";
+import { getAllCityAPI } from "@/src/services/city.service";
 
 export default function PartnerStoreManage() {
+  const { partner } = useAuth();
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: "",
-    search: "",
+    keyword: "",
+    companyid: partner?.partnerId,
+    cityId: "",
   });
 
   const {
@@ -28,6 +32,12 @@ export default function PartnerStoreManage() {
     select: (res) => res.data as Store[],
   });
   const columns = getStoreColumns();
+
+  const { data: cityList = [] } = useQuery({
+    queryKey: ["cities"],
+    queryFn: () => getAllCityAPI({}),
+    select: (res) => res.data,
+  });
 
   return (
     <>
@@ -49,7 +59,8 @@ export default function PartnerStoreManage() {
               query={query}
               loading={isLoading}
               resultCount={storeList.length}
-              onSearch={(val) => updateQuery({ search: val })}
+              cityList={cityList}
+              onSearch={(val) => updateQuery({ keyword: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

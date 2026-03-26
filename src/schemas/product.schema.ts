@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const productSchema = z.object({
   productCategoryId: z.string().min(1, "Danh mục sản phẩm là bắt buộc"),
+  productCategoryName: z.string().optional(),
   name: z.string().min(1, "Tên sản phẩm là bắt buộc"),
   basePrice: z.coerce.number().min(1, "Giá là bắt buộc"),
   description: z.string().min(1, "Mô tả là bắt buộc"),
@@ -17,7 +18,6 @@ export const productSchema = z.object({
     z.object({
       name: z.string().optional(),
       colorId: z.string().min(1, "Chọn màu sắc là bắt buộc"),
-      priceSegmentId: z.string().min(1, "Chọn phân khúc giá là bắt buộc"),
       price: z.coerce.number().min(1, "Giá sản phẩm là bắt buộc"),
       model3DUrl: z.string(),
       model3DFile: z
@@ -29,7 +29,6 @@ export const productSchema = z.object({
         }),
       imageUrl: z.string(),
       imageFile: z.instanceof(File).optional().or(z.undefined()),
-      priceSegmentName: z.string().optional(),
       colorName: z.string().optional(),
       colorHex: z.string().optional(),
     }),
@@ -41,6 +40,7 @@ export type ProductFormValues = z.input<typeof productSchema>;
 export const productUpdateSchema = z.object({
   name: z.string().min(1, "Tên sản phẩm là bắt buộc"),
   description: z.string().min(1, "Mô tả là bắt buộc"),
+  productCategoryName: z.string().optional(),
   productCategoryId: z.string().min(1, "Danh mục sản phẩm là bắt buộc"),
   basePrice: z.coerce.number().min(1, "Giá là bắt buộc"),
   brand: z.string().min(1, "Thương hiệu là bắt buộc"),
@@ -51,12 +51,10 @@ export const productUpdateSchema = z.object({
   width: z.coerce.number().min(1, "Chiều rộng là bắt buộc"),
   height: z.coerce.number().min(1, "Chiều cao là bắt buộc"),
   weight: z.coerce.number().min(1, "Cân nặng là bắt buộc"),
-  isConsignment: z.boolean().optional(),
   colors: z.array(
     z.object({
       name: z.string().optional(),
       colorId: z.string().min(1, "Chọn màu sắc là bắt buộc"),
-      priceSegmentId: z.string().min(1, "Chọn phân khúc giá là bắt buộc"),
       price: z.coerce.number().min(1, "Giá sản phẩm là bắt buộc"),
       model3DUrl: z.string(),
       model3DFile: z
@@ -68,7 +66,6 @@ export const productUpdateSchema = z.object({
         }),
       imageUrl: z.string(),
       imageFile: z.instanceof(File).optional().or(z.undefined()),
-      priceSegmentName: z.string().optional(),
       colorName: z.string().optional(),
       colorHex: z.string().optional(),
     }),

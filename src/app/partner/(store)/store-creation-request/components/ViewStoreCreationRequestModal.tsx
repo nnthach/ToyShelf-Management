@@ -27,6 +27,8 @@ import {
   Clock,
   CheckCircle2,
   XCircle,
+  UserCheck,
+  UserPlus,
 } from "lucide-react";
 
 type ViewStoreCreateRequestModalProps = {
@@ -40,7 +42,6 @@ function ViewStoreCreateRequestModal({
   isOpen,
   onClose,
 }: ViewStoreCreateRequestModalProps) {
-
   const { data: requestDetail, isLoading } = useQuery({
     queryKey: ["requestDetail", requestId],
     queryFn: () => getStoreCreationRequestDetailAPI(requestId!),
@@ -97,12 +98,12 @@ function ViewStoreCreateRequestModal({
 
               {/* Main Details Grid */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="sm:col-span-2 space-y-1">
+                <div className="space-y-1">
                   <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
-                    <MapPin className="h-3 w-3" /> Địa chỉ kinh doanh
+                    <User className="h-3 w-3" /> Đối tác
                   </p>
-                  <p className="text-sm font-medium leading-snug bg-muted/30 p-2 rounded-md border border-dashed">
-                    {requestDetail?.storeAddress}
+                  <p className="text-sm font-semibold text-foreground">
+                    {requestDetail?.partnerName}
                   </p>
                 </div>
 
@@ -115,23 +116,62 @@ function ViewStoreCreateRequestModal({
                   </p>
                 </div>
 
-                {/* Thông tin xét duyệt (Nếu có) */}
+                {/* Địa chỉ và Thành phố */}
+                <div className="sm:col-span-2 space-y-1">
+                  <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
+                    <MapPin className="h-3 w-3" /> Địa chỉ kinh doanh
+                  </p>
+                  <div className="bg-muted/30 p-3 rounded-md border border-dashed space-y-2">
+                    <p className="text-sm font-medium leading-snug">
+                      {requestDetail?.storeAddress}
+                    </p>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full uppercase tracking-wider">
+                        {requestDetail?.cityName || "Chưa cập nhật"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Thông tin Người yêu cầu (Bổ sung thêm nếu bạn muốn hiện rõ ai là người tạo) */}
+                <div className="space-y-1 border-t pt-3">
+                  <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
+                    <UserPlus className="h-3 w-3" /> Người yêu cầu
+                  </p>
+                  <p className="text-sm font-semibold">
+                    {requestDetail?.requestedByUserName}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {requestDetail?.requestedByUserEmail}
+                  </p>
+                </div>
+
+                {/* Thông tin xét duyệt */}
                 {!isPending && (
                   <>
-                    <div className="space-y-1">
+                    <div className="space-y-1 border-t pt-3">
                       <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
-                        <User className="h-3 w-3" /> Người duyệt
+                        <UserCheck className="h-3 w-3" /> Người duyệt
                       </p>
+                      {/* Thay ID bằng Name và thêm Email */}
                       <p className="text-sm font-semibold text-blue-600">
-                        {requestDetail?.reviewedByUserId}
+                        {requestDetail?.reviewedByUserName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {requestDetail?.reviewedByUserEmail}
                       </p>
                     </div>
-                    <div className="sm:col-span-2 space-y-1 border-t pt-3 mt-1">
+
+                    <div className="sm:col-span-2 space-y-1 border-t pt-3">
                       <p className="text-xs font-medium uppercase text-muted-foreground flex items-center gap-1">
                         <Clock className="h-3 w-3" /> Thời gian xử lý
                       </p>
                       <p className="text-sm italic text-muted-foreground">
-                        {requestDetail?.reviewedAt}
+                        {requestDetail?.reviewedAt
+                          ? new Date(requestDetail.reviewedAt).toLocaleString(
+                              "vi-VN",
+                            )
+                          : "N/A"}
                       </p>
                     </div>
                   </>
@@ -154,8 +194,6 @@ function ViewStoreCreateRequestModal({
           )}
         </DialogContent>
       </Dialog>
-
-
     </>
   );
 }

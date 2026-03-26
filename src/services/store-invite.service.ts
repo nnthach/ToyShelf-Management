@@ -14,3 +14,18 @@ export const getMyStoreAPI = async () => {
   const res = await api.get("/StoreInvitation/my-stores");
   return res.data;
 };
+
+export const getMyStoreInviteAPI = async () => {
+  const res = await api.get("/StoreInvitation/my-invitations");
+  return res.data;
+};
+
+export const acceptStoreInviteAPI = async (invitationId: string) => {
+  const res = await api.post(`/StoreInvitation/${invitationId}/accept`);
+  return res.data;
+};
+
+export const rejectStoreInviteAPI = async (invitationId: string) => {
+  const res = await api.post(`/StoreInvitation/${invitationId}/reject`);
+  return res.data;
+};

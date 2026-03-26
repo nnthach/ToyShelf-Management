@@ -77,7 +77,13 @@ export function useAuth() {
     }
     if (roles.includes("Partner")) {
       const myStoreRes = await getMyStoreAPI();
-      dispatch(setMyStore(myStoreRes.data[0]));
+
+      if (myStoreRes.data.length > 0) {
+        dispatch(setMyStore(myStoreRes.data[0]));
+      } else {
+        router.replace("/store-invitations");
+        return;
+      }
     }
 
     const payload = {

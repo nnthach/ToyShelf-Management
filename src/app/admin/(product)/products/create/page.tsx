@@ -14,15 +14,16 @@ import { createProductAPI } from "@/src/services/product.service";
 import CreateProductInfoLeft from "./components/CreateProductInfoLeft";
 import CreateProductMediaRight from "./components/CreateProductMediaRight";
 import { getAllProductColorAPI } from "@/src/services/product-color.service";
-import { Color, ProductPriceSegment } from "@/src/types";
-import { SelectOption } from "@/src/types/SubType";
-import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
-import { useQuery } from "@tanstack/react-query";
+import { Color, ProductCategory } from "@/src/types";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { uploadFileToCloudinary } from "@/src/config/cloundinary";
 import { formatColorNameToVN } from "@/src/utils/format";
+import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import { SelectOption } from "@/src/types/SubType";
 
 export default function CreateProductPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [isLoading, setIsLoading] = useState(false);
   const [previewData, setPreviewData] = useState<ProductFormValues | null>(
@@ -41,11 +42,14 @@ export default function CreateProductPage() {
       material: "",
       originCountry: "",
       ageRange: "",
+      width: 0,
+      length: 0,
+      height: 0,
+      weight: 0,
       colors: [
         {
           name: "",
           colorId: "",
-          priceSegmentId: "",
           price: 0,
           model3DUrl: "",
           imageUrl: "",
@@ -53,6 +57,17 @@ export default function CreateProductPage() {
       ],
     },
   });
+
+  const { data: categoryList = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({}),
+    select: (res) => res.data as ProductCategory[],
+  });
+
+  const categoryOptions: SelectOption[] = categoryList.map((c) => ({
+    value: c.id,
+    label: c.name,
+  }));
 
   // product color
   const { data: colorList = [] } = useQuery({
@@ -69,29 +84,15 @@ export default function CreateProductPage() {
     hexCode: c.hexCode,
   }));
 
-  // product price segment
-  const { data: productPriceSegmentList = [] } = useQuery({
-    queryKey: ["productPriceSegments"],
-    queryFn: () => getAllProducePriceSegmentAPI({}),
-    select: (res) => res.data as ProductPriceSegment[],
-  });
-
-  const priceSegmentOptions: SelectOption[] = productPriceSegmentList.map(
-    (c) => ({
-      value: c.id,
-      label: `${c?.name} (${c?.minPrice?.toLocaleString()} - ${c?.maxPrice?.toLocaleString()} VND)`,
-    }),
-  );
-
   function onSubmit(data: ProductFormValues) {
+    const selectedCategory = categoryOptions.find(
+      (c) => c.value === data.productCategoryId,
+    );
     const payload = {
       ...data,
+      productCategoryName: selectedCategory?.label ?? "",
       colors: data.colors.map((i) => {
         const selectedColor = colorOptions.find((c) => c.value === i.colorId);
-
-        const selectedSegment = priceSegmentOptions.find(
-          (p) => p.value === i.priceSegmentId,
-        );
 
         const label = selectedColor?.label ?? "";
         const formattedName =
@@ -102,7 +103,6 @@ export default function CreateProductPage() {
           price: Number(i.price),
           colorName: formattedName,
           colorHex: selectedColor?.hexCode ?? "#ccc",
-          priceSegmentName: selectedSegment?.label ?? "",
         };
       }),
     };
@@ -137,9 +137,8 @@ export default function CreateProductPage() {
             imageUrl,
             model3DUrl,
             colorId: color.colorId,
-            priceSegmentId: color.priceSegmentId,
             price: color.price,
-            name: color.name,
+            name: color.colorName,
           };
         }),
       );
@@ -149,9 +148,13 @@ export default function CreateProductPage() {
         colors: uploadedColors,
       };
 
+      delete finalPayload.productCategoryName;
+
       await createProductAPI(finalPayload);
 
       toast.success("Thêm sản phẩm thành công");
+
+      queryClient.invalidateQueries({ queryKey: ["products"] });
 
       form.reset();
       setPreviewData(null);
@@ -203,11 +206,7 @@ export default function CreateProductPage() {
             <CreateProductInfoLeft />
 
             {/*Image 3Ds */}
-            <CreateProductMediaRight
-              form={form}
-              colorOptions={colorOptions}
-              priceSegmentOptions={priceSegmentOptions}
-            />
+            <CreateProductMediaRight form={form} colorOptions={colorOptions} />
           </div>
         </form>
       </FormProvider>

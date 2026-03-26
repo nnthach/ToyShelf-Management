@@ -37,6 +37,10 @@ export const getStoreColumns = (): ColumnDef<Store>[] => [
     header: "Số điện thoại",
   },
   {
+    accessorKey: "cityName",
+    header: "Thành phố",
+  },
+  {
     accessorKey: "storeAddress",
     header: "Địa chỉ",
     cell: ({ row }) => {

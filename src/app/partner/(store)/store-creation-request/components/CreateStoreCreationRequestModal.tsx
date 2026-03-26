@@ -13,8 +13,9 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  Globe2,
   MapIcon,
   MapPin,
   Navigation,
@@ -33,11 +34,24 @@ import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import MapCreate from "@/src/components/MapCreate";
 import { StoreFormValues, storeSchema } from "@/src/schemas/store.schema";
 import { createStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
+import { City } from "@/src/types";
+import { getAllCityAPI } from "@/src/services/city.service";
 
 function CreateStoreRequestModal() {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
+
+  const { data: cityList = [] } = useQuery({
+    queryKey: ["cities", { isActive: undefined }],
+    queryFn: () => getAllCityAPI({ isActive: undefined }),
+    select: (res) => res.data as City[],
+  });
+
+  const cityOptions = cityList.map((s) => ({
+    value: s.id,
+    label: s.name,
+  }));
 
   const {
     suggestions,
@@ -54,6 +68,7 @@ function CreateStoreRequestModal() {
     defaultValues: {
       name: "",
       storeAddress: "",
+      cityId:"",
       phoneNumber: "",
       latitude: 0,
       longitude: 0,
@@ -99,7 +114,7 @@ function CreateStoreRequestModal() {
 
         <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl">
           {/* Header đồng bộ */}
-          <DialogHeader className="p-6 py-2 bg-slate-50/50 border-b">
+          <DialogHeader className="p-6 py-4 bg-slate-50/50 border-b">
             <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
               <Store className="text-primary" size={24} />
               Tạo yêu cầu cửa hàng mới
@@ -111,7 +126,7 @@ function CreateStoreRequestModal() {
           </DialogHeader>
 
           {/* Form Body - Scrollable */}
-          <div className="p-6 py-0 max-h-[75vh] overflow-y-auto custom-scrollbar">
+          <div className="p-6 py-0 max-h-[60vh] overflow-y-auto custom-scrollbar">
             <div className="space-y-6">
               {/* SECTION: BẢN ĐỒ */}
               <div className="space-y-2">
@@ -148,6 +163,15 @@ function CreateStoreRequestModal() {
                     label="Số điện thoại liên hệ"
                     placeholder="Ví dụ: 0901234567"
                     icon={<Phone size={18} />}
+                  />
+
+                  <FormFieldCustom
+                    name="cityId"
+                    label="Thành phố / Tỉnh"
+                    placeholder="Chọn thành phố"
+                    type="select"
+                    selectData={cityOptions}
+                    icon={<Globe2 size={18} />}
                   />
 
                   {/* Địa chỉ với Suggestions */}
@@ -232,7 +256,7 @@ function CreateStoreRequestModal() {
           </div>
 
           {/* Footer đồng bộ */}
-          <DialogFooter className="p-4 py-2 bg-slate-50/50 border-t flex gap-3">
+          <DialogFooter className="p-4 bg-slate-50/50 border-t flex gap-3">
             <DialogClose asChild>
               <Button
                 variant="ghost"

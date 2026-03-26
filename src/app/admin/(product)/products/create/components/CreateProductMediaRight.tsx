@@ -8,13 +8,11 @@ import { useFieldArray, UseFormReturn } from "react-hook-form";
 interface CreateProductMediaRightProps {
   form: UseFormReturn<ProductFormValues>;
   colorOptions: SelectOption[];
-  priceSegmentOptions: SelectOption[];
 }
 
 function CreateProductMediaRight({
   form,
   colorOptions,
-  priceSegmentOptions,
 }: CreateProductMediaRightProps) {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -41,7 +39,6 @@ function CreateProductMediaRight({
             remove={remove}
             fieldsLength={fields.length}
             colorOptions={colorOptions}
-            priceSegmentOptions={priceSegmentOptions}
           />
         ))}
 
@@ -51,7 +48,6 @@ function CreateProductMediaRight({
             append({
               name: "",
               colorId: "",
-              priceSegmentId: "",
               price: 0,
               model3DUrl: "",
               imageUrl: "",

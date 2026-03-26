@@ -2,10 +2,10 @@ import { Button } from "@/src/styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import { Product } from "@/src/types";
-import ProductCard from "./ProductCard";
 import { memo } from "react";
 import Pagination from "@/src/components/Pagination";
 import { QueryParams } from "@/src/types/SubType";
+import ProductCardWithQuantity from "@/src/components/ProductCardWithQuantity";
 
 interface ProductGridViewProps {
   productList: Product[];
@@ -54,7 +54,7 @@ function ProductGridView({
           ) : productList.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
               {productList.map((product) => (
-                <ProductCard
+                <ProductCardWithQuantity
                   key={product.id}
                   product={product}
                   handleViewDetail={handleViewDetail}

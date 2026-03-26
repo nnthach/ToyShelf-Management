@@ -29,8 +29,21 @@ function StoreActionCell({ id }: { id: string }) {
 
 export const getStoreColumns = (): ColumnDef<Store>[] => [
   {
-    accessorKey: "name",
+    accessorKey: "partnerName",
     header: "Đối tác",
+    cell: ({ row }) => {
+      const { partnerName } = row.original;
+
+      return (
+        <p className="text-sm text-gray-900 line-clamp-2 font-medium">
+          {partnerName}
+        </p>
+      );
+    },
+  },
+  {
+    accessorKey: "ownerName",
+    header: "Tài khoản sở hữu",
   },
   {
     accessorKey: "name",
@@ -39,6 +52,10 @@ export const getStoreColumns = (): ColumnDef<Store>[] => [
   {
     accessorKey: "phoneNumber",
     header: "Số điện thoại",
+  },
+  {
+    accessorKey: "cityName",
+    header: "Thành phố",
   },
   {
     accessorKey: "storeAddress",

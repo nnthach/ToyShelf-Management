@@ -15,6 +15,7 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getPartnerDetailAPI } from "@/src/services/partner.service";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
+import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
 
 export default function AdminDashboard() {
   const { partner, isLoading: isAuthLoading } = useAuth();
@@ -70,7 +71,9 @@ export default function AdminDashboard() {
 
               {/* Partner Tier */}
               <div className="flex items-center gap-2 text-sm">
-                <span className="px-2 py-0.5 rounded-md bg-blue-500/80 text-white text-xs font-medium">
+                <span
+                  className={`font-bold text-[10px] uppercase tracking-wide shadow-sm ${formatPartnerTierTextColor(partnerDetail?.partnerTierName || "")}`}
+                >
                   {partnerDetail?.partnerTierName}
                 </span>
 

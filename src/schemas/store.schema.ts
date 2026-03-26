@@ -5,6 +5,7 @@ export const storeSchema = z.object({
   partnerId: z.string().optional(),
   code: z.string().optional(),
   storeAddress: z.string().min(1, "Địa chỉ cửa hàng không được để trống"),
+  cityId: z.string().min(1, "Thành phố không được để trống"),
   phoneNumber: z.string().min(10, "Số điện thoại không hợp lệ"),
   latitude: z.number(),
   longitude: z.number(),

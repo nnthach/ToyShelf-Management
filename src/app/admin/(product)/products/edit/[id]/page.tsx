@@ -4,7 +4,7 @@ import {
   ProductUpdateFormValues,
   productUpdateSchema,
 } from "@/src/schemas/product.schema";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Check } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -15,11 +15,9 @@ import {
   getProductDetailAPI,
   updateProductAPI,
 } from "@/src/services/product.service";
-import { Color, ProductColorItem, ProductPriceSegment } from "@/src/types";
-import { SelectOption } from "@/src/types/SubType";
+import { Color, ProductColorItem } from "@/src/types";
 import { Button } from "@/src/styles/components/ui/button";
 import { getAllProductColorAPI } from "@/src/services/product-color.service";
-import { getAllProducePriceSegmentAPI } from "@/src/services/product-segment.service";
 import EditProductInfoLeft from "../components/EditProductInfoLeft";
 import EditProductMediaRight from "../components/EditProductMediaRight";
 import ConfirmPopup from "../../create/ConfirmPopup";
@@ -28,6 +26,7 @@ import { formatColorNameToVN } from "@/src/utils/format";
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
+  const queryClient = useQueryClient();
 
   const router = useRouter();
 
@@ -46,13 +45,11 @@ export default function EditProductPage() {
       brand: "",
       material: "",
       originCountry: "",
-      isConsignment: false,
       ageRange: "",
       colors: [
         {
           name: "",
           colorId: "",
-          priceSegmentId: "",
           price: 0,
           model3DUrl: "",
           imageUrl: "",
@@ -79,14 +76,12 @@ export default function EditProductPage() {
         material: productDetail.material,
         originCountry: productDetail.originCountry,
         ageRange: productDetail.ageRange,
-        isConsignment: productDetail.isConsignment,
         weight: productDetail.weight,
         height: productDetail.height,
         length: productDetail.length,
         width: productDetail.width,
         colors: productDetail.colors.map((color: ProductColorItem) => ({
           colorId: color.colorId,
-          priceSegmentId: color.priceSegmentId,
           price: color.price,
           model3DUrl: color.model3DUrl,
           imageUrl: color.imageUrl,
@@ -110,29 +105,11 @@ export default function EditProductPage() {
     hexCode: c.hexCode,
   }));
 
-  // product price segment
-  const { data: productPriceSegmentList = [], refetch } = useQuery({
-    queryKey: ["productPriceSegments"],
-    queryFn: () => getAllProducePriceSegmentAPI({}),
-    select: (res) => res.data as ProductPriceSegment[],
-  });
-
-  const priceSegmentOptions: SelectOption[] = productPriceSegmentList.map(
-    (c) => ({
-      value: c.id,
-      label: c.name,
-    }),
-  );
-
   function onSubmit(data: ProductUpdateFormValues) {
     const payload = {
       ...data,
       colors: data.colors.map((i) => {
         const selectedColor = colorOptions.find((c) => c.value === i.colorId);
-
-        const selectedSegment = priceSegmentOptions.find(
-          (p) => p.value === i.priceSegmentId,
-        );
 
         const label = selectedColor?.label ?? "";
         const formattedName =
@@ -143,7 +120,6 @@ export default function EditProductPage() {
           price: Number(i.price),
           colorName: formattedName,
           colorHex: selectedColor?.hexCode ?? "#ccc",
-          priceSegmentName: selectedSegment?.label ?? "",
         };
       }),
     };
@@ -190,6 +166,8 @@ export default function EditProductPage() {
       await updateProductAPI(finalPayload, id);
 
       toast.success("Cập nhật sản phẩm thành công");
+
+      queryClient.invalidateQueries({ queryKey: ["products"] });
 
       form.reset();
       setPreviewData(null);
@@ -251,11 +229,7 @@ export default function EditProductPage() {
             <EditProductInfoLeft />
 
             {/*Image 3Ds */}
-            <EditProductMediaRight
-              form={form}
-              colorOptions={colorOptions}
-              priceSegmentOptions={priceSegmentOptions}
-            />
+            <EditProductMediaRight form={form} colorOptions={colorOptions} />
           </div>
         </form>
       </FormProvider>

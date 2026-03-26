@@ -1,17 +1,17 @@
 "use client";
 
-import { DataTable } from "@/src/styles/components/ui/data-table";
-import { getInventoryColumns } from "./columns";
-import { Button } from "@/src/styles/components/ui/button";
-import { Download, Upload } from "lucide-react";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
 import CreateInventoryModal from "./components/CreateInventoryModal";
-import { getAllInventoryAPI } from "@/src/services/inventory.service";
+import { getInventoryOfWarehouseByIdAPI } from "@/src/services/inventory.service";
+import ProductGridView from "./components/ProductGridView";
+import { useState } from "react";
 
 export default function WarehouseInventoryManage() {
+  const [selectedProductId, setSelectProductId] = useState<string | null>(null);
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
@@ -19,58 +19,50 @@ export default function WarehouseInventoryManage() {
   });
 
   const {
-    data: inventoryList = [],
+    data: productInventoryList = [],
     isLoading,
     refetch,
   } = useQuery({
     queryKey: ["inventories", query],
-    queryFn: () => getAllInventoryAPI(query),
-    select: (res) => res.data,
+    queryFn: () =>
+      getInventoryOfWarehouseByIdAPI("d2f2e652-ad54-44a0-b6e4-6447d449ca1a"),
+    select: (res) => res.data.products,
   });
 
-  const columns = getInventoryColumns();
+  const handleViewDetail = (productId: string) => {
+    setSelectProductId(productId);
+  };
 
   return (
-    <div>
+    <>
       {/*Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold ">Quản lý hàng tồn kho</h1>
         <CreateInventoryModal />
       </div>
-      {/*Table */}
-      <div className="container mx-auto py-10">
-        <DataTable
-          columns={columns}
-          data={inventoryList ?? []}
-          isLoading={isLoading}
-        >
-          <div className="p-4 border-b flex justify-between items-center">
-            {/*Filter search */}
-            <FilterSearch
-              query={query}
-              loading={isLoading}
-              resultCount={inventoryList.length}
-              onSearch={(val) => updateQuery({ search: val })}
-              onApplyFilter={(filter) =>
-                updateQuery({
-                  ...filter,
-                })
-              }
-              onReset={() => resetQuery()}
-              onRefresh={() => refetch()}
-            />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập dữ liệu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất dữ liệu
-              </Button>
-            </div>
-          </div>
-        </DataTable>
-      </div>
-    </div>
+      <ProductGridView
+        productList={productInventoryList.items ?? []}
+        isLoading={isLoading}
+        handleViewDetail={handleViewDetail}
+        query={query}
+        updateQuery={updateQuery}
+        totalItems={productInventoryList.totalCount}
+      >
+        <FilterSearch
+          query={query}
+          loading={isLoading}
+          resultCount={productInventoryList.totalCount}
+          onSearch={(val) => updateQuery({ searchItem: val })}
+          onApplyFilter={(filter) =>
+            updateQuery({
+              ...filter,
+              pageNumber: 1,
+            })
+          }
+          onReset={() => resetQuery()}
+          onRefresh={() => refetch()}
+        />
+      </ProductGridView>
+    </>
   );
 }

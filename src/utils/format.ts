@@ -77,3 +77,29 @@ export const formatColorNameToVN = (data: string) => {
       return "";
   }
 };
+
+export const formatCommissionTableTypeToVN = (text: string) => {
+  switch (text) {
+    case "TIER":
+      return "Thường";
+    case "CAMPAIGN":
+      return "Chiến Dịch";
+    case "SPECIAL":
+      return "Đặc Biệt";
+    default:
+      return "N/A";
+  }
+};
+
+export const formatStoreRoleToVN = (text: string) => {
+  const role = text?.toLowerCase();
+
+  switch (role) {
+    case "manager":
+      return "Quản lý cửa hàng";
+    case "staff":
+      return "Nhân viên cửa hàng";
+    default:
+      return "N/A";
+  }
+};

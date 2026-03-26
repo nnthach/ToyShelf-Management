@@ -30,7 +30,10 @@ import {
   Trash2,
   RotateCcw,
 } from "lucide-react";
-import { formatBooleanIsActiveStatusText } from "@/src/utils/formatStatus";
+import {
+  formatBooleanIsActiveStatusColor,
+  formatBooleanIsActiveStatusText,
+} from "@/src/utils/formatStatus";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { useRouter } from "next/navigation";
 import {
@@ -180,36 +183,57 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
 
           {/* Header Info */}
           <div className="space-y-4">
-            <div className="flex justify-between items-start">
-              <div className="space-y-1">
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold tracking-tight">
                   {productDetail?.name}
                 </h2>
-                <p className="text-sm text-muted-foreground italic line-clamp-2">
-                  {productDetail?.description || "Không có mô tả sản phẩm"}
-                </p>
+
+                {productDetail?.isActive && (
+                  <span
+                    className={`
+          shrink-0 whitespace-nowrap
+          text-[10px] font-bold uppercase border rounded-full px-2 py-1
+          ${formatBooleanIsActiveStatusColor(productDetail?.isActive)}
+        `}
+                  >
+                    {formatBooleanIsActiveStatusText(productDetail?.isActive)}
+                  </span>
+                )}
               </div>
-              {productDetail?.isActive && (
-                <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-full border border-amber-200 uppercase">
-                  {formatBooleanIsActiveStatusText(productDetail?.isActive)}
-                </span>
-              )}
+
+              <p className="text-sm text-muted-foreground italic">
+                {productDetail?.description || "Không có mô tả sản phẩm"}
+              </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 py-4 border-y border-dashed">
+            <div className="grid grid-cols-3 gap-4 py-4 border-y border-dashed">
+              {/* Cột 1: SKU */}
               <div className="space-y-1">
                 <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
-                  <Hash size={12} /> SKU Gốc
+                  <Hash size={12} /> SKU Sản phẩm
                 </p>
                 <p className="font-mono text-sm font-medium">
                   {productDetail?.sku}
                 </p>
               </div>
+
+              {/* Cột 2: Danh mục (Mới thêm) */}
+              <div className="space-y-1 text-center">
+                <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1 justify-center">
+                  <Tag size={12} /> Danh mục
+                </p>
+                <p className="text-sm font-medium">
+                  {productDetail?.productCategoryName || "Chưa phân loại"}
+                </p>
+              </div>
+
+              {/* Cột 3: Giá gốc */}
               <div className="space-y-1 text-right">
                 <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1 justify-end">
                   <BadgeDollarSign size={12} /> Giá gốc
                 </p>
-                <p className="font-bold text-primary text-lg">
+                <p className="font-bold text-primary text-lg leading-none">
                   {productDetail?.basePrice?.toLocaleString()}đ
                 </p>
               </div>
@@ -233,18 +257,18 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
                   }`}
                 >
                   <div
-                    className="w-10 h-10 rounded-full border border-black/10 shadow-inner shrink-0 flex items-center justify-center overflow-hidden"
+                    className="w-8 h-8 rounded-full border border-black/10 shadow-inner shrink-0 flex items-center justify-center overflow-hidden"
                     style={{ backgroundColor: color.hexcode }}
                   >
                     <div className="w-full h-full shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]" />
                   </div>
                   <div className="flex items-start justify-between w-full">
                     <div className="overflow-hidden space-y-0.5">
-                      <p className="text-xs font-bold truncate text-foreground">
+                      <p className="text-sm font-bold truncate text-foreground">
                         {formatColorNameToVN(color?.colorName as string)}
                       </p>
 
-                      <p className="text-[10px] text-muted-foreground font-medium pt-0.5">
+                      <p className="text-[12px] text-gray-800 font-medium pt-0.5">
                         {color.price?.toLocaleString()}đ
                       </p>
                     </div>

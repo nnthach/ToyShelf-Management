@@ -32,31 +32,20 @@ export interface Store {
   id: string;
   storeAddress: string;
   name: string;
+  ownerName: string;
+  inventoryLocationId: string;
   latitude: number;
   longitude: number;
-  rating: number;
-  images: string[];
-  openTime: string;
-  closeTime: string;
-  openDay: string;
-  status: StoreStatus;
   isActive: boolean;
   partnerId: string;
   phoneNumber: string;
-}
-
-export interface Cabinet {
-  id: string;
-  storeID: string;
-  code?: string;
-  name: string;
-  numberOfSlot: number;
-  locationDescription: string;
-  layoutName: string;
-  qrCodeUrl: string;
-  images: string[];
-  isOnline: boolean;
-  isActive: boolean;
+  cityName: string;
+  requestedByUserId: string;
+  reviewedByUserId: string;
+  rejectReason: string;
+  reviewedByUserName: string;
+  reviewedByUserEmail: string;
+  partnerName: string;
 }
 
 export interface Color {

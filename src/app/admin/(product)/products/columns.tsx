@@ -24,7 +24,7 @@ export const getProductColumns = (
     header: "Tên sản phẩm",
   },
   {
-    accessorKey: "productCategoryId",
+    accessorKey: "productCategoryName",
     header: "Danh mục",
   },
 
@@ -36,6 +36,11 @@ export const getProductColumns = (
   {
     accessorKey: "basePrice",
     header: "Gía tiền",
+    cell: ({ row }) => {
+      const basePrice = row.getValue("basePrice") as boolean;
+
+      return <span>{basePrice.toLocaleString()}đ</span>;
+    },
   },
   {
     accessorKey: "isActive",

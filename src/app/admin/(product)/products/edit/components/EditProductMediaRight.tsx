@@ -1,6 +1,5 @@
 import ProductColorItem from "@/src/components/ProductColorItem";
 import {
-  ProductFormValues,
   ProductUpdateFormValues,
 } from "@/src/schemas/product.schema";
 import { Button } from "@/src/styles/components/ui/button";
@@ -11,13 +10,11 @@ import { useFieldArray, UseFormReturn } from "react-hook-form";
 interface EditProductMediaRightProps {
   form: UseFormReturn<ProductUpdateFormValues>;
   colorOptions: SelectOption[];
-  priceSegmentOptions: SelectOption[];
 }
 
 function EditProductMediaRight({
   form,
   colorOptions,
-  priceSegmentOptions,
 }: EditProductMediaRightProps) {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -44,7 +41,6 @@ function EditProductMediaRight({
             remove={remove}
             fieldsLength={fields.length}
             colorOptions={colorOptions}
-            priceSegmentOptions={priceSegmentOptions}
           />
         ))}
 

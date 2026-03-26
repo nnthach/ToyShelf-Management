@@ -14,7 +14,6 @@ interface ProductColorItemProps {
   remove: (index: number) => void;
   fieldsLength: number;
   colorOptions: SelectOption[];
-  priceSegmentOptions: SelectOption[];
 }
 
 function ProductColorItem({
@@ -23,7 +22,6 @@ function ProductColorItem({
   remove,
   fieldsLength,
   colorOptions,
-  priceSegmentOptions,
 }: ProductColorItemProps) {
   const imageUrl = useWatch({
     control: form.control,
@@ -65,15 +63,6 @@ function ProductColorItem({
                 placeholder="Nhập giá cho màu này"
                 type="number"
                 icon={<Banknote size={18} />} // Icon tiền mặt
-              />
-
-              <FormFieldCustom
-                name={`colors.${index}.priceSegmentId`}
-                label="Phân khúc giá"
-                placeholder="Chọn phân khúc giá"
-                type="select"
-                selectData={priceSegmentOptions}
-                icon={<Layers size={18} />} // Icon lớp/phân tầng
               />
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { PartnerTier } from "@/src/types";
 import { Edit, Trash } from "lucide-react";
+import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -14,6 +15,19 @@ export const getPartnerTierColumns = (
   {
     accessorKey: "name",
     header: "Tên",
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+
+      return (
+        <div className="flex items-center">
+          <span
+            className={`font-bold text-xs shadow-sm border border-black/5 whitespace-nowrap ${formatPartnerTierTextColor(name)}`}
+          >
+            {name}
+          </span>
+        </div>
+      );
+    },
   },
 
   {

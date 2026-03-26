@@ -12,14 +12,15 @@ import { Store } from "@/src/types";
 import CreateStoreModal from "./components/CreateStoreModal";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreColumns } from "./columns";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
+import { getAllCityAPI } from "@/src/services/city.service";
 
 export default function AdminStoreManage() {
-  const router = useRouter();
-
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: "",
-    search: "",
+    keyword: "",
+    companyid: "",
+    cityId: "",
   });
 
   const {
@@ -33,6 +34,18 @@ export default function AdminStoreManage() {
   });
 
   const columns = getStoreColumns();
+
+  const { data: partnerList = [] } = useQuery({
+    queryKey: ["partners"],
+    queryFn: () => getAllPartnerAPI({}),
+    select: (res) => res.data,
+  });
+
+  const { data: cityList = [] } = useQuery({
+    queryKey: ["cities"],
+    queryFn: () => getAllCityAPI({}),
+    select: (res) => res.data,
+  });
 
   return (
     <>
@@ -55,7 +68,9 @@ export default function AdminStoreManage() {
               query={query}
               loading={isLoading}
               resultCount={storeList.length}
-              onSearch={(val) => updateQuery({ search: val })}
+              partnerList={partnerList}
+              cityList={cityList}
+              onSearch={(val) => updateQuery({ keyword: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

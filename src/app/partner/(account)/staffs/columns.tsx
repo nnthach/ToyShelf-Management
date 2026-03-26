@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@/src/types";
-import { formatDateTime } from "@/src/utils/format";
+import { formatDateTime, formatStoreRoleToVN } from "@/src/utils/format";
 import {
   formatUserStatusColor,
   formatUserStatusText,
@@ -34,6 +34,11 @@ export const getStaffColumns = (
   {
     accessorKey: "storeRole",
     header: "Chức vụ",
+    cell: ({ row }) => {
+      const storeRole = row.getValue("storeRole") as string;
+
+      return <span>{formatStoreRoleToVN(storeRole)}</span>;
+    },
   },
 
   {

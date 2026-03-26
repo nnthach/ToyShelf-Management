@@ -16,8 +16,33 @@ export const getStoreCreateRequestColumns = (
   onEdit: (tierId: string) => void,
 ): ColumnDef<Store>[] => [
   {
-    accessorKey: "requestedByUserId",
-    header: "Người tạo",
+    accessorKey: "partnerName",
+    header: "Đối tác",
+    cell: ({ row }) => {
+      const { partnerName } = row.original;
+
+      return (
+        <p className="text-sm text-gray-900 line-clamp-2 font-medium">
+          {partnerName}
+        </p>
+      );
+    },
+  },
+  {
+    accessorKey: "reviewedByUserName",
+    header: "Người yêu cầu",
+    cell: ({ row }) => {
+      const { reviewedByUserName, reviewedByUserEmail } = row.original;
+
+      return (
+        <div className="w-[150px]">
+          <p className="text-sm text-gray-900 line-clamp-2 font-medium">
+            {reviewedByUserName}
+          </p>
+          <p className="text-gray-600">{reviewedByUserEmail}</p>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "name",
@@ -26,6 +51,10 @@ export const getStoreCreateRequestColumns = (
   {
     accessorKey: "phoneNumber",
     header: "Số điện thoại",
+  },
+  {
+    accessorKey: "cityName",
+    header: "Thành phố",
   },
   {
     accessorKey: "storeAddress",
