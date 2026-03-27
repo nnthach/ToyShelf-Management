@@ -24,6 +24,7 @@ import { getStoreOrderAvailableWarehouseAPI } from "@/src/services/refill.servic
 import { RefillRequestProductColor } from "@/src/types";
 import { cn } from "@/src/styles/lib/utils";
 import { formatColorNameToVN } from "@/src/utils/format";
+import Image from "next/image";
 
 type AssignWarehouseModalProps = {
   requestId: string;
@@ -33,6 +34,7 @@ type AssignWarehouseModalProps = {
 };
 
 interface WarehouseInventory {
+  warehouseLocationId: string;
   warehouseId: string;
   warehouseName: string;
   warehouseCode: string;
@@ -60,7 +62,7 @@ function AssignWarehouseModal({
   // Tìm warehouse đang được chọn để hiển thị items bên dưới
   const selectedWarehouse = useMemo(() => {
     return availableWarehouseList?.find(
-      (w: WarehouseInventory) => w.warehouseId === selectedWarehouseId,
+      (w: WarehouseInventory) => w.warehouseLocationId === selectedWarehouseId,
     );
   }, [selectedWarehouseId, availableWarehouseList]);
 
@@ -128,10 +130,10 @@ function AssignWarehouseModal({
               {availableWarehouseList?.map((wh: WarehouseInventory) => (
                 <div
                   key={wh.warehouseId}
-                  onClick={() => setSelectedWarehouseId(wh.warehouseId)}
+                  onClick={() => setSelectedWarehouseId(wh.warehouseLocationId)}
                   className={cn(
                     "cursor-pointer p-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-between",
-                    selectedWarehouseId === wh.warehouseId
+                    selectedWarehouseId === wh.warehouseLocationId
                       ? "border-blue-500 bg-blue-50/50 shadow-sm"
                       : "border-gray-100 hover:border-gray-200 bg-white",
                   )}
@@ -140,7 +142,7 @@ function AssignWarehouseModal({
                     <div
                       className={cn(
                         "p-2 rounded-lg",
-                        selectedWarehouseId === wh.warehouseId
+                        selectedWarehouseId === wh.warehouseLocationId
                           ? "bg-blue-500 text-white"
                           : "bg-gray-100 text-gray-500",
                       )}
@@ -160,7 +162,7 @@ function AssignWarehouseModal({
                     <div
                       className={cn(
                         "px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm border",
-                        selectedWarehouseId === wh.warehouseId
+                        selectedWarehouseId === wh.warehouseLocationId
                           ? "bg-white text-green-600 border-transparent"
                           : "bg-green-50 text-green-700 border-green-100",
                       )}
@@ -218,10 +220,27 @@ function AssignWarehouseModal({
                           className="hover:bg-blue-50/30 transition-colors"
                         >
                           <td className="px-4 py-3 font-medium text-gray-700">
-                            {item.productName}
-                            <p className="text-[10px] text-gray-400 font-mono">
-                              {item.sku}
-                            </p>
+                            <div className="flex items-center gap-3">
+                              <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                <Image
+                                  src={
+                                    item.imageUrl || "/placeholder-product.png"
+                                  }
+                                  alt={item.productName as string}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+
+                              <div>
+                                <div className="text-sm font-semibold">
+                                  {item.productName}
+                                </div>
+                                <p className="text-[10px] text-gray-400 font-mono">
+                                  {item.sku}
+                                </p>
+                              </div>
+                            </div>
                           </td>
                           <td className="px-4 py-3">
                             <span className="px-2 py-0.5 rounded-full text-[10px] bg-gray-100 border font-bold">

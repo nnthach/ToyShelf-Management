@@ -18,6 +18,8 @@ import { memo, useEffect } from "react";
 import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
 import { receiveShipmentAPI } from "@/src/services/shipment.service";
 import { toast } from "react-toastify";
+import Image from "next/image";
+import { formatColorNameToVN } from "@/src/utils/format";
 
 type ConfirmReceiveModalProps = {
   shipmentId: string;
@@ -36,6 +38,7 @@ function ConfirmReceiveModal({
   onClose,
   onSuccess,
 }: ConfirmReceiveModalProps) {
+  console.log("items", items);
   const queryClient = useQueryClient();
 
   const formSchema = z.object({
@@ -73,7 +76,7 @@ function ConfirmReceiveModal({
         queryKey: ["refillRequests"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["requestDetail", requestId],
+        queryKey: ["storeOrderDetail", requestId],
       });
 
       queryClient.invalidateQueries({
@@ -134,25 +137,37 @@ function ConfirmReceiveModal({
                     className="grid grid-cols-12 gap-4 items-center bg-white border border-slate-200 rounded-xl p-3 transition-all hover:border-blue-200"
                   >
                     {/* CỘT TRÁI (8/12): Thông tin sản phẩm */}
-                    <div className="col-span-8 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <ClipboardList
-                          size={14}
-                          className="text-blue-500 shrink-0"
+                    <div className="col-span-8 flex gap-3 items-start">
+                      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-slate-100 bg-slate-50">
+                        <Image
+                          src={item.imageUrl || "/placeholder-product.png"}
+                          alt={item.productName as string}
+                          fill
+                          className="object-cover"
                         />
+                      </div>
+
+                      {/* 2. Nội dung chi tiết */}
+                      <div className="flex-1 min-w-0">
                         <p className="text-sm font-bold text-slate-700 truncate uppercase tracking-tight">
                           {item.productName}
                         </p>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-medium ml-5">
-                        <Hash size={10} />
-                        <span className="truncate">{item.productColorId}</span>
-                      </div>
-                      <div className="ml-5 mt-1">
+
+                        {/* SKU & Color (Thay thế cho ID cũ) */}
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-[10px] font-mono text-slate-400 font-medium">
+                            {item.sku || "N/A"}
+                          </span>
+                          <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 leading-none">
+                            {formatColorNameToVN(item?.color as string)}
+                          </span>
+                        </div>
+
+                        {/* Số lượng yêu cầu */}
                         <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
                           Yêu cầu:{" "}
-                          <span className="text-slate-800">
-                            {item.quantity}
+                          <span className="text-slate-900">
+                            {item.expectedQuantity}
                           </span>
                         </span>
                       </div>

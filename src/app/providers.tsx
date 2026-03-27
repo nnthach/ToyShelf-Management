@@ -7,22 +7,25 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider } from "@/src/components/AuthProvider";
 import { AccountAdminModalProvider } from "@/src/context/AccountAdminModalContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ProductDetailSheetProvider } from "../context/ProductDetailSheetContext";
 
 const queryClient = new QueryClient();
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
-      <ReduxProvider store={store}>
-        <AuthProvider>
-          <AccountAdminModalProvider>
-            <QueryClientProvider client={queryClient}>
-              {children}
-              <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
-          </AccountAdminModalProvider>
-        </AuthProvider>
-      </ReduxProvider>
-    </GoogleOAuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+        <ReduxProvider store={store}>
+          <AuthProvider>
+            <ProductDetailSheetProvider>
+              <AccountAdminModalProvider>
+                {children}
+                <ReactQueryDevtools initialIsOpen={false} />
+              </AccountAdminModalProvider>
+            </ProductDetailSheetProvider>
+          </AuthProvider>
+        </ReduxProvider>
+      </GoogleOAuthProvider>
+    </QueryClientProvider>
   );
 }

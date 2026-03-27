@@ -46,7 +46,7 @@ export default function ManagerRefillRequestManage() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Yêu cầu đặt hàng</h1>
+        <h1 className="text-4xl font-bold">Đơn đặt hàng</h1>
         {/* <CreateRefillOrderModal /> */}
         <Button
           className="btn-primary-gradient"

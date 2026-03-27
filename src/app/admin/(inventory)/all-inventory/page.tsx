@@ -1,41 +1,65 @@
 "use client";
 
-import FilterSearch from "./components/FilterSearch";
-import { QueryParams } from "@/src/types/SubType";
-import useQueryParams from "@/src/hooks/useQueryParams";
-import { useQuery } from "@tanstack/react-query";
-import CreateInventoryModal from "./components/CreateInventoryModal";
-import { getInventoryOfWarehouseByIdAPI } from "@/src/services/inventory.service";
+import Pagination from "@/src/components/Pagination";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import ProductCardWithQuantity from "@/src/components/ProductCardWithQuantity";
-import { Product } from "@/src/types";
-import Pagination from "@/src/components/Pagination";
+import { InventoryLocation, Product } from "@/src/types";
+import React, { useEffect } from "react";
+import FilterSearch from "./components/FilterSearch";
+import { getInventoryByLocationIdAPI } from "@/src/services/inventory.service";
+import { useQuery } from "@tanstack/react-query";
+import useQueryParams from "@/src/hooks/useQueryParams";
+import { QueryParams } from "@/src/types/SubType";
+import { getAllInventoryLocationAPI } from "@/src/services/inventory-location.service";
 
-export default function WarehouseInventoryManage() {
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
+export default function AdminViewAllInventory() {
+  const { data: locationList } = useQuery({
+    queryKey: ["locations"],
+    queryFn: () => getAllInventoryLocationAPI({}),
+    select: (res) => res.data as InventoryLocation[],
   });
 
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
+    isActive: undefined,
+    locationId: "",
+    categoryId: "",
+    pageNumber: 1,
+    pageSize: 10,
+  });
+
+  useEffect(() => {
+    if (locationList?.length && !query.locationId) {
+      updateQuery({
+        locationId: locationList[0].id,
+      });
+    }
+  }, [locationList]);
+
   const {
-    data: productInventoryList = [],
+    data: inventoryList,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["inventories", query],
-    queryFn: () =>
-      getInventoryOfWarehouseByIdAPI("d2f2e652-ad54-44a0-b6e4-6447d449ca1a"),
+    queryKey: ["inventories", query.locationId],
+    queryFn: () => getInventoryByLocationIdAPI(query.locationId!),
     select: (res) => res.data,
+    enabled: !!query.locationId,
   });
 
   return (
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý hàng tồn kho</h1>
-        <CreateInventoryModal />
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Giám xác hàng tồn kho tại {inventoryList?.locationName}
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách sản phẩm tồn kho tại cửa hàng và kho
+          </p>
+        </div>
       </div>
+
       {/*main content */}
       <div className="container mx-auto py-10">
         <div className="bg-white rounded-xl overflow-hidden pb-4">
@@ -43,7 +67,8 @@ export default function WarehouseInventoryManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={productInventoryList?.length}
+              locationList={locationList}
+              resultCount={inventoryList?.products.length}
               onSearch={(val) => updateQuery({ searchItem: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -63,9 +88,9 @@ export default function WarehouseInventoryManage() {
                   <ProductCardSkeleton key={i} />
                 ))}
               </div>
-            ) : productInventoryList?.products?.length > 0 ? (
+            ) : inventoryList?.products?.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
-                {productInventoryList?.products?.map((product: Product) => (
+                {inventoryList?.products?.map((product: Product) => (
                   <ProductCardWithQuantity
                     key={product.productId}
                     product={product}
@@ -81,7 +106,7 @@ export default function WarehouseInventoryManage() {
 
           <Pagination
             currentPage={query?.pageNumber || 1}
-            totalPages={productInventoryList?.products?.totalPages || 0}
+            totalPages={inventoryList?.products?.totalPages || 0}
             onPageChange={(page) => updateQuery({ pageNumber: page })}
           />
         </div>

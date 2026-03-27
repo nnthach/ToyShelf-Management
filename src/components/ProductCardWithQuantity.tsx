@@ -3,15 +3,14 @@ import { Product } from "@/src/types";
 import { Eye } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useProductDetailSheet } from "../context/ProductDetailSheetContext";
 
 interface ProductCardWithQuantityProps {
   product: Product;
-  handleViewDetail: (productId: string) => void;
 }
-function ProductCardWithQuantity({
-  product,
-  handleViewDetail,
-}: ProductCardWithQuantityProps) {
+function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
+  const { open } = useProductDetailSheet();
+
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
 
   const selectedColor = product?.colors?.[selectedColorIndex];
@@ -24,21 +23,50 @@ function ProductCardWithQuantity({
         {image && (
           <Image
             src={image || ""}
-            alt={product.name}
+            alt={product.productName || ""}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
           />
         )}
 
-        {/* Eye Button */}
+        {/* quantity top left */}
+        <div className="absolute top-2 left-2 z-20 flex flex-col gap-1">
+          {/* Badge Kho: Luôn hiển thị */}
+          <span className="bg-emerald-50/90 backdrop-blur-sm text-[11px] font-bold px-2 py-1 rounded-md shadow-sm text-emerald-700 border border-emerald-200/50 w-fit">
+            Kho: {selectedColor?.quantity || selectedColor?.available || 0}
+          </span>
+
+          {/* Container cho các badge phụ: Chỉ hiện khi hover group */}
+          <div className="flex flex-col gap-1 transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0">
+            {selectedColor?.inTransit >= 0 && (
+              <span className="bg-blue-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-blue-700 border border-blue-200/50 w-fit">
+                Đang về: {selectedColor.inTransit}
+              </span>
+            )}
+
+            {selectedColor?.damaged >= 0 && (
+              <span className="bg-red-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-red-700 border border-red-200/50 w-fit">
+                Lỗi: {selectedColor.damaged}
+              </span>
+            )}
+
+            {selectedColor?.sold >= 0 && (
+              <span className="bg-amber-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-amber-700 border border-amber-200/50 w-fit">
+                Đã bán: {selectedColor.sold}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Eye Button (Góc phải trên) */}
         <Button
           variant="outline"
           size="icon"
-          onClick={() => handleViewDetail(product.id)}
-          className="absolute top-2 right-2 z-20
-                     opacity-0 group-hover:opacity-100
-                     transition bg-white/80 backdrop-blur-sm"
+          onClick={() => open(product.productId || "")}
+          className="absolute top-2 right-2 z-20 
+             opacity-0 group-hover:opacity-100 
+             transition bg-white/80 backdrop-blur-sm"
         >
           <Eye className="h-4 w-4" />
         </Button>
@@ -54,7 +82,7 @@ function ProductCardWithQuantity({
             <div className="flex justify-between">
               <span className="text-gray-500">Mã sản phẩm</span>
               <span className="font-medium text-gray-900">
-                {selectedColor?.sku}
+                {selectedColor?.productColorSku}
               </span>
             </div>
             <div className="flex justify-between">
@@ -82,14 +110,18 @@ function ProductCardWithQuantity({
         <div>
           {/* Name */}
           <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
-            {product.name}
+            {product.productName}
           </h3>
+          {/* Base price nếu cần */}
+          <p className="text-sm text-gray-600 mb-2">
+            {selectedColor?.productColorPrice?.toLocaleString()}đ
+          </p>
         </div>
         {/* Color selector */}
         <div className="flex items-center gap-2">
           {product.colors?.map((color, index) => (
             <button
-              key={color.id}
+              key={index}
               onClick={() => setSelectedColorIndex(index)}
               className="w-5 h-5 rounded-full border-2 transition"
               style={{ backgroundColor: color.hexcode }}

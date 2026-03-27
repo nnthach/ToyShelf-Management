@@ -6,7 +6,7 @@ import { Button } from "@/src/styles/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import FilterSearch from "./components/FilterSearch";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { QueryParams } from "@/src/types/SubType";
@@ -37,8 +37,6 @@ export default function AdminViewWarehouseInventory() {
     select: (res) => res.data,
     enabled: !!warehouseId,
   });
-
-  const handleViewDetail = () => {};
 
   return (
     <>
@@ -89,15 +87,12 @@ export default function AdminViewWarehouseInventory() {
               </div>
             ) : warehouseInventories?.products?.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
-                {warehouseInventories?.products?.map(
-                  (product: Product) => (
-                    <ProductCardWithQuantity
-                      key={product.productId}
-                      product={product}
-                      handleViewDetail={handleViewDetail}
-                    />
-                  ),
-                )}
+                {warehouseInventories?.products?.map((product: Product) => (
+                  <ProductCardWithQuantity
+                    key={product.productId}
+                    product={product}
+                  />
+                ))}
               </div>
             ) : (
               <div className="h-64 flex items-center justify-center text-gray-500 dark:text-gray-300 text-lg font-medium">

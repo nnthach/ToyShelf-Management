@@ -10,21 +10,17 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import {
+  formatShipmentStatusColor,
+  formatShipmentStatusText,
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { useState } from "react";
 import { getRefillDetailAPI } from "@/src/services/refill.service";
 import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
-import { getShipmentAssignDetailByIdAPI } from "@/src/services/shipment-assignment.service";
-import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
-import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
-import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";
-import ShipmentProductListComponent from "@/src/components/ShipmentComponent/ShipmentProductListComponent";
 import ConfirmReceiveModal from "./ConfirmReceiveModal";
 import { RefillRequestProductColor, Shipment } from "@/src/types";
 import {
-  ArrowRight,
   MapPin,
   Package,
   Store,
@@ -35,8 +31,7 @@ import {
 } from "lucide-react";
 import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
-import EmptySection from "@/src/components/ShipmentComponent/EmptySection";
-import { formatColorNameToVN, formatDateTime } from "@/src/utils/format";
+import { formatColorNameToVN } from "@/src/utils/format";
 import Image from "next/image";
 
 type ViewRefillRequestModalDetailProps = {
@@ -265,10 +260,10 @@ function ViewRefillRequestModalDetail({
                   </div>
                   {/* Status Badge - Bạn có thể map màu theo status ở đây */}
                   {shipmentDetail?.status && (
-                    <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-700 border border-green-200">
-                      {shipmentDetail?.status === "Received"
-                        ? "Đã nhận hàng"
-                        : shipmentDetail?.status}
+                    <span
+                      className={`text-[12px] font-medium ${formatShipmentStatusColor(shipmentDetail?.status)}`}
+                    >
+                      {formatShipmentStatusText(shipmentDetail?.status)}
                     </span>
                   )}
                 </div>

@@ -59,15 +59,22 @@ export interface ProductColorItem {
   id: string;
   productId: string;
   sku: string;
+  productColorSku: string;
   priceSegmentId: string;
   colorId: string;
   price: number;
+  productColorPrice: number;
   qrCode: string;
   model3DUrl: string;
   imageUrl: string;
   hexcode: string;
   isActive: boolean;
   colorName?: string;
+  quantity: number;
+  available: number;
+  inTransit: number;
+  damaged: number;
+  sold: number;
 }
 
 export interface Product {
@@ -77,6 +84,7 @@ export interface Product {
   productCategoryName: string;
   sku: string;
   name: string;
+  productName: string;
   description: string;
   basePrice: number;
   brand: string;

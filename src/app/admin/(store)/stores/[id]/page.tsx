@@ -22,10 +22,10 @@ import {
   formatStoreStatusColor,
   formatStoreStatusText,
 } from "@/src/utils/formatStatus";
-import StatCard from "@/src/components/StatCard";
 import EditStoreModal from "./components/EditStoreModal";
 import ViewStoreProductSheet from "./components/ViewStoreProductSheet";
 import { getAllStoreStaffAPI } from "@/src/services/user.service";
+import StatCardWithButton from "@/src/components/StatCardWithButton";
 
 export default function PartnerStoreDetailPage() {
   const params = useParams();
@@ -92,7 +92,7 @@ export default function PartnerStoreDetailPage() {
 
       {/*Statistic card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-        <StatCard
+        <StatCardWithButton
           title="Doanh thu cửa hàng"
           value="$250,520"
           change="+$30,215"
@@ -101,7 +101,7 @@ export default function PartnerStoreDetailPage() {
           color="bg-green-100 text-green-900"
         />
 
-        <StatCard
+        <StatCardWithButton
           title="Đơn hàng"
           value="15"
           change="+1,647"
@@ -110,13 +110,24 @@ export default function PartnerStoreDetailPage() {
           color="bg-yellow-100 text-yellow-900"
         />
 
-        <StatCard
+        <StatCardWithButton
           title="Tồn kho"
           value="15"
           change="+2,815"
           changePercent="+18%"
           icon={Box}
           color="bg-blue-100 text-blue-900"
+          action={
+            <Button
+              onClick={() =>
+                router.push(
+                  `/admin/stores/${id}/inventory?inventoryLocationId=${storeDetail.inventoryLocationId}`,
+                )
+              }
+            >
+              Chi tiết
+            </Button>
+          }
         />
       </div>
 

@@ -24,11 +24,6 @@ import {
   Shapes,
   Baby,
   Info,
-  Power,
-  Edit,
-  Lock,
-  Trash2,
-  RotateCcw,
 } from "lucide-react";
 import {
   formatBooleanIsActiveStatusColor,
@@ -36,22 +31,18 @@ import {
 } from "@/src/utils/formatStatus";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { useRouter } from "next/navigation";
-import {
-  deleteProductAPI,
-  disableProductAPI,
-  restoreProductAPI,
-} from "@/src/services/product.service";
-import { toast } from "react-toastify";
 
-type ViewDetailSheetProps = {
+type ProductViewDetailSheetProps = {
   productId: string | null;
   isOpen: boolean;
   onClose: () => void;
 };
 
-function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
-  const router = useRouter();
-  const queryClient = useQueryClient();
+function ProductViewDetailSheet({
+  productId,
+  isOpen,
+  onClose,
+}: ProductViewDetailSheetProps) {
 
   const { data: productDetail, isLoading } = useQuery({
     queryKey: ["product", productId],
@@ -64,57 +55,6 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
   const [viewMode, setViewMode] = useState<"image" | "3d">("image");
 
   const selectedColor = productDetail?.colors?.[selectedColorIndex];
-
-  async function handleDisable() {
-    try {
-      await disableProductAPI(productId!);
-
-      queryClient.invalidateQueries({
-        queryKey: ["products"],
-      });
-
-      await queryClient.invalidateQueries({
-        queryKey: ["product", productId],
-      });
-
-      toast.success("Vô hiệu hóa sản phẩm thành công");
-    } catch (error) {
-      toast.error("Vô hiệu hóa sản phẩm thất bại");
-    }
-  }
-
-  async function handleRestore() {
-    try {
-      await restoreProductAPI(productId!);
-
-      queryClient.invalidateQueries({
-        queryKey: ["products"],
-      });
-
-      await queryClient.invalidateQueries({
-        queryKey: ["product", productId],
-      });
-
-      toast.success("Khôi phục sản phẩm thành công");
-    } catch (error) {
-      toast.error("Khôi phục sản phẩm thất bại");
-    }
-  }
-
-  async function handleDelete() {
-    try {
-      await deleteProductAPI(productId!);
-
-      queryClient.invalidateQueries({
-        queryKey: ["products"],
-      });
-
-      onClose();
-      toast.success("Xóa sản phẩm thành công");
-    } catch (error) {
-      toast.error("Xóa sản phẩm thất bại");
-    }
-  }
 
   if (!productId) return null;
 
@@ -187,18 +127,6 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
                 <h2 className="text-2xl font-bold tracking-tight">
                   {productDetail?.name}
                 </h2>
-
-                {productDetail?.isActive && (
-                  <span
-                    className={`
-          shrink-0 whitespace-nowrap
-          text-[10px] font-bold uppercase border rounded-full px-2 py-1
-          ${formatBooleanIsActiveStatusColor(productDetail?.isActive)}
-        `}
-                  >
-                    {formatBooleanIsActiveStatusText(productDetail?.isActive)}
-                  </span>
-                )}
               </div>
 
               <p className="text-sm text-muted-foreground italic">
@@ -338,49 +266,6 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
             </div>
           </div>
         </div>
-
-        {/* Footer Action Bar */}
-        <div className="p-4 border-t bg-white flex items-center gap-3 shadow-[0_-8px_20px_rgba(0,0,0,0.04)]">
-          <div className="flex gap-2 flex-1">
-            {productDetail?.isActive ? (
-              <button
-                onClick={handleDisable}
-                title="Vô hiệu hóa sản phẩm"
-                className="flex items-center justify-center w-full h-11 gap-2 rounded-xl border border-red-100 text-red-500 hover:bg-red-50 hover:border-red-200 transition-all"
-              >
-                <Lock size={18} /> Vô hiệu hóa
-              </button>
-            ) : (
-              <>
-                <button
-                  onClick={handleDelete}
-                  title="Xóa vĩnh viễn"
-                  className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition-all font-medium text-sm"
-                >
-                  <Trash2 size={18} />
-                  Xóa
-                </button>
-
-                <button
-                  onClick={handleRestore}
-                  title="Khôi phục hoạt động"
-                  className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl border border-blue-200 text-blue-600 hover:bg-blue-50 transition-all font-medium text-sm"
-                >
-                  <RotateCcw size={18} />
-                  Mở lại
-                </button>
-              </>
-            )}
-          </div>
-
-          <button
-            onClick={() => router.push(`/admin/products/edit/${productId}`)}
-            className="flex-[2] flex items-center justify-center gap-2 h-11 rounded-xl bg-black text-white text-sm font-bold hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-lg shadow-black/10"
-          >
-            <Edit size={18} />
-            Chỉnh sửa sản phẩm
-          </button>
-        </div>
       </SheetContent>
     </Sheet>
   );
@@ -408,4 +293,4 @@ function SpecItem({
   );
 }
 
-export default ViewDetailSheet;
+export default ProductViewDetailSheet;
