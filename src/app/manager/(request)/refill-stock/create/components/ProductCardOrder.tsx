@@ -4,21 +4,21 @@ import { Eye } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { CartItem } from "../page";
+import { useProductDetailSheet } from "@/src/context/ProductDetailSheetContext";
 
 interface ProductCardOrderProps {
   product: Product;
-  handleViewDetail: (productId: string) => void;
   handleAddToCart: (item: CartItem) => void;
   handleRemoveFromCart: (productColorId: string) => void;
   cart: CartItem[];
 }
 function ProductCardOrder({
   product,
-  handleViewDetail,
   handleAddToCart,
   handleRemoveFromCart,
   cart,
 }: ProductCardOrderProps) {
+  const { open } = useProductDetailSheet();
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
 
   const selectedColor = product.colors?.[selectedColorIndex];
@@ -47,7 +47,7 @@ function ProductCardOrder({
         <Button
           variant="outline"
           size="icon"
-          onClick={() => handleViewDetail(product.id)}
+          onClick={() => open(product.id)}
           className="absolute top-2 right-2 z-20
                      opacity-0 group-hover:opacity-100
                      transition bg-white/80 backdrop-blur-sm"

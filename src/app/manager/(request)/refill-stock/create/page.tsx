@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import FilterSearch from "./components/FilterSearch";
 import { getAllProductAPI } from "@/src/services/product.service";
-import ViewDetailSheet from "./components/ViewDetailSheet";
 import CartDetailSheet from "./components/CartDetailSheet";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import ProductCardOrder from "./components/ProductCardOrder";
@@ -35,7 +34,6 @@ export default function CreateStoreOrderRefill() {
   const queryClient = useQueryClient();
 
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [selectedProductId, setSelectProductId] = useState<string | null>(null);
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
@@ -55,10 +53,6 @@ export default function CreateStoreOrderRefill() {
     queryFn: () => getAllProductAPI(query),
     select: (res) => res.data,
   });
-
-  const handleViewDetail = (productId: string) => {
-    setSelectProductId(productId);
-  };
 
   const handleAddToCart = (item: CartItem) => {
     setCart((prev) => {
@@ -174,7 +168,6 @@ export default function CreateStoreOrderRefill() {
                   <ProductCardOrder
                     key={product.id}
                     product={product}
-                    handleViewDetail={handleViewDetail}
                     handleAddToCart={handleAddToCart}
                     handleRemoveFromCart={handleRemoveFromCart}
                     cart={cart}
@@ -195,12 +188,6 @@ export default function CreateStoreOrderRefill() {
           />
         </div>
       </div>
-
-      <ViewDetailSheet
-        productId={selectedProductId}
-        isOpen={!!selectedProductId}
-        onClose={() => setSelectProductId(null)}
-      />
     </>
   );
 }
