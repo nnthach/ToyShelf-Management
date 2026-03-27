@@ -112,9 +112,14 @@ export interface Product {
 
 export interface Order {
   id: string;
-  storeId: string;
+  storeName: string;
   totalAmount: number;
-  status: "COMPLETE" | "FAILED" | "REFUND";
+  orderCode: number;
+  status: string;
+  paymentMethod: string;
+  customerName: string;
+  createdAt: string;
+  customerPhone: string;
 }
 
 export interface Warehouse {

@@ -102,8 +102,9 @@ const AdminSidebar = () => {
 
         {/* --- Nested collapsible sub groups --- */}
         {AdminSidebarNested.map((group) => {
-          const isGroupActive = group.sub.some((item) =>
-            pathname.startsWith(item.url),
+          const isGroupActive = group.sub.some(
+            (item) =>
+              pathname === item.url || pathname.startsWith(item.url + "/"),
           );
 
           return (
@@ -128,7 +129,9 @@ const AdminSidebar = () => {
                   <SidebarGroupContent>
                     <SidebarMenu>
                       {group.sub.map((item) => {
-                        const isActive = pathname.startsWith(item.url);
+                        const isActive =
+                          pathname === item.url ||
+                          pathname.startsWith(item.url + "/");
                         return (
                           <SidebarMenuItem key={item.title}>
                             <SidebarMenuSub>

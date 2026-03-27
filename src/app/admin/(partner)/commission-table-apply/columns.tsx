@@ -16,7 +16,7 @@ export const getCommissionTableApplyColumns = (
   },
 
   {
-    accessorKey: "priceTableName",
+    accessorKey: "commissionTableName",
     header: "Bảng hoa hồng",
   },
 

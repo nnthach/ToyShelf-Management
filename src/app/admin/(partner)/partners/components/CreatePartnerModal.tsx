@@ -1,5 +1,7 @@
 "use client";
 import { PartnerFormValues, partnerSchema } from "@/src/schemas/partner.schema";
+import { getAllCommissionTableApplyAPI } from "@/src/services/commission-table-apply.service";
+import { getAllCommissionTableAPI } from "@/src/services/commission-table.service";
 import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
 import { createPartnerAPI } from "@/src/services/partner.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
@@ -14,13 +16,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import { PartnerTier } from "@/src/types";
+import { CommissionTable, PartnerTier } from "@/src/types";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Building2,
+  Calendar,
   Info,
+  Layers,
   Plus,
   Send,
   ShieldCheck,
@@ -39,6 +43,9 @@ function CreatePartnerModal() {
     defaultValues: {
       companyName: "",
       partnerTierId: "",
+      commissionTableId: "",
+      tableStartDate: "",
+      tableEndDate: "",
     },
   });
 
@@ -46,6 +53,12 @@ function CreatePartnerModal() {
     queryKey: ["partnerTiers", { isActive: undefined }],
     queryFn: () => getAllPartnerTierAPI({ isActive: undefined }),
     select: (res) => res.data as PartnerTier[],
+  });
+
+  const { data: commissionTableList } = useQuery({
+    queryKey: ["commissionTables"],
+    queryFn: () => getAllCommissionTableAPI({}),
+    select: (res) => res.data as CommissionTable[],
   });
 
   async function onSubmit(data: PartnerFormValues) {
@@ -66,6 +79,11 @@ function CreatePartnerModal() {
   }
 
   const partnerTierOptions = partnerTierList.map((s) => ({
+    value: s.id,
+    label: s.name,
+  }));
+
+  const commissionTableOptions = commissionTableList?.map((s) => ({
     value: s.id,
     label: s.name,
   }));
@@ -119,6 +137,27 @@ function CreatePartnerModal() {
                   placeholder="Chọn hạng mức hợp tác"
                   type="select"
                   selectData={partnerTierOptions}
+                />
+
+                <FormFieldCustom
+                  name="commissionTableId"
+                  label="Bảng hoa hồng"
+                  type="select"
+                  placeholder="Chọn bảng hoa hồng"
+                  selectData={commissionTableOptions}
+                  icon={<Layers size={16} />}
+                />
+                <FormFieldCustom
+                  name="tableStartDate"
+                  label="Ngày bắt đầu"
+                  type="date"
+                  icon={<Calendar size={16} />}
+                />
+                <FormFieldCustom
+                  name="tableEndDate"
+                  label="Ngày kết thúc"
+                  type="date"
+                  icon={<Calendar size={16} />}
                 />
               </div>
             </form>

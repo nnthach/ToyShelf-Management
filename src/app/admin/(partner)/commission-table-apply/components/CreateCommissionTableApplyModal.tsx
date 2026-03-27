@@ -44,7 +44,7 @@ function CreateCommissionPolicyModal() {
 
   const formSchema = z.object({
     partnerId: z.string().min(1, "Đối tác là bắt buộc"),
-    priceTableId: z.string().min(1, "Bảng giá là bắt buộc"),
+    commissionTableId: z.string().min(1, "Bảng giá là bắt buộc"),
     name: z.string().min(1, "Tên là bắt buộc"),
     startDate: z.string().min(1, "Ngày bắt đầu là bắt buộc"),
     endDate: z.string().min(1, "Ngày kết thúc là bắt buộc"),
@@ -54,7 +54,7 @@ function CreateCommissionPolicyModal() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       partnerId: "",
-      priceTableId: "",
+      commissionTableId: "",
       name: "",
       startDate: "",
       endDate: "",
@@ -84,6 +84,7 @@ function CreateCommissionPolicyModal() {
   }));
 
   async function onSubmit(data: z.output<typeof formSchema>) {
+    console.log("data", data);
     try {
       await createCommissionTableApplyAPI(data);
 
@@ -149,7 +150,7 @@ function CreateCommissionPolicyModal() {
 
                 <div className="col-span-2 sm:col-span-1">
                   <FormFieldCustom
-                    name="priceTableId"
+                    name="commissionTableId"
                     label="Bảng hoa hồng"
                     type="select"
                     placeholder="Chọn bảng hoa hồng"
