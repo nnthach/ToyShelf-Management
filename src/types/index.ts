@@ -15,6 +15,14 @@ export interface User {
   roles: string[];
 }
 
+export interface StoreStaff {
+  userId: string;
+  fullName: string;
+  avatarUrl: string;
+  storeRole: string;
+  email: string;
+}
+
 export interface Partner {
   id: string;
   partnerId: string;
