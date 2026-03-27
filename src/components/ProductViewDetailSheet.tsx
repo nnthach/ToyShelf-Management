@@ -7,9 +7,9 @@ import {
   SheetTitle,
 } from "@/src/styles/components/ui/sheet";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getProductDetailAPI } from "@/src/services/product.service";
-import ModelThreeDPreview from "@/src/styles/components/custom/ModelThreeDPreview";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Product } from "@/src/types";
 import {
@@ -25,12 +25,12 @@ import {
   Baby,
   Info,
 } from "lucide-react";
-import {
-  formatBooleanIsActiveStatusColor,
-  formatBooleanIsActiveStatusText,
-} from "@/src/utils/formatStatus";
 import { formatColorNameToVN } from "@/src/utils/format";
-import { useRouter } from "next/navigation";
+
+const ModelThreeDPreview = dynamic(
+  () => import("@/src/styles/components/custom/ModelThreeDPreview"),
+  { ssr: false },
+);
 
 type ProductViewDetailSheetProps = {
   productId: string | null;
@@ -43,7 +43,6 @@ function ProductViewDetailSheet({
   isOpen,
   onClose,
 }: ProductViewDetailSheetProps) {
-
   const { data: productDetail, isLoading } = useQuery({
     queryKey: ["product", productId],
     queryFn: () => getProductDetailAPI(productId!),
