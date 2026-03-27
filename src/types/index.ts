@@ -76,6 +76,7 @@ export interface ProductColorItem {
   model3DUrl: string;
   imageUrl: string;
   hexcode: string;
+  hexCode: string;
   isActive: boolean;
   colorName?: string;
   quantity: number;
@@ -120,6 +121,8 @@ export interface Order {
   customerName: string;
   createdAt: string;
   customerPhone: string;
+
+  items: RefillRequestProductColor[];
 }
 
 export interface Warehouse {

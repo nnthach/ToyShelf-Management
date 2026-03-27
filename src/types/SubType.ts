@@ -19,7 +19,8 @@ export interface QueryParams {
   cityId?: string;
   ownerId?: string;
   companyid?: string;
-  locationId?:string;
+  locationId?: string;
+  phone?: string;
 }
 
 export interface LoginRes {

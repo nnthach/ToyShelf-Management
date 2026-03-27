@@ -28,6 +28,7 @@ export default function AdminPartnerManage() {
     select: (res) => res.data,
   });
 
+
   const columns = getPartnerColumns();
 
   return (

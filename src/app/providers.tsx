@@ -8,6 +8,7 @@ import { AuthProvider } from "@/src/components/AuthProvider";
 import { AccountAdminModalProvider } from "@/src/context/AccountAdminModalContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ProductDetailSheetProvider } from "../context/ProductDetailSheetContext";
+import { OrderDetailSheetProvider } from "../context/OrderDetailSheetContext";
 
 const queryClient = new QueryClient();
 
@@ -18,10 +19,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <ReduxProvider store={store}>
           <AuthProvider>
             <ProductDetailSheetProvider>
-              <AccountAdminModalProvider>
-                {children}
-                <ReactQueryDevtools initialIsOpen={false} />
-              </AccountAdminModalProvider>
+              <OrderDetailSheetProvider>
+                <AccountAdminModalProvider>
+                  {children}
+                  <ReactQueryDevtools initialIsOpen={false} />
+                </AccountAdminModalProvider>
+              </OrderDetailSheetProvider>
             </ProductDetailSheetProvider>
           </AuthProvider>
         </ReduxProvider>

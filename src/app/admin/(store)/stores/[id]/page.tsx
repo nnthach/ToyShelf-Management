@@ -71,6 +71,7 @@ export default function PartnerStoreDetailPage() {
         </h1>
       </div>
 
+      {/*banner store ìno */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
         {/* A. LEFT: Store Info - Compact Deep Gradient Section */}
         <div className="col-span-1 md:col-span-3">
@@ -185,6 +186,17 @@ export default function PartnerStoreDetailPage() {
           changePercent="+15%"
           icon={Store}
           color="bg-yellow-100 text-yellow-900"
+          action={
+            <span
+              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
+  border-current bg-yellow-100 text-yellow-900
+  bg-opacity-30 hover:bg-opacity-50
+  transition-all cursor-pointer shadow-sm active:scale-95`}
+              onClick={() => router.push(`/admin/stores/${id}/orders`)}
+            >
+              <ArrowRight size={16} />
+            </span>
+          }
         />
 
         <StatCardWithButton

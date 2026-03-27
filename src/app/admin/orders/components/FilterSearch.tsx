@@ -1,4 +1,3 @@
-// import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { Button } from "@/src/styles/components/ui/button";
 import { Input } from "@/src/styles/components/ui/input";
@@ -8,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
+import { Partner, Store } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
@@ -16,69 +16,57 @@ import { useEffect, useState } from "react";
 type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
+  partnerList: Partner[];
+  storeList: Store[];
   resultCount?: number;
-  showStatus?: boolean;
-  showOrder?: boolean;
   onSearch: (val: string) => void;
-  onApplyFilter: (val: {
-    status?: boolean;
-    order?: string;
-    limit?: number;
-  }) => void;
-  onRefresh?: () => void;
+  onApplyFilter: (val: { storeId?: string; partnerId?: string }) => void;
   onReset: () => void;
+  onRefresh?: () => void;
+  onPartnerChange?: (partnerId: string) => void;
 };
 
 export default function FilterSearch({
   query,
   loading,
-  showStatus = true,
-  showOrder = true,
+  storeList,
+  partnerList,
   onSearch,
   onApplyFilter,
   onReset,
   onRefresh,
+  onPartnerChange,
 }: FilterBarProps) {
   const [searchInput, setSearchInput] = useState(query.search ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
 
   useEffect(() => {
-    if (debouncedSearch !== query.search) {
-      onSearch(debouncedSearch);
-    }
+    onSearch(debouncedSearch);
   }, [debouncedSearch]);
 
   const [tempFilter, setTempFilter] = useState<{
-    status: "" | "true" | "false";
-    order: string;
-    limit: number;
+    storeId?: string;
+    partnerId?: string;
   }>({
-    status:
-      query.status === true ? "true" : query.status === false ? "false" : "",
-    order: query.order ?? "",
-    limit: query.limit ?? 10,
+    storeId: query.storeId ?? "",
+    partnerId: query.partnerId ?? "",
   });
 
   const isFiltered =
-    query.search ||
-    (showOrder && query.order !== "") ||
-    (showStatus && typeof query.status === "boolean");
+    query.search || query.storeId !== "" || query.partnerId !== "";
 
   const handleApply = () => {
     onApplyFilter({
-      status:
-        tempFilter.status === "" ? undefined : tempFilter.status === "true",
-      order: tempFilter.order || undefined,
-      limit: tempFilter.limit,
+      partnerId: tempFilter.partnerId || undefined,
+      storeId: tempFilter.storeId || undefined,
     });
   };
 
   const handleResetAll = () => {
     setSearchInput("");
     setTempFilter({
-      status: "",
-      order: "",
-      limit: 10,
+      partnerId: "",
+      storeId: "",
     });
     onReset();
   };
@@ -96,47 +84,49 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
-            {/* Order */}
-            {showOrder && (
-              <div className="grid gap-2">
-                <Label>Sắp xếp</Label>
-                <select
-                  className="border rounded-md h-9 px-2"
-                  value={tempFilter.order}
-                  onChange={(e) =>
-                    setTempFilter((p) => ({
-                      ...p,
-                      order: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Tất cả</option>
-                  <option value="asc">A → Z</option>
-                  <option value="desc">Z → A</option>
-                </select>
-              </div>
-            )}
+            <div className="grid gap-2">
+              <Label>Đối tác</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.partnerId}
+                onChange={(e) => {
+                  setTempFilter((p) => ({
+                    ...p,
+                    partnerId: e.target.value,
+                    storeId: "",
+                  }));
+                  onPartnerChange?.(e.target.value);
+                }}
+              >
+                <option value="">Tất cả</option>
+                {partnerList?.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.companyName}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            {/* Status */}
-            {showStatus && (
-              <div className="grid gap-2">
-                <Label>Trạng thái</Label>
-                <select
-                  className="border rounded-md h-9 px-2"
-                  value={tempFilter.status}
-                  onChange={(e) =>
-                    setTempFilter((p) => ({
-                      ...p,
-                      status: e.target.value as "" | "true" | "false",
-                    }))
-                  }
-                >
-                  <option value="">Tất cả</option>
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
-                </select>
-              </div>
-            )}
+            <div className="grid gap-2">
+              <Label>Cửa hàng</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.storeId}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    storeId: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {storeList?.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <PopoverClose asChild>
               <Button onClick={handleApply}>Áp dụng</Button>
@@ -167,23 +157,12 @@ export default function FilterSearch({
 
       {/* CLEAR */}
       {isFiltered && !loading ? (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleResetAll}
-          className="
-      flex items-center gap-1
-      text-blue-600
-      hover:text-blue-700
-      hover:bg-blue-50
-      transition
-    "
-        >
+        <Button variant="outline" onClick={handleResetAll}>
           <XCircle className="w-4 h-4" />
-          Clear
+          Xóa
         </Button>
       ) : (
-        <Button variant="outline" onClick={onReset}>
+        <Button variant="outline" onClick={onRefresh}>
           <RotateCcw />
         </Button>
       )}

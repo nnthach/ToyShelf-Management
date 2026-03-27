@@ -22,7 +22,7 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
       <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
         {image && (
           <Image
-            src={image || ""}
+            src={image || "/images/placeholder.png"}
             alt={product.productName || ""}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -80,18 +80,6 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
         >
           <div className="bg-white/90 backdrop-blur-sm px-3 py-2 text-xs rounded-b-lg">
             <div className="flex justify-between">
-              <span className="text-gray-500">Mã sản phẩm</span>
-              <span className="font-medium text-gray-900">
-                {selectedColor?.productColorSku}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Chất liệu</span>
-              <span className="font-medium text-gray-900">
-                {product?.material}
-              </span>
-            </div>
-            <div className="flex justify-between">
               <span className="text-gray-500">Hãng</span>
               <span className="font-medium text-gray-900">
                 {product?.brand}
@@ -113,20 +101,34 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
             {product.productName}
           </h3>
           {/* Base price nếu cần */}
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm text-gray-600">
             {selectedColor?.productColorPrice?.toLocaleString()}đ
           </p>
         </div>
-        {/* Color selector */}
-        <div className="flex items-center gap-2">
-          {product.colors?.map((color, index) => (
-            <button
-              key={index}
-              onClick={() => setSelectedColorIndex(index)}
-              className="w-5 h-5 rounded-full border-2 transition"
-              style={{ backgroundColor: color.hexcode }}
-            />
-          ))}
+        <div className="flex flex-col items-end gap-0.5">
+          {/* Color selector */}
+          <div className="flex items-center gap-2 mb-1">
+            {product.colors?.map((color, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedColorIndex(index)}
+                className={`w-5 h-5 rounded-full border transition-all duration-300 transform hover:scale-110 ${
+                  selectedColorIndex === index
+                    ? "border-gray-500 scale-110"
+                    : "border-transparent"
+                }`}
+                style={{
+                  backgroundColor: color.hexCode,
+                  boxShadow:
+                    "inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.1)",
+                  backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%)`,
+                }}
+              />
+            ))}
+          </div>
+          <p className="text-xs font-medium text-gray-700">
+            {selectedColor?.productColorSku}
+          </p>
         </div>
       </div>
     </div>
