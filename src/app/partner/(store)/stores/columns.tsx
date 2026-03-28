@@ -31,6 +31,11 @@ export const getStoreColumns = (): ColumnDef<Store>[] => [
   {
     accessorKey: "name",
     header: "Tên",
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+
+      return <p className="font-semibold">{name}</p>;
+    },
   },
   {
     accessorKey: "phoneNumber",

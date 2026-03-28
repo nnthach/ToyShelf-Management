@@ -21,6 +21,8 @@ import {
   ArchiveRestore,
   MapPin,
   ShieldCheck,
+  PlusCircle,
+  Ticket,
 } from "lucide-react";
 
 // Admin
@@ -183,25 +185,13 @@ export const PartnerAdminSidebarGroups = [
     items: [
       { title: "Tổng quan", url: "/partner/dashboard", icon: LayoutDashboard },
       { title: "Thông báo", url: "#", icon: Bell, badge: true },
-      { title: "Cài đặt", url: "#", icon: Settings },
     ],
   },
   {
-    label: "Quản lý cửa hàng",
-    items: [
-      { title: "Cửa hàng", url: "/partner/stores", icon: Store },
-      {
-        title: "Yêu cầu tạo cửa hàng",
-        url: "/partner/store-creation-request",
-        icon: Store,
-      },
-      {
-        title: "Lời mời tham gia cửa hàng",
-        url: "/partner/store-invitation",
-        icon: Store,
-      },
-    ],
+    label: "Đơn hàng",
+    items: [{ title: "Đơn hàng", url: "/partner/orders", icon: ClipboardList }],
   },
+
   {
     label: "Quản lý nhân sự",
     items: [
@@ -209,12 +199,34 @@ export const PartnerAdminSidebarGroups = [
     ],
   },
   {
-    label: "Đơn hàng",
-    items: [{ title: "Đơn hàng", url: "/partner/orders", icon: ClipboardList }],
+    label: "Hàng tồn kho",
+    items: [
+      {
+        title: "Danh sách hàng tồn kho",
+        url: "/partner/inventories",
+        icon: ClipboardList,
+      },
+    ],
   },
 ];
 
 export const PartnerAdminSidebarNested = [
+  {
+    label: "Quản lý cửa hàng",
+    sub: [
+      { title: "Cửa hàng", url: "/partner/stores", icon: Store },
+      {
+        title: "Yêu cầu tạo cửa hàng",
+        url: "/partner/store-creation-request",
+        icon: FilePlus,
+      },
+      {
+        title: "Lời mời tham gia cửa hàng",
+        url: "/partner/store-invitation",
+        icon: Ticket,
+      },
+    ],
+  },
   {
     label: "Quản lý yêu cầu",
     sub: [
@@ -245,7 +257,7 @@ export const WarehouseManagerSidebarGroups = [
     label: "Nhân viên giao hàng",
     items: [
       {
-        title: "Tài khoản nhân viên giao hàng",
+        title: "Tài khoản nhân viên",
         url: "/warehouse/shipper",
         icon: UserStar,
       },

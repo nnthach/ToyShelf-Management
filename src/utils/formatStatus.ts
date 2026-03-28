@@ -218,3 +218,35 @@ export const formatStoreOrderRefillRequestStatusColor = (status: string) => {
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
   }
 };
+
+export const formatSystemRoleText = (status: string) => {
+  switch (status) {
+    case "Shipper":
+      return "Nhân viên giao hàng";
+    case "Warehouse":
+      return "Nhân viên kho";
+    case "Partner":
+      return "Nhân viên đối tác";
+    case "PartnerAdmin":
+      return "Đối tác";
+    case "Admin":
+      return "Quản trị viên";
+  }
+};
+
+export const formatSystemRoleColor = (role: string) => {
+  switch (role) {
+    case "Shipper":
+      return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
+    case "Warehouse":
+      return "bg-purple-100 text-purple-800 px-3 py-1 rounded-2xl";
+    case "Partner":
+      return "bg-teal-100 text-teal-800 px-3 py-1 rounded-2xl";
+    case "PartnerAdmin":
+      return "bg-indigo-100 text-indigo-800 px-3 py-1 rounded-2xl";
+    case "Admin":
+      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+    default:
+      return "bg-gray-100 text-gray-800 px-3 py-1 rounded-2xl";
+  }
+};

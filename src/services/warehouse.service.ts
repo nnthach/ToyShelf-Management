@@ -5,8 +5,8 @@ export const getAllWarehouseAPI = async <T>(params: T) => {
   return res.data;
 };
 
-export const getWarehouseDetailAPI = async (id: string) => {
-  const res = await api.get(`/warehouse/${id}`);
+export const getWarehouseDetailAPI = async <T>(id: string, params: T) => {
+  const res = await api.get(`/warehouse/${id}/detail`, { params });
   return res.data;
 };
 

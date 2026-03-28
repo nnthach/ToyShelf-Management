@@ -1,9 +1,5 @@
-import { User } from "@/src/types";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-} from "@/src/styles/components/ui/card";
+import { User, WarehouseStaff } from "@/src/types";
+import { Card, CardHeader, CardTitle } from "@/src/styles/components/ui/card";
 import { Input } from "@/src/styles/components/ui/input";
 import { Label } from "@/src/styles/components/ui/label";
 import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
@@ -20,7 +16,7 @@ import {
 import { DollarSign, Eye, Home } from "lucide-react";
 import { Button } from "@/src/styles/components/ui/button";
 
-function ViewDetailSheet({ user }: { user: User }) {
+function ViewDetailSheet({ user }: { user: WarehouseStaff }) {
   return (
     <Sheet>
       <SheetTrigger asChild>

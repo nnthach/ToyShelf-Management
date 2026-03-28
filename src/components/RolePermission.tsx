@@ -3,6 +3,7 @@
 import { useAppSelector } from "../redux/hooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 interface RolePermissionProps {
   allowedRoles: string[];
@@ -13,6 +14,8 @@ export const RolePermission: React.FC<RolePermissionProps> = ({
   allowedRoles,
   children,
 }) => {
+  const { warehouse } = useAuth();
+
   const { isLoading } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
@@ -43,6 +46,13 @@ export const RolePermission: React.FC<RolePermissionProps> = ({
         router.replace("/admin/dashboard");
       } else if (roles.includes("PartnerAdmin")) {
         router.replace("/partner/dashboard");
+      } else if (roles.includes("Partner")) {
+        router.replace("/manager/dashboard");
+      } else if (
+        roles.includes("Warehouse") &&
+        warehouse?.warehouseRole === "Manager"
+      ) {
+        router.replace("/warehouse/dashboard");
       } else {
         router.replace("/");
       }

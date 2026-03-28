@@ -23,6 +23,16 @@ export interface StoreStaff {
   email: string;
 }
 
+export interface WarehouseStaff {
+  userId: string;
+  fullName: string;
+  warehouseRole: string;
+  warehouseName: string;
+  warehouseId: string;
+  warehouseLocationIds: string[];
+  email: string;
+}
+
 export interface Partner {
   id: string;
   partnerId: string;

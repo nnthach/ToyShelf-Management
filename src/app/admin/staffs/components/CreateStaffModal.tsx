@@ -1,4 +1,7 @@
-import { createAllRoleAccountAPI } from "@/src/services/account.service";
+import {
+  createAllRoleAccountAPI,
+  createWarehouseStaffAccountAPI,
+} from "@/src/services/account.service";
 import { getAllRoleAPI } from "@/src/services/role.service";
 import { getAllWarehouseAPI } from "@/src/services/warehouse.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
@@ -13,7 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import { Role, Warehouse } from "@/src/types";
+import { Warehouse } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -37,7 +40,7 @@ function CreateStaffModal() {
   const formSchema = z.object({
     email: z.string().min(1, "Email là bắt buộc"),
     fullName: z.string().min(1, "Tên đối tác là bắt buộc"),
-    roleId: z.string().min(1, "Chức vụ là bắt buộc"),
+    role: z.string().min(1, "Chức vụ là bắt buộc"),
     warehouseId: z.string().min(1, "Kho là bắt buộc"),
   });
 
@@ -46,15 +49,9 @@ function CreateStaffModal() {
     defaultValues: {
       email: "",
       fullName: "",
-      roleId: "",
+      role: "",
       warehouseId: "",
     },
-  });
-
-  const { data: roleList = [] } = useQuery({
-    queryKey: ["roles", { isActive: undefined }],
-    queryFn: () => getAllRoleAPI({ isActive: undefined }),
-    select: (res) => res.data as Role[],
   });
 
   const { data: warehouseList = [] } = useQuery({
@@ -68,23 +65,20 @@ function CreateStaffModal() {
     label: s.name,
   }));
 
-  const roleFilter = roleList.filter((r) => {
-    return r.name === "Shipper" || r.name === "Warehouse";
-  });
-
-  const roleOptions = roleFilter.map((s) => ({
-    value: s.id,
-    label: s.name === "Shipper" ? "Nhân viên giao hàng" : "Quản lý kho",
-  }));
+  const roleOptions = [
+    {
+      value: "Manager",
+      label: "Quán lý kho",
+    },
+    {
+      value: "Shipper",
+      label: "Nhân viên giao hàng",
+    },
+  ];
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const { roleId, ...rest } = data;
-    const payload = {
-      ...rest,
-      roleIds: [roleId],
-    };
     try {
-      await createAllRoleAccountAPI(payload);
+      await createWarehouseStaffAccountAPI(data);
 
       queryClient.invalidateQueries({
         queryKey: ["staffs"],
@@ -135,14 +129,6 @@ function CreateStaffModal() {
             >
               <div className="grid gap-4">
                 <FormFieldCustom
-                  name="roleId"
-                  label="Chức vụ"
-                  icon={<Building2 size={18} />}
-                  placeholder="Chọn chức vụ"
-                  type="select"
-                  selectData={roleOptions}
-                />
-                <FormFieldCustom
                   name="fullName"
                   label="Họ và tên"
                   icon={<User size={18} />}
@@ -154,6 +140,15 @@ function CreateStaffModal() {
                   label="Email đăng nhập"
                   icon={<Mail size={18} />}
                   placeholder="example@gmail.com"
+                />
+
+                <FormFieldCustom
+                  name="role"
+                  label="Chức vụ"
+                  icon={<Building2 size={18} />}
+                  placeholder="Chọn chức vụ"
+                  type="select"
+                  selectData={roleOptions}
                 />
 
                 <FormFieldCustom

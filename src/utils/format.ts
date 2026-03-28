@@ -103,3 +103,16 @@ export const formatStoreRoleToVN = (text: string) => {
       return "N/A";
   }
 };
+
+export const formatWarehouseRoleToVN = (text: string) => {
+  const role = text?.toLowerCase();
+
+  switch (role) {
+    case "manager":
+      return "Quản lý kho";
+    case "shipper":
+      return "Nhân viên giao hàng";
+    default:
+      return "N/A";
+  }
+};

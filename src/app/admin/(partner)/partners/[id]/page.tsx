@@ -1,7 +1,14 @@
 "use client";
 
 import StatCard from "@/src/components/StatCard";
-import { ArrowLeft, Box, Server, Store, UserPlus } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Box,
+  Server,
+  Store,
+  UserPlus,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import BarChartExample from "./components/charts/BarChart";
@@ -13,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPartnerDetailAPI } from "@/src/services/partner.service";
 import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
 import PartnerDetailStoreList from "./components/storelist/PartnerDetailStoreList";
+import StatCardWithButton from "@/src/components/StatCardWithButton";
 
 export default function ViewPartnerDetailPage() {
   const { id: partnerId } = useParams<{ id: string }>();
@@ -44,7 +52,7 @@ export default function ViewPartnerDetailPage() {
             <ArrowLeft />
           </Button>
           <h1 className="text-xl font-bold dark:text-foreground">
-            Chi tiết đối tác
+            Chi tiết thông tin đối tác
           </h1>
         </div>
       </div>
@@ -163,16 +171,7 @@ export default function ViewPartnerDetailPage() {
         />
 
         <StatCard
-          title="Cửa hàng"
-          value="15"
-          change="+1,647"
-          changePercent="+15%"
-          icon={Store}
-          color="bg-yellow-100 text-yellow-900"
-        />
-
-        <StatCard
-          title="Kệ"
+          title="Đơn hàng"
           value="10"
           change="+2,815"
           changePercent="+18%"
@@ -181,12 +180,34 @@ export default function ViewPartnerDetailPage() {
         />
 
         <StatCard
-          title="Tồn kho"
+          title="Hoa hồng"
           value="15"
           change="+2,815"
           changePercent="+18%"
           icon={Box}
           color="bg-blue-100 text-blue-900"
+        />
+
+        <StatCardWithButton
+          title="Cửa hàng"
+          value="15"
+          change="+1,647"
+          changePercent="+15%"
+          icon={Store}
+          color="bg-yellow-100 text-yellow-900"
+          action={
+            <span
+              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
+  border-current bg-yellow-100 text-yellow-900
+  bg-opacity-30 hover:bg-opacity-50
+  transition-all cursor-pointer shadow-sm active:scale-95`}
+              onClick={() =>
+                router.push(`/admin/stores?companyid=${partnerId}`)
+              }
+            >
+              <ArrowRight size={16} />
+            </span>
+          }
         />
       </div>
 

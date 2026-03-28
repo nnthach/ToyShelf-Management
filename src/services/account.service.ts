@@ -10,6 +10,11 @@ export const createPartnerStaffAccountAPI = async <T>(data: T) => {
   return res.data;
 };
 
+export const createWarehouseStaffAccountAPI = async <T>(data: T) => {
+  const res = await api.post("/account/activate/internal/warehouse", data);
+  return res.data;
+};
+
 export const activeAccountRequestAPI = async (email: string) => {
   const res = await api.post("/account/activate/request", null, {
     params: { email },

@@ -4,14 +4,16 @@ import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getShipperColumns } from "./columns";
 import { Button } from "@/src/styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
-import CreateStaffModal from "./components/CreateShipperModal";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
-import { getAllUserAPI } from "@/src/services/user.service";
+import { getAllWarehouseStaffAPI } from "@/src/services/user.service";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/src/hooks/useAuth";
 
 export default function WarehouseShipperManage() {
+  const { warehouse } = useAuth();
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
@@ -19,13 +21,18 @@ export default function WarehouseShipperManage() {
   });
 
   const {
-    data: shipperList = [],
+    data: shipperList,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["shippers", query],
-    queryFn: () => getAllUserAPI(query),
+    queryKey: ["warehouseStaffs", { warehouseId: warehouse?.warehouseId }],
+    queryFn: () =>
+      getAllWarehouseStaffAPI({
+        warehouseId: warehouse?.warehouseId,
+        role: "Shipper",
+      }),
     select: (res) => res.data,
+    enabled: !!warehouse?.warehouseId,
   });
 
   const columns = getShipperColumns();
@@ -34,8 +41,7 @@ export default function WarehouseShipperManage() {
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý nhân viên giao hàng</h1>
-        <CreateStaffModal />
+        <h1 className="text-4xl font-bold ">Danh sách nhân viên giao hàng</h1>
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
@@ -49,7 +55,7 @@ export default function WarehouseShipperManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={shipperList.length}
+              resultCount={shipperList?.length || 0}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({

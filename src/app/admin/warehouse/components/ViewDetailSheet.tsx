@@ -28,7 +28,7 @@ function ViewDetailSheet({
 }: ViewDetailSheetProps) {
   const { data: warehouseDetail, isLoading } = useQuery({
     queryKey: ["warehouse", warehouseId],
-    queryFn: () => getWarehouseDetailAPI(warehouseId!),
+    queryFn: () => getWarehouseDetailAPI(warehouseId!, {}),
     select: (res) => res.data,
     enabled: !!warehouseId,
   });

@@ -7,10 +7,12 @@ import {
   setMyStore,
   setPartner,
   setUser,
+  setWarehouse,
 } from "../redux/slice/authSlice";
 import {
   getMyPartnerProfileAPI,
   getMyProfileAPI,
+  getMyWarehouseProfileAPI,
 } from "../services/user.service";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -19,7 +21,7 @@ import { LoginRes } from "../types/SubType";
 
 export function useAuth() {
   const router = useRouter();
-  const { user, partner, myStore, isLoading } = useAppSelector(
+  const { user, partner, myStore, isLoading, warehouse } = useAppSelector(
     (state) => state.auth,
   );
   const dispatch = useAppDispatch();
@@ -34,15 +36,25 @@ export function useAuth() {
         const userProfile = await getMyProfileAPI();
         const data = userProfile.data;
 
+        // if role partnerAdmin => get partner by userId
         if (roles.includes("PartnerAdmin")) {
           const partnerDetail = await getMyPartnerProfileAPI({
             userId: userProfile.data.id,
           });
           dispatch(setPartner(partnerDetail.data));
         }
+
+        // if role warehouse => get warehouse by userId
+        if (roles.includes("Warehouse")) {
+          const warehouseDetail = await getMyWarehouseProfileAPI({
+            userId: userProfile.data.id,
+          });
+          dispatch(setWarehouse(warehouseDetail.data[0]));
+        }
+
+        // if role partner (manager/staff)=> get store detail
         if (roles.includes("Partner")) {
           const myStoreRes = await getMyStoreAPI();
-          console.log("mystore", myStoreRes);
           dispatch(setMyStore(myStoreRes.data[0]));
         }
 
@@ -68,6 +80,7 @@ export function useAuth() {
 
     const fetchProfileRes = await getMyProfileAPI();
 
+    // if role partnerAdmin => get partner by userId
     if (roles.includes("PartnerAdmin")) {
       const partnerDetail = await getMyPartnerProfileAPI({
         userId: fetchProfileRes.data.id,
@@ -75,6 +88,16 @@ export function useAuth() {
 
       dispatch(setPartner(partnerDetail.data));
     }
+
+    // if role warehouse => get warehouse by userId
+    if (roles.includes("Warehouse")) {
+      const warehouseDetail = await getMyWarehouseProfileAPI({
+        userId: fetchProfileRes.data.id,
+      });
+      dispatch(setWarehouse(warehouseDetail.data[0]));
+    }
+
+    // if role partner (manager/staff)=> get store detail
     if (roles.includes("Partner")) {
       const myStoreRes = await getMyStoreAPI();
 
@@ -105,7 +128,7 @@ export function useAuth() {
       return;
     }
 
-    if (roles.includes("Warehouse")) {
+    if (roles.includes("Warehouse") && warehouse?.warehouseRole === "Manager") {
       router.replace("/warehouse/dashboard");
       return;
     }
@@ -136,6 +159,7 @@ export function useAuth() {
     user,
     partner,
     myStore,
+    warehouse,
     isLoading,
     logout: logoutUser,
     handleLoginSuccess,

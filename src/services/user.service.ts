@@ -37,6 +37,11 @@ export const getMyPartnerProfileAPI = async <T>(params: T) => {
   return res.data;
 };
 
+export const getMyWarehouseProfileAPI = async <T>(params: T) => {
+  const res = await api.get("/user/warehouse-detail", { params });
+  return res.data;
+};
+
 export const updateMyProfileAPI = async <T>(data: T) => {
   const res = await api.put("/user", data);
   return res.data;
@@ -59,5 +64,10 @@ export const getAllPartnerStaffAPI = async <T>(params: T) => {
 
 export const getAllStoreStaffAPI = async <T>(params: T) => {
   const res = await api.get("/user/store-users", { params });
+  return res.data;
+};
+
+export const getAllWarehouseStaffAPI = async <T>(params: T) => {
+  const res = await api.get("/user/warehouse-users", { params });
   return res.data;
 };
