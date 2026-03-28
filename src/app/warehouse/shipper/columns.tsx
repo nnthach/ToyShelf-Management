@@ -4,7 +4,11 @@ import { ColumnDef } from "@tanstack/react-table";
 import ViewDetailSheet from "./components/ViewDetailSheet";
 import { WarehouseStaff } from "@/src/types";
 import { formatDateTime, formatWarehouseRoleToVN } from "@/src/utils/format";
-import { formatSystemRoleColor } from "@/src/utils/formatStatus";
+import {
+  formatSystemRoleColor,
+  formatUserStatusColor,
+  formatUserStatusText,
+} from "@/src/utils/formatStatus";
 
 export const getShipperColumns = (): ColumnDef<WarehouseStaff>[] => [
   {
@@ -35,28 +39,28 @@ export const getShipperColumns = (): ColumnDef<WarehouseStaff>[] => [
     },
   },
 
-  // {
-  //   accessorKey: "isActive",
-  //   header: "Trạng thái",
-  //   cell: ({ row }) => {
-  //     const status = row.getValue("isActive") as boolean;
+  {
+    accessorKey: "userIsActive",
+    header: "Trạng thái",
+    cell: ({ row }) => {
+      const status = row.getValue("userIsActive") as boolean;
 
-  //     return (
-  //       <span className={`${formatUserStatusColor(status)}`}>
-  //         {formatUserStatusText(status)}
-  //       </span>
-  //     );
-  //   },
-  // },
+      return (
+        <span className={`${formatUserStatusColor(status)}`}>
+          {formatUserStatusText(status)}
+        </span>
+      );
+    },
+  },
 
-  // {
-  //   accessorKey: "createdAt",
-  //   header: "Ngày tạo",
-  //   cell: ({ row }) => {
-  //     const value = row.getValue("createdAt") as string;
-  //     return <span>{formatDateTime(value).full}</span>;
-  //   },
-  // },
+  {
+    accessorKey: "userCreatedAt",
+    header: "Ngày tạo",
+    cell: ({ row }) => {
+      const value = row.getValue("userCreatedAt") as string;
+      return <span>{formatDateTime(value).full}</span>;
+    },
+  },
   {
     accessorKey: "action",
     header: "Hành động",

@@ -350,6 +350,13 @@ export const StoreManagerSidebarGroups = [
   },
 
   {
+    label: "Đơn hàng",
+    items: [
+      { title: "Danh sách đơn hàng", url: "/manager/orders", icon: UserStar },
+    ],
+  },
+
+  {
     label: "Yêu cầu",
     items: [
       {

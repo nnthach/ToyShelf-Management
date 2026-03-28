@@ -1,29 +1,12 @@
-// import { useCallback, useState } from "react";
-
-// const useQueryParams = <T>(initial: T) => {
-//   const [query, setQuery] = useState(initial);
-
-//   const updateQuery = useCallback((params: Partial<T>) => {
-//     setQuery((prev) => ({
-//       ...prev,
-//       ...params,
-//     }));
-//   }, []);
-
-//   const resetQuery = () => {
-//     setQuery(initial);
-//   };
-//   return { query, updateQuery, resetQuery };
-// };
-
-// export default useQueryParams;
-
 "use client";
 
 import { useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const useQueryParams = <T extends object>(initial: T) => {
+const useQueryParams = <T extends object>(
+  initial: T,
+  options?: { excludeResetKeys?: (keyof T)[] },
+) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -69,9 +52,20 @@ const useQueryParams = <T extends object>(initial: T) => {
   );
 
   // reset
+  // const resetQuery = useCallback(() => {
+  //   router.replace("?");
+  // }, [router]);
   const resetQuery = useCallback(() => {
-    router.replace("?");
-  }, [router]);
+    const search = new URLSearchParams(searchParams.toString());
+
+    Object.keys(initial).forEach((key) => {
+      if (options?.excludeResetKeys?.includes(key as keyof T)) return;
+
+      search.delete(key);
+    });
+
+    router.replace(`?${search.toString()}`);
+  }, [router, searchParams, initial, options]);
 
   return { query, updateQuery, resetQuery };
 };

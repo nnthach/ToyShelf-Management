@@ -232,6 +232,7 @@ export interface MyStore {
   storeRole: string;
   storeName: string;
   storeCode: string;
+  storeLocationId: string;
 }
 
 export interface Inventory {

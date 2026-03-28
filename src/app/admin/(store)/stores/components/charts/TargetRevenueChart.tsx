@@ -48,7 +48,7 @@ export function TargetRevenueChart() {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-62.5"
         >
           <RadialBarChart
             data={chartData}

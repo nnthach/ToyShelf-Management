@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllStoreAPI } from "@/src/services/store.service";
 import { Store } from "@/src/types";
-import CreateStoreModal from "./components/CreateStoreModal";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreColumns } from "./columns";
 import { getAllPartnerAPI } from "@/src/services/partner.service";
@@ -50,8 +49,16 @@ export default function AdminStoreManage() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Quản lý cửa hàng</h1>
-        <CreateStoreModal />
+        <div>
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Giám sát cửa hàng
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách tất cả các cửa hàng trong hệ thống
+          </p>
+        </div>
+
+        {/* <CreateStoreModal /> */}
       </div>
 
       {/*Table */}
@@ -81,10 +88,10 @@ export default function AdminStoreManage() {
 
             <div className="space-x-3">
               <Button>
-                <Download /> Nhập khẩu
+                <Download /> Nhập
               </Button>
               <Button variant={"outline"}>
-                <Upload /> Xuất khẩu
+                <Upload /> Xuất
               </Button>
             </div>
           </div>

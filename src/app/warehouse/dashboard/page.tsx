@@ -7,16 +7,17 @@ import { PieChartExample } from "./components/charts/PieChart";
 import MostSellStore from "./components/MostSellStore";
 import BadFeedBackStore from "./components/BadFeedbackStore";
 import FeedbackList from "./components/FeedbackList";
-import StatCard from "@/src/components/StatCard";
-import { Box, Server } from "lucide-react";
-import Image from "next/image";
+import { ArrowRight, Box, Server } from "lucide-react";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { getWarehouseDetailAPI } from "@/src/services/warehouse.service";
 import WarehouseBannerInfo from "./components/WarehouseBannerInfo";
+import StatCardWithButton from "@/src/components/StatCardWithButton";
+import { useRouter } from "next/navigation";
 
 export default function WarehouseDashboard() {
   const { warehouse } = useAuth();
+  const router = useRouter();
 
   const warehouseId = warehouse?.warehouseId;
 
@@ -37,21 +38,64 @@ export default function WarehouseDashboard() {
 
       {/*Statistic card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Sản phẩm"
+        <StatCardWithButton
+          title="Hàng tồn kho"
           value="$250,520"
           change="+$30,215"
           changePercent="+12%"
           icon={Box}
           color="bg-green-100 text-green-900"
+          action={
+            <span
+              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
+  border-current bg-green-100 text-green-900
+  bg-opacity-30 hover:bg-opacity-50
+  transition-all cursor-pointer shadow-sm active:scale-95`}
+              onClick={() => router.push(`/warehouse/inventory`)}
+            >
+              <ArrowRight size={16} />
+            </span>
+          }
         />
-        <StatCard
+
+        <StatCardWithButton
           title="Kệ"
           value="10"
           change="+2,815"
           changePercent="+18%"
           icon={Server}
           color="bg-pink-100 text-pink-900"
+          action={
+            <span
+              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
+  border-current bg-pink-100 text-pink-900
+  bg-opacity-30 hover:bg-opacity-50
+  transition-all cursor-pointer shadow-sm active:scale-95`}
+              onClick={() => router.push(`/warehouse/shelf-inventory`)}
+            >
+              <ArrowRight size={16} />
+            </span>
+          }
+        />
+
+        <StatCardWithButton
+          title="Đơn giao hàng"
+          value="10"
+          change="+2,815"
+          changePercent="+18%"
+          icon={Server}
+          color="bg-blue-100 text-blue-900"
+          action={
+            <span
+              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
+  border-current bg-blue-100 text-blue-900
+  bg-opacity-30 hover:bg-opacity-50
+  transition-all cursor-pointer shadow-sm active:scale-95`}
+              onClick={() => router.push(`/warehouse/refill-stocks`)}
+            >
+              <ArrowRight size={16} />
+            </span>
+          }
         />
       </div>
 

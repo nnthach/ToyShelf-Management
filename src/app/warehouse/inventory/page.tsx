@@ -10,8 +10,11 @@ import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import ProductCardWithQuantity from "@/src/components/ProductCardWithQuantity";
 import { Product } from "@/src/types";
 import Pagination from "@/src/components/Pagination";
+import { useAuth } from "@/src/hooks/useAuth";
 
 export default function WarehouseInventoryManage() {
+  const { warehouse } = useAuth();
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
@@ -25,8 +28,9 @@ export default function WarehouseInventoryManage() {
   } = useQuery({
     queryKey: ["inventories", query],
     queryFn: () =>
-      getInventoryOfWarehouseByIdAPI("d2f2e652-ad54-44a0-b6e4-6447d449ca1a"),
+      getInventoryOfWarehouseByIdAPI(warehouse?.warehouseId as string),
     select: (res) => res.data,
+    enabled: !!warehouse?.warehouseId,
   });
 
   return (

@@ -16,21 +16,28 @@ import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function PartnerManageInventory() {
   const { partner } = useAuth();
+
   const { data: partnerStoreList, isLoading: isPartnerStoreLoading } = useQuery(
     {
       queryKey: ["partnerStores"],
       queryFn: () => getAllStoreAPI({ companyid: partner?.partnerId }),
       select: (res) => res.data as Store[],
+      enabled: true,
     },
   );
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    locationId: "",
-    categoryId: "",
-    pageNumber: 1,
-    pageSize: 10,
-  });
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      isActive: undefined,
+      locationId: "",
+      categoryId: "",
+      pageNumber: 1,
+      pageSize: 10,
+    },
+    {
+      excludeResetKeys: ["locationId"],
+    },
+  );
 
   useEffect(() => {
     if (partnerStoreList?.length && !query.locationId) {
@@ -51,7 +58,7 @@ export default function PartnerManageInventory() {
     enabled: !!query.locationId,
   });
 
-  if (isPartnerStoreLoading) {
+  if (isPartnerStoreLoading || !query.locationId) {
     return <LoadingPageComponent />;
   }
 

@@ -11,8 +11,16 @@ import { useQuery } from "@tanstack/react-query";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllInventoryLocationAPI } from "@/src/services/inventory-location.service";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Button } from "@/src/styles/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function AdminViewAllInventory() {
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
+  const storeId = searchParams.get("storeId");
+  const router = useRouter();
+
   const { data: locationList } = useQuery({
     queryKey: ["locations"],
     queryFn: () => getAllInventoryLocationAPI({}),
@@ -50,13 +58,25 @@ export default function AdminViewAllInventory() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <div className="flex flex-col">
-          <h1 className="text-2xl font-bold dark:text-foreground">
-            Giám xác hàng tồn kho tại {inventoryList?.locationName}
-          </h1>
-          <p className="text-gray-500 dark:text-gray-200">
-            Danh sách sản phẩm tồn kho tại cửa hàng và kho
-          </p>
+        <div>
+          {from === "store" && storeId && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push(`/admin/stores/${storeId}`)}
+              className="w-8 h-8"
+            >
+              <ArrowLeft />
+            </Button>
+          )}
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-bold dark:text-foreground">
+              Giám xác hàng tồn kho tại {inventoryList?.locationName}
+            </h1>
+            <p className="text-gray-500 dark:text-gray-200">
+              Danh sách sản phẩm tồn kho tại cửa hàng và kho
+            </p>
+          </div>
         </div>
       </div>
 

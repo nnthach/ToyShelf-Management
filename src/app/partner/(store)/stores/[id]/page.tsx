@@ -81,6 +81,21 @@ export default function PartnerStoreDetailPage() {
           changePercent="+15%"
           icon={Store}
           color="bg-yellow-100 text-yellow-900"
+          action={
+            <span
+              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
+              border-current bg-yellow-100 text-yellow-900
+              bg-opacity-30 hover:bg-opacity-50
+              transition-all cursor-pointer shadow-sm active:scale-95`}
+              onClick={() =>
+                router.push(
+                  `/partner/orders?partnerId=${partner?.id}&storeId=${id}`,
+                )
+              }
+            >
+              <ArrowRight size={16} />
+            </span>
+          }
         />
 
         <StatCardWithButton
@@ -98,7 +113,7 @@ export default function PartnerStoreDetailPage() {
               transition-all cursor-pointer shadow-sm active:scale-95`}
               onClick={() =>
                 router.push(
-                  `/partner/stores/${id}/inventory?inventoryLocationId=${storeDetail.inventoryLocationId}`,
+                  `/partner/inventories?locationId=${storeDetail.inventoryLocationId}`,
                 )
               }
             >

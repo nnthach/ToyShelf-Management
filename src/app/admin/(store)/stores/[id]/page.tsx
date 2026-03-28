@@ -75,7 +75,9 @@ export default function PartnerStoreDetailPage() {
   border-current bg-yellow-100 text-yellow-900
   bg-opacity-30 hover:bg-opacity-50
   transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() => router.push(`/admin/stores/${id}/orders`)}
+              onClick={() =>
+                router.push(`/admin/orders?storeId=${id}&from=store`)
+              }
             >
               <ArrowRight size={16} />
             </span>
@@ -97,7 +99,7 @@ export default function PartnerStoreDetailPage() {
   transition-all cursor-pointer shadow-sm active:scale-95`}
               onClick={() =>
                 router.push(
-                  `/admin/stores/${id}/inventory?inventoryLocationId=${storeDetail.inventoryLocationId}`,
+                  `/admin/all-inventory?locationId=${storeDetail.inventoryLocationId}`,
                 )
               }
             >
@@ -134,16 +136,16 @@ export default function PartnerStoreDetailPage() {
       <div className="">
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
           {/*Chart total revenue */}
-          <div className="bg-background rounded-lg col-span-3 h-[60vh] w-full">
+          <div className="bg-background rounded-lg col-span-3 h-[60vh] w-full shadow-sm">
             <BarChartExample />
           </div>
           {/*Chart target value */}
-          <div className="bg-background rounded-lg col-span-1 w-full">
+          <div className="bg-background rounded-lg col-span-1 w-full shadow-sm">
             <TargetRevenueChart />
           </div>
 
           {/*chart */}
-          <div className="bg-background rounded-lg col-span-4 h-[60vh] w-full">
+          <div className="bg-background rounded-lg col-span-4 h-[60vh] w-full shadow-sm">
             <AreaChartExample />
           </div>
         </div>
