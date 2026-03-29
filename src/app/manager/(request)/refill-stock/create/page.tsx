@@ -16,6 +16,7 @@ import Pagination from "@/src/components/Pagination";
 import { Product } from "@/src/types";
 import { createRefillAPI } from "@/src/services/refill.service";
 import { toast } from "react-toastify";
+import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 
 export interface CartItem {
   productColorId: string;
@@ -51,6 +52,12 @@ export default function CreateStoreOrderRefill() {
   } = useQuery({
     queryKey: ["products", query],
     queryFn: () => getAllProductAPI(query),
+    select: (res) => res.data,
+  });
+
+  const { data: categoryList = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({ isActive: true }),
     select: (res) => res.data,
   });
 
@@ -142,6 +149,7 @@ export default function CreateStoreOrderRefill() {
             <FilterSearch
               query={query}
               loading={isLoading}
+              categoryList={categoryList}
               resultCount={productList.totalCount}
               onSearch={(val) => updateQuery({ searchItem: val })}
               onApplyFilter={(filter) =>
@@ -183,7 +191,9 @@ export default function CreateStoreOrderRefill() {
 
           <Pagination
             currentPage={query?.pageNumber || 1}
+            totalItems={productList.totalCount}
             totalPages={productList.totalPages}
+            pageSize={query?.pageSize || 10}
             onPageChange={(page) => updateQuery({ pageNumber: page })}
           />
         </div>

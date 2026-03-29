@@ -22,7 +22,11 @@ export default function AdminUserManage() {
     search: "",
   });
 
-  const { data: staffList = [], isLoading, refetch } = useQuery({
+  const {
+    data: staffList = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["staffs", query],
     queryFn: () => getAllUserAPI(query),
     select: (res) => res.data,
@@ -34,12 +38,23 @@ export default function AdminUserManage() {
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý nhân viên</h1>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý nhân viên
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách nhân viên trong hệ thống
+          </p>
+        </div>{" "}
         <CreateStaffModal />
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={staffList ?? []} isLoading={isLoading}>
+        <DataTable
+          columns={columns}
+          data={staffList ?? []}
+          isLoading={isLoading}
+        >
           <div className="p-4 border-b flex justify-between items-center">
             {/*Filter search */}
             <FilterSearch
@@ -54,7 +69,6 @@ export default function AdminUserManage() {
               }
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
-
             />
 
             <div className="space-x-3">

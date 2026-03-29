@@ -72,7 +72,14 @@ export default function AdminPartnerLevel() {
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý cấp bậc đối tác</h1>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý cấp bậc đối tác
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách cấp bậc đối tác trong hệ thống
+          </p>
+        </div>{" "}
         <CreatePartnerTierModal />
       </div>
       {/*Table */}

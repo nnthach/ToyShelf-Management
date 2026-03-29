@@ -14,7 +14,16 @@ import {
 import { memo } from "react";
 
 import { Dispatch, SetStateAction } from "react";
-import { Box, Check, Edit, Globe, Package, Ruler, Tag } from "lucide-react";
+import {
+  Box,
+  Check,
+  DollarSign,
+  Edit,
+  Globe,
+  Package,
+  Ruler,
+  Tag,
+} from "lucide-react";
 
 interface ConfirmPopupProps {
   openVerifyCreateForm: boolean;
@@ -73,12 +82,20 @@ function ConfirmPopup({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="p-3 rounded-lg bg-secondary/30 border space-y-1">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium uppercase">
+                      <DollarSign className="w-3 h-3" /> Gía nhập
+                    </div>
+                    <p className="font-semibold text-sm">
+                      {Number(previewData?.basePrice) || 0}
+                    </p>
+                  </div>
                   <div className="p-3 rounded-lg bg-secondary/30 border space-y-1">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium uppercase">
                       <Globe className="w-3 h-3" /> Xuất xứ
                     </div>
-                    <p className="font-semibold">
+                    <p className="font-semibold text-sm">
                       {previewData?.originCountry || "N/A"}
                     </p>
                   </div>
@@ -86,7 +103,7 @@ function ConfirmPopup({
                     <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium uppercase">
                       <Tag className="w-3 h-3" /> Chất liệu
                     </div>
-                    <p className="font-semibold">
+                    <p className="font-semibold text-sm">
                       {previewData?.material || "N/A"}
                     </p>
                   </div>

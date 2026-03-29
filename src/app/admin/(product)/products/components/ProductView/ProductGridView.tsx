@@ -15,6 +15,7 @@ interface ProductGridViewProps {
   query: QueryParams;
   updateQuery: (val: Partial<QueryParams>) => void;
   totalItems: number;
+  totalPages: number;
 }
 
 function ProductGridView({
@@ -25,12 +26,11 @@ function ProductGridView({
   query,
   updateQuery,
   totalItems,
+  totalPages,
 }: ProductGridViewProps) {
-  const totalPages = Math.ceil(totalItems / (query.pageSize ?? 10));
-
   return (
     <div className="container mx-auto py-10">
-      <div className="bg-white rounded-xl overflow-hidden pb-4">
+      <div className="bg-white rounded-xl overflow-hidden ">
         <div className="mb-4 p-4 border-b flex justify-between items-center bg-white dark:bg-sidebar">
           {children}
           <div className="space-x-3">
@@ -43,7 +43,6 @@ function ProductGridView({
             </Button>
           </div>
         </div>
-
         <div className="px-4 pb-4">
           {isLoading ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
@@ -71,6 +70,8 @@ function ProductGridView({
         <Pagination
           currentPage={query?.pageNumber || 1}
           totalPages={totalPages}
+          totalItems={totalItems}
+          pageSize={query?.pageSize || 10}
           onPageChange={(page) => updateQuery({ pageNumber: page })}
         />
       </div>

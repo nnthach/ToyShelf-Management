@@ -14,6 +14,7 @@ import { getAllInventoryLocationAPI } from "@/src/services/inventory-location.se
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/src/styles/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 
 export default function AdminViewAllInventory() {
   const searchParams = useSearchParams();
@@ -27,13 +28,20 @@ export default function AdminViewAllInventory() {
     select: (res) => res.data as InventoryLocation[],
   });
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    locationId: "",
-    categoryId: "",
-    pageNumber: 1,
-    pageSize: 10,
-  });
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      isActive: undefined,
+      locationId: "",
+      categoryId: "",
+      order: "",
+      pageNumber: 1,
+      pageSize: 10,
+      searchItem: "",
+    },
+    {
+      excludeResetKeys: ["locationId"],
+    },
+  );
 
   useEffect(() => {
     if (locationList?.length && !query.locationId) {
@@ -48,10 +56,16 @@ export default function AdminViewAllInventory() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["inventories", query.locationId],
-    queryFn: () => getInventoryByLocationIdAPI(query.locationId!),
+    queryKey: ["inventories", query],
+    queryFn: () => getInventoryByLocationIdAPI(query.locationId!, query),
     select: (res) => res.data,
     enabled: !!query.locationId,
+  });
+
+  const { data: categoryList } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({}),
+    select: (res) => res.data,
   });
 
   return (
@@ -88,7 +102,8 @@ export default function AdminViewAllInventory() {
               query={query}
               loading={isLoading}
               locationList={locationList}
-              resultCount={inventoryList?.products.length}
+              categoryList={categoryList}
+              resultCount={inventoryList?.totalCount}
               onSearch={(val) => updateQuery({ searchItem: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -126,7 +141,9 @@ export default function AdminViewAllInventory() {
 
           <Pagination
             currentPage={query?.pageNumber || 1}
-            totalPages={inventoryList?.products?.totalPages || 0}
+            totalPages={inventoryList?.totalPages || 1}
+            totalItems={inventoryList?.totalCount}
+            pageSize={query?.pageSize || 10}
             onPageChange={(page) => updateQuery({ pageNumber: page })}
           />
         </div>

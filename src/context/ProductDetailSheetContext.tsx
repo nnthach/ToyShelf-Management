@@ -2,15 +2,23 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import ProductViewDetailSheet from "../components/ProductViewDetailSheet";
+import { Product } from "../types";
+import ProductViewDetailWithQuantitySheet from "../components/ProductViewDetailWithQuantitySheet";
 
 type ProductDetailSheetContextType = {
-  open: (id: string) => void;
+  openById: (id: string) => void;
+  openByData: (product: Product) => void;
   close: () => void;
 };
 
 type ProductDetailSheetProviderProps = {
   children: ReactNode;
 };
+
+type ProductDetailState =
+  | { type: "id"; id: string }
+  | { type: "data"; product: Product }
+  | null;
 
 const ProductDetailSheetContext =
   createContext<ProductDetailSheetContextType | null>(null);
@@ -28,23 +36,33 @@ export const useProductDetailSheet = () => {
 export function ProductDetailSheetProvider({
   children,
 }: ProductDetailSheetProviderProps) {
-  const [productId, setProductId] = useState<string | null>(null);
+  const [state, setState] = useState<ProductDetailState>(null);
 
-  const open = (id: string) => {
-    console.log("OPEN", id);
-    setProductId(id);
+  const openById = (id: string) => {
+    setState({ type: "id", id });
   };
-  const close = () => setProductId(null);
+
+  const openByData = (product: Product) => {
+    setState({ type: "data", product });
+  };
+
+  const close = () => setState(null);
 
   return (
-    <ProductDetailSheetContext.Provider value={{ open, close }}>
+    <ProductDetailSheetContext.Provider value={{ openById, openByData, close }}>
       {children}
 
-      <ProductViewDetailSheet
-        productId={productId}
-        isOpen={!!productId}
-        onClose={close}
-      />
+      {state?.type === "id" && (
+        <ProductViewDetailSheet productId={state.id} isOpen onClose={close} />
+      )}
+
+      {state?.type === "data" && (
+        <ProductViewDetailWithQuantitySheet
+          product={state.product}
+          isOpen
+          onClose={close}
+        />
+      )}
     </ProductDetailSheetContext.Provider>
   );
 }

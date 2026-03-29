@@ -67,7 +67,7 @@ function CreateProductInfoLeft() {
         <div className="grid grid-cols-2 gap-4">
           <FormFieldCustom
             name="basePrice"
-            label="Giá sản phẩm"
+            label="Giá nhập"
             placeholder="0"
             type="number"
             icon={<DollarSign size={18} />} // Icon Giá

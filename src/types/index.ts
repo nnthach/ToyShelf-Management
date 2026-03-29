@@ -76,6 +76,7 @@ export interface Color {
 export interface ProductColorItem {
   id: string;
   productId: string;
+  productColorId: string;
   sku: string;
   productColorSku: string;
   priceSegmentId: string;
@@ -94,6 +95,7 @@ export interface ProductColorItem {
   inTransit: number;
   damaged: number;
   sold: number;
+  name: string;
 }
 
 export interface Product {
@@ -101,6 +103,7 @@ export interface Product {
   productId?: string;
   productCategoryId: string;
   productCategoryName: string;
+  productSKU: string;
   sku: string;
   name: string;
   productName: string;

@@ -15,13 +15,18 @@ export const refillInventoryAPI = async <T>(data: T) => {
   return res.data;
 };
 
-export const getInventoryOfWarehouseByIdAPI = async (id: string) => {
-  const res = await api.get(`/Inventory/warehouse/${id}/inventory`);
+export const getInventoryOfWarehouseByIdAPI = async <T>(
+  id: string,
+  params?: T,
+) => {
+  const res = await api.get(`/Inventory/warehouse/${id}/inventory`, { params });
   return res.data;
 };
 
-export const getInventoryByLocationIdAPI = async (id: string) => {
-  const res = await api.get(`/Inventory/location/${id}/inventory-overview`);
+export const getInventoryByLocationIdAPI = async <T>(id: string, params: T) => {
+  const res = await api.get(`/Inventory/location/${id}/inventory-overview`, {
+    params,
+  });
   return res.data;
 };
 

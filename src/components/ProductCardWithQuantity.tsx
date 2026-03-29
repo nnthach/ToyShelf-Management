@@ -9,7 +9,15 @@ interface ProductCardWithQuantityProps {
   product: Product;
 }
 function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
-  const { open } = useProductDetailSheet();
+  const { openByData } = useProductDetailSheet();
+
+  // color
+  const [showMore, setShowMore] = useState(false);
+  const displayLimit = 3;
+  const hasMore = product.colors?.length > displayLimit;
+  const visibleColors = product.colors?.slice(0, displayLimit);
+  const remainingColors = product.colors?.slice(displayLimit);
+  //end color
 
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
 
@@ -63,7 +71,7 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
         <Button
           variant="outline"
           size="icon"
-          onClick={() => open(product.productId || "")}
+          onClick={() => openByData(product)}
           className="absolute top-2 right-2 z-20 
              opacity-0 group-hover:opacity-100 
              transition bg-white/80 backdrop-blur-sm"
@@ -108,7 +116,7 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
         <div className="flex flex-col items-end gap-0.5">
           {/* Color selector */}
           <div className="flex items-center gap-2 mb-1">
-            {product.colors?.map((color, index) => (
+            {visibleColors.map((color, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedColorIndex(index)}
@@ -125,6 +133,49 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
                 }}
               />
             ))}
+
+            {hasMore && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowMore(!showMore)}
+                  className="w-5 h-5 rounded-full border-2 border-gray-200 bg-gray-50 flex items-center justify-center text-[10px] font-bold hover:bg-gray-100 transition"
+                >
+                  +{remainingColors.length}
+                </button>
+
+                {/* Bảng màu mở rộng (Absolute) */}
+                {showMore && (
+                  <>
+                    {/* Backdrop để bấm ra ngoài thì đóng */}
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setShowMore(false)}
+                    />
+
+                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-20 bg-white p-2 shadow-xl border rounded-lg flex gap-2 min-w-max">
+                      {remainingColors.map((color, index) => (
+                        <button
+                          key={color.id}
+                          onClick={() => {
+                            setSelectedColorIndex(index + displayLimit);
+                            setShowMore(false);
+                          }}
+                          className="w-5 h-5 rounded-full border transition-all duration-300 transform hover:scale-110"
+                          style={{
+                            backgroundColor: color.hexCode,
+                            boxShadow:
+                              "inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.1)",
+                            backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%)`,
+                          }}
+                        />
+                      ))}
+                      {/* Mũi tên nhỏ trỏ xuống */}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-white" />
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
           <p className="text-xs font-medium text-gray-700">
             {selectedColor?.productColorSku}

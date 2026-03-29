@@ -13,6 +13,7 @@ import { useAuth } from "@/src/hooks/useAuth";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { QueryParams } from "@/src/types/SubType";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
+import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 
 export default function PartnerManageInventory() {
   const { partner } = useAuth();
@@ -33,6 +34,8 @@ export default function PartnerManageInventory() {
       categoryId: "",
       pageNumber: 1,
       pageSize: 10,
+      order: "",
+      searchItem: "",
     },
     {
       excludeResetKeys: ["locationId"],
@@ -52,10 +55,16 @@ export default function PartnerManageInventory() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["inventories", query.locationId],
-    queryFn: () => getInventoryByLocationIdAPI(query.locationId!),
+    queryKey: ["inventories", query],
+    queryFn: () => getInventoryByLocationIdAPI(query.locationId!, query),
     select: (res) => res.data,
     enabled: !!query.locationId,
+  });
+
+  const { data: categoryList } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({}),
+    select: (res) => res.data,
   });
 
   if (isPartnerStoreLoading || !query.locationId) {
@@ -84,7 +93,8 @@ export default function PartnerManageInventory() {
               query={query}
               loading={isLoading}
               partnerStoreList={partnerStoreList}
-              resultCount={inventoryList?.products.length}
+              categoryList={categoryList}
+              resultCount={inventoryList?.totalCount}
               onSearch={(val) => updateQuery({ searchItem: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -122,7 +132,9 @@ export default function PartnerManageInventory() {
 
           <Pagination
             currentPage={query?.pageNumber || 1}
-            totalPages={inventoryList?.products?.totalPages || 0}
+            totalPages={inventoryList?.totalPages || 1}
+            totalItems={inventoryList?.totalCount}
+            pageSize={query?.pageSize || 10}
             onPageChange={(page) => updateQuery({ pageNumber: page })}
           />
         </div>

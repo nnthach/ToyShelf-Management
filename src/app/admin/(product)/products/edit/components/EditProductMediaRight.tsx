@@ -1,7 +1,5 @@
 import ProductColorItem from "@/src/components/ProductColorItem";
-import {
-  ProductUpdateFormValues,
-} from "@/src/schemas/product.schema";
+import { ProductUpdateFormValues } from "@/src/schemas/product.schema";
 import { Button } from "@/src/styles/components/ui/button";
 import { SelectOption } from "@/src/types/SubType";
 import { memo } from "react";
@@ -16,7 +14,7 @@ function EditProductMediaRight({
   form,
   colorOptions,
 }: EditProductMediaRightProps) {
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
     name: "colors",
   });

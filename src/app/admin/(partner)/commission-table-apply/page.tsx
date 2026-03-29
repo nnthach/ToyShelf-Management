@@ -44,7 +44,14 @@ export default function AdminCommissionTableApply() {
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý bảng hoa hồng áp dụng</h1>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý bảng hoa hồng áp dụng
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách bảng hoa hồng được áp dụng cho đối tác trong hệ thống
+          </p>
+        </div>{" "}
         <CreateCommissionPolicyModal />
       </div>
       {/*Table */}

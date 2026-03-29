@@ -13,6 +13,7 @@ import { QueryParams } from "@/src/types/SubType";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import { Product } from "@/src/types";
 import ProductCardWithQuantity from "@/src/components/ProductCardWithQuantity";
+import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 
 export default function AdminViewWarehouseInventory() {
   const { id: warehouseId } = useParams<{ id: string }>();
@@ -32,10 +33,16 @@ export default function AdminViewWarehouseInventory() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["warehouseInventories", warehouseId],
-    queryFn: () => getInventoryOfWarehouseByIdAPI(warehouseId!),
+    queryKey: ["warehouseInventories", query, warehouseId],
+    queryFn: () => getInventoryOfWarehouseByIdAPI(warehouseId!, query),
     select: (res) => res.data,
     enabled: !!warehouseId,
+  });
+
+  const { data: categoryList } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({}),
+    select: (res) => res.data,
   });
 
   return (
@@ -65,7 +72,8 @@ export default function AdminViewWarehouseInventory() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={warehouseInventories?.products.length}
+              resultCount={warehouseInventories?.totalCount}
+              categoryList={categoryList}
               onSearch={(val) => updateQuery({ searchItem: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -103,7 +111,9 @@ export default function AdminViewWarehouseInventory() {
 
           <Pagination
             currentPage={query?.pageNumber || 1}
-            totalPages={warehouseInventories?.products?.totalPages || 0}
+            totalPages={warehouseInventories?.totalPages || 1}
+            totalItems={warehouseInventories?.totalCount}
+            pageSize={query?.pageSize || 10}
             onPageChange={(page) => updateQuery({ pageNumber: page })}
           />
         </div>

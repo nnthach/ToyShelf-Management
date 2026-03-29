@@ -73,7 +73,14 @@ export default function AdminStoreCreationRequestManage() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Yêu cầu tạo cửa hàng</h1>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý yêu cầu tạo cửa hàng
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách yêu cầu tạo cửa hàng trong hệ thống
+          </p>
+        </div>{" "}
       </div>
 
       {/*Table */}

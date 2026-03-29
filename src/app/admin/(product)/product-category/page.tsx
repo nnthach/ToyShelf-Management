@@ -5,8 +5,6 @@ import useQueryParams from "@/src/hooks/useQueryParams";
 import { useState } from "react";
 import { getProductCategoryColumns } from "./columns";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { Button } from "@/src/styles/components/ui/button";
-import { Upload } from "lucide-react";
 import FilterSearch from "./components/FilterSearch";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CreateCategoryModal from "./components/CreateCategoryModal";
@@ -76,7 +74,14 @@ export default function AdminProductType() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý danh mục sản phẩm</h1>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý danh mục sản phẩm
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách danh mục sản phẩm trong hệ thống
+          </p>
+        </div>{" "}
         <CreateCategoryModal />
       </div>
       {/*Table */}

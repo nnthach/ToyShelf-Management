@@ -69,7 +69,14 @@ export default function AdminProductColor() {
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý màu sắc sản phẩm</h1>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý màu sắc sản phẩm
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách màu sắc sản phẩm trong hệ thống
+          </p>
+        </div>
         <CreateProductColorModal />
       </div>
       {/*Table */}

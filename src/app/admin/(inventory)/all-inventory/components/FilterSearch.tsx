@@ -26,6 +26,7 @@ type FilterBarProps = {
     locationId?: string;
     categoryId?: string;
     pageNumber?: number;
+    pageSize?: number;
   }) => void;
   onRefresh?: () => void;
   onReset: () => void;
@@ -63,20 +64,30 @@ export default function FilterSearch({
   const [tempFilter, setTempFilter] = useState<{
     isActive?: boolean;
     categoryId: string;
+    pageSize: number;
+    order: string;
     pageNumber: number;
   }>({
     isActive: undefined,
     categoryId: query.categoryId ?? "",
+    pageSize: query.pageSize ?? 10,
+    order: query.order ?? "",
     pageNumber: query.pageNumber ?? 1,
   });
 
   const isFiltered =
-    query.searchItem || query.categoryId !== "" || query.isActive !== undefined;
+    query.searchItem ||
+    query.categoryId !== "" ||
+    query.isActive !== undefined ||
+    query.order !== "" ||
+    query.pageSize !== 10;
 
   const handleApply = () => {
     onApplyFilter({
       isActive: tempFilter.isActive,
       categoryId: tempFilter.categoryId || undefined,
+      pageSize: tempFilter.pageSize || 10,
+      order: tempFilter.order || undefined,
     });
   };
 
@@ -86,6 +97,8 @@ export default function FilterSearch({
       isActive: undefined,
       categoryId: "",
       pageNumber: 1,
+      pageSize: 10,
+      order: "",
     });
     onReset();
   };
@@ -103,6 +116,26 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
+            {/* Page Size */}
+            <div className="grid gap-2">
+              <Label>Hiển thị</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.pageSize}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    pageSize: Number(e.target.value),
+                  }))
+                }
+              >
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+            
             {/* Category */}
             <div className="grid gap-2">
               <Label>Danh mục</Label>
@@ -119,6 +152,25 @@ export default function FilterSearch({
                     {cat.name}
                   </option>
                 ))}
+              </select>
+            </div>
+
+            {/* Order */}
+            <div className="grid gap-2">
+              <Label>Sắp xếp</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.order}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    order: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                <option value="asc">A → Z</option>
+                <option value="desc">Z → A</option>
               </select>
             </div>
 

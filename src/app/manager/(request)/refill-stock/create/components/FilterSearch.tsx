@@ -24,6 +24,7 @@ type FilterBarProps = {
     order?: string;
     categoryId?: string;
     pageNumber?: number;
+    pageSize?: number;
   }) => void;
   onRefresh?: () => void;
   onReset: () => void;
@@ -50,17 +51,20 @@ export default function FilterSearch({
     order: string;
     categoryId: string;
     pageNumber: number;
+    pageSize: number;
   }>({
     isActive: undefined,
     order: query.order ?? "",
     categoryId: query.categoryId ?? "",
     pageNumber: query.pageNumber ?? 1,
+    pageSize: query.pageSize ?? 10,
   });
 
   const isFiltered =
     query.searchItem ||
     query.order !== "" ||
     query.categoryId !== "" ||
+    query.pageSize !== 10 ||
     query.isActive !== undefined;
 
   const handleApply = () => {
@@ -68,6 +72,7 @@ export default function FilterSearch({
       isActive: tempFilter.isActive,
       order: tempFilter.order || undefined,
       categoryId: tempFilter.categoryId || undefined,
+      pageSize: tempFilter.pageSize || 10,
     });
   };
 
@@ -78,6 +83,7 @@ export default function FilterSearch({
       order: "",
       categoryId: "",
       pageNumber: 1,
+      pageSize: 10,
     });
     onReset();
   };
@@ -95,6 +101,25 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
+            {/* Page Size */}
+            <div className="grid gap-2">
+              <Label>Hiển thị</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.pageSize}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    pageSize: Number(e.target.value),
+                  }))
+                }
+              >
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
             {/* Category */}
             <div className="grid gap-2">
               <Label>Danh mục</Label>

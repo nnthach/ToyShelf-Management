@@ -34,7 +34,14 @@ export default function AdminInventoryManage() {
     <div>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold ">Quản lý hàng tồn kho</h1>
+        <div>
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý nhập hàng
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách tất cả các đơn hàng nhập trong hệ thống
+          </p>
+        </div>{" "}
         <CreateInventoryModal />
       </div>
       {/*Table */}

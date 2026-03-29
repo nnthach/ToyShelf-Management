@@ -41,10 +41,10 @@ export const AdminSidebarGroups = [
   },
 
   {
-    label: "Thanh toán hoa hồng",
+    label: "Đổi soát hoa hồng",
     items: [
       {
-        title: "Danh sách thanh toán",
+        title: "Danh sách đổi soát",
         url: "/admin/monthly-settlement",
         icon: ClipboardList,
       },
@@ -56,6 +56,11 @@ export const AdminSidebarGroups = [
     items: [
       { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
     ],
+  },
+
+  {
+    label: "Quản lý kệ",
+    items: [{ title: "Danh sách kệ", url: "/admin/shelf", icon: Server }],
   },
 ];
 
@@ -107,7 +112,6 @@ export const AdminSidebarNested = [
         url: "/admin/store-creation-request",
         icon: FilePlus,
       },
-      { title: "Kệ", url: "/admin/shelf", icon: Server },
     ],
   },
   {

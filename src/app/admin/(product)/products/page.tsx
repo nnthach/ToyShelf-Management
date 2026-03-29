@@ -60,7 +60,9 @@ export default function AdminProductManage() {
           <h1 className="text-2xl font-bold dark:text-foreground">
             Quản lý sản phẩm
           </h1>
-          <p className="text-gray-500 dark:text-gray-200">Danh sách sản phẩm</p>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách sản phẩm trong hệ thống
+          </p>
         </div>
         <div className="flex items-center gap-4">
           <Button
@@ -138,10 +140,12 @@ export default function AdminProductManage() {
           query={query}
           updateQuery={updateQuery}
           totalItems={productList.totalCount}
+          totalPages={productList.totalPages}
         >
           <FilterSearch
             query={query}
             loading={isLoading}
+            categoryList={categoryList}
             resultCount={productList.totalCount}
             onSearch={(val) => updateQuery({ searchItem: val })}
             onApplyFilter={(filter) =>

@@ -3,16 +3,16 @@
 import Pagination from "@/src/components/Pagination";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import ProductCardWithQuantity from "@/src/components/ProductCardWithQuantity";
-import { Product, Store } from "@/src/types";
+import { Product } from "@/src/types";
 import React, { useEffect } from "react";
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
 import { getInventoryByLocationIdAPI } from "@/src/services/inventory.service";
-import { getAllStoreAPI } from "@/src/services/store.service";
 import { useAuth } from "@/src/hooks/useAuth";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { QueryParams } from "@/src/types/SubType";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
+import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 
 export default function StoreManagerManageInventory() {
   const { myStore } = useAuth();
@@ -22,8 +22,10 @@ export default function StoreManagerManageInventory() {
       isActive: undefined,
       locationId: "",
       categoryId: "",
+      order: "",
       pageNumber: 1,
       pageSize: 10,
+      searchItem: "",
     },
     {
       excludeResetKeys: ["locationId"],
@@ -43,10 +45,16 @@ export default function StoreManagerManageInventory() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["inventories", query.locationId],
-    queryFn: () => getInventoryByLocationIdAPI(query.locationId!),
+    queryKey: ["inventories", query],
+    queryFn: () => getInventoryByLocationIdAPI(query.locationId!, query),
     select: (res) => res.data,
     enabled: !!query.locationId,
+  });
+
+  const { data: categoryList } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({}),
+    select: (res) => res.data,
   });
 
   if (!query.locationId) {
@@ -74,6 +82,7 @@ export default function StoreManagerManageInventory() {
             <FilterSearch
               query={query}
               loading={isLoading}
+              categoryList={categoryList}
               resultCount={inventoryList?.products.length}
               onSearch={(val) => updateQuery({ searchItem: val })}
               onApplyFilter={(filter) =>
@@ -112,7 +121,9 @@ export default function StoreManagerManageInventory() {
 
           <Pagination
             currentPage={query?.pageNumber || 1}
-            totalPages={inventoryList?.products?.totalPages || 0}
+            totalPages={inventoryList?.totalPages || 1}
+            totalItems={inventoryList?.totalCount}
+            pageSize={query?.pageSize || 10}
             onPageChange={(page) => updateQuery({ pageNumber: page })}
           />
         </div>

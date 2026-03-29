@@ -131,6 +131,8 @@ export default function EditProductPage() {
   const handleConfirmUpdate = useCallback(async () => {
     if (!previewData) return;
 
+    console.log("previewData", previewData);
+
     setIsLoading(true);
     try {
       const uploadedColors = await Promise.all(
@@ -162,6 +164,8 @@ export default function EditProductPage() {
         ...previewData,
         colors: uploadedColors,
       };
+
+      console.log("finalPayload", finalPayload);
 
       await updateProductAPI(finalPayload, id);
 

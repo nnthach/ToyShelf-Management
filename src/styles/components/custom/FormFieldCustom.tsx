@@ -145,6 +145,7 @@ export function FormFieldCustom({
       <Controller
         name={name}
         control={control}
+        defaultValue={type === "number" ? 0 : ""}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="gap-1">
             <FieldLabel
