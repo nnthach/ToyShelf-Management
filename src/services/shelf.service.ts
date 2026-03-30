@@ -1,26 +1,34 @@
 import api from "../config/axios";
 
-export const getAllShelfAPI = async <T>(params: T) => {
-  const res = await api.get("/shelf", { params });
+export const getAllShelfTypeAPI = async <T>(params: T) => {
+  const res = await api.get("/ShefType", { params });
   return res.data;
 };
 
-export const getShelfDetailAPI = async (id: string) => {
-  const res = await api.get(`/shelf/${id}`);
+export const getShelfTypeDetailAPI = async (id: string) => {
+  const res = await api.get(`/ShefType/${id}`);
   return res.data;
 };
 
-export const createShelfAPI = async <T>(data: T) => {
-  const res = await api.post("/shelf", data);
+export const createShelfTypeAPI = async <T>(data: T) => {
+  const res = await api.post("/ShefType", data);
   return res.data;
 };
 
-export const updateShelfAPI = async <T>(data: T, id: string) => {
-  const res = await api.put(`/shelf/${id}`, data);
+export const updateShelfTypeAPI = async <T>(data: T, id: string) => {
+  const res = await api.put(`/ShefType/${id}`, data);
   return res.data;
 };
 
-export const deleteShelfAPI = async (id: string) => {
-  const res = await api.delete(`/shelf/${id}`);
+export const deleteShelfTypeAPI = async (id: string) => {
+  const res = await api.delete(`/ShefType/${id}/delete`);
+  return res.data;
+};
+export const disableShelfTypeAPI = async (id: string) => {
+  const res = await api.patch(`/ShefType/${id}/disable`);
+  return res.data;
+};
+export const restoreShelfTypeAPI = async (id: string) => {
+  const res = await api.patch(`/ShefType/${id}/restore`);
   return res.data;
 };

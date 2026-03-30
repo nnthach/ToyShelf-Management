@@ -59,8 +59,8 @@ export const AdminSidebarGroups = [
   },
 
   {
-    label: "Quản lý kệ",
-    items: [{ title: "Danh sách kệ", url: "/admin/shelf", icon: Server }],
+    label: "Quản lý loại kệ",
+    items: [{ title: "Danh sách loại kệ", url: "/admin/shelf", icon: Server }],
   },
 ];
 

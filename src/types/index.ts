@@ -261,6 +261,28 @@ export interface InventoryLocation {
   isActive: boolean;
 }
 
+export interface ShelfLevelItem {
+  level: number;
+  name: string;
+  clearanceHeight: number;
+  recommendedCapacity: number;
+  suitableProductCategoryTypes: string[];
+  displayGuideline: string;
+}
+
+export interface Shelf {
+  id: string;
+  name: string;
+  imageUrl: string;
+  width: number;
+  height: number;
+  depth: number;
+  totalLevels: number;
+  suitableProductCategoryTypes: string[];
+  displayGuideline: string;
+  levels: ShelfLevelItem[];
+}
+
 export interface RefillRequestProductColor {
   productColorId?: string;
   productName?: string;

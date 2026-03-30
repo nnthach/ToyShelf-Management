@@ -57,6 +57,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
     fetchPlaceDetail,
     fetchSuggestions,
     setSuggestions,
+    setInput,
   } = useMapCreate();
 
   const form = useForm<WarehouseFormValues>({
@@ -205,8 +206,9 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
                 loading={isGeocoding}
                 icon={<MapPin size={18} />}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  setInput(value);
                   form.setValue("address", e.target.value);
-                  fetchSuggestions(e.target.value);
                 }}
               />
 

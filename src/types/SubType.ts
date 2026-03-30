@@ -21,6 +21,8 @@ export interface QueryParams {
   companyid?: string;
   locationId?: string;
   phone?: string;
+  searchName?: string;
+  categoryType?: string;
 }
 
 export interface LoginRes {

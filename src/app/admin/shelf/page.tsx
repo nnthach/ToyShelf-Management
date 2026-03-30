@@ -1,28 +1,29 @@
 "use client";
 
 import { Download, Plus, Upload } from "lucide-react";
-
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
-import { useRouter } from "next/navigation";
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
-import { getCabinetColumns } from "./columns";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { useState } from "react";
 import ViewDetailSheet from "./components/ViewDetailSheet";
 import { QueryParams } from "@/src/types/SubType";
-import { getAllShelfAPI } from "@/src/services/shelf.service";
+import { getAllShelfTypeAPI } from "@/src/services/shelf.service";
+import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import ShelfListView from "./components/ShelfView/ShelfListView";
+import ShelfGridView from "./components/ShelfView/ShelfGridView";
+import CreateShelfTypeModal from "./components/CreateShelfTypeModal";
 
 export default function AdminCabinetManage() {
-  const router = useRouter();
-
-  const [selectedCabinetId, setSelectCabinetId] = useState<string | null>(null);
+  const [selectedShelfId, setSelectShelfId] = useState<string | null>(null);
+  const [shelfView, setShelfView] = useState<"list" | "grid">("grid");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: undefined,
-    search: undefined,
+    searchName: "",
+    categoryType: "",
+    order: "",
   });
 
   const {
@@ -31,15 +32,19 @@ export default function AdminCabinetManage() {
     refetch,
   } = useQuery({
     queryKey: ["shelfs", query],
-    queryFn: () => getAllShelfAPI(query),
-    select: (res) => res.data ,
+    queryFn: () => getAllShelfTypeAPI(query),
+    select: (res) => res.data,
   });
 
   const handleViewDetail = (productId: string) => {
-    setSelectCabinetId(productId);
+    setSelectShelfId(productId);
   };
 
-  const columns = getCabinetColumns(handleViewDetail);
+  const { data: categoryList = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getAllProductCategoryAPI({ isActive: true }),
+    select: (res) => res.data,
+  });
 
   return (
     <>
@@ -47,54 +52,72 @@ export default function AdminCabinetManage() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Quản lý kệ
+            Quản lý loại kệ trưng bày
           </h1>
-          <p className="text-gray-500 dark:text-gray-200">Danh sách kệ</p>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách các loại kệ trong hệ thống
+          </p>
         </div>
-        <div className="flex items-center gap-4">
-          <Button
-            className="btn-primary-gradient"
-            onClick={() => router.push("/admin/cabinets/create")}
-          >
-            <Plus /> Thêm kệ mới
-          </Button>
-        </div>
+        <CreateShelfTypeModal />
       </div>
 
-      <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={shelfList} isLoading={isLoading}>
-          <div className="p-4 border-b flex justify-between items-center">
-            {/*Filter search */}
-            <FilterSearch
-              query={query}
-              loading={isLoading}
-              resultCount={shelfList.length}
-              onSearch={(val) => updateQuery({ search: val })}
-              onApplyFilter={(filter) =>
-                updateQuery({
-                  ...filter,
-                })
-              }
-              onReset={() => resetQuery()}
-              onRefresh={() => refetch()}
-            />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập dữ liệu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất dữ liệu
-              </Button>
-            </div>
-          </div>
-        </DataTable>
-      </div>
+      {/*Table */}
+      {shelfView === "list" ? (
+        <ShelfListView
+          handleViewDetail={handleViewDetail}
+          shelfList={shelfList ?? []}
+          isLoading={isLoading}
+          query={query}
+          updateQuery={updateQuery}
+        >
+          <FilterSearch
+            query={query}
+            loading={isLoading}
+            resultCount={shelfList.totalCount || shelfList.length}
+            categoryList={categoryList}
+            onSearch={(val) => updateQuery({ searchName: val })}
+            onApplyFilter={(filter) =>
+              updateQuery({
+                ...filter,
+                pageNumber: 1,
+              })
+            }
+            onReset={() => resetQuery()}
+            onRefresh={() => refetch()}
+          />
+        </ShelfListView>
+      ) : (
+        <ShelfGridView
+          shelfList={shelfList ?? []}
+          isLoading={isLoading}
+          handleViewDetail={handleViewDetail}
+          query={query}
+          updateQuery={updateQuery}
+          totalItems={shelfList.totalCount}
+          totalPages={shelfList.totalPages}
+        >
+          <FilterSearch
+            query={query}
+            loading={isLoading}
+            categoryList={categoryList}
+            resultCount={shelfList.totalCount || shelfList.length}
+            onSearch={(val) => updateQuery({ searchName: val })}
+            onApplyFilter={(filter) =>
+              updateQuery({
+                ...filter,
+                pageNumber: 1,
+              })
+            }
+            onReset={() => resetQuery()}
+            onRefresh={() => refetch()}
+          />
+        </ShelfGridView>
+      )}
 
       <ViewDetailSheet
-        cabinetId={selectedCabinetId}
-        isOpen={!!selectedCabinetId}
-        onClose={() => setSelectCabinetId(null)}
+        cabinetId={selectedShelfId}
+        isOpen={!!selectedShelfId}
+        onClose={() => setSelectShelfId(null)}
       />
     </>
   );

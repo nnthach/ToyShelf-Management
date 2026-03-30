@@ -61,6 +61,7 @@ function CreateStoreRequestModal() {
     fetchPlaceDetail,
     fetchSuggestions,
     setSuggestions,
+    setInput,
   } = useMapCreate();
 
   const form = useForm<StoreFormValues>({
@@ -68,7 +69,7 @@ function CreateStoreRequestModal() {
     defaultValues: {
       name: "",
       storeAddress: "",
-      cityId:"",
+      cityId: "",
       phoneNumber: "",
       latitude: 0,
       longitude: 0,
@@ -183,8 +184,9 @@ function CreateStoreRequestModal() {
                       loading={isGeocoding}
                       icon={<MapPin size={18} />}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        form.setValue("storeAddress", e.target.value);
-                        fetchSuggestions(e.target.value);
+                        const value = e.target.value;
+                        setInput(value);
+                        form.setValue("storeAddress", value);
                       }}
                     />
 

@@ -24,6 +24,7 @@ import {
   MapIcon,
   MapPin,
   Navigation,
+  Pencil,
   Plus,
   Search,
   Send,
@@ -56,6 +57,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
     setIsLoading,
     fetchPlaceDetail,
     fetchSuggestions,
+    setInput,
     setSuggestions,
   } = useMapCreate();
 
@@ -116,7 +118,6 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
       form.reset();
       toast.success("Cập nhật kho thành công");
       setOpen(false);
-
     } catch (error) {
       toast.error("Cập nhật kho thất bại");
     }
@@ -175,10 +176,11 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
       >
         <DialogTrigger asChild>
           <Button
-            // className="btn-primary-gradient"
-            className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 backdrop-blur-md rounded-xl transition-all duration-200 group"
+            size="icon"
+            variant="secondary"
+            className="h-7 w-7 bg-white/5 hover:bg-white/10 text-white/70 rounded-full border border-white/10"
           >
-            <Edit /> Chỉnh sửa thông tin kho
+            <Pencil size={12} />
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl">
@@ -241,8 +243,9 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
                       loading={isGeocoding}
                       icon={<MapPin size={18} />}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        form.setValue("address", e.target.value);
-                        fetchSuggestions(e.target.value);
+                        const value = e.target.value;
+                        setInput(value);
+                        form.setValue("address", value);
                       }}
                     />
 

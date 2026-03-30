@@ -8,6 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
+import { ProductCategory } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
@@ -17,13 +18,12 @@ type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
-  showStatus?: boolean;
-  showOrder?: boolean;
+  categoryList?: ProductCategory[];
   onSearch: (val: string) => void;
   onApplyFilter: (val: {
     isActive?: boolean;
     order?: string;
-    // limit?: number;
+    categoryType?: string;
   }) => void;
   onRefresh?: () => void;
   onReset: () => void;
@@ -32,14 +32,13 @@ type FilterBarProps = {
 export default function FilterSearch({
   query,
   loading,
-  showStatus = true,
-  showOrder = true,
+  categoryList,
   onSearch,
   onApplyFilter,
   onReset,
   onRefresh,
 }: FilterBarProps) {
-  const [searchInput, setSearchInput] = useState(query.search ?? "");
+  const [searchInput, setSearchInput] = useState(query.searchName ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
 
   useEffect(() => {
@@ -49,23 +48,24 @@ export default function FilterSearch({
   const [tempFilter, setTempFilter] = useState<{
     isActive?: boolean;
     order: string;
-    // limit: number;
+    categoryType?: string;
   }>({
     isActive: undefined,
     order: query.order ?? "",
-    // limit: query.limit ?? 10,
+    categoryType: query.categoryType ?? undefined,
   });
 
   const isFiltered =
-    query.search ||
-    (showOrder && query.order !== "") ||
-    (showStatus && query.isActive !== undefined);
+    query.searchName ||
+    query.order !== "" ||
+    query.isActive !== undefined ||
+    query.categoryType !== "";
 
   const handleApply = () => {
     onApplyFilter({
       isActive: tempFilter.isActive,
       order: tempFilter.order || undefined,
-      // limit: tempFilter.limit,
+      categoryType: tempFilter.categoryType || undefined,
     });
   };
 
@@ -74,7 +74,7 @@ export default function FilterSearch({
     setTempFilter({
       isActive: undefined,
       order: "",
-      // limit: 10,
+      categoryType: "",
     });
     onReset();
   };
@@ -92,54 +92,69 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
+            {/* Category */}
+            <div className="grid gap-2">
+              <Label>Danh mục</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.categoryType}
+                onChange={(e) =>
+                  setTempFilter((p) => ({ ...p, categoryType: e.target.value }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {categoryList?.map((cat) => (
+                  <option key={cat.id} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Order */}
-            {showOrder && (
-              <div className="grid gap-2">
-                <Label>Sắp xếp</Label>
-                <select
-                  className="border rounded-md h-9 px-2"
-                  value={tempFilter.order}
-                  onChange={(e) =>
-                    setTempFilter((p) => ({
-                      ...p,
-                      order: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Tất cả</option>
-                  <option value="asc">A → Z</option>
-                  <option value="desc">Z → A</option>
-                </select>
-              </div>
-            )}
+            <div className="grid gap-2">
+              <Label>Sắp xếp</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.order}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    order: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                <option value="asc">A → Z</option>
+                <option value="desc">Z → A</option>
+              </select>
+            </div>
 
             {/* Status */}
-            {showStatus && (
-              <div className="grid gap-2">
-                <Label>Trạng thái</Label>
-                <select
-                  className="border rounded-md h-9 px-2"
-                  value={
-                    tempFilter.isActive === undefined
-                      ? "all"
-                      : String(tempFilter.isActive)
-                  }
-                  onChange={(e) =>
-                    setTempFilter((p) => ({
-                      ...p,
-                      isActive:
-                        e.target.value === "all"
-                          ? undefined
-                          : e.target.value === "true",
-                    }))
-                  }
-                >
-                  <option value="all">Tất cả</option>
-                  <option value="true">Hoạt động</option>
-                  <option value="false">Không hoạt động</option>
-                </select>
-              </div>
-            )}
+            <div className="grid gap-2">
+              <Label>Trạng thái</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={
+                  tempFilter.isActive === undefined
+                    ? "all"
+                    : String(tempFilter.isActive)
+                }
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    isActive:
+                      e.target.value === "all"
+                        ? undefined
+                        : e.target.value === "true",
+                  }))
+                }
+              >
+                <option value="all">Tất cả</option>
+                <option value="true">Hoạt động</option>
+                <option value="false">Không hoạt động</option>
+              </select>
+            </div>
 
             <PopoverClose asChild>
               <Button onClick={handleApply}>Áp dụng</Button>

@@ -14,6 +14,7 @@ import {
   Warehouse as WarehouseIcon,
 } from "lucide-react";
 import { memo } from "react";
+import UpdateWarehouseModal from "../../components/UpdateWarehouseModal";
 
 type WarehouseBannerInfoProps = {
   warehouseDetail: {
@@ -45,13 +46,7 @@ function WarehouseBannerInfo({ warehouseDetail }: WarehouseBannerInfoProps) {
             <h2 className="text-sm font-bold flex items-center gap-2 uppercase tracking-widest text-blue-200/80">
               <Building size={16} /> Chi tiết kho hàng
             </h2>
-            <Button
-              size="icon"
-              variant="secondary"
-              className="h-7 w-7 bg-white/5 hover:bg-white/10 text-white/70 rounded-full border border-white/10"
-            >
-              <Pencil size={12} />
-            </Button>
+            <UpdateWarehouseModal warehouse={warehouseDetail?.warehouse} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 relative z-10">

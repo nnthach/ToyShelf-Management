@@ -50,7 +50,7 @@ function CreateWarehouseModal() {
     isLoading,
     setIsLoading,
     fetchPlaceDetail,
-    fetchSuggestions,
+    setInput,
     setSuggestions,
   } = useMapCreate();
 
@@ -169,12 +169,14 @@ function CreateWarehouseModal() {
                     <FormFieldCustom
                       name="address"
                       label="Địa chỉ chi tiết"
+                      labelNote="Nhập tối thiểu 4 ký tự"
                       placeholder="Tìm kiếm địa chỉ..."
                       loading={isGeocoding}
                       icon={<MapPin size={18} />}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        form.setValue("address", e.target.value);
-                        fetchSuggestions(e.target.value);
+                        const value = e.target.value;
+                        setInput(value);
+                        form.setValue("address", value);
                       }}
                     />
 
@@ -184,6 +186,7 @@ function CreateWarehouseModal() {
                         {suggestions.map((item) => (
                           <div
                             key={item.properties.id}
+                            title={item.properties.label}
                             className="flex items-start gap-3 px-3 py-2.5 hover:bg-slate-50 cursor-pointer rounded-lg transition-colors group/item"
                             onClick={async () => {
                               const detail = await fetchPlaceDetail(

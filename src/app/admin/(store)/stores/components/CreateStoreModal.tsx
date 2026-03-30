@@ -41,6 +41,7 @@ function CreateStoreModal() {
     setIsLoading,
     fetchPlaceDetail,
     fetchSuggestions,
+    setInput,
     setSuggestions,
   } = useMapCreate();
 
@@ -138,8 +139,9 @@ function CreateStoreModal() {
                   placeholder="Địa chỉ"
                   loading={isGeocoding}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    form.setValue("storeAddress", e.target.value);
-                    fetchSuggestions(e.target.value);
+                    const value = e.target.value;
+                    setInput(value);
+                    form.setValue("storeAddress", value);
                   }}
                 />
 

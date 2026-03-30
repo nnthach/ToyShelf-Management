@@ -20,7 +20,6 @@ export default function AdminProductManage() {
   const router = useRouter();
 
   const [productView, setProductView] = useState<"list" | "grid">("grid");
-
   const [selectedProductId, setSelectProductId] = useState<string | null>(null);
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({

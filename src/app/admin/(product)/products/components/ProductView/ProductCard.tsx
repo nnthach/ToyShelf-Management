@@ -2,7 +2,7 @@ import { Button } from "@/src/styles/components/ui/button";
 import { Product } from "@/src/types";
 import { Eye } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -164,4 +164,4 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
   );
 }
 
-export default ProductCard;
+export default memo(ProductCard);
