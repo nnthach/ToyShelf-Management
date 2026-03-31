@@ -239,6 +239,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
                     <FormFieldCustom
                       name="address"
                       label="Địa chỉ chi tiết"
+                      labelNote="Tối thiểu 4 ký tự để tìm kiếm"
                       placeholder="Tìm kiếm địa chỉ..."
                       loading={isGeocoding}
                       icon={<MapPin size={18} />}

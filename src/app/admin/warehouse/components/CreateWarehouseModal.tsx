@@ -169,7 +169,7 @@ function CreateWarehouseModal() {
                     <FormFieldCustom
                       name="address"
                       label="Địa chỉ chi tiết"
-                      labelNote="Nhập tối thiểu 4 ký tự"
+                      labelNote="Tối thiểu 4 ký tự để tìm kiếm"
                       placeholder="Tìm kiếm địa chỉ..."
                       loading={isGeocoding}
                       icon={<MapPin size={18} />}

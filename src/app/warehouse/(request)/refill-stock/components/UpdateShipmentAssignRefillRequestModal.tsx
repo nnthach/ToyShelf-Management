@@ -20,7 +20,6 @@ import {
   getShipmentAssignDetailByIdAPI,
   rejectShipmentAssignAPI,
 } from "@/src/services/shipment-assignment.service";
-import { RefillRequestProductColor } from "@/src/types";
 import { getShipmentDetailByAssignmentIdAPI } from "@/src/services/shipment.service";
 import AssignShipperModal from "./AssignShipperModal";
 import CreateShipmentModal from "./CreateShipmentModal";
@@ -156,9 +155,11 @@ function UpdateShipmentAssignRefillRequestModal({
                       ? "Hãy chọn nhân viên giao hàng"
                       : isPending
                         ? "Hãy chờ nhân viên giao hàng xác nhận"
-                        : isAccepted
+                        : isAccepted && !shipmentDetail
                           ? "Hãy xác nhận xuất kho"
-                          : '"Xác nhận số lượng thực tế trước khi xuất kho cho Shipper."'}
+                          : shipmentDetail
+                            ? "Đã xuất kho và tạo đơn giao hàng, chờ giao hàng"
+                            : "Xác nhận số lượng thực tế trước khi xuất kho cho Shipper."}
                   </p>
                 </div>
               </div>
@@ -194,14 +195,16 @@ function UpdateShipmentAssignRefillRequestModal({
                     >
                       Đóng
                     </Button>
-                    <Button
-                      variant="success"
-                      onClick={() => setIsOpenCreateShipmentModal(true)}
-                      className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                      <CheckCircle2 className="mr-2 h-4 w-4" /> Xác nhận xuất
-                      kho
-                    </Button>
+                    {!shipmentDetail && (
+                      <Button
+                        variant="success"
+                        onClick={() => setIsOpenCreateShipmentModal(true)}
+                        className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        <CheckCircle2 className="mr-2 h-4 w-4" /> Tạo đơn giao
+                        hàng và xuất kho
+                      </Button>
+                    )}
                   </>
                 )}
               </div>

@@ -26,6 +26,28 @@ export function useAuth() {
   );
   const dispatch = useAppDispatch();
 
+  const navigateByRole = (roles: string[]) => {
+    if (roles.includes("Admin")) {
+      router.replace("/admin/dashboard");
+      return;
+    }
+
+    if (roles.includes("PartnerAdmin")) {
+      router.replace("/partner/dashboard");
+      return;
+    }
+
+    if (roles.includes("Partner")) {
+      router.replace("/manager/dashboard");
+      return;
+    }
+
+    if (roles.includes("Customer")) {
+      toast.error("Hệ thống dành cho quản trị viên!");
+      return;
+    }
+  };
+
   const initAuth = async () => {
     const token = localStorage.getItem("token");
     const roles = JSON.parse(localStorage.getItem("roles") || "[]");
@@ -35,6 +57,8 @@ export function useAuth() {
       try {
         const userProfile = await getMyProfileAPI();
         const data = userProfile.data;
+
+        dispatch(setUser({ ...data, roles }));
 
         // if role partnerAdmin => get partner by userId
         if (roles.includes("PartnerAdmin")) {
@@ -50,15 +74,30 @@ export function useAuth() {
             userId: userProfile.data.id,
           });
           dispatch(setWarehouse(warehouseDetail.data[0]));
+          if (warehouseDetail?.data[0]?.warehouseRole === "Manager") {
+            router.replace("/warehouse/dashboard");
+            toast.success("Đăng nhập thành công");
+            return;
+          } else {
+            toast.error("Bạn không có quyền truy cập vào hệ thống!");
+            logoutUser();
+            return;
+          }
         }
 
         // if role partner (manager/staff)=> get store detail
         if (roles.includes("Partner")) {
           const myStoreRes = await getMyStoreAPI();
-          dispatch(setMyStore(myStoreRes.data[0]));
+
+          if (myStoreRes.data.length > 0) {
+            dispatch(setMyStore(myStoreRes.data[0]));
+          } else {
+            router.replace("/store-invitations");
+            return;
+          }
         }
 
-        dispatch(setUser(data));
+        navigateByRole(roles);
       } catch (error) {
         dispatch(logout());
       } finally {
@@ -80,6 +119,13 @@ export function useAuth() {
 
     const fetchProfileRes = await getMyProfileAPI();
 
+    const payload = {
+      ...fetchProfileRes.data,
+      roles,
+    };
+
+    dispatch(setUser(payload));
+
     // if role partnerAdmin => get partner by userId
     if (roles.includes("PartnerAdmin")) {
       const partnerDetail = await getMyPartnerProfileAPI({
@@ -95,7 +141,19 @@ export function useAuth() {
         userId: fetchProfileRes.data.id,
       });
       dispatch(setWarehouse(warehouseDetail.data[0]));
+
+      if (warehouseDetail?.data[0]?.warehouseRole === "Manager") {
+        router.replace("/warehouse/dashboard");
+        toast.success("Đăng nhập thành công");
+
+        return;
+      } else {
+        toast.error("Bạn không có quyền truy cập vào hệ thống!");
+        return;
+      }
     }
+
+    toast.success("Đăng nhập thành công");
 
     // if role partner (manager/staff)=> get store detail
     if (roles.includes("Partner")) {
@@ -109,38 +167,7 @@ export function useAuth() {
       }
     }
 
-    const payload = {
-      ...fetchProfileRes.data,
-      roles,
-    };
-
-    dispatch(setUser(payload));
-
-    toast.success("Đăng nhập thành công");
-
-    if (roles.includes("Admin")) {
-      router.replace("/admin/dashboard");
-      return;
-    }
-
-    if (roles.includes("PartnerAdmin")) {
-      router.replace("/partner/dashboard");
-      return;
-    }
-
-    if (roles.includes("Warehouse") && warehouse?.warehouseRole === "Manager") {
-      router.replace("/warehouse/dashboard");
-      return;
-    }
-
-    if (roles.includes("Partner")) {
-      router.replace("/manager/dashboard");
-      return;
-    }
-
-    if (roles.includes("Customer")) {
-      toast.error("Hệ thống dành cho quản trị viên!");
-    }
+    navigateByRole(roles);
   };
 
   useEffect(() => {

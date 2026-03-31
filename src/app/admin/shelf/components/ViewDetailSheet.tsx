@@ -8,25 +8,29 @@ import {
 } from "@/src/styles/components/ui/sheet";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getShelfDetailAPI } from "@/src/services/shelf.service";
+import { getShelfTypeDetailAPI } from "@/src/services/shelf.service";
 
 type ViewDetailSheetProps = {
-  cabinetId: string | null;
+  shelfTypeId: string | null;
   isOpen: boolean;
   onClose: () => void;
 };
 
-function ViewDetailSheet({ cabinetId, isOpen, onClose }: ViewDetailSheetProps) {
+function ViewDetailSheet({
+  shelfTypeId,
+  isOpen,
+  onClose,
+}: ViewDetailSheetProps) {
   const router = useRouter();
 
-  const { data: cabinetDetail, isLoading } = useQuery({
-    queryKey: ["cabinet", cabinetId],
-    queryFn: () => getShelfDetailAPI(cabinetId!),
+  const { data: shelfTypeDetail, isLoading } = useQuery({
+    queryKey: ["shelfType", shelfTypeId],
+    queryFn: () => getShelfTypeDetailAPI(shelfTypeId!),
     select: (res) => res.data,
-    enabled: !!cabinetId,
+    enabled: !!shelfTypeId,
   });
 
-  if (!cabinetId) return null;
+  if (!shelfTypeId) return null;
 
   return (
     <Sheet
@@ -44,7 +48,6 @@ function ViewDetailSheet({ cabinetId, isOpen, onClose }: ViewDetailSheetProps) {
         <div className="flex bg-gray-200 dark:bg-muted h-full">
           {/*Left */}
           <div className="w-[70%] p-4">{/* Tabs content */}</div>
-
         </div>
       </SheetContent>
     </Sheet>

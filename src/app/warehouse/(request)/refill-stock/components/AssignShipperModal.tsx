@@ -14,19 +14,15 @@ import z from "zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import {
-  UserCheck,
-  Send,
-  XCircle,
-  Truck,
-  User,
-  ShieldCheck,
-  Info,
-} from "lucide-react";
+import { Send, XCircle, Truck, User } from "lucide-react";
 import { assignShipperShipmentAssignAPI } from "@/src/services/shipment-assignment.service";
-import { getAllUserAPI } from "@/src/services/user.service";
-import { User as UserType } from "@/src/types";
+import {
+  getAllUserAPI,
+  getAllWarehouseStaffAPI,
+} from "@/src/services/user.service";
+import { User as UserType, WarehouseStaff } from "@/src/types";
 import { memo } from "react";
+import { useAuth } from "@/src/hooks/useAuth";
 
 type AssignShipperModalProps = {
   requestId: string;
@@ -40,17 +36,21 @@ function AssignShipperModal({
   isOpen,
   onClose,
 }: AssignShipperModalProps) {
+  const { warehouse } = useAuth();
+  const warehouseId = warehouse?.warehouseId;
+
   const queryClient = useQueryClient();
 
-  const { data: userList = [] } = useQuery({
-    queryKey: ["shipper", {}],
-    queryFn: () => getAllUserAPI({}),
-    select: (res) => res.data as UserType[],
-    enabled: isOpen,
+  const { data: userList } = useQuery({
+    queryKey: ["shipper", { warehouseId: warehouseId }],
+    queryFn: () =>
+      getAllWarehouseStaffAPI({ warehouseId: warehouseId, role: "Shipper" }),
+    select: (res) => res.data as WarehouseStaff[],
+    enabled: !!warehouseId,
   });
 
-  const userOptions = userList.map((s) => ({
-    value: s.id,
+  const userOptions = userList?.map((s) => ({
+    value: s.userId,
     label: s.fullName,
   }));
 
@@ -128,7 +128,6 @@ function AssignShipperModal({
                 selectData={userOptions}
                 icon={<User size={16} />}
               />
-
             </form>
           </FormProvider>
         </div>

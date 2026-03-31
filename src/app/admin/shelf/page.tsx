@@ -36,8 +36,8 @@ export default function AdminCabinetManage() {
     select: (res) => res.data,
   });
 
-  const handleViewDetail = (productId: string) => {
-    setSelectShelfId(productId);
+  const handleViewDetail = (shelfTypeId: string) => {
+    setSelectShelfId(shelfTypeId);
   };
 
   const { data: categoryList = [] } = useQuery({
@@ -115,7 +115,7 @@ export default function AdminCabinetManage() {
       )}
 
       <ViewDetailSheet
-        cabinetId={selectedShelfId}
+        shelfTypeId={selectedShelfId}
         isOpen={!!selectedShelfId}
         onClose={() => setSelectShelfId(null)}
       />

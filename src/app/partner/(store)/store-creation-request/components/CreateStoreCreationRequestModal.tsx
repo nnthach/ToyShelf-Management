@@ -180,6 +180,7 @@ function CreateStoreRequestModal() {
                     <FormFieldCustom
                       name="storeAddress"
                       label="Địa chỉ chi tiết"
+                      labelNote="Tối thiểu 4 ký tự để tìm kiếm"
                       placeholder="Tìm kiếm địa chỉ từ bản đồ..."
                       loading={isGeocoding}
                       icon={<MapPin size={18} />}

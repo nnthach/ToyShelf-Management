@@ -28,7 +28,7 @@ export interface QueryParams {
 export interface LoginRes {
   data: {
     accessToken: string;
-    roles: string;
+    roles: string[];
   };
 }
 
