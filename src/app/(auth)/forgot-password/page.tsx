@@ -15,7 +15,7 @@ import {
 } from "@/src/styles/components/ui/card";
 import { FieldGroup, FieldLabel } from "@/src/styles/components/ui/field";
 import { Input } from "@/src/styles/components/ui/input";
-import { ArrowLeft, Eye, EyeOff, LogIn, Mail } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, LogIn, LogOut, Mail } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -74,11 +74,34 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div
-      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url(/images/home_background.jpg)" }}
-    >
-      <Card className="w-full max-w-md shadow-xl bg-white/80 dark:bg-card/80 backdrop-blur-md">
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#dde8f0]">
+      {/* --- BACKGROUND LAYER (Giống bản mẫu) --- */}
+      <div className="absolute inset-0 z-0">
+        {/* Mesh Gradient */}
+        <div
+          className="absolute inset-0 opacity-40"
+          style={{
+            background:
+              "radial-gradient(circle at 15% 10%, #b8d9ef 0%, transparent 60%), radial-gradient(circle at 85% 90%, #96c8e6 0%, transparent 55%)",
+          }}
+        ></div>
+
+        {/* Grid Overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage:
+              "linear-gradient(#2d6a9f 1px, transparent 1px), linear-gradient(90deg, #2d6a9f 1px, transparent 1px)",
+            backgroundSize: "52px 52px",
+          }}
+        ></div>
+
+        {/* Animated Orbs */}
+        <div className="absolute w-[500px] h-[500px] rounded-full bg-blue-300/20 blur-[90px] -top-40 -left-20 animate-drift duration-[13s]"></div>
+        <div className="absolute w-[400px] h-[400px] rounded-full bg-blue-400/15 blur-[90px] -bottom-20 -right-10 animate-drift duration-[10s] delay-[-4s]"></div>
+      </div>
+
+      <Card className="w-full max-w-[420px] shadow-2xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-2xl border-white/70 rounded-[28px] overflow-hidden">
         <CardHeader className="text-center">
           <CardTitle className="font-bold text-2xl">
             <div className=" flex items-center gap-1 justify-center">
@@ -94,7 +117,9 @@ export default function ForgotPasswordPage() {
               <p className="text-[#1E88E5] font-bold text-xl">ToyShelf</p>
             </div>
           </CardTitle>
-          <CardDescription>Đặt lại mật khẩu</CardDescription>
+          <CardDescription className="font-medium">
+            Đặt lại mật khẩu
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -108,13 +133,19 @@ export default function ForgotPasswordPage() {
           >
             {forgotPasswordStep === 1 ? (
               <FieldGroup className="gap-1">
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel
+                  htmlFor="email"
+                  className="text-[10px] uppercase font-bold text-gray-400 ml-1"
+                >
+                  Email
+                </FieldLabel>
                 <Input
                   id="email"
                   value={form.email}
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, email: e.target.value }))
                   }
+                  className="bg-white/60 border-blue-100 focus:bg-white rounded-lg h-11 pr-10"
                   placeholder="abc@example.com"
                   autoComplete="off"
                 />
@@ -122,9 +153,15 @@ export default function ForgotPasswordPage() {
             ) : (
               <>
                 <FieldGroup className="gap-1">
-                  <FieldLabel htmlFor="otpCode">Mã OTP</FieldLabel>
+                  <FieldLabel
+                    className="text-[10px] uppercase font-bold text-gray-400 ml-1"
+                    htmlFor="otpCode"
+                  >
+                    Mã OTP
+                  </FieldLabel>
                   <Input
                     value={form.otpCode}
+                    className="bg-white/60 border-blue-100 focus:bg-white rounded-lg h-11 pr-10"
                     onChange={(e) =>
                       setForm((prev) => ({ ...prev, otpCode: e.target.value }))
                     }
@@ -132,10 +169,16 @@ export default function ForgotPasswordPage() {
                   />
                 </FieldGroup>
                 <FieldGroup className="gap-1">
-                  <FieldLabel htmlFor="newPassword">Mật khẩu mới</FieldLabel>
+                  <FieldLabel
+                    className="text-[10px] uppercase font-bold text-gray-400 ml-1"
+                    htmlFor="newPassword"
+                  >
+                    Mật khẩu mới
+                  </FieldLabel>
                   <div className="relative">
                     <Input
                       type={isViewPassword ? "text" : "password"}
+                      className="bg-white/60 border-blue-100 focus:bg-white rounded-lg h-11 pr-10"
                       value={form.newPassword}
                       placeholder="******"
                       onChange={(e) =>
@@ -159,12 +202,16 @@ export default function ForgotPasswordPage() {
                 </FieldGroup>
 
                 <FieldGroup className="gap-1">
-                  <FieldLabel htmlFor="confirmPassword">
+                  <FieldLabel
+                    className="text-[10px] uppercase font-bold text-gray-400 ml-1"
+                    htmlFor="confirmPassword"
+                  >
                     Xác nhận mật khẩu mới
                   </FieldLabel>
                   <div className="relative">
                     <Input
                       type={isViewNewPassword ? "text" : "password"}
+                      className="bg-white/60 border-blue-100 focus:bg-white rounded-lg h-11 pr-10"
                       value={form.confirmPassword}
                       placeholder="******"
                       onChange={(e) =>
@@ -197,17 +244,17 @@ export default function ForgotPasswordPage() {
               <Button
                 type="button"
                 variant={"outline"}
-                className="w-[50%]"
+                className="w-[48%]"
                 disabled={isLoading}
                 onClick={() => router.replace("/")}
               >
-                <LogIn />
+                <ArrowLeft />
                 Quay về
               </Button>
               <Button
                 type="submit"
                 form="form-rhf-demo"
-                className="w-[50%]"
+                className="w-[48%] bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-lg shadow-blue-500/25 transition-all active:scale-95"
                 disabled={isLoading}
               >
                 <Mail />
@@ -218,7 +265,8 @@ export default function ForgotPasswordPage() {
             <>
               <Button
                 type="button"
-                className="w-[50%]"
+                variant={"outline"}
+                className="w-[48%]"
                 disabled={isLoading}
                 onClick={() => setForgotPasswordStep(1)}
               >
@@ -228,7 +276,7 @@ export default function ForgotPasswordPage() {
               <Button
                 type="submit"
                 form="form-rhf-demo"
-                className="w-[50%]"
+                className="w-[48%] bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-lg shadow-blue-500/25 transition-all active:scale-95"
                 disabled={isLoading}
               >
                 <LogIn />
