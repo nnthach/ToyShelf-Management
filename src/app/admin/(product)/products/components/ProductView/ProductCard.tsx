@@ -11,7 +11,7 @@ interface ProductCardProps {
 function ProductCard({ product, handleViewDetail }: ProductCardProps) {
   // color
   const [showMore, setShowMore] = useState(false);
-  const displayLimit = 3;
+  const displayLimit = 2;
   const hasMore = product.colors?.length > displayLimit;
   const visibleColors = product.colors?.slice(0, displayLimit);
   const remainingColors = product.colors?.slice(displayLimit);
@@ -83,81 +83,83 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-start">
-        <div>
-          {/* Name */}
-          <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
-            {product.name}
-          </h3>
+      <div className="flex flex-col">
+        {/* Name */}
+        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
+          {product.name}
+        </h3>
+
+        {/* Color selector */}
+        <div className="flex  items-center justify-between gap-0.5">
           {/* Base price nếu cần */}
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm text-gray-600">
             {selectedColor?.price.toLocaleString()}đ
           </p>
-        </div>
-        {/* Color selector */}
-        <div className="flex items-center gap-2 relative">
-          {/* Hiển thị 3 màu đầu tiên */}
-          {visibleColors.map((color, index) => (
-            <button
-              key={color.id}
-              onClick={() => setSelectedColorIndex(index)}
-              className={`w-5 h-5 rounded-full border transition-all duration-300 transform hover:scale-110 ${
-                selectedColorIndex === index
-                  ? "border-gray-500 scale-110"
-                  : "border-transparent"
-              }`}
-              style={{
-                backgroundColor: color.hexcode,
-                boxShadow:
-                  "inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.1)",
-                backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%)`,
-              }}
-            />
-          ))}
 
-          {/* Nút + hiển thị số lượng còn lại */}
-          {hasMore && (
-            <div className="relative">
+          <div className="flex items-center gap-2">
+            {/* Hiển thị 3 màu đầu tiên */}
+            {visibleColors.map((color, index) => (
               <button
-                onClick={() => setShowMore(!showMore)}
-                className="w-5 h-5 rounded-full border-2 border-gray-200 bg-gray-50 flex items-center justify-center text-[10px] font-bold hover:bg-gray-100 transition"
-              >
-                +{remainingColors.length}
-              </button>
+                key={color.id}
+                onClick={() => setSelectedColorIndex(index)}
+                className={`w-5 h-5 rounded-full border transition-all duration-300 transform hover:scale-110 ${
+                  selectedColorIndex === index
+                    ? "border-gray-500 scale-110"
+                    : "border-transparent"
+                }`}
+                style={{
+                  backgroundColor: color.hexcode,
+                  boxShadow:
+                    "inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.1)",
+                  backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%)`,
+                }}
+              />
+            ))}
 
-              {/* Bảng màu mở rộng (Absolute) */}
-              {showMore && (
-                <>
-                  {/* Backdrop để bấm ra ngoài thì đóng */}
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setShowMore(false)}
-                  />
+            {/* Nút + hiển thị số lượng còn lại */}
+            {hasMore && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowMore(!showMore)}
+                  className="w-5 h-5 rounded-full border-2 border-gray-200 bg-gray-50 flex items-center justify-center text-[10px] font-bold hover:bg-gray-100 transition"
+                >
+                  +{remainingColors.length}
+                </button>
 
-                  <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-20 bg-white p-2 shadow-xl border rounded-lg flex gap-2 min-w-max">
-                    {remainingColors.map((color, index) => (
-                      <button
-                        key={color.id}
-                        onClick={() => {
-                          setSelectedColorIndex(index + displayLimit);
-                          setShowMore(false);
-                        }}
-                        className="w-5 h-5 rounded-full border transition-all duration-300 transform hover:scale-110"
-                        style={{
-                          backgroundColor: color.hexcode,
-                          boxShadow:
-                            "inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.1)",
-                          backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%)`,
-                        }}
-                      />
-                    ))}
-                    {/* Mũi tên nhỏ trỏ xuống */}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-white" />
-                  </div>
-                </>
-              )}
-            </div>
-          )}
+                {/* Bảng màu mở rộng (Absolute) */}
+                {showMore && (
+                  <>
+                    {/* Backdrop để bấm ra ngoài thì đóng */}
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setShowMore(false)}
+                    />
+
+                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-20 bg-white p-2 shadow-xl border rounded-lg flex gap-2 min-w-max">
+                      {remainingColors.map((color, index) => (
+                        <button
+                          key={color.id}
+                          onClick={() => {
+                            setSelectedColorIndex(index + displayLimit);
+                            setShowMore(false);
+                          }}
+                          className="w-5 h-5 rounded-full border transition-all duration-300 transform hover:scale-110"
+                          style={{
+                            backgroundColor: color.hexcode,
+                            boxShadow:
+                              "inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.1)",
+                            backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%)`,
+                          }}
+                        />
+                      ))}
+                      {/* Mũi tên nhỏ trỏ xuống */}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-white" />
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

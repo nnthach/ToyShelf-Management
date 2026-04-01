@@ -105,17 +105,13 @@ function EditProductInfoLeft() {
           <FormFieldCustom
             name="material"
             label="Chất liệu"
-            placeholder="Chọn chất liệu"
-            type="select"
-            selectData={ProductMaterialOption}
+            placeholder="Nhập chất liệu"
             icon={<Box size={18} />} // Icon Chất liệu
           />
           <FormFieldCustom
             name="brand"
             label="Thương hiệu"
-            placeholder="Chọn thương hiệu"
-            type="select"
-            selectData={ProductBrandOption}
+            placeholder="Nhập thương hiệu"
             icon={<Tags size={18} />} // Icon Thương hiệu (dùng chung với Tag)
           />
           <FormFieldCustom

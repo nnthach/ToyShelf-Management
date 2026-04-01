@@ -13,7 +13,7 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
 
   // color
   const [showMore, setShowMore] = useState(false);
-  const displayLimit = 3;
+  const displayLimit = 2;
   const hasMore = product.colors?.length > displayLimit;
   const visibleColors = product.colors?.slice(0, displayLimit);
   const remainingColors = product.colors?.slice(displayLimit);
@@ -58,12 +58,6 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
                 Lỗi: {selectedColor.damaged}
               </span>
             )}
-
-            {selectedColor?.sold >= 0 && (
-              <span className="bg-amber-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-amber-700 border border-amber-200/50 w-fit">
-                Đã bán: {selectedColor.sold}
-              </span>
-            )}
           </div>
         </div>
 
@@ -88,6 +82,12 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
         >
           <div className="bg-white/90 backdrop-blur-sm px-3 py-2 text-xs rounded-b-lg">
             <div className="flex justify-between">
+              <span className="text-gray-500">Mã sản phẩm</span>
+              <span className="font-medium text-gray-900">
+                {selectedColor?.productColorSku}{" "}
+              </span>
+            </div>
+            <div className="flex justify-between">
               <span className="text-gray-500">Hãng</span>
               <span className="font-medium text-gray-900">
                 {product?.brand}
@@ -102,20 +102,20 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-start">
-        <div>
-          {/* Name */}
-          <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
-            {product.productName}
-          </h3>
+      <div className="flex flex-col">
+        {/* Name */}
+        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1 ">
+          {product.productName}
+        </h3>
+
+        <div className="flex  items-center justify-between gap-0.5">
           {/* Base price nếu cần */}
           <p className="text-sm text-gray-600">
             {selectedColor?.productColorPrice?.toLocaleString()}đ
           </p>
-        </div>
-        <div className="flex flex-col items-end gap-0.5">
+
           {/* Color selector */}
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2">
             {visibleColors.map((color, index) => (
               <button
                 key={index}
@@ -177,9 +177,6 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
               </div>
             )}
           </div>
-          <p className="text-xs font-medium text-gray-700">
-            {selectedColor?.productColorSku}
-          </p>
         </div>
       </div>
     </div>

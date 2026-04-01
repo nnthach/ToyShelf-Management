@@ -73,8 +73,12 @@ export const formatColorNameToVN = (data: string) => {
       return "Trắng";
     case "grey":
       return "Xám";
+    case "brown":
+      return "Nâu";
+    case "pink":
+      return "Hồng";
     default:
-      return "";
+      return "N/A";
   }
 };
 

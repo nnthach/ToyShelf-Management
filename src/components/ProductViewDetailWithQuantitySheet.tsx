@@ -149,14 +149,14 @@ function ProductViewDetailWithQuantitySheet({
               </div>
 
               {/* Cột 3: Giá gốc */}
-              <div className="space-y-1 text-right">
+              {/* <div className="space-y-1 text-right">
                 <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1 justify-end">
                   <BadgeDollarSign size={12} /> Giá gốc
                 </p>
                 <p className="font-bold text-primary text-lg leading-none">
                   {product?.basePrice?.toLocaleString()}đ
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
 

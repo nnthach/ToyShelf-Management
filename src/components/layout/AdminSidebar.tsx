@@ -19,6 +19,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarSeparator,
+  useSidebar,
 } from "../../styles/components/ui/sidebar";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { CollapsibleTrigger } from "@radix-ui/react-collapsible";
@@ -36,15 +37,18 @@ const AdminSidebar = () => {
   const { user } = useAppSelector((state) => state.auth);
   const pathname = usePathname();
 
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
+
   return (
     <Sidebar
       collapsible="icon"
       className="[--sidebar:white] dark:[--sidebar:oklch(0.205_0_0)] overflow-hidden"
     >
       {/* Header */}
-      <SidebarHeader className="min-h-[50px] p-0">
+      <SidebarHeader className="min-h-12.5 p-0">
         <Link href={"/admin/dashboard"} className="p-2 flex items-center gap-2">
-          <div className="relative w-[50px] h-[50px]">
+          <div className="relative w-12.5 h-12.5">
             <Image
               src="/images/finallogo.png"
               alt="ToyShelf logo"
@@ -52,8 +56,11 @@ const AdminSidebar = () => {
               className="object-contain"
             />
           </div>
-          {/*#0D47A1 */}
-          <p className="text-[#1E88E5] font-bold text-xl">ToyShelf</p>
+          {!isCollapsed && (
+            <p className="text-[#1E88E5] font-bold text-xl whitespace-nowrap">
+              ToyShelf
+            </p>
+          )}
         </Link>
       </SidebarHeader>
 

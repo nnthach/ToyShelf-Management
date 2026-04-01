@@ -231,7 +231,7 @@ function CreateShelfTypeModal() {
                   />
                   {/*Image */}
                   <div className="flex flex-col gap-2 ">
-                    <span className="text-sm font-medium">Ảnh đại diện</span>
+                    <span className="text-sm font-medium">Hình ảnh kệ</span>
                     <input
                       ref={imageInputRef}
                       type="file"
@@ -397,7 +397,6 @@ function CreateShelfTypeModal() {
   );
 }
 
-// Component phụ trợ cho việc chọn nhiều Category (Tag style)
 function MultiSelectCategory({
   name,
   options,
@@ -413,15 +412,16 @@ function MultiSelectCategory({
       render={({ field: { value = [], onChange } }) => (
         <div className="flex flex-wrap gap-2">
           {options.map((cat) => {
-            const isSelected = value.includes(cat.id);
+            const isSelected = value.includes(cat.name);
             return (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => {
                   const newValue = isSelected
-                    ? value.filter((id: string) => id !== cat.id)
-                    : [...value, cat.id];
+                    ? value.filter((name: string) => name !== cat.name)
+                    : [...value, cat.name];
+
                   onChange(newValue);
                 }}
                 className={cn(

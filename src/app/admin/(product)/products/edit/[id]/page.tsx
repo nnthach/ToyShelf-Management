@@ -123,15 +123,12 @@ export default function EditProductPage() {
         };
       }),
     };
-    console.log("payload", payload);
     setPreviewData(payload);
     setOpenVerifyCreateForm(true);
   }
 
   const handleConfirmUpdate = useCallback(async () => {
     if (!previewData) return;
-
-    console.log("previewData", previewData);
 
     setIsLoading(true);
     try {
