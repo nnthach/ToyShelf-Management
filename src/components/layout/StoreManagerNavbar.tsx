@@ -27,7 +27,7 @@ const StoreManagerNavbar = () => {
   const { openProfile, openChangePassword } = useAccountAdminModal();
 
   return (
-    <nav className="p-4 flex items-center justify-between bg-white dark:bg-sidebar">
+    <nav className="sticky top-0 z-10 w-full h-16.5 shadow-xs bg-white dark:bg-sidebar p-4 flex justify-between items-center">
       {/*left */}
       <div className="flex items-center gap-3">
         <Button variant="outline" size={"sm"} onClick={toggleSidebar}>
