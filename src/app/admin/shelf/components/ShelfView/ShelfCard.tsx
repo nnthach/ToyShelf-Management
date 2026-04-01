@@ -14,7 +14,7 @@ function ShelfCard({ shelf, handleViewDetail }: ShelfCardProps) {
       {/* Image */}
       <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
         <Image
-          src={"/images/placeholder.png"}
+          src={shelf.imageUrl || "/images/placeholder.png"}
           alt={shelf.name}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"

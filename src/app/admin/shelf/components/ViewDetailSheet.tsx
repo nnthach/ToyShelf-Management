@@ -6,9 +6,12 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/src/styles/components/ui/sheet";
-import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getShelfTypeDetailAPI } from "@/src/services/shelf.service";
+import Image from "next/image";
+import { Box, Layers, Maximize2, Package2, Tag } from "lucide-react";
+import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
+import { Shelf, ShelfLevelItem } from "@/src/types";
 
 type ViewDetailSheetProps = {
   shelfTypeId: string | null;
@@ -21,33 +24,190 @@ function ViewDetailSheet({
   isOpen,
   onClose,
 }: ViewDetailSheetProps) {
-  const router = useRouter();
-
-  const { data: shelfTypeDetail, isLoading } = useQuery({
+  const { data: shelf, isLoading } = useQuery({
     queryKey: ["shelfType", shelfTypeId],
     queryFn: () => getShelfTypeDetailAPI(shelfTypeId!),
-    select: (res) => res.data,
+    select: (res) => res.data as Shelf,
     enabled: !!shelfTypeId,
   });
 
   if (!shelfTypeId) return null;
 
   return (
-    <Sheet
-      open={isOpen}
-      onOpenChange={(value) => {
-        if (!value) onClose();
-      }}
-    >
-      <SheetContent className="w-full !max-w-[1200px]">
-        <SheetHeader className="pb-0">
-          <SheetTitle className="">
-            <h1 className="text-xl">Cabin</h1>
+    <Sheet open={isOpen} onOpenChange={(val) => !val && onClose()}>
+      <SheetContent className="w-full !max-w-[650px] p-0 flex flex-col gap-0 border-none">
+        <SheetHeader className="p-6 border-b bg-white">
+          <SheetTitle className="flex items-center gap-2">
+            <Box className="text-blue-600" size={24} />
+            <span className="text-xl font-bold uppercase tracking-tight">
+              Chi tiết loại kệ
+            </span>
           </SheetTitle>
         </SheetHeader>
-        <div className="flex bg-gray-200 dark:bg-muted h-full">
-          {/*Left */}
-          <div className="w-[70%] p-4">{/* Tabs content */}</div>
+
+        <div className="p-6 space-y-8 overflow-y-auto h-full">
+          {/* 1. IMAGE SECTION - Theo style bạn yêu cầu */}
+          <div className="relative group">
+            <div className="w-full aspect-video rounded-3xl border bg-slate-50 overflow-hidden relative shadow-inner flex items-center justify-center">
+              {shelf?.imageUrl ? (
+                <Image
+                  src={shelf?.imageUrl}
+                  alt={shelf.name}
+                  fill
+                  className="object-contain p-4 animate-in fade-in duration-500"
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <Package2 size={40} className="opacity-20" />
+                  <span className="text-sm">Không có hình ảnh</span>
+                </div>
+              )}
+
+              {/* Badge thông tin nhanh trên ảnh */}
+              <div className="absolute top-4 right-4 flex gap-2">
+                <p className="bg-white/80 backdrop-blur-md shadow-sm">
+                  {shelf?.totalLevels} Tầng
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. BASIC INFO SECTION */}
+          <div className="grid grid-cols-3 gap-4">
+            <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 flex flex-col items-center justify-center text-center">
+              <span className="text-[10px] uppercase font-bold text-blue-500 mb-1">
+                Rộng
+              </span>
+              <span className="text-lg font-bold text-blue-900">
+                {shelf?.width} <small>cm</small>
+              </span>
+            </div>
+            <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 flex flex-col items-center justify-center text-center">
+              <span className="text-[10px] uppercase font-bold text-indigo-500 mb-1">
+                Cao
+              </span>
+              <span className="text-lg font-bold text-indigo-900">
+                {shelf?.height} <small>cm</small>
+              </span>
+            </div>
+            <div className="p-4 rounded-2xl bg-violet-50/50 border border-violet-100 flex flex-col items-center justify-center text-center">
+              <span className="text-[10px] uppercase font-bold text-violet-500 mb-1">
+                Sâu
+              </span>
+              <span className="text-lg font-bold text-violet-900">
+                {shelf?.depth} <small>cm</small>
+              </span>
+            </div>
+          </div>
+
+          {/* 3. CATEGORIES SECTION */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-bold flex items-center gap-2 text-slate-700">
+              <Tag size={16} /> DANH MỤC PHÙ HỢP CHUNG
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {Array.isArray(shelf?.suitableProductCategoryTypes) ? (
+                shelf?.suitableProductCategoryTypes.map((cat: string) => (
+                  <span
+                    key={cat}
+                    className="bg-slate-100 text-slate-600 border border-slate-200 py-1 px-3 rounded-full text-xs font-medium"
+                  >
+                    {cat}
+                  </span>
+                ))
+              ) : shelf?.suitableProductCategoryTypes ? (
+                (shelf.suitableProductCategoryTypes as unknown as string)
+                  .split(",")
+                  .map((cat: string) => (
+                    <span
+                      key={cat.trim()}
+                      className="bg-slate-100 text-slate-600 border border-slate-200 py-1 px-3 rounded-full text-xs font-medium"
+                    >
+                      {cat.trim()}
+                    </span>
+                  ))
+              ) : (
+                <span className="text-slate-400 text-xs italic">
+                  Chưa có danh mục
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* 4. LEVELS LIST SECTION */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold flex items-center gap-2 text-slate-700">
+              <Layers size={16} /> CẤU TRÚC CHI TIẾT CÁC TẦNG
+            </h3>
+
+            <div className="space-y-4">
+              {shelf?.levels?.map((item: ShelfLevelItem, index: number) => (
+                <div
+                  key={index}
+                  className="relative p-5 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-all"
+                >
+                  <div className="absolute top-5 left-0 w-1 h-10 bg-blue-500 rounded-r-full"></div>
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h4 className="font-bold text-slate-900">{item.name}</h4>
+                      <span className="text-[10px] font-medium text-slate-400">
+                        VỊ TRÍ: TẦNG {item.level}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
+                        Sức chứa: {item.recommendedCapacity} SP
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="flex items-center gap-2 text-sm text-slate-600">
+                      <Maximize2 size={14} className="text-slate-400" />
+                      <span>
+                        Thông thủy: <b>{item.clearanceHeight} cm</b>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase">
+                      Danh mục tầng:
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {Array.isArray(item?.suitableProductCategoryTypes) ? (
+                        item?.suitableProductCategoryTypes.map(
+                          (cat: string) => (
+                            <span
+                              key={cat}
+                              className="bg-slate-100 text-slate-600 border border-slate-200 py-1 px-3 rounded-full text-xs font-medium"
+                            >
+                              {cat}
+                            </span>
+                          ),
+                        )
+                      ) : item?.suitableProductCategoryTypes ? (
+                        (item.suitableProductCategoryTypes as unknown as string)
+                          .split(",")
+                          .map((cat: string) => (
+                            <span
+                              key={cat.trim()}
+                              className="bg-slate-100 text-slate-600 border border-slate-200 py-1 px-3 rounded-full text-xs font-medium"
+                            >
+                              {cat.trim()}
+                            </span>
+                          ))
+                      ) : (
+                        <span className="text-slate-400 text-xs italic">
+                          Chưa có danh mục
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
