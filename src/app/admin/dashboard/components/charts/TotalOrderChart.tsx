@@ -50,7 +50,7 @@ const data = [
 ];
 
 // #endregion
-const BarChartExample = ({ isAnimationActive = true }) => (
+const TotalOrderChart = ({ isAnimationActive = true }) => (
   <div className="flex flex-col h-full">
     <p className="font-bold text-lg w-full mb-4">Total Revenue</p>
     <div className="flex-1">
@@ -79,4 +79,4 @@ const BarChartExample = ({ isAnimationActive = true }) => (
   </div>
 );
 
-export default BarChartExample;
+export default TotalOrderChart;

@@ -1,11 +1,11 @@
 import React from "react";
-import BarChartExample from "./components/charts/BarChart";
-import AreaChartExample from "./components/charts/AreaChart";
+import BarChartExample from "./components/charts/TotalOrderChart";
 import { PieChartExample } from "./components/charts/PieChart";
 import MostSellStore from "./components/MostSellStore";
 import StoreMap from "./components/StoreMap";
 import { Box, ClipboardList, Star } from "lucide-react";
 import StatCard from "@/src/components/StatCard";
+import TotalRevenueChart from "./components/charts/TotalRevenueChart";
 
 export default function AdminDashboard() {
   return (
@@ -53,14 +53,12 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
-        {/* <div className="bg-background rounded-lg col-span-1 h-[50vh] w-full shadow-sm shadow-sm">
-          <h1>Dashboard</h1>
+        <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">
+          <TotalRevenueChart />
         </div>
-        <div className="bg-background rounded-lg col-span-3 h-[50vh] w-full shadow-sm">
-          <StoreMap />
-        </div> */}
+
         <div className="bg-background p-4 rounded-lg lg:col-span-2 xl:col-span-1 2xl:col-span-2 min-h-[50vh] shadow-sm">
-          <AreaChartExample />
+          <BarChartExample />
         </div>
         <div className="bg-background p-4 rounded-lg shadow-sm">
           <MostSellStore />
@@ -68,9 +66,13 @@ export default function AdminDashboard() {
         <div className="bg-background p-4 rounded-lg shadow-sm">
           <PieChartExample />
         </div>
-        <div className="bg-background p-4 rounded-lg lg:col-span-2 xl:col-span-1 2xl:col-span-2 min-h-[50vh] shadow-sm">
-          <BarChartExample />
+
+        {/* <div className="bg-background rounded-lg col-span-1 h-[50vh] w-full shadow-sm shadow-sm">
+          <h1>Dashboard</h1>
         </div>
+        <div className="bg-background rounded-lg col-span-3 h-[50vh] w-full shadow-sm">
+          <StoreMap />
+        </div> */}
       </div>
     </>
   );

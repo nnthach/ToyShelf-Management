@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Store } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
-import { getAllStoreAPI } from "@/src/services/store.service";
+import { getAllWarehouseAPI } from "@/src/services/warehouse.service";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || "";
 
@@ -25,9 +25,9 @@ function StoreMap() {
     search: "",
   });
 
-  const { data: storeList = [], isLoading } = useQuery({
-    queryKey: ["stores", query],
-    queryFn: () => getAllStoreAPI(query),
+  const { data: warehouseList = [], isLoading } = useQuery({
+    queryKey: ["warehouses", query],
+    queryFn: () => getAllWarehouseAPI(query),
     select: (res) => res.data as Store[],
   });
 
@@ -65,7 +65,7 @@ function StoreMap() {
   useEffect(() => {
     if (!mapRef.current) return;
 
-    const storeMarkers = storeList.map((store) => {
+    const warehouseMarkers = warehouseList.map((store) => {
       const storeIcon = document.createElement("div");
       storeIcon.className = "store-marker";
 
@@ -82,9 +82,9 @@ function StoreMap() {
     });
 
     return () => {
-      storeMarkers.forEach((marker) => marker.remove());
+      warehouseMarkers.forEach((marker) => marker.remove());
     };
-  }, [storeList]);
+  }, [warehouseList]);
 
   return (
     <div className="relative w-full h-full">
@@ -109,8 +109,6 @@ function StoreMap() {
               {selectStore.storeAddress}
             </p>
           </div>
-
-          
         </div>
       )}
     </div>

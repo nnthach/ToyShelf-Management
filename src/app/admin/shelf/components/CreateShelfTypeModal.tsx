@@ -40,7 +40,6 @@ import Image from "next/image";
 
 const formSchema = z.object({
   name: z.string().min(1, "Tên loại kệ là bắt buộc"),
-  imageUrl: z.string().min(1, "Link ảnh là bắt buộc"),
   width: z.coerce.number().min(1, "Chiều rộng > 0"),
   height: z.coerce.number().min(1, "Chiều cao > 0"),
   depth: z.coerce.number().min(1, "Chiều sâu > 0"),
@@ -117,7 +116,6 @@ function CreateShelfTypeModal() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      imageUrl: "",
       width: 0,
       height: 0,
       depth: 0,
@@ -334,14 +332,14 @@ function CreateShelfTypeModal() {
                     >
                       <div className="flex justify-between items-center">
                         <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">
-                          TẦNG {index + 1}
+                          Tầng {index + 1}
                         </span>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <FormFieldCustom
                           name={`levels.${index}.name`}
-                          label="Tên tầng"
+                          label="Thứ tự tầng"
                           placeholder="VD: Tầng đáy"
                         />
                         <FormFieldCustom
