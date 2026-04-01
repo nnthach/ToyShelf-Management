@@ -1,11 +1,13 @@
 import React from "react";
 import BarChartExample from "./components/charts/TotalOrderChart";
 import { PieChartExample } from "./components/charts/PieChart";
-import MostSellStore from "./components/MostSellStore";
+import MostSellStore from "./components/TopThreeStore";
 import StoreMap from "./components/StoreMap";
 import { Box, ClipboardList, Star } from "lucide-react";
 import StatCard from "@/src/components/StatCard";
 import TotalRevenueChart from "./components/charts/TotalRevenueChart";
+import TotalOrderChart from "./components/charts/TotalOrderChart";
+import TopThreeStore from "./components/TopThreeStore";
 
 export default function AdminDashboard() {
   return (
@@ -57,11 +59,11 @@ export default function AdminDashboard() {
           <TotalRevenueChart />
         </div>
 
-        <div className="bg-background p-4 rounded-lg lg:col-span-2 xl:col-span-1 2xl:col-span-2 min-h-[50vh] shadow-sm">
-          <BarChartExample />
+        <div className="bg-background p-4 rounded-lg lg:col-span-3 min-h-[60vh] shadow-sm">
+          <TotalOrderChart />
         </div>
         <div className="bg-background p-4 rounded-lg shadow-sm">
-          <MostSellStore />
+          <TopThreeStore />
         </div>
         <div className="bg-background p-4 rounded-lg shadow-sm">
           <PieChartExample />

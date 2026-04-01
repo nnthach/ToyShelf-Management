@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import ChartFilter from "@/src/components/ChartFilter";
+import { useDebounce } from "@/src/hooks/useDebounce";
+import { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -11,6 +13,8 @@ import {
   CartesianGrid,
 } from "recharts";
 
+type ViewType = "week" | "month" | "year";
+
 interface RevenueData {
   label: string;
   revenue: number;
@@ -20,6 +24,12 @@ interface DataSources {
   week: RevenueData[];
   month: RevenueData[];
   year: RevenueData[];
+}
+
+interface RevenueParams {
+  type: ViewType;
+  month?: number;
+  year?: number;
 }
 
 // 2. Khai báo kiểu dữ liệu cho DATA_SOURCES
@@ -55,13 +65,41 @@ const DATA_SOURCES: DataSources = {
   ],
 };
 
-const TotalRevenueChart = ({ isAnimationActive = true }) => {
+const TotalRevenueChart = () => {
   const [timeFrame, setTimeFrame] = useState<keyof DataSources>("month");
+
+  const [filters, setFilters] = useState({
+    viewType: "month" as ViewType,
+    month: new Date().getMonth() + 1,
+    year: new Date().getFullYear(),
+  });
+
+  const debouncedFilters = useDebounce(filters, 1000);
 
   const totalAmount = DATA_SOURCES[timeFrame].reduce(
     (acc, curr) => acc + curr.revenue,
     0,
   );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { viewType, month, year } = debouncedFilters;
+
+      // Build params động
+      const params: RevenueParams = { type: viewType };
+      if (viewType === "month") {
+        params.month = month;
+        params.year = year;
+      } else if (viewType === "year") {
+        params.year = year;
+      }
+
+      console.log("API Call:", params);
+    };
+
+    fetchData();
+  }, [debouncedFilters]);
+
   return (
     <div className="flex flex-col h-full w-full bg-white">
       {/* HEADER: Tên bên trái - Filter bên phải */}
@@ -75,34 +113,14 @@ const TotalRevenueChart = ({ isAnimationActive = true }) => {
                 ? "năm nay"
                 : "các năm"}
           </h3>
-          <p className="text-3xl font-bold text-gray-900 mt-1">
+          <p className="text-2xl font-bold text-gray-900 mt-1">
             {totalAmount.toLocaleString()}
-            <span className="text-2xl">đ</span>
+            <span className="text-xl">đ</span>
           </p>
         </div>
 
         {/* BỘ LỌC FILTER */}
-        <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-lg">
-          {(["week", "month", "year"] as const).map((type) => {
-            const isActive = timeFrame === type;
-            return (
-              <button
-                key={type}
-                onClick={() => setTimeFrame(type)}
-                className={`
-          px-4 py-1.5 text-sm font-medium transition-all duration-200 capitalize
-          ${
-            isActive
-              ? "bg-white text-gray-900 shadow-sm rounded-md"
-              : "text-gray-500 hover:text-gray-700"
-          }
-        `}
-              >
-                {type === "week" ? "Tuần" : type === "month" ? "Tháng" : "Năm"}
-              </button>
-            );
-          })}
-        </div>
+        <ChartFilter value={filters} onChange={setFilters} />
       </div>
 
       <div className="flex-1 min-h-[300px]">
@@ -166,7 +184,7 @@ const TotalRevenueChart = ({ isAnimationActive = true }) => {
               stroke="#1E88E5"
               strokeWidth={3}
               fill="url(#colorRevenue)"
-              isAnimationActive={isAnimationActive}
+              isAnimationActive={true}
             />
           </AreaChart>
         </ResponsiveContainer>

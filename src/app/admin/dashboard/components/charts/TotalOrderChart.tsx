@@ -1,82 +1,178 @@
 "use client";
 
+import ChartFilter, { ViewType } from "@/src/components/ChartFilter";
+import { useDebounce } from "@/src/hooks/useDebounce";
+import { useEffect, useState } from "react";
 import {
   BarChart,
-  Legend,
   XAxis,
   YAxis,
   Tooltip,
   Bar,
   ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 
-// #region Sample data
-const data = [
-  {
-    name: "Jan",
-    Membership: 4000,
-    QRScan: 2400,
-  },
-  {
-    name: "Feb",
-    Membership: 3000,
-    QRScan: 1398,
-  },
-  {
-    name: "Mar",
-    Membership: 2000,
-    QRScan: 9800,
-  },
-  {
-    name: "Apr",
-    Membership: 2780,
-    QRScan: 3908,
-  },
-  {
-    name: "Jun",
-    Membership: 1890,
-    QRScan: 4800,
-  },
-  {
-    name: "Jul",
-    Membership: 2390,
-    QRScan: 3800,
-  },
-  {
-    name: "Aug",
-    Membership: 3490,
-    QRScan: 4300,
-  },
-];
+interface OrderData {
+  label: string;
+  orders: number;
+}
 
-// #endregion
-const TotalOrderChart = ({ isAnimationActive = true }) => (
-  <div className="flex flex-col h-full">
-    <p className="font-bold text-lg w-full mb-4">Total Revenue</p>
-    <div className="flex-1">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          data={data}
-          margin={{ top: 10, right: 0, left: 2, bottom: 0 }}
-        >
-          <XAxis dataKey="name" axisLine={false} tickLine={false} />
-          <YAxis axisLine={false} tickLine={false} />
-          <Tooltip />
-          <Legend />
-          <Bar
-            dataKey="Membership"
-            fill="blue"
-            isAnimationActive={isAnimationActive}
-          />
-          <Bar
-            dataKey="QRScan"
-            fill="orange"
-            isAnimationActive={isAnimationActive}
-          />
-        </BarChart>
-      </ResponsiveContainer>
+interface DataSources {
+  week: OrderData[];
+  month: OrderData[];
+  year: OrderData[];
+}
+
+interface RevenueParams {
+  type: ViewType;
+  month?: number;
+  year?: number;
+}
+
+const DATA_SOURCES: DataSources = {
+  week: [
+    { label: "Thứ 2", orders: 12 },
+    { label: "Thứ 3", orders: 18 },
+    { label: "Thứ 4", orders: 10 },
+    { label: "Thứ 5", orders: 25 },
+    { label: "Thứ 6", orders: 20 },
+    { label: "Thứ 7", orders: 35 },
+    { label: "CN", orders: 40 },
+  ],
+  month: [
+    { label: "T1", orders: 120 },
+    { label: "T2", orders: 98 },
+    { label: "T3", orders: 150 },
+    { label: "T4", orders: 130 },
+    { label: "T5", orders: 180 },
+    { label: "T6", orders: 170 },
+    { label: "T7", orders: 220 },
+    { label: "T8", orders: 200 },
+    { label: "T9", orders: 260 },
+    { label: "T10", orders: 240 },
+    { label: "T11", orders: 300 },
+    { label: "T12", orders: 350 },
+  ],
+  year: [
+    { label: "2021", orders: 1200 },
+    { label: "2022", orders: 1800 },
+    { label: "2023", orders: 2400 },
+    { label: "2024", orders: 900 },
+  ],
+};
+
+const TotalOrderChart = () => {
+  const [filters, setFilters] = useState({
+    viewType: "month" as ViewType,
+    month: new Date().getMonth() + 1,
+    year: new Date().getFullYear(),
+  });
+
+  const timeFrame = filters.viewType;
+
+  const debouncedFilters = useDebounce(filters, 500);
+
+  const totalOrders = DATA_SOURCES[timeFrame].reduce(
+    (acc, curr) => acc + curr.orders,
+    0,
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { viewType, month, year } = debouncedFilters;
+
+      const params: RevenueParams = { type: viewType };
+
+      if (viewType === "month") {
+        params.month = month;
+        params.year = year;
+      } else if (viewType === "year") {
+        params.year = year;
+      }
+
+      console.log("Orders API:", params);
+    };
+
+    fetchData();
+  }, [debouncedFilters]);
+
+  return (
+    <div className="flex flex-col h-full w-full bg-white">
+      {/* HEADER */}
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">
+            Tổng đơn hàng theo{" "}
+            {timeFrame === "week"
+              ? "tuần này"
+              : timeFrame === "month"
+                ? "tháng"
+                : "năm"}
+          </h3>
+
+          <p className="text-2xl font-bold text-gray-900 mt-1">
+            {totalOrders.toLocaleString()}
+            <span className="text-base ml-1">đơn</span>
+          </p>
+        </div>
+
+        <ChartFilter value={filters} onChange={setFilters} />
+      </div>
+
+      {/* CHART */}
+      <div className="flex-1 min-h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={DATA_SOURCES[timeFrame]}
+            margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+          >
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="#f0f0f0"
+            />
+
+            <XAxis
+              dataKey="label"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#9CA3AF", fontSize: 12 }}
+              dy={10}
+            />
+
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#9CA3AF", fontSize: 12 }}
+            />
+
+            <Tooltip
+              contentStyle={{
+                borderRadius: "12px",
+                border: "none",
+                boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
+              }}
+              formatter={(value: number) => [`${value} đơn`, "Đơn hàng"]}
+            />
+
+            <defs>
+              <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#6366F1" stopOpacity={0.9} />
+                <stop offset="100%" stopColor="#6366F1" stopOpacity={0.2} />
+              </linearGradient>
+            </defs>
+
+            <Bar
+              dataKey="orders"
+              fill="url(#colorOrders)"
+              radius={[8, 8, 0, 0]}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default TotalOrderChart;
