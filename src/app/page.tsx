@@ -104,7 +104,7 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-4xl font-extrabold leading-tight">
-            Hệ thống quản lý đồ chơi ký gửi kèm theo kệ trưng bày
+            Hệ thống quản lý đồ chơi ký gửi & kệ trưng bày thông minh
           </h1>
           <p className="text-[#4a6880] text-md leading-relaxed my-8">
             Nền tảng quản trị toàn diện cho ToyShelf — theo dõi đơn hàng, đối
