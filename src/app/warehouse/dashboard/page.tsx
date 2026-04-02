@@ -45,17 +45,7 @@ export default function WarehouseDashboard() {
           changePercent="+12%"
           icon={Box}
           color="bg-green-100 text-green-900"
-          action={
-            <span
-              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
-  border-current bg-green-100 text-green-900
-  bg-opacity-30 hover:bg-opacity-50
-  transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() => router.push(`/warehouse/inventory`)}
-            >
-              <ArrowRight size={16} />
-            </span>
-          }
+          action={() => router.push(`/warehouse/inventory`)}
         />
 
         <StatCardWithButton
@@ -65,17 +55,7 @@ export default function WarehouseDashboard() {
           changePercent="+18%"
           icon={Server}
           color="bg-pink-100 text-pink-900"
-          action={
-            <span
-              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
-  border-current bg-pink-100 text-pink-900
-  bg-opacity-30 hover:bg-opacity-50
-  transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() => router.push(`/warehouse/shelf-inventory`)}
-            >
-              <ArrowRight size={16} />
-            </span>
-          }
+          action={() => router.push(`/warehouse/shelf-inventory`)}
         />
 
         <StatCardWithButton
@@ -85,17 +65,7 @@ export default function WarehouseDashboard() {
           changePercent="+18%"
           icon={Server}
           color="bg-blue-100 text-blue-900"
-          action={
-            <span
-              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
-  border-current bg-blue-100 text-blue-900
-  bg-opacity-30 hover:bg-opacity-50
-  transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() => router.push(`/warehouse/refill-stocks`)}
-            >
-              <ArrowRight size={16} />
-            </span>
-          }
+          action={() => router.push(`/warehouse/refill-stocks`)}
         />
       </div>
 

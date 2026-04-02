@@ -81,20 +81,10 @@ export default function PartnerStoreDetailPage() {
           changePercent="+15%"
           icon={Store}
           color="bg-yellow-100 text-yellow-900"
-          action={
-            <span
-              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
-              border-current bg-yellow-100 text-yellow-900
-              bg-opacity-30 hover:bg-opacity-50
-              transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() =>
-                router.push(
-                  `/partner/orders?partnerId=${partner?.id}&storeId=${id}`,
-                )
-              }
-            >
-              <ArrowRight size={16} />
-            </span>
+          action={() =>
+            router.push(
+              `/partner/orders?partnerId=${partner?.id}&storeId=${id}`,
+            )
           }
         />
 
@@ -105,20 +95,10 @@ export default function PartnerStoreDetailPage() {
           changePercent="+18%"
           icon={Box}
           color="bg-blue-100 text-blue-900"
-          action={
-            <span
-              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
-              border-current bg-blue-100 text-blue-900
-              bg-opacity-30 hover:bg-opacity-50
-              transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() =>
-                router.push(
-                  `/partner/inventories?locationId=${storeDetail.inventoryLocationId}`,
-                )
-              }
-            >
-              <ArrowRight size={16} />
-            </span>
+          action={() =>
+            router.push(
+              `/partner/inventories?locationId=${storeDetail.inventoryLocationId}`,
+            )
           }
         />
       </div>
