@@ -9,6 +9,7 @@ import { AccountAdminModalProvider } from "@/src/context/AccountAdminModalContex
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ProductDetailSheetProvider } from "../context/ProductDetailSheetContext";
 import { OrderDetailSheetProvider } from "../context/OrderDetailSheetContext";
+import { ShelfDetailSheetProvider } from "../context/ShelfDetailSheetContext";
 
 const queryClient = new QueryClient();
 
@@ -18,14 +19,16 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
         <ReduxProvider store={store}>
           <AuthProvider>
-            <ProductDetailSheetProvider>
-              <OrderDetailSheetProvider>
-                <AccountAdminModalProvider>
-                  {children}
-                  <ReactQueryDevtools initialIsOpen={false} />
-                </AccountAdminModalProvider>
-              </OrderDetailSheetProvider>
-            </ProductDetailSheetProvider>
+            <ShelfDetailSheetProvider>
+              <ProductDetailSheetProvider>
+                <OrderDetailSheetProvider>
+                  <AccountAdminModalProvider>
+                    {children}
+                    <ReactQueryDevtools initialIsOpen={false} />
+                  </AccountAdminModalProvider>
+                </OrderDetailSheetProvider>
+              </ProductDetailSheetProvider>
+            </ShelfDetailSheetProvider>
           </AuthProvider>
         </ReduxProvider>
       </GoogleOAuthProvider>

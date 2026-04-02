@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Sheet,
   SheetContent,
@@ -13,26 +11,17 @@ import { Box, Layers, Maximize2, Package2, Tag } from "lucide-react";
 import { Shelf, ShelfLevelItem } from "@/src/types";
 import { Badge } from "@/src/styles/components/ui/badge";
 
-type ViewDetailSheetProps = {
-  shelfTypeId: string | null;
+type ShelfViewDetailSheetWithQuantityProps = {
+  shelf: Shelf | null;
   isOpen: boolean;
   onClose: () => void;
 };
 
-function ViewDetailSheet({
-  shelfTypeId,
+function ShelfViewDetailSheetWithQuantity({
+  shelf,
   isOpen,
   onClose,
-}: ViewDetailSheetProps) {
-  const { data: shelf, isLoading } = useQuery({
-    queryKey: ["shelfType", shelfTypeId],
-    queryFn: () => getShelfTypeDetailAPI(shelfTypeId!),
-    select: (res) => res.data as Shelf,
-    enabled: !!shelfTypeId,
-  });
-
-  if (!shelfTypeId) return null;
-
+}: ShelfViewDetailSheetWithQuantityProps) {
   return (
     <Sheet open={isOpen} onOpenChange={(val) => !val && onClose()}>
       <SheetContent className="w-full !max-w-[500px] p-0 flex flex-col gap-0 border-none">
@@ -217,4 +206,4 @@ function ViewDetailSheet({
   );
 }
 
-export default ViewDetailSheet;
+export default ShelfViewDetailSheetWithQuantity;

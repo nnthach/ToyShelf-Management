@@ -13,7 +13,7 @@ import { useState } from "react";
 import { getAllShipmentAssignAPI } from "@/src/services/shipment-assignment.service";
 import UpdateShipmentAssignRefillRequestModal from "./components/UpdateShipmentAssignRefillRequestModal";
 
-export default function WarehouseRefillRequestManage() {
+export default function WarehouseRefillShelfRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
@@ -43,11 +43,11 @@ export default function WarehouseRefillRequestManage() {
       {/*Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold dark:text-foreground">
-          Quản lý đơn đặt hàng từ cửa hàng
+          Quản lý đơn đặt kệ từ cửa hàng
         </h1>
         <p className="text-gray-500 dark:text-gray-200">
-          Danh sách tất cả các đơn đặt hàng từ cửa hàng
-        </p>{" "}
+          Danh sách tất cả các đơn đặt kệ từ cửa hàng
+        </p>
       </div>
 
       {/*Table */}

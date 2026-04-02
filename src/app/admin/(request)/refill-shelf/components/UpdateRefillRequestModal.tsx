@@ -30,17 +30,17 @@ import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/Ship
 import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";
 import ShipmentProductListComponent from "@/src/components/ShipmentComponent/ShipmentProductListComponent";
 
-type UpdateRefillRequestModalProps = {
+type UpdateRefillShelfRequestModalProps = {
   requestId: string;
   isOpen: boolean;
   onClose: () => void;
 };
 
-function UpdateRefillRequestModal({
+function UpdateRefillShelfRequestModal({
   requestId,
   isOpen,
   onClose,
-}: UpdateRefillRequestModalProps) {
+}: UpdateRefillShelfRequestModalProps) {
   const queryClient = useQueryClient();
 
   const [isOpenAssignWarehouseModal, setIsOpenAssignWarehouseModal] =
@@ -74,7 +74,7 @@ function UpdateRefillRequestModal({
       await rejectRefillRequestAPI(requestId);
 
       queryClient.invalidateQueries({
-        queryKey: ["refillRequests"],
+        queryKey: ["refillShelfRequests"],
       });
 
       toast.success("Từ chối yêu cầu thành công");
@@ -90,7 +90,7 @@ function UpdateRefillRequestModal({
       await approveRefillRequestAPI(requestId);
 
       queryClient.invalidateQueries({
-        queryKey: ["refillRequests"],
+        queryKey: ["refillShelfRequests"],
       });
 
       queryClient.invalidateQueries({
@@ -121,7 +121,7 @@ function UpdateRefillRequestModal({
               <div className="flex justify-between items-start">
                 <div>
                   <DialogTitle className="text-xl">
-                    Chi tiết đơn đặt hàng
+                    Chi tiết đơn đặt kệ
                   </DialogTitle>
                   <DialogDescription className="mt-1">
                     Mã đơn:{" "}
@@ -221,4 +221,4 @@ function UpdateRefillRequestModal({
   );
 }
 
-export default UpdateRefillRequestModal;
+export default UpdateRefillShelfRequestModal;

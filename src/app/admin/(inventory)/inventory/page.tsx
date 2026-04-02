@@ -41,7 +41,7 @@ export default function AdminInventoryManage() {
           <p className="text-gray-500 dark:text-gray-200">
             Danh sách tất cả các đơn hàng nhập trong hệ thống
           </p>
-        </div>{" "}
+        </div>
         <CreateInventoryModal />
       </div>
       {/*Table */}

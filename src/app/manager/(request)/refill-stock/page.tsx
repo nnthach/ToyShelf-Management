@@ -4,7 +4,7 @@ import { Download, Plus, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
 import { RefillRequest } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
@@ -13,7 +13,6 @@ import { useState } from "react";
 import { getAllRefillAPI } from "@/src/services/refill.service";
 import ViewRefillRequestModalDetail from "./components/ViewRefillRequestDetailModal";
 import { useRouter } from "next/navigation";
-import CreateRefillOrderModal from "./components/CreateRefillOrderModal";
 
 export default function ManagerRefillRequestManage() {
   const router = useRouter();
@@ -46,13 +45,19 @@ export default function ManagerRefillRequestManage() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Đơn đặt hàng</h1>
-        {/* <CreateRefillOrderModal /> */}
+        <div>
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý đặt hàng
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách tất cả các đơn đặt hàng của cửa hàng
+          </p>
+        </div>
         <Button
           className="btn-primary-gradient"
           onClick={() => router.push("/manager/refill-stock/create")}
         >
-          <Plus /> Tạo yêu cầu
+          <Plus /> Tạo đơn hàng
         </Button>
       </div>
 

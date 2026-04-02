@@ -48,6 +48,11 @@ export function useAuth() {
     }
   };
 
+  const isAtAuthPage = () => {
+    const pathname = window.location.pathname;
+    return pathname === "/" || pathname === "/login";
+  };
+
   const initAuth = async () => {
     const token = localStorage.getItem("token");
     const roles = JSON.parse(localStorage.getItem("roles") || "[]");
@@ -97,7 +102,9 @@ export function useAuth() {
           }
         }
 
-        navigateByRole(roles);
+        if (isAtAuthPage()) {
+          navigateByRole(roles);
+        }
       } catch (error) {
         dispatch(logout());
       } finally {

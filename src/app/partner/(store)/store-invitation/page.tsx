@@ -82,9 +82,14 @@ export default function PartnerManageStoreInvites() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">
-          Quản lý lời mời tham gia cửa hàng
-        </h1>
+        <div>
+          <h1 className="text-2xl font-bold dark:text-foreground">
+            Quản lý lời mời tham gia cửa hàng
+          </h1>
+          <p className="text-gray-500 dark:text-gray-200">
+            Danh sách tất cả các lời mời tham gia cửa hàng
+          </p>
+        </div>
         <CreateStoreInviteModal />
       </div>
       {/*Table */}

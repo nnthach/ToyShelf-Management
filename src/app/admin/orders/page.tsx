@@ -51,15 +51,13 @@ export default function AdminOrderManagement() {
   return (
     <>
       {/*Header */}
-      <div className="">
-        <div className="flex flex-col">
-          <h1 className="text-2xl font-bold dark:text-foreground">
-            Danh sách đơn hàng
-          </h1>
-          <p className="text-gray-500 dark:text-gray-200">
-            Bộ lọc thông minh theo đối tác và cửa hàng trong hệ thống
-          </p>
-        </div>
+      <div className="flex flex-col">
+        <h1 className="text-2xl font-bold dark:text-foreground">
+          Danh sách đơn hàng
+        </h1>
+        <p className="text-gray-500 dark:text-gray-200">
+          Bộ lọc thông minh theo đối tác và cửa hàng trong hệ thống
+        </p>
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">

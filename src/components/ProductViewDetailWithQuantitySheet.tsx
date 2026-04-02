@@ -6,7 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/src/styles/components/ui/sheet";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProductDetailAPI } from "@/src/services/product.service";
 import dynamic from "next/dynamic";
@@ -46,6 +46,15 @@ function ProductViewDetailWithQuantitySheet({
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [viewMode, setViewMode] = useState<"image" | "3d">("image");
 
+  console.log("Selected Color Index:", product);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleColorSelect = (index: number) => {
+    setSelectedColorIndex(index);
+    scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const selectedColor = product?.colors?.[selectedColorIndex];
 
   console.log("product", product);
@@ -61,7 +70,10 @@ function ProductViewDetailWithQuantitySheet({
           </SheetTitle>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-8 pb-10">
+        <div
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto px-6 py-4 space-y-8 pb-10 scroll-smooth custom-scrollbar"
+        >
           {/* Main Preview Section */}
           <div className="relative group">
             <div className="w-full aspect-square rounded-2xl border bg-secondary/10 overflow-hidden relative shadow-inner">
@@ -112,13 +124,14 @@ function ProductViewDetailWithQuantitySheet({
               </div>
             </div>
           </div>
-
           {/* Header Info */}
           <div className="space-y-4">
             <div className="space-y-1">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold tracking-tight">
-                  {product?.name}
+                  {product?.name ||
+                    product?.productName ||
+                    "Tên sản phẩm không xác định"}
                 </h2>
               </div>
 
@@ -159,7 +172,6 @@ function ProductViewDetailWithQuantitySheet({
               </div> */}
             </div>
           </div>
-
           {/* Color Selection */}
           <div className="space-y-3">
             <h3 className="text-sm font-bold flex items-center gap-2 uppercase tracking-wider">
@@ -169,7 +181,7 @@ function ProductViewDetailWithQuantitySheet({
               {product?.colors?.map((color, index) => (
                 <button
                   key={color.productColorId}
-                  onClick={() => setSelectedColorIndex(index)}
+                  onClick={() => handleColorSelect(index)}
                   className={`relative flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
                     selectedColorIndex === index
                       ? "border-black bg-black/[0.02] shadow-sm ring-1 ring-black/5"
@@ -233,41 +245,57 @@ function ProductViewDetailWithQuantitySheet({
               ))}
             </div>
           </div>
+          {/* Specifications Section */}
+          <div className="space-y-6">
+            <div className="flex items-center justify-between border-b pb-2">
+              <h3 className="text-sm font-bold flex items-center gap-2 uppercase tracking-widest text-slate-800">
+                <div className="p-1.5 bg-blue-50 rounded-lg text-blue-600">
+                  <Info size={16} />
+                </div>
+                Thông số kỹ thuật
+              </h3>
+            </div>
 
-          {/* Specifications - Đưa các thông tin bạn yêu cầu vào đây */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-bold flex items-center gap-2 uppercase tracking-wider">
-              <Info size={16} /> Thông số kỹ thuật
-            </h3>
-            <div className="grid grid-cols-2 gap-px bg-gray-200 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+            <div className="grid grid-cols-2 gap-3">
               <SpecItem
-                icon={<Shapes size={14} />}
+                icon={<Shapes size={16} />}
                 label="Chất liệu"
                 value={product?.material}
+                color="bg-orange-50 text-orange-600"
               />
               <SpecItem
-                icon={<Globe2 size={14} />}
+                icon={<Globe2 size={16} />}
                 label="Xuất xứ"
                 value={product?.originCountry}
+                color="bg-blue-50 text-blue-600"
               />
               <SpecItem
-                icon={<Baby size={14} />}
+                icon={<Baby size={16} />}
                 label="Độ tuổi"
-                value={`${product?.ageRange}+`}
+                value={product?.ageRange ? `${product.ageRange}+` : undefined}
+                color="bg-purple-50 text-purple-600"
               />
               <SpecItem
-                icon={<Weight size={14} />}
+                icon={<Weight size={16} />}
                 label="Trọng lượng"
-                value={`${product?.weight}g`}
+                value={product?.weight ? `${product.weight}g` : undefined}
+                color="bg-emerald-50 text-emerald-600"
               />
-              <div className="col-span-2 bg-white p-3 flex items-center gap-3">
-                <Ruler size={14} className="text-muted-foreground" />
-                <div className="flex-1">
-                  <p className="text-[10px] text-muted-foreground uppercase font-bold">
-                    Kích thước (D x R x C)
+
+              {/* Full width item cho Kích thước */}
+              <div className="col-span-2 flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100/50 hover:bg-slate-100 transition-colors">
+                <div className="h-10 w-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-500 shrink-0">
+                  <Ruler size={20} />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-[10px] text-slate-400 uppercase font-extrabold tracking-wider">
+                    Kích thước tổng thể (D x R x C)
                   </p>
-                  <p className="text-sm font-medium">
-                    {product?.length} x {product?.width} x {product?.height} cm
+                  <p className="text-sm font-bold text-slate-900">
+                    {product?.length} × {product?.width} × {product?.height}{" "}
+                    <span className="text-[12px] font-normal text-slate-600 ml-1">
+                      cm
+                    </span>
                   </p>
                 </div>
               </div>
@@ -283,19 +311,30 @@ function SpecItem({
   icon,
   label,
   value,
+  color = "bg-slate-100 text-slate-600",
 }: {
   icon: React.ReactNode;
   label: string;
   value: number | string | undefined;
+  color?: string;
 }) {
   return (
-    <div className="bg-white p-3 flex items-center gap-3">
-      <div className="text-muted-foreground">{icon}</div>
-      <div>
-        <p className="text-[10px] text-muted-foreground uppercase font-bold">
+    <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-100 hover:border-blue-200 transition-all group">
+      {/* Icon bên trái */}
+      <div
+        className={`w-9 h-9 shrink-0 rounded-lg ${color} flex items-center justify-center transition-transform group-hover:scale-105`}
+      >
+        {icon}
+      </div>
+
+      {/* Nội dung bên phải */}
+      <div className="flex flex-col min-w-0">
+        <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider leading-none mb-1">
           {label}
         </p>
-        <p className="text-sm font-medium capitalize">{value || "---"}</p>
+        <p className="text-[13px] font-bold text-slate-800 truncate leading-tight">
+          {value || "---"}
+        </p>
       </div>
     </div>
   );

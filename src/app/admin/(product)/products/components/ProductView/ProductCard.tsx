@@ -23,7 +23,10 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
   const image = selectedColor?.imageUrl;
 
   return (
-    <div className="group rounded-xl border border-gray-100 bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300">
+    <div
+      onClick={() => handleViewDetail(product.id)}
+      className="group rounded-xl cursor-pointer border border-gray-100 bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300"
+    >
       {/* Image */}
       <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
         {image && (
@@ -35,18 +38,6 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
           />
         )}
-
-        {/* Eye Button */}
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => handleViewDetail(product.id)}
-          className="absolute top-2 right-2 z-20
-                     opacity-0 group-hover:opacity-100
-                     transition bg-white/80 backdrop-blur-sm"
-        >
-          <Eye className="h-4 w-4" />
-        </Button>
 
         {/* Hover info */}
         <div

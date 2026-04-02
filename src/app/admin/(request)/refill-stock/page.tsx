@@ -44,7 +44,12 @@ export default function AdminRefillRequestManage() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Yêu cầu đặt hàng từ cửa hàng</h1>
+        <h1 className="text-2xl font-bold dark:text-foreground">
+          Quản lý đặt hàng từ cửa hàng
+        </h1>
+        <p className="text-gray-500 dark:text-gray-200">
+          Danh sách tất cả các đơn đặt hàng trong hệ thống
+        </p>
       </div>
 
       {/*Table */}

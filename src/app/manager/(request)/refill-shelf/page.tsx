@@ -1,25 +1,22 @@
 "use client";
 
-import { Download, Upload } from "lucide-react";
+import { Download, Plus, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
-import { Store } from "@/src/types";
+import { RefillRequest } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { getStoreCreateRequestColumns } from "./columns";
-import CreateStoreRequestModal from "./components/CreateStoreCreationRequestModal";
-import {
-  deleteStoreCreationRequestAPI,
-  getAllStoreCreationRequestAPI,
-} from "@/src/services/store-create-request.service";
-import { toast } from "react-toastify";
+import { getStoreRefillShelfRequestColumns } from "./columns";
 import { useState } from "react";
-import ViewStoreCreateRequestModal from "./components/ViewStoreCreationRequestModal";
+import { getAllRefillAPI } from "@/src/services/refill.service";
+import ViewRefillRequestModalDetail from "./components/ViewRefillShelfRequestDetailModal";
+import { useRouter } from "next/navigation";
 
-export default function PartnerStoreCreationRequestManage() {
-  const queryClient = useQueryClient();
+export default function ManagerRefillShelfRequestManage() {
+  const router = useRouter();
+
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
@@ -29,45 +26,20 @@ export default function PartnerStoreCreationRequestManage() {
   });
 
   const {
-    data: storeCreateRequestList = [],
+    data: refillShelfRequestList = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["storeRequests", query],
-    queryFn: () => getAllStoreCreationRequestAPI(query),
-    select: (res) => res.data as Store[],
+    queryKey: ["refillShelfRequests", query],
+    queryFn: () => getAllRefillAPI(query),
+    select: (res) => res.data as RefillRequest[],
   });
 
-  const handleViewDetail = (requestId: string) => {
+  const handleEdit = (requestId: string) => {
     setSelectedRequestId(requestId);
   };
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteStoreCreationRequestAPI,
-    onSuccess: () => {
-      toast.success("Xóa thành công");
-
-      // reload danh sách
-      queryClient.invalidateQueries({
-        queryKey: ["storeRequests"],
-      });
-    },
-    onError: () => {
-      toast.error("Xóa thất bại");
-    },
-  });
-
-  const handleDelete = (cityId: string) => {
-    const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xóa yêu cầu này không?",
-    );
-
-    if (!confirmDelete) return;
-
-    deleteMutation.mutate(cityId);
-  };
-
-  const columns = getStoreCreateRequestColumns(handleDelete, handleViewDetail);
+  const columns = getStoreRefillShelfRequestColumns(handleEdit);
 
   return (
     <>
@@ -75,20 +47,25 @@ export default function PartnerStoreCreationRequestManage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Quản lý yêu cầu tạo cửa hàng
+            Quản lý đặt kệ
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
-            Danh sách tất cả các yêu cầu tạo cửa hàng
+            Danh sách tất cả các đơn đặt kệ của cửa hàng
           </p>
         </div>
-        <CreateStoreRequestModal />
+        <Button
+          className="btn-primary-gradient"
+          onClick={() => router.push("/manager/refill-shelf/create")}
+        >
+          <Plus /> Tạo đơn
+        </Button>
       </div>
 
       {/*Table */}
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={storeCreateRequestList ?? []}
+          data={refillShelfRequestList ?? []}
           isLoading={isLoading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -96,7 +73,7 @@ export default function PartnerStoreCreationRequestManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={storeCreateRequestList.length}
+              resultCount={refillShelfRequestList.length}
               onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -120,7 +97,7 @@ export default function PartnerStoreCreationRequestManage() {
       </div>
 
       {selectedRequestId && (
-        <ViewStoreCreateRequestModal
+        <ViewRefillRequestModalDetail
           requestId={selectedRequestId}
           isOpen={!!selectedRequestId}
           onClose={() => {

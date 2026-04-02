@@ -1,8 +1,7 @@
-import { Button } from "@/src/styles/components/ui/button";
-import { Product, Shelf } from "@/src/types";
-import { Eye } from "lucide-react";
+import { Badge } from "@/src/styles/components/ui/badge";
+import { Shelf } from "@/src/types";
 import Image from "next/image";
-import { memo, useState } from "react";
+import { memo } from "react";
 
 interface ShelfCardProps {
   shelf: Shelf;
@@ -10,8 +9,11 @@ interface ShelfCardProps {
 }
 function ShelfCard({ shelf, handleViewDetail }: ShelfCardProps) {
   return (
-    <div className="group rounded-xl border border-gray-100 bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300">
-      {/* Image */}
+    <div
+      onClick={() => handleViewDetail(shelf.id)}
+      className="group rounded-xl cursor-pointer border border-gray-100 bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300"
+    >
+      {/* Image Container */}
       <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
         <Image
           src={shelf.imageUrl || "/images/placeholder.png"}
@@ -21,47 +23,33 @@ function ShelfCard({ shelf, handleViewDetail }: ShelfCardProps) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
         />
 
-        {/* Eye Button */}
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => handleViewDetail(shelf.id)}
-          className="absolute top-2 right-2 z-20
-                     opacity-0 group-hover:opacity-100
-                     transition bg-white/80 backdrop-blur-sm"
-        >
-          <Eye className="h-4 w-4" />
-        </Button>
-
-        {/* Hover info */}
-        <div
-          className="absolute inset-x-0 bottom-0 z-10
-    translate-y-full opacity-0
-    group-hover:translate-y-0 group-hover:opacity-100
-    transition-all duration-300 ease-out"
-        >
-          <div className="bg-white/90 backdrop-blur-sm px-3 py-2 text-xs rounded-b-lg">
-            <div className="flex justify-between">
-              <span className="text-gray-500">Kích thước</span>
-              <span className="font-medium text-gray-900">
-                {shelf?.width} x {shelf?.depth} x {shelf?.height}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Số tầng</span>
-              <span className="font-medium text-gray-900">
-                {shelf?.totalLevels}
-              </span>
-            </div>
-          </div>
+        {/* Badge số tầng ở góc trái trên */}
+        <div className="absolute top-2 left-2 z-10">
+          <Badge className="bg-white/90 text-gray-900 hover:bg-white/100 border-none shadow-sm backdrop-blur-sm">
+            {shelf?.totalLevels} tầng
+          </Badge>
         </div>
       </div>
-      <div className="flex flex-col ">
+
+      {/* Info Content */}
+      <div className="flex flex-col gap-1">
         {/* Name */}
-        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
+        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
           {shelf.name}
         </h3>
-        <p className="text-xs text-gray-500">{shelf.displayGuideline}</p>
+
+        {/* Description/Guideline */}
+        <p className="text-xs text-gray-500 line-clamp-1">
+          {shelf.displayGuideline}
+        </p>
+
+        {/* Kích thước đem xuống dưới */}
+        <div className="mt-1 flex items-center gap-1 text-[12px] text-gray-800">
+          <span className="font-medium">Kích thước:</span>
+          <span>
+            {shelf?.width} × {shelf?.depth} × {shelf?.height} (cm)
+          </span>
+        </div>
       </div>
     </div>
   );

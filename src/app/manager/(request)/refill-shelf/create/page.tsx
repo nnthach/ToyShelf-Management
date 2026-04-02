@@ -8,29 +8,28 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import FilterSearch from "./components/FilterSearch";
-import { getAllProductAPI } from "@/src/services/product.service";
 import CartDetailSheet from "./components/CartDetailSheet";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
-import ProductCardOrder from "./components/ProductCardOrder";
 import Pagination from "@/src/components/Pagination";
-import { Product } from "@/src/types";
+import { Shelf } from "@/src/types";
 import { createRefillAPI } from "@/src/services/refill.service";
 import { toast } from "react-toastify";
-import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import { getAllShelfTypeAPI } from "@/src/services/shelf.service";
+import ShelfCardOrder from "./components/ShelfCardOrder";
 
 export interface CartItem {
-  productColorId: string;
-  categoryName: string;
+  shelfTypeId: string;
   quantity: number;
   name: string;
   image: string;
-  colorName: string;
-  hexcode: string;
-  sku: string;
-  price: number;
+  description: string;
+  totalLevels: number;
+  width: number;
+  depth: number;
+  height: number;
 }
 
-export default function CreateStoreOrderRefill() {
+export default function CreateStoreOrderRefillShelf() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -46,49 +45,44 @@ export default function CreateStoreOrderRefill() {
   });
 
   const {
-    data: productList = [],
+    data: shelfList = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["products", query],
-    queryFn: () => getAllProductAPI(query),
-    select: (res) => res.data,
-  });
-
-  const { data: categoryList = [] } = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => getAllProductCategoryAPI({ isActive: true }),
+    queryKey: ["shelfTypes", query],
+    queryFn: () => getAllShelfTypeAPI(query),
     select: (res) => res.data,
   });
 
   const handleAddToCart = (item: CartItem) => {
     setCart((prev) => {
-      const exist = prev.find((i) => i.productColorId === item.productColorId);
+      const exist = prev.find((i) => i.shelfTypeId === item.shelfTypeId);
 
       if (exist) {
         return prev.map((i) =>
-          i.productColorId === item.productColorId
-            ? { ...i, quantity: i.quantity + item.quantity }
+          i.shelfTypeId === item.shelfTypeId
+            ? { ...i, quantity: i.quantity + 1 }
             : i,
         );
       }
 
-      return [...prev, { ...item, quantity: item.quantity }];
+      return [...prev, { ...item, quantity: 1 }];
     });
   };
 
-  const handleRemoveFromCart = (productColorId: string, amount = 1) => {
+  const handleRemoveFromCart = (shelfTypeId: string) => {
     setCart((prev) => {
-      const exist = prev.find((i) => i.productColorId === productColorId);
+      const exist = prev.find((i) => i.shelfTypeId === shelfTypeId);
+
       if (!exist) return prev;
 
-      const newQty = exist.quantity - amount;
-      if (newQty <= 0) {
-        return prev.filter((i) => i.productColorId !== productColorId);
+      if (exist.quantity === 1) {
+        return prev.filter((i) => i.shelfTypeId !== shelfTypeId);
       }
+
       return prev.map((item) =>
-        item.productColorId === productColorId
-          ? { ...item, quantity: newQty }
+        item.shelfTypeId === shelfTypeId
+          ? { ...item, quantity: item.quantity - 1 }
           : item,
       );
     });
@@ -97,7 +91,7 @@ export default function CreateStoreOrderRefill() {
   const onSubmit = async () => {
     const payload = {
       items: cart.map((item) => ({
-        productColorId: item.productColorId,
+        shelfTypeId: item.shelfTypeId,
         quantity: item.quantity,
       })),
     };
@@ -148,8 +142,7 @@ export default function CreateStoreOrderRefill() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              categoryList={categoryList}
-              resultCount={productList.totalCount}
+              resultCount={shelfList.totalCount}
               onSearch={(val) => updateQuery({ searchItem: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -169,12 +162,12 @@ export default function CreateStoreOrderRefill() {
                   <ProductCardSkeleton key={i} />
                 ))}
               </div>
-            ) : productList.items.length > 0 ? (
+            ) : shelfList.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
-                {productList.items.map((product: Product) => (
-                  <ProductCardOrder
-                    key={product.id}
-                    product={product}
+                {shelfList.map((shelfType: Shelf) => (
+                  <ShelfCardOrder
+                    key={shelfType.id}
+                    shelf={shelfType}
                     handleAddToCart={handleAddToCart}
                     handleRemoveFromCart={handleRemoveFromCart}
                     cart={cart}
@@ -190,8 +183,8 @@ export default function CreateStoreOrderRefill() {
 
           <Pagination
             currentPage={query?.pageNumber || 1}
-            totalItems={productList.totalCount}
-            totalPages={productList.totalPages}
+            totalItems={shelfList.totalCount}
+            totalPages={shelfList.totalPages}
             pageSize={query?.pageSize || 10}
             onPageChange={(page) => updateQuery({ pageNumber: page })}
           />

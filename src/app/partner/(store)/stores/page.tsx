@@ -43,7 +43,12 @@ export default function PartnerStoreManage() {
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl font-bold">Quản lý cửa hàng</h1>
+        <h1 className="text-2xl font-bold dark:text-foreground">
+          Quản lý cửa hàng
+        </h1>
+        <p className="text-gray-500 dark:text-gray-200">
+          Danh sách tất cả các cửa hàng sở hữu trong hệ thống
+        </p>
       </div>
 
       {/*Table */}
