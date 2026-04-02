@@ -1,7 +1,7 @@
 import {
   Collapsible,
   CollapsibleContent,
-} from "../../styles/components/ui/collapsible";
+} from "@/src/styles/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -18,7 +18,7 @@ import {
   SidebarMenuSubItem,
   SidebarSeparator,
   useSidebar,
-} from "../../styles/components/ui/sidebar";
+} from "@/src/styles/components/ui/sidebar";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { CollapsibleTrigger } from "@radix-ui/react-collapsible";
 import {

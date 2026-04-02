@@ -11,25 +11,31 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar, Info, Layers, Plus, Send, Trophy } from "lucide-react";
+import {
+  Calendar,
+  FilePlus,
+  Info,
+  Layers,
+  Plus,
+  Send,
+  Trophy,
+} from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import { CommissionTable, Partner } from "@/src/types";
+import { CommissionTable } from "@/src/types";
 import { getAllCommissionTableAPI } from "@/src/services/commission-table.service";
-import { getAllPartnerAPI } from "@/src/services/partner.service";
 import { createCommissionTableApplyAPI } from "@/src/services/commission-table-apply.service";
 
-function CreateCommissionPolicyModal() {
+function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
 
   const formSchema = z.object({
-    partnerId: z.string().min(1, "Đối tác là bắt buộc"),
     commissionTableId: z.string().min(1, "Bảng giá là bắt buộc"),
     name: z.string().min(1, "Tên là bắt buộc"),
     startDate: z.string().min(1, "Ngày bắt đầu là bắt buộc"),
@@ -39,7 +45,6 @@ function CreateCommissionPolicyModal() {
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      partnerId: "",
       commissionTableId: "",
       name: "",
       startDate: "",
@@ -47,22 +52,11 @@ function CreateCommissionPolicyModal() {
     },
   });
 
-  const { data: partnerList } = useQuery({
-    queryKey: ["partners"],
-    queryFn: () => getAllPartnerAPI({}),
-    select: (res) => res.data as Partner[],
-  });
-
   const { data: commissionTableList } = useQuery({
     queryKey: ["commissionTables"],
     queryFn: () => getAllCommissionTableAPI({}),
     select: (res) => res.data as CommissionTable[],
   });
-
-  const partnerOptions = partnerList?.map((s) => ({
-    value: s.id,
-    label: s.companyName,
-  }));
 
   const commissionTableOptions = commissionTableList?.map((s) => ({
     value: s.id,
@@ -72,10 +66,10 @@ function CreateCommissionPolicyModal() {
   async function onSubmit(data: z.output<typeof formSchema>) {
     console.log("data", data);
     try {
-      await createCommissionTableApplyAPI(data);
+      await createCommissionTableApplyAPI({ ...data, partnerId });
 
       queryClient.invalidateQueries({
-        queryKey: ["commissionTableApplies"],
+        queryKey: ["partner"],
       });
 
       form.reset();
@@ -86,6 +80,8 @@ function CreateCommissionPolicyModal() {
       toast.error("Áp dụng bảng hoa hồng thất bại");
     }
   }
+
+  console.log("Form Errors:", form.formState.errors);
 
   return (
     <Dialog
@@ -98,9 +94,13 @@ function CreateCommissionPolicyModal() {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="btn-primary-gradient">
-          <Plus /> Áp dụng bảng hoa hồng
-        </Button>
+        <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-[11px] font-black uppercase tracking-wider rounded-lg transition-all border border-white/20 backdrop-blur-sm flex items-center gap-2 group">
+          <FilePlus
+            size={14}
+            className="group-hover:scale-110 transition-transform text-orange-400"
+          />
+          Áp dụng hoa hồng mới
+        </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden border-none shadow-2xl">
         {/* Header tối giản */}
@@ -123,17 +123,6 @@ function CreateCommissionPolicyModal() {
               id="form-create-commission-policy"
             >
               <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2 sm:col-span-1">
-                  <FormFieldCustom
-                    name="partnerId"
-                    label="Đối tác"
-                    placeholder="Chọn đối tác"
-                    type="select"
-                    selectData={partnerOptions}
-                    icon={<Trophy size={16} />}
-                  />
-                </div>
-
                 <div className="col-span-2 sm:col-span-1">
                   <FormFieldCustom
                     name="commissionTableId"
@@ -194,4 +183,4 @@ function CreateCommissionPolicyModal() {
   );
 }
 
-export default CreateCommissionPolicyModal;
+export default ApplyNewCommissionTableModal;

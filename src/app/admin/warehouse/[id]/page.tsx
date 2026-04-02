@@ -4,12 +4,11 @@ import { ArrowLeft, ArrowRight, Box, Server, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { Button } from "@/src/styles/components/ui/button";
-import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getWarehouseDetailAPI } from "@/src/services/warehouse.service";
 import TotalShipOrderBarChart from "./components/charts/TotalShipOrderBarChart";
-import WarehouseStatCard from "./components/WarehouseStatCard";
 import WarehouseBannerInfo from "./components/WarehouseBannerInfo";
+import StatCardWithButton from "@/src/components/StatCardWithButton";
 
 export default function ViewWarehouseDetailPage() {
   const { id: warehouseId } = useParams<{ id: string }>();
@@ -51,7 +50,7 @@ export default function ViewWarehouseDetailPage() {
 
       {/*Statistic card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <WarehouseStatCard
+        <StatCardWithButton
           title="Đơn hàng"
           value="100"
           change="+10"
@@ -60,7 +59,7 @@ export default function ViewWarehouseDetailPage() {
           color="bg-green-100 text-green-900"
         />
 
-        <WarehouseStatCard
+        <StatCardWithButton
           title="Kệ Tồn Kho"
           value="10"
           change="+2"
@@ -69,28 +68,18 @@ export default function ViewWarehouseDetailPage() {
           color="bg-pink-100 text-pink-900"
         />
 
-        <WarehouseStatCard
+        <StatCardWithButton
           title="Hàng Tồn kho"
           value="150"
           change="+20"
           changePercent="+18%"
           icon={Box}
           color="bg-blue-100 text-blue-900"
-          action={
-            <span
-              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
-  border-current bg-blue-100 text-blue-900
-  bg-opacity-30 hover:bg-opacity-50
-  transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() =>
-                router.push(`/admin/warehouse/${warehouseId}/inventory`)
-              }
-            >
-              <ArrowRight size={16} />
-            </span>
+          action={() =>
+            router.push(`/admin/warehouse/${warehouseId}/inventory`)
           }
         />
-        <WarehouseStatCard
+        <StatCardWithButton
           title="Nhân viên giao hàng"
           value="15"
           change="+0"
@@ -101,11 +90,9 @@ export default function ViewWarehouseDetailPage() {
       </div>
 
       {/*Content */}
-      <div className="">
-        <div className="grid grid-cols-1 mb-4">
-          <div className="bg-background shadow-sm rounded-lg col-span-3 h-[70vh] w-full">
-            <TotalShipOrderBarChart />
-          </div>
+      <div className="grid grid-cols-1 mb-4">
+        <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">
+          <TotalShipOrderBarChart />
         </div>
       </div>
     </div>

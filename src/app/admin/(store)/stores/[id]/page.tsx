@@ -11,6 +11,9 @@ import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import { getStoreDetailAPI } from "@/src/services/store.service";
 import StatCardWithButton from "@/src/components/StatCardWithButton";
 import StoreBannerInfo from "./components/StoreBannerInfo";
+import TotalRevenueChart from "./components/charts/TotalRevenueChart";
+import TotalOrderChart from "./components/charts/TotalOrderChart";
+import TopThreeProduct from "./components/charts/TopThreeProduct";
 
 export default function PartnerStoreDetailPage() {
   const params = useParams();
@@ -69,19 +72,7 @@ export default function PartnerStoreDetailPage() {
           changePercent="+15%"
           icon={Store}
           color="bg-yellow-100 text-yellow-900"
-          action={
-            <span
-              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
-  border-current bg-yellow-100 text-yellow-900
-  bg-opacity-30 hover:bg-opacity-50
-  transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() =>
-                router.push(`/admin/orders?storeId=${id}&from=store`)
-              }
-            >
-              <ArrowRight size={16} />
-            </span>
-          }
+          action={() => router.push(`/admin/orders?storeId=${id}&from=store`)}
         />
 
         <StatCardWithButton
@@ -91,20 +82,10 @@ export default function PartnerStoreDetailPage() {
           changePercent="+18%"
           icon={Box}
           color="bg-blue-100 text-blue-900"
-          action={
-            <span
-              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
-  border-current bg-blue-100 text-blue-900
-  bg-opacity-30 hover:bg-opacity-50
-  transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() =>
-                router.push(
-                  `/admin/all-inventory?locationId=${storeDetail.inventoryLocationId}`,
-                )
-              }
-            >
-              <ArrowRight size={16} />
-            </span>
+          action={() =>
+            router.push(
+              `/admin/all-inventory?locationId=${storeDetail.inventoryLocationId}`,
+            )
           }
         />
         <StatCardWithButton
@@ -114,40 +95,25 @@ export default function PartnerStoreDetailPage() {
           changePercent="+18%"
           icon={Box}
           color="bg-pink-100 text-pink-900"
-          action={
-            <span
-              className={`inline-flex items-center justify-center h-7 w-10 rounded-2xl border 
-  border-current bg-pink-100 text-pink-900
-  bg-opacity-30 hover:bg-opacity-50
-  transition-all cursor-pointer shadow-sm active:scale-95`}
-              onClick={() =>
-                router.push(
-                  `/admin/stores/${id}/inventory?inventoryLocationId=${storeDetail.inventoryLocationId}`,
-                )
-              }
-            >
-              <ArrowRight size={16} />
-            </span>
+          action={() =>
+            router.push(
+              `/admin/stores/${id}/inventory?inventoryLocationId=${storeDetail.inventoryLocationId}`,
+            )
           }
         />
       </div>
 
       {/*Content */}
-      <div className="">
-        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
-          {/*Chart total revenue */}
-          <div className="bg-background rounded-lg col-span-3 h-[60vh] w-full shadow-sm">
-            <BarChartExample />
-          </div>
-          {/*Chart target value */}
-          <div className="bg-background rounded-lg col-span-1 w-full shadow-sm">
-            <TargetRevenueChart />
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
+        <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">
+          <TotalRevenueChart />
+        </div>
 
-          {/*chart */}
-          <div className="bg-background rounded-lg col-span-4 h-[60vh] w-full shadow-sm">
-            <AreaChartExample />
-          </div>
+        <div className="bg-background p-4 rounded-lg lg:col-span-3 min-h-[60vh] shadow-sm border border-gray-100">
+          <TotalOrderChart />
+        </div>
+        <div className="bg-background p-4 rounded-lg shadow-sm border border-gray-100">
+          <TopThreeProduct />
         </div>
       </div>
     </div>

@@ -1,0 +1,7 @@
+.warehouse-marker {
+  width: 40px;
+  height: 40px;
+  background-image: url("/icons/warehouse.png");
+  background-size: cover;
+  border-radius: 50%;
+}

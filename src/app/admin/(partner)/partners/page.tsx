@@ -1,7 +1,7 @@
 "use client";
 
-import { DataTable } from "../../../../styles/components/ui/data-table";
-import { Button } from "../../../../styles/components/ui/button";
+import { DataTable } from "@/src/styles/components/ui/data-table";
+import { Button } from "@/src/styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
 import useQueryParams from "../../../../hooks/useQueryParams";
 import { getPartnerColumns } from "./columns";

@@ -1,4 +1,4 @@
-import { SidebarProvider } from "../../styles/components/ui/sidebar";
+import { SidebarProvider } from "@/src/styles/components/ui/sidebar";
 import { cookies } from "next/headers";
 import { PartnerAdminClientShell } from "@/src/components/layout/PartnerAdminClient";
 import { RolePermission } from "@/src/components/RolePermission";

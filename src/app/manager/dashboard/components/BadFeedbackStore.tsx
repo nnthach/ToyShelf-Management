@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "../../../../styles/components/ui/card";
+} from "@/src/styles/components/ui/card";
 import { Star } from "lucide-react";
 
 const BadFeedBackStore = () => {

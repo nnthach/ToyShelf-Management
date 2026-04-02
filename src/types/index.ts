@@ -38,12 +38,17 @@ export interface Partner {
   partnerId: string;
   email: string;
   companyName: string;
+  code: string;
   fullName: string;
   partnerTierId: string;
   partnerTierName: string;
   isActive: boolean;
   createdAt: string;
   partnerIsActive: boolean;
+  partnerTierPriority: number;
+  partnerAccount: User;
+  currentCommission: CommissionTable;
+  commissionHistories: CommissionTable[];
 }
 
 export interface Store {
@@ -194,6 +199,9 @@ export interface CommissionTable {
   partnerTierName: string;
   isActive: boolean;
   items: CommissionTableItem[];
+  startDate: string;
+  endDate: string;
+  commissionTableId: string;
 }
 
 export interface CommissionTableApply {

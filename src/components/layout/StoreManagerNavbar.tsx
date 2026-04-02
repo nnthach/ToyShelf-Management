@@ -5,8 +5,8 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../../styles/components/ui/avatar";
-import { Button } from "../../styles/components/ui/button";
+} from "@/src/styles/components/ui/avatar";
+import { Button } from "@/src/styles/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +14,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../styles/components/ui/dropdown-menu";
-import { useSidebar } from "../../styles/components/ui/sidebar";
+} from "@/src/styles/components/ui/dropdown-menu";
+import { useSidebar } from "@/src/styles/components/ui/sidebar";
 import { ChevronLeft, Lock, LogOut, Menu, Moon, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useAccountAdminModal } from "@/src/context/AccountAdminModalContext";

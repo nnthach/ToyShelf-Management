@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 type StatCardWithButtonProps = {
   title: string;
@@ -7,7 +7,7 @@ type StatCardWithButtonProps = {
   changePercent: string;
   color?: string | null;
   icon: React.ComponentType<{ className?: string }>;
-  action?: React.ReactNode;
+  action?: () => void;
 };
 
 function StatCardWithButton({
@@ -47,7 +47,16 @@ function StatCardWithButton({
           tháng trước
         </div>
 
-        {action && action}
+        {action && (
+          <span
+            className={`inline-flex items-center justify-center h-6 w-7 rounded-2xl ${bgColor} ${textColor}
+    bg-opacity-30 hover:bg-opacity-50
+    transition-all cursor-pointer shadow-sm active:scale-95`}
+            onClick={action} // ✅ gọi trực tiếp
+          >
+            <ArrowRight size={18} className={`${textColor}`} />
+          </span>
+        )}
       </div>
     </div>
   );

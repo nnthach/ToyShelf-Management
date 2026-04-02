@@ -4,11 +4,9 @@ import ChartFilter, { ViewType } from "@/src/components/ChartFilter";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { useEffect, useState } from "react";
 import {
-  LineChart,
   XAxis,
   YAxis,
   Tooltip,
-  Line,
   ResponsiveContainer,
   CartesianGrid,
   Area,

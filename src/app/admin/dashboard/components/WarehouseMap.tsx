@@ -1,34 +1,28 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import "./StoreMap.css";
+import "./WarehouseMap.css";
 import { useTheme } from "next-themes";
 import { useQuery } from "@tanstack/react-query";
-import useQueryParams from "@/src/hooks/useQueryParams";
-import { Store } from "@/src/types";
-import { QueryParams } from "@/src/types/SubType";
+import { Warehouse } from "@/src/types";
 import { getAllWarehouseAPI } from "@/src/services/warehouse.service";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY || "";
 
-function StoreMap() {
+function WarehouseMap() {
   const { theme } = useTheme();
 
-  const [selectStore, setSelectStore] = useState<Store | null>(null);
+  const [selectWarehouse, setSelectWarehouse] = useState<Warehouse | null>(
+    null,
+  );
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
-  });
-
   const { data: warehouseList = [], isLoading } = useQuery({
-    queryKey: ["warehouses", query],
-    queryFn: () => getAllWarehouseAPI(query),
-    select: (res) => res.data as Store[],
+    queryKey: ["warehouses"],
+    queryFn: () => getAllWarehouseAPI({}),
+    select: (res) => res.data as Warehouse[],
   });
 
   useEffect(() => {
@@ -65,17 +59,17 @@ function StoreMap() {
   useEffect(() => {
     if (!mapRef.current) return;
 
-    const warehouseMarkers = warehouseList.map((store) => {
-      const storeIcon = document.createElement("div");
-      storeIcon.className = "store-marker";
+    const warehouseMarkers = warehouseList.map((warehouse) => {
+      const warehouseIcon = document.createElement("div");
+      warehouseIcon.className = "warehouse-marker";
 
-      // render icon store location
-      const marker = new mapboxgl.Marker({ element: storeIcon })
-        .setLngLat([store.longitude, store.latitude])
+      // render icon warehouse location
+      const marker = new mapboxgl.Marker({ element: warehouseIcon })
+        .setLngLat([warehouse.longitude, warehouse.latitude])
         .addTo(mapRef.current!);
 
-      storeIcon.addEventListener("click", () => {
-        setSelectStore(store);
+      warehouseIcon.addEventListener("click", () => {
+        setSelectWarehouse(warehouse);
       });
 
       return marker;
@@ -89,11 +83,11 @@ function StoreMap() {
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainerRef} className="w-full h-full rounded-lg" />
-      {selectStore && (
+      {selectWarehouse && (
         <div
           className="
     absolute left-4 top-4
-    w-[260px] max-h-[85%]
+    w-[300px] max-h-[85%]
     bg-background backdrop-blur-md
     rounded-2xl shadow-xl
     border border-gray-200
@@ -103,10 +97,13 @@ function StoreMap() {
           {/* Header */}
           <div className="p-4 border-b">
             <h3 className="font-semibold text-lg line-clamp-2">
-              {selectStore.name}
+              {selectWarehouse.name}
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-300 mt-1 line-clamp-2">
-              {selectStore.storeAddress}
+            <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">
+              {selectWarehouse.address}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">
+              {selectWarehouse.cityName}
             </p>
           </div>
         </div>
@@ -115,4 +112,4 @@ function StoreMap() {
   );
 }
 
-export default StoreMap;
+export default memo(WarehouseMap);

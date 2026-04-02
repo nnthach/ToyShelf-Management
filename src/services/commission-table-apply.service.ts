@@ -15,6 +15,11 @@ export const createCommissionTableApplyAPI = async <T>(data: T) => {
   return res.data;
 };
 
+export const upgradePartnerTierAPI = async <T>(data: T) => {
+  const res = await api.post("/CommissionTableApply/upgrade-tier", data);
+  return res.data;
+};
+
 export const updateCommissionTableApplyAPI = async <T>(data: T, id: string) => {
   const res = await api.put(`/CommissionTableApply/${id}`, data);
   return res.data;

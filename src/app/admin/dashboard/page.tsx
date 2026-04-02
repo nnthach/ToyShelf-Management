@@ -1,13 +1,13 @@
 import React from "react";
-import BarChartExample from "./components/charts/TotalOrderChart";
 import { PieChartExample } from "./components/charts/PieChart";
-import MostSellStore from "./components/TopThreeStore";
-import StoreMap from "./components/StoreMap";
 import { Box, ClipboardList, Star } from "lucide-react";
 import StatCard from "@/src/components/StatCard";
 import TotalRevenueChart from "./components/charts/TotalRevenueChart";
 import TotalOrderChart from "./components/charts/TotalOrderChart";
 import TopThreeStore from "./components/TopThreeStore";
+import TopThreeProduct from "./components/TopThreeProduct";
+import TopThreePartner from "./components/TopThreePartner";
+import WarehouseMap from "./components/WarehouseMap";
 
 export default function AdminDashboard() {
   return (
@@ -59,22 +59,32 @@ export default function AdminDashboard() {
           <TotalRevenueChart />
         </div>
 
-        <div className="bg-background p-4 rounded-lg lg:col-span-3 min-h-[60vh] shadow-sm">
+        <div className="bg-background p-4 rounded-lg lg:col-span-3 min-h-[60vh] shadow-sm border border-gray-100">
           <TotalOrderChart />
         </div>
-        <div className="bg-background p-4 rounded-lg shadow-sm">
+        <div className="bg-background p-4 rounded-lg shadow-sm border border-gray-100">
           <TopThreeStore />
         </div>
-        <div className="bg-background p-4 rounded-lg shadow-sm">
+
+        <div className="bg-background p-4 rounded-lg shadow-sm border border-gray-100">
+          <TopThreeProduct />
+        </div>
+        <div className="bg-background p-4 rounded-lg shadow-sm border border-gray-100">
+          <TopThreePartner />
+        </div>
+        <div className="bg-background p-4 rounded-lg shadow-sm border border-gray-100">
+          <PieChartExample />
+        </div>
+        <div className="bg-background p-4 rounded-lg shadow-sm border border-gray-100">
           <PieChartExample />
         </div>
 
-        {/* <div className="bg-background rounded-lg col-span-1 h-[50vh] w-full shadow-sm shadow-sm">
+        <div className="bg-background rounded-lg col-span-1 h-[50vh] w-full shadow-sm">
           <h1>Dashboard</h1>
         </div>
-        <div className="bg-background rounded-lg col-span-3 h-[50vh] w-full shadow-sm">
-          <StoreMap />
-        </div> */}
+        <div className="bg-background rounded-lg col-span-3 p-2 h-[50vh] w-full border border-gray-100 shadow-sm">
+          <WarehouseMap />
+        </div>
       </div>
     </>
   );

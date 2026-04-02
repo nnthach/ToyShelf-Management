@@ -11,13 +11,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../../../../styles/components/ui/card";
+} from "@/src/styles/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "../../../../../styles/components/ui/chart";
+} from "@/src/styles/components/ui/chart";
 
 export const description = "A donut chart with text";
 
