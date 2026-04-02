@@ -9,6 +9,8 @@ import { getWarehouseDetailAPI } from "@/src/services/warehouse.service";
 import TotalShipOrderBarChart from "./components/charts/TotalShipOrderBarChart";
 import WarehouseBannerInfo from "./components/WarehouseBannerInfo";
 import StatCardWithButton from "@/src/components/StatCardWithButton";
+import WarehouseStatCard from "./components/WarehouseStatCard";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function ViewWarehouseDetailPage() {
   const { id: warehouseId } = useParams<{ id: string }>();
@@ -24,6 +26,10 @@ export default function ViewWarehouseDetailPage() {
     select: (res) => res.data,
     enabled: !!warehouseId,
   });
+
+  if (isLoading) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <div className="space-y-6">
@@ -50,43 +56,7 @@ export default function ViewWarehouseDetailPage() {
 
       {/*Statistic card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCardWithButton
-          title="Đơn hàng"
-          value="100"
-          change="+10"
-          changePercent="+12%"
-          icon={Box}
-          color="bg-green-100 text-green-900"
-        />
-
-        <StatCardWithButton
-          title="Kệ Tồn Kho"
-          value="10"
-          change="+2"
-          changePercent="+18%"
-          icon={Server}
-          color="bg-pink-100 text-pink-900"
-        />
-
-        <StatCardWithButton
-          title="Hàng Tồn kho"
-          value="150"
-          change="+20"
-          changePercent="+18%"
-          icon={Box}
-          color="bg-blue-100 text-blue-900"
-          action={() =>
-            router.push(`/admin/warehouse/${warehouseId}/inventory`)
-          }
-        />
-        <StatCardWithButton
-          title="Nhân viên giao hàng"
-          value="15"
-          change="+0"
-          changePercent="+18%"
-          icon={User}
-          color="bg-yellow-100 text-yellow-900"
-        />
+        <WarehouseStatCard warehouseId={warehouseId} />
       </div>
 
       {/*Content */}

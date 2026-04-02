@@ -114,7 +114,7 @@ export default function HomePage() {
           {/* Stats Preview */}
           <div className="space-y-4">
             {[
-              { icon: "💰", label: "Doanh thu", val: "$250,520" },
+              { icon: "💰", label: "Doanh thu", val: "250,520 VND" },
               { icon: "📦", label: "Đơn hàng", val: "15,640" },
               { icon: "🤝", label: "Đối tác", val: "153" },
             ].map((item, i) => (

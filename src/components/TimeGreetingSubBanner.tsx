@@ -3,7 +3,7 @@
 import { CalendarDays, Moon, Sun } from "lucide-react";
 import { memo, useEffect, useState } from "react";
 
-function TimeGreetingSubBanner() {
+function TimeGreetingSubBanner({ heigh }: { heigh?: string }) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -18,7 +18,9 @@ function TimeGreetingSubBanner() {
     return "Chào buổi tối!";
   };
   return (
-    <div className="bg-linear-to-br from-white to-blue-50/50 dark:from-zinc-900 dark:to-zinc-800 shadow-sm rounded-xl col-span-1 h-[30vh] w-full flex flex-col p-5 border border-zinc-100 dark:border-zinc-800 relative overflow-hidden">
+    <div
+      className={`bg-linear-to-br from-white to-blue-50/50 dark:from-zinc-900 dark:to-zinc-800 shadow-sm rounded-xl col-span-1 ${heigh ? heigh : "h-[30vh]"} w-full flex flex-col p-5 border border-zinc-100 dark:border-zinc-800 relative overflow-hidden`}
+    >
       {/* Decor background: Hình tròn mờ tạo chiều sâu */}
       <div className="absolute -top-6 -right-6 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl"></div>
 

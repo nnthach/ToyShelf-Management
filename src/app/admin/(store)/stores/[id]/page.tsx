@@ -14,6 +14,7 @@ import StoreBannerInfo from "./components/StoreBannerInfo";
 import TotalRevenueChart from "./components/charts/TotalRevenueChart";
 import TotalOrderChart from "./components/charts/TotalOrderChart";
 import TopThreeProduct from "./components/charts/TopThreeProduct";
+import StoreStatCard from "./components/StoreStatCard";
 
 export default function PartnerStoreDetailPage() {
   const params = useParams();
@@ -56,50 +57,9 @@ export default function PartnerStoreDetailPage() {
 
       {/*Statistic card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCardWithButton
-          title="Doanh thu cửa hàng"
-          value="$250,520"
-          change="+$30,215"
-          changePercent="+12%"
-          icon={Box}
-          color="bg-green-100 text-green-900"
-        />
-
-        <StatCardWithButton
-          title="Đơn hàng"
-          value="15"
-          change="+1,647"
-          changePercent="+15%"
-          icon={Store}
-          color="bg-yellow-100 text-yellow-900"
-          action={() => router.push(`/admin/orders?storeId=${id}&from=store`)}
-        />
-
-        <StatCardWithButton
-          title="Tồn kho"
-          value="15"
-          change="+2,815"
-          changePercent="+18%"
-          icon={Box}
-          color="bg-blue-100 text-blue-900"
-          action={() =>
-            router.push(
-              `/admin/all-inventory?locationId=${storeDetail.inventoryLocationId}`,
-            )
-          }
-        />
-        <StatCardWithButton
-          title="Kệ"
-          value="15"
-          change="+2,815"
-          changePercent="+18%"
-          icon={Box}
-          color="bg-pink-100 text-pink-900"
-          action={() =>
-            router.push(
-              `/admin/stores/${id}/inventory?inventoryLocationId=${storeDetail.inventoryLocationId}`,
-            )
-          }
+        <StoreStatCard
+          storeId={id}
+          inventoryLocationId={storeDetail?.inventoryLocationId}
         />
       </div>
 
