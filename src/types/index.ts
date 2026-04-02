@@ -309,12 +309,46 @@ export interface RefillRequest {
   rejectedByUserId: string;
   storeName: string;
   requestName: string;
+  approveName: string;
+  rejectName: string;
   storeAddress: string;
   status: string;
+  adminNote: string;
   createdAt: string;
   approvedAt: string;
   rejectedAt: string;
   items: RefillRequestProductColor[];
+}
+
+export interface RefillShelfRequestItem {
+  shelfTypeId?: string;
+  shelfTypeName?: string;
+  imageUrl?: string;
+  quantity: number;
+  fulfilledQuantity?: number;
+  expectedQuantity?: number;
+  receivedQuantity?: number;
+  displayExpected?: number;
+  displayReceived?: number;
+  availableQuantity?: number;
+}
+
+export interface RefillShelfRequest {
+  id: string;
+  code: string;
+  storeLocationId: string;
+  requestedByUserId: string;
+  approvedByUserId: string;
+  rejectedByUserId: string;
+  storeName: string;
+  requestName: string;
+  storeAddress: string;
+  status: string;
+  createdAt: string;
+  adminNote: string;
+  approvedAt: string;
+  rejectedAt: string;
+  items: RefillShelfRequestItem[];
 }
 
 export interface Payment {

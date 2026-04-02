@@ -12,6 +12,7 @@ import { getStoreRefillShelfRequestColumns } from "./columns";
 import { useState } from "react";
 import { getAllRefillAPI } from "@/src/services/refill.service";
 import UpdateRefillShelfRequestModal from "./components/UpdateRefillRequestModal";
+import { getAllRefillShelfAPI } from "@/src/services/refill-shelf.service";
 
 export default function AdminRefillShelfRequestManage() {
   const queryClient = useQueryClient();
@@ -30,7 +31,7 @@ export default function AdminRefillShelfRequestManage() {
     refetch,
   } = useQuery({
     queryKey: ["refillShelfRequests", query],
-    queryFn: () => getAllRefillAPI(query),
+    queryFn: () => getAllRefillShelfAPI(query),
     select: (res) => res.data as RefillRequest[],
   });
 
@@ -43,7 +44,7 @@ export default function AdminRefillShelfRequestManage() {
   return (
     <>
       {/*Header */}
-      <div className="flex justify-between items-center">
+      <div className="">
         <h1 className="text-2xl font-bold dark:text-foreground">
           Quản lý đặt kệ từ cửa hàng
         </h1>

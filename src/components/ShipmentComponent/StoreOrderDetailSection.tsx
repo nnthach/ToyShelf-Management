@@ -1,5 +1,5 @@
 import { RefillRequest } from "@/src/types";
-import { MapPin, Store, User } from "lucide-react";
+import { MapPin, Notebook, Store, User } from "lucide-react";
 import ShipInfoItem from "./ShipInfoItem";
 import { memo } from "react";
 import { cn } from "@/src/styles/lib/utils";
@@ -34,6 +34,26 @@ function StoreOrderDetailSection({
             icon={<MapPin className="h-3 w-3" />}
           />
         </div>
+        {storeOrderDetail?.status === "Rejected" ? (
+          <>
+            <ShipInfoItem
+              label="Quản trị viên từ chối"
+              value={storeOrderDetail?.rejectName}
+              icon={<User className="h-3 w-3" />}
+            />
+            <ShipInfoItem
+              label="Ghi chú"
+              value={storeOrderDetail?.adminNote}
+              icon={<Notebook className="h-3 w-3" />}
+            />
+          </>
+        ) : (
+          <ShipInfoItem
+            label="Quản trị viên chấp nhận"
+            value={storeOrderDetail?.approveName}
+            icon={<User className="h-3 w-3" />}
+          />
+        )}
       </div>
     </section>
   );

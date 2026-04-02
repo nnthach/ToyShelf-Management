@@ -10,14 +10,7 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import {
-  AlertCircle,
-  Send,
-  Warehouse,
-  XCircle,
-  Box,
-  Package,
-} from "lucide-react";
+import { Send, Warehouse, Box, Package } from "lucide-react";
 import { memo, useState, useMemo } from "react";
 import { createShipmentAssignWarehouseAPI } from "@/src/services/shipment-assignment.service";
 import { getStoreOrderAvailableWarehouseAPI } from "@/src/services/refill.service";
@@ -52,14 +45,16 @@ function AssignWarehouseModal({
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: availableWarehouseList } = useQuery({
+  const {
+    data: availableWarehouseList,
+    isLoading: isLoadingAvailableWarehouse,
+  } = useQuery({
     queryKey: ["availableWarehouses", requestId],
     queryFn: () => getStoreOrderAvailableWarehouseAPI(requestId),
     select: (res) => res.data,
     enabled: isOpen,
   });
 
-  // Tìm warehouse đang được chọn để hiển thị items bên dưới
   const selectedWarehouse = useMemo(() => {
     return availableWarehouseList?.find(
       (w: WarehouseInventory) => w.warehouseLocationId === selectedWarehouseId,

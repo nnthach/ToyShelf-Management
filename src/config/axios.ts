@@ -30,7 +30,9 @@ api.interceptors.response.use(
   (error) => {
     // Xử lý lỗi chung (401, 403, 500...)
     if (error.response?.status === 401) {
-      // Có thể redirect về /login hoặc refresh token
+      localStorage.removeItem("token");
+      localStorage.removeItem("roles");
+      window.location.href = "/";
     }
 
     return Promise.reject(error);

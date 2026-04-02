@@ -4,6 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import ViewDetailSheet from "./components/ViewDetailSheet";
 import { Order } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
+import {
+  formatOrderStatusColor,
+  formatOrderStatusText,
+} from "@/src/utils/formatStatus";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -29,6 +33,11 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "totalAmount",
     header: "Tổng tiền",
+    cell: ({ row }) => {
+      const totalAmount = row.getValue("totalAmount") as string;
+
+      return <span>{totalAmount.toLocaleString()}đ</span>;
+    },
   },
   {
     accessorKey: "paymentMethod",
@@ -37,6 +46,15 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "status",
     header: "Trạng thái",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+
+      return (
+        <span className={`${formatOrderStatusColor(status)}`}>
+          {formatOrderStatusText(status)}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "createdAt",

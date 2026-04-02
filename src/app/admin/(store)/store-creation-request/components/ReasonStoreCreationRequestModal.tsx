@@ -117,7 +117,7 @@ function ReasonStoreCreateRequestModal({
         <DialogFooter className="flex sm:justify-between gap-3 border-t pt-4">
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             onClick={onClose}
             className="flex-1 gap-2"
           >

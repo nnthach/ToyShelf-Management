@@ -72,7 +72,8 @@ function ShelfCardOrder({
       <div className="mt-2">
         {!cartItem ? (
           <Button
-            onClick={() =>
+            onClick={(e) => {
+              e.stopPropagation();
               handleAddToCart({
                 shelfTypeId: shelf.id,
                 quantity: 1,
@@ -83,8 +84,8 @@ function ShelfCardOrder({
                 width: shelf.width,
                 depth: shelf.depth,
                 height: shelf.height,
-              })
-            }
+              });
+            }}
             className="w-full bg-gray-900 hover:bg-blue-600 text-white"
           >
             Thêm vào giỏ hàng
@@ -94,7 +95,10 @@ function ShelfCardOrder({
             <Button
               size="icon"
               variant="outline"
-              onClick={() => handleRemoveFromCart(shelf.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRemoveFromCart(shelf.id);
+              }}
             >
               -
             </Button>
@@ -104,7 +108,8 @@ function ShelfCardOrder({
             <Button
               size="icon"
               variant="outline"
-              onClick={() =>
+              onClick={(e) => {
+                e.stopPropagation();
                 handleAddToCart({
                   shelfTypeId: shelf.id,
                   quantity: 1,
@@ -115,8 +120,8 @@ function ShelfCardOrder({
                   width: shelf.width,
                   depth: shelf.depth,
                   height: shelf.height,
-                })
-              }
+                });
+              }}
             >
               +
             </Button>

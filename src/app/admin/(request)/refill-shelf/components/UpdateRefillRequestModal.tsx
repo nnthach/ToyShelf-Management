@@ -14,12 +14,7 @@ import {
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
-import { CheckCircle2, XCircle } from "lucide-react";
-import {
-  approveRefillRequestAPI,
-  getRefillDetailAPI,
-  rejectRefillRequestAPI,
-} from "@/src/services/refill.service";
+import { CheckCircle2, Package, XCircle } from "lucide-react";
 import { Shipment } from "@/src/types";
 import { useState } from "react";
 import AssignWarehouseModal from "./AssignWarehouseModal";
@@ -28,7 +23,13 @@ import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
 import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
 import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
 import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";
-import ShipmentProductListComponent from "@/src/components/ShipmentComponent/ShipmentProductListComponent";
+import {
+  approveRefillShelfRequestAPI,
+  getRefillShelfDetailAPI,
+  rejectRefillShelfRequestAPI,
+} from "@/src/services/refill-shelf.service";
+import ShipmentShelfListComponent from "@/src/components/ShipmentComponent/ShipmentShelfListComponent";
+import ReasonRejectRequestModal from "./ReasonRejectRequest";
 
 type UpdateRefillShelfRequestModalProps = {
   requestId: string;
@@ -46,9 +47,11 @@ function UpdateRefillShelfRequestModal({
   const [isOpenAssignWarehouseModal, setIsOpenAssignWarehouseModal] =
     useState(false);
 
+  const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
+
   const { data: requestDetail, isLoading } = useQuery({
     queryKey: ["requestDetail", requestId],
-    queryFn: () => getRefillDetailAPI(requestId!),
+    queryFn: () => getRefillShelfDetailAPI(requestId!),
     select: (res) => res.data,
     enabled: !!requestId,
   });
@@ -69,25 +72,9 @@ function UpdateRefillShelfRequestModal({
     enabled: !!shipmentId,
   });
 
-  async function handleReject() {
-    try {
-      await rejectRefillRequestAPI(requestId);
-
-      queryClient.invalidateQueries({
-        queryKey: ["refillShelfRequests"],
-      });
-
-      toast.success("Từ chối yêu cầu thành công");
-
-      onClose();
-    } catch {
-      toast.error("Từ chối yêu cầu thất bại");
-    }
-  }
-
   async function handleApprove() {
     try {
-      await approveRefillRequestAPI(requestId);
+      await approveRefillShelfRequestAPI(requestId);
 
       queryClient.invalidateQueries({
         queryKey: ["refillShelfRequests"],
@@ -142,27 +129,36 @@ function UpdateRefillShelfRequestModal({
           </div>
 
           <div className="flex-1 overflow-hidden">
-            <div className="grid grid-cols-12 h-full">
-              {/* CỘT TRÁI: THÔNG TIN LUỒNG XỬ LÝ (7 columns) */}
-              <div className="col-span-6 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
-                {/* Section 1: Thông tin yêu cầu gốc */}
-                <StoreOrderDetailSection storeOrderDetail={requestDetail} />
-                {/* Section 2: Thông tin điều phối (Assignment) */}
-                <ShipmentAssignDetailSection
-                  shipmentAssignDetail={shipmentAssignDetail}
-                />
-                {/* Section 3: Thông tin vận chuyển (Shipment) */}
-                <ShipmentDetailSection shipmentDetail={shipmentDetail} />
+            {isLoading ? (
+              <div className="h-full flex items-center justify-center">
+                <div className="flex flex-col items-center gap-3 text-slate-400">
+                  <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-500 rounded-full animate-spin" />
+                  <p className="text-sm">Đang tải dữ liệu...</p>
+                </div>
               </div>
+            ) : !requestDetail ? (
+              <div className="h-full flex flex-col items-center justify-center gap-2 text-slate-400">
+                <Package className="h-10 w-10 opacity-20" />
+                <p className="text-sm italic">Không có dữ liệu</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-12 h-full">
+                <div className="col-span-6 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
+                  <StoreOrderDetailSection storeOrderDetail={requestDetail} />
+                  <ShipmentAssignDetailSection
+                    shipmentAssignDetail={shipmentAssignDetail}
+                  />
+                  <ShipmentDetailSection shipmentDetail={shipmentDetail} />
+                </div>
 
-              {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
-              <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
-                <ShipmentProductListComponent
-                  shipmentDetail={shipmentDetail}
-                  storeOrderDetail={requestDetail}
-                />
+                <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
+                  <ShipmentShelfListComponent
+                    shipmentDetail={shipmentDetail}
+                    storeOrderDetail={requestDetail}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="p-4 border-t bg-white">
@@ -174,7 +170,7 @@ function UpdateRefillShelfRequestModal({
                 <>
                   <Button
                     variant="error"
-                    onClick={handleReject}
+                    onClick={() => setIsOpenRejectModal(true)}
                     className="px-8 border-2"
                   >
                     <XCircle className="h-4 w-4 mr-2" /> Từ chối
@@ -187,15 +183,6 @@ function UpdateRefillShelfRequestModal({
                     <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
                   </Button>
                 </>
-              )}
-              {isRejected && (
-                <Button
-                  variant="success"
-                  onClick={handleApprove}
-                  className="px-8 border-2"
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
-                </Button>
               )}
               {isApproved && !assignmentId && (
                 <Button
@@ -215,6 +202,14 @@ function UpdateRefillShelfRequestModal({
         requestId={requestId}
         isOpen={isOpenAssignWarehouseModal}
         onClose={() => setIsOpenAssignWarehouseModal(false)}
+        onSuccess={onClose}
+      />
+
+      {/* Reject reason modal */}
+      <ReasonRejectRequestModal
+        requestId={requestId}
+        isOpen={isOpenRejectModal}
+        onClose={() => setIsOpenRejectModal(false)}
         onSuccess={onClose}
       />
     </>

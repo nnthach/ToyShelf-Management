@@ -140,13 +140,13 @@ export const AdminSidebarNested = [
         icon: Wallet,
       },
       {
-        title: "Bổ sung hàng hóa",
+        title: "Đặt hàng",
         url: "/admin/refill-stock",
         icon: PackagePlus,
       },
 
       {
-        title: "Bổ sung kệ",
+        title: "Đặt kệ",
         url: "/admin/refill-shelf",
         icon: LayoutGrid,
       },
@@ -235,7 +235,12 @@ export const PartnerAdminSidebarNested = [
     label: "Quản lý yêu cầu",
     sub: [
       {
-        title: "Bổ sung kệ",
+        title: "Đặt hàng",
+        url: "/partner/refill-stock",
+        icon: Store,
+      },
+      {
+        title: "Đặt kệ",
         url: "/partner/refill-shelf",
         icon: Store,
       },
@@ -283,13 +288,13 @@ export const WarehouseManagerSidebarGroups = [
     label: "Yêu cầu",
     items: [
       {
-        title: "Bổ sung hàng hóa",
+        title: "Đặt hàng",
         url: "/warehouse/refill-stock",
         icon: PackagePlus,
       },
 
       {
-        title: "Bổ sung kệ",
+        title: "Đặt kệ",
         url: "/warehouse/refill-shelf",
         icon: LayoutGrid,
       },
@@ -364,13 +369,13 @@ export const StoreManagerSidebarGroups = [
     label: "Yêu cầu",
     items: [
       {
-        title: "Bổ sung hàng hóa",
+        title: "Đặt hàng",
         url: "/manager/refill-stock",
         icon: PackagePlus,
       },
 
       {
-        title: "Bổ sung kệ",
+        title: "Đặt kệ",
         url: "/manager/refill-shelf",
         icon: LayoutGrid,
       },

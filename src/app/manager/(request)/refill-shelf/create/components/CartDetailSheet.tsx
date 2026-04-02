@@ -11,14 +11,14 @@ import { Box, ShoppingCart, Plus, Minus, Edit } from "lucide-react";
 import { Button } from "@/src/styles/components/ui/button";
 import Image from "next/image";
 import { CartItem } from "../page";
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { Badge } from "@/src/styles/components/ui/badge";
 
 type CartDetailSheetProps = {
   cart: CartItem[];
   onAdd: (item: CartItem) => void;
   onRemove: (productColorId: string) => void;
-  onSubmit: () => void;
+  onSubmit: (note: string) => void;
 };
 
 function CartDetailSheet({
@@ -27,6 +27,8 @@ function CartDetailSheet({
   onRemove,
   onSubmit,
 }: CartDetailSheetProps) {
+  const [note, setNote] = useState("");
+
   const totalQuantity = React.useMemo(() => {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   }, [cart]);
@@ -124,9 +126,21 @@ function CartDetailSheet({
           )}
         </div>
 
-        <div className="p-6 border-t bg-gray-50/50">
+        <div className="p-4 pt-2 border-t ">
+          {/* Note input */}
+          <div className=" mb-2">
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              Ghi chú
+            </label>
+            <input
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Nhập ghi chú cho đơn hàng..."
+              className="w-full text-sm px-3 py-2 mt-1 rounded-xl border border-gray-400 bg-white resize-none outline-none focus:ring-2 focus:ring-black/10 focus:border-gray-400 transition-all placeholder:text-gray-300"
+            />
+          </div>
           <button
-            onClick={onSubmit}
+            onClick={() => onSubmit(note)}
             disabled={cart.length === 0}
             className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-black text-white font-bold hover:bg-zinc-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >

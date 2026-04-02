@@ -16,6 +16,7 @@ import { createRefillAPI } from "@/src/services/refill.service";
 import { toast } from "react-toastify";
 import { getAllShelfTypeAPI } from "@/src/services/shelf.service";
 import ShelfCardOrder from "./components/ShelfCardOrder";
+import { createRefillShelfAPI } from "@/src/services/refill-shelf.service";
 
 export interface CartItem {
   shelfTypeId: string;
@@ -88,8 +89,9 @@ export default function CreateStoreOrderRefillShelf() {
     });
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (note: string) => {
     const payload = {
+      note,
       items: cart.map((item) => ({
         shelfTypeId: item.shelfTypeId,
         quantity: item.quantity,
@@ -97,10 +99,10 @@ export default function CreateStoreOrderRefillShelf() {
     };
 
     try {
-      await createRefillAPI(payload);
+      await createRefillShelfAPI(payload);
 
       queryClient.invalidateQueries({
-        queryKey: ["refillRequests"],
+        queryKey: ["refillShelfRequests"],
       });
 
       toast.success("Tạo đơn thành công");

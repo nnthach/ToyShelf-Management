@@ -15,7 +15,7 @@ import {
   formatShipmentAssignStatusText,
 } from "@/src/utils/formatStatus";
 import { memo, useState } from "react";
-import { CheckCircle2, XCircle, Truck, Info } from "lucide-react";
+import { CheckCircle2, XCircle, Truck, Info, Package } from "lucide-react";
 import {
   getShipmentAssignDetailByIdAPI,
   rejectShipmentAssignAPI,
@@ -114,28 +114,42 @@ function UpdateShipmentAssignRefillRequestModal({
 
           {/*Main content */}
           <div className="flex-1 overflow-hidden bg-white">
-            <div className="grid grid-cols-12 h-full">
-              {/* CỘT TRÁI: THÔNG TIN CHI TIẾT (7 columns) */}
-              <div className="col-span-6 p-6 space-y-8 border-r overflow-y-auto custom-scrollbar">
-                {/* Section 1: Thông tin Điều phối (Shipment Assign) */}
-                <WarehouseShipmentStoreInfo
-                  shipmentAssignDetail={shipmentAssignDetail}
-                />
-
-                {/* Section 2: Thông tin Vận chuyển (Shipment Detail) */}
-                <WarehouseShipmentDetailSection
-                  shipmentDetail={shipmentDetail}
-                />
+            {isLoading ? (
+              <div className="h-full flex items-center justify-center">
+                <div className="flex flex-col items-center gap-3 text-slate-400">
+                  <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-500 rounded-full animate-spin" />
+                  <p className="text-sm">Đang tải dữ liệu...</p>
+                </div>
               </div>
-
-              {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
-              <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
-                <WarehouseShipmentProductList
-                  shipmentAssignDetail={shipmentAssignDetail}
-                  shipmentDetail={shipmentDetail}
-                />
+            ) : !shipmentAssignDetail ? (
+              <div className="h-full flex flex-col items-center justify-center gap-2 text-slate-400">
+                <Package className="h-10 w-10 opacity-20" />
+                <p className="text-sm italic">Không có dữ liệu</p>
               </div>
-            </div>
+            ) : (
+              <div className="grid grid-cols-12 h-full">
+                {/* CỘT TRÁI: THÔNG TIN CHI TIẾT (7 columns) */}
+                <div className="col-span-6 p-6 space-y-8 border-r overflow-y-auto custom-scrollbar">
+                  {/* Section 1: Thông tin Điều phối (Shipment Assign) */}
+                  <WarehouseShipmentStoreInfo
+                    shipmentAssignDetail={shipmentAssignDetail}
+                  />
+
+                  {/* Section 2: Thông tin Vận chuyển (Shipment Detail) */}
+                  <WarehouseShipmentDetailSection
+                    shipmentDetail={shipmentDetail}
+                  />
+                </div>
+
+                {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
+                <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
+                  <WarehouseShipmentProductList
+                    shipmentAssignDetail={shipmentAssignDetail}
+                    shipmentDetail={shipmentDetail}
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* FOOTER ACTIONS */}
@@ -170,6 +184,7 @@ function UpdateShipmentAssignRefillRequestModal({
                   <>
                     <Button
                       variant="error"
+                      disabled={isLoading}
                       onClick={handleReject}
                       className="px-6 h-11 rounded-xl font-bold shadow-sm"
                     >
@@ -177,6 +192,7 @@ function UpdateShipmentAssignRefillRequestModal({
                     </Button>
                     <Button
                       variant="success"
+                      disabled={isLoading}
                       onClick={() => setIsOpenAssignShipperModal(true)}
                       className="px-6 h-11 rounded-xl font-bold shadow-lg shadow-green-100 transition-all hover:scale-[1.02]"
                     >
@@ -190,6 +206,7 @@ function UpdateShipmentAssignRefillRequestModal({
                   <>
                     <Button
                       variant="outline"
+                      disabled={isLoading}
                       onClick={onClose}
                       className="px-6 h-11 rounded-xl border-slate-200 font-bold text-slate-600 hover:bg-white"
                     >
@@ -198,6 +215,7 @@ function UpdateShipmentAssignRefillRequestModal({
                     {!shipmentDetail && (
                       <Button
                         variant="success"
+                        disabled={isLoading}
                         onClick={() => setIsOpenCreateShipmentModal(true)}
                         className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02] active:scale-[0.98]"
                       >

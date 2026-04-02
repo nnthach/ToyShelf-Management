@@ -14,7 +14,7 @@ import {
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
-import { CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, Package, XCircle } from "lucide-react";
 import {
   approveRefillRequestAPI,
   getRefillDetailAPI,
@@ -142,27 +142,37 @@ function UpdateRefillRequestModal({
           </div>
 
           <div className="flex-1 overflow-hidden">
-            <div className="grid grid-cols-12 h-full">
-              {/* CỘT TRÁI: THÔNG TIN LUỒNG XỬ LÝ (7 columns) */}
-              <div className="col-span-6 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
-                {/* Section 1: Thông tin yêu cầu gốc */}
-                <StoreOrderDetailSection storeOrderDetail={requestDetail} />
-                {/* Section 2: Thông tin điều phối (Assignment) */}
-                <ShipmentAssignDetailSection
-                  shipmentAssignDetail={shipmentAssignDetail}
-                />
-                {/* Section 3: Thông tin vận chuyển (Shipment) */}
-                <ShipmentDetailSection shipmentDetail={shipmentDetail} />
+            {isLoading ? (
+              <div className="h-full flex items-center justify-center">
+                <div className="flex flex-col items-center gap-3 text-slate-400">
+                  <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-500 rounded-full animate-spin" />
+                  <p className="text-sm">Đang tải dữ liệu...</p>
+                </div>
               </div>
+            ) : !requestDetail ? (
+              <div className="h-full flex flex-col items-center justify-center gap-2 text-slate-400">
+                <Package className="h-10 w-10 opacity-20" />
+                <p className="text-sm italic">Không có dữ liệu</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-12 h-full">
+                <div className="col-span-6 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
+                  <StoreOrderDetailSection storeOrderDetail={requestDetail} />
+                  <ShipmentAssignDetailSection
+                    shipmentAssignDetail={shipmentAssignDetail}
+                  />
+                  <ShipmentDetailSection shipmentDetail={shipmentDetail} />
+                </div>
 
-              {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
-              <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
-                <ShipmentProductListComponent
-                  shipmentDetail={shipmentDetail}
-                  storeOrderDetail={requestDetail}
-                />
+                {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
+                <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
+                  <ShipmentProductListComponent
+                    shipmentDetail={shipmentDetail}
+                    storeOrderDetail={requestDetail}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="p-4 border-t bg-white">

@@ -37,7 +37,7 @@ export const getProductColumns = (
     accessorKey: "basePrice",
     header: "Gía tiền",
     cell: ({ row }) => {
-      const basePrice = row.getValue("basePrice") as boolean;
+      const basePrice = row.getValue("basePrice") as string;
 
       return <span>{basePrice.toLocaleString()}đ</span>;
     },

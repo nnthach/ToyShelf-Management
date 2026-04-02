@@ -13,6 +13,7 @@ import { useState } from "react";
 import { getAllRefillAPI } from "@/src/services/refill.service";
 import ViewRefillRequestModalDetail from "./components/ViewRefillShelfRequestDetailModal";
 import { useRouter } from "next/navigation";
+import { getAllRefillShelfAPI } from "@/src/services/refill-shelf.service";
 
 export default function ManagerRefillShelfRequestManage() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function ManagerRefillShelfRequestManage() {
     isActive: undefined,
     order: "",
     search: "",
+    status: "",
   });
 
   const {
@@ -31,7 +33,7 @@ export default function ManagerRefillShelfRequestManage() {
     refetch,
   } = useQuery({
     queryKey: ["refillShelfRequests", query],
-    queryFn: () => getAllRefillAPI(query),
+    queryFn: () => getAllRefillShelfAPI(query),
     select: (res) => res.data as RefillRequest[],
   });
 
@@ -83,15 +85,6 @@ export default function ManagerRefillShelfRequestManage() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập khẩu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất khẩu
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>
