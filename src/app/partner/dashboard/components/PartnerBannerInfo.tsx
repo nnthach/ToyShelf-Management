@@ -85,7 +85,9 @@ function PartnerBannerInfo({
                     Từ:{" "}
                     {new Date(
                       partnerDetail.currentCommission.startDate,
-                    ).toLocaleDateString("vi-VN")}
+                    ).toLocaleDateString("vi-VN", {
+                      timeZone: "Asia/Ho_Chi_Minh",
+                    })}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-[11px] text-white/80">
@@ -94,7 +96,9 @@ function PartnerBannerInfo({
                     Đến:{" "}
                     {new Date(
                       partnerDetail.currentCommission.endDate,
-                    ).toLocaleDateString("vi-VN")}
+                    ).toLocaleDateString("vi-VN", {
+                      timeZone: "Asia/Ho_Chi_Minh",
+                    })}
                   </span>
                 </div>
               </div>

@@ -9,6 +9,7 @@ import {
   formatUserStatusColor,
   formatUserStatusText,
 } from "@/src/utils/formatStatus";
+import { Eye } from "lucide-react";
 
 export const getShipperColumns = (): ColumnDef<WarehouseStaff>[] => [
   {
@@ -66,7 +67,12 @@ export const getShipperColumns = (): ColumnDef<WarehouseStaff>[] => [
     header: "Hành động",
     cell: ({ row }) => {
       const user = row.original;
-      return <ViewDetailSheet user={user} />;
+      // return <ViewDetailSheet user={user} />;
+      return (
+        <span title="Detail" className="cursor-pointer text-blue-400">
+          <Eye />
+        </span>
+      );
     },
   },
 ];

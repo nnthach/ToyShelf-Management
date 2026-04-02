@@ -41,7 +41,7 @@ export default function WarehouseRefillRequestManage() {
   return (
     <>
       {/*Header */}
-      <div className="flex justify-between items-center">
+      <div>
         <h1 className="text-2xl font-bold dark:text-foreground">
           Quản lý đơn đặt hàng từ cửa hàng
         </h1>

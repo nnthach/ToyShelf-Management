@@ -40,7 +40,7 @@ export default function WarehouseShipperManage() {
   return (
     <div>
       {/*Header */}
-      <div className="flex justify-between items-center">
+      <div>
         <h1 className="text-2xl font-bold dark:text-foreground">
           Quản lý nhân viên giao hàng
         </h1>

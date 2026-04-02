@@ -31,7 +31,7 @@ function BannerInfo() {
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-blue-900/80 to-transparent"></div>
 
         {/* Content */}
-        <div className="relative z-10 px-8 py-6 text-white w-full flex justify-between items-center">
+        <div className="relative px-8 py-6 text-white w-full flex justify-between items-center">
           <div className="space-y-3">
             {/* Lời chào & Tên Manager */}
             <h2 className="text-2xl font-bold tracking-wide">

@@ -35,14 +35,14 @@ function StoreBannerInfo({ storeDetail }: StoreBannerInfoProps) {
           <div className="absolute inset-0 opacity-[0.03] bg-[url('/bg-patterns/abstract-01.png')] bg-cover" />
           <Sparkles className="absolute -top-4 -right-4 h-24 w-24 text-blue-400 opacity-10 rotate-12" />
 
-          <div className="flex justify-between items-center mb-2 relative z-10">
+          <div className="flex justify-between items-center mb-2 relative">
             <h2 className="text-sm font-bold flex items-center gap-2 uppercase tracking-widest text-blue-200/80">
               <Building size={16} /> Chi tiết cửa hàng
             </h2>
             <EditStoreModal storeId={storeDetail?.id} />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 relative z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 relative">
             <InfoItem
               icon={Building}
               label="Đối tác"
