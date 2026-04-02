@@ -1,15 +1,11 @@
 "use client";
 
 import { Button } from "@/src/styles/components/ui/button";
-import { ArrowLeft, ArrowRight, Box, Store } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import BarChartExample from "../components/charts/BarChart";
-import AreaChartExample from "../components/charts/AreaChart";
-import { TargetRevenueChart } from "../components/charts/TargetRevenueChart";
 import { useQuery } from "@tanstack/react-query";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import { getStoreDetailAPI } from "@/src/services/store.service";
-import StatCardWithButton from "@/src/components/StatCardWithButton";
 import StoreBannerInfo from "./components/StoreBannerInfo";
 import TotalRevenueChart from "./components/charts/TotalRevenueChart";
 import TotalOrderChart from "./components/charts/TotalOrderChart";
@@ -36,7 +32,7 @@ export default function PartnerStoreDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 mb-4">
       {/*Header */}
       <div className="flex items-center gap-3">
         <Button
@@ -64,7 +60,7 @@ export default function PartnerStoreDetailPage() {
       </div>
 
       {/*Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 ">
         <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">
           <TotalRevenueChart />
         </div>

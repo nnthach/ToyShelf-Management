@@ -32,7 +32,7 @@ export default function WarehouseDashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-4">
       <WarehouseBannerInfo warehouseDetail={warehouseDetail} />
 
       {/*Statistic card */}
@@ -40,7 +40,7 @@ export default function WarehouseDashboard() {
         <WarehouseStatCard />
       </div>
 
-      <div className="grid grid-cols-1 mb-4">
+      <div className="grid grid-cols-1">
         <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">
           <TotalShipOrderAreaChart />
         </div>

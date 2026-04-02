@@ -18,7 +18,7 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
   return (
     <>
       {/* BANNER TRÁI: THÔNG TIN CHÍNH & CHIẾT KHẤU HIỆN TẠI (Col-span 3) */}
-      <div className="relative rounded-2xl overflow-hidden shadow-lg col-span-3 h-[300px] flex">
+      <div className="relative rounded-2xl overflow-hidden shadow-lg sm:col-span-3 lg:col-span-3 h-[300px] flex">
         {/* Background image */}
         <Image
           src="/images/banner_admin_hello.jpg"
@@ -132,7 +132,7 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
       </div>
 
       {/* CỘT PHẢI: LỊCH SỬ CHIẾT KHẤU / TÀI KHOẢN (Col-span 1) */}
-      <div className="bg-white max-h-[300px] dark:bg-zinc-950 shadow-sm rounded-2xl col-span-1 border border-zinc-200 dark:border-zinc-800 flex flex-col h-full overflow-hidden">
+      <div className="bg-white max-h-[300px] dark:bg-zinc-950 shadow-sm rounded-2xl sm:col-span-3 lg:col-span-1 border border-zinc-200 dark:border-zinc-800 flex flex-col h-full overflow-hidden">
         {/* Header của cột phải */}
         <div className="px-5 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50/50">
           <h3 className="text-[11px] font-black text-zinc-600 dark:text-zinc-400 uppercase tracking-[0.15em] flex items-center gap-2">

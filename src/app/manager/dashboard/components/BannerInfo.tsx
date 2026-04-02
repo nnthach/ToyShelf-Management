@@ -18,7 +18,7 @@ function BannerInfo() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
-      <div className="relative rounded-xl overflow-hidden shadow-lg col-span-8 min-h-[180px] flex items-center">
+      <div className="relative rounded-xl overflow-hidden shadow-lg col-span-1 lg:col-span-8 min-h-[180px] flex items-center">
         {/* Background image với overlay chuyên nghiệp hơn */}
         <Image
           src="/images/banner_admin_hello.jpg"
@@ -59,7 +59,7 @@ function BannerInfo() {
       </div>
 
       {/*Trang trí */}
-      <div className="col-span-4">
+      <div className="col-span-1 lg:col-span-4">
         <div className="bg-white dark:bg-slate-900 rounded-xl shadow-md p-3 h-full flex flex-col gap-3 border border-slate-100 dark:border-slate-800">
           <h2 className="text-sm font-bold flex items-center gap-2 border-b border-slate-50 dark:border-slate-800 pb-3 mb-1 text-slate-500 uppercase tracking-tighter">
             <Target size={14} className="text-amber-500" /> Nhân viên (

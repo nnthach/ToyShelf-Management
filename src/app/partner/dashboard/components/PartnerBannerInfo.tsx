@@ -14,7 +14,7 @@ function PartnerBannerInfo({
   return (
     <>
       {/* BANNER TRÁI: THÔNG TIN CHÍNH & CHIẾT KHẤU HIỆN TẠI (Col-span 3) */}
-      <div className="relative rounded-2xl overflow-hidden shadow-lg col-span-3 h-[250px] flex">
+      <div className="relative rounded-2xl overflow-hidden shadow-lg col-span-1 lg:col-span-3 h-[250px] flex">
         {/* Background image */}
         <Image
           src="/images/banner_admin_hello.jpg"
