@@ -21,6 +21,10 @@ export const metadata: Metadata = {
   title: "ToyShelf Management System",
   description:
     "An automated vending shelf management system that provides monitoring, control, analytics, and efficient operation of the entire ToyShelf network.",
+  icons: {
+    icon: "/finallogo.png",
+    shortcut: "/finallogo.png",
+  },
 };
 
 export default async function RootLayout({

@@ -288,6 +288,7 @@ export interface Shelf {
   totalLevels: number;
   suitableProductCategoryTypes: string[];
   displayGuideline: string;
+  isActive: boolean;
   levels: ShelfLevelItem[];
 }
 

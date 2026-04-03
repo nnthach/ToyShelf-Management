@@ -8,29 +8,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Edit,
-  Hash,
-  Palette,
-  Pipette,
-  Plus,
-  Send,
-  Sparkles,
-} from "lucide-react";
+import { Edit, Hash, Palette, Pipette, Sparkles } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { SketchPicker } from "react-color";
 import namer from "color-namer";
 import {
-  createProductColorAPI,
   getProductColorDetailAPI,
   updateProductColorAPI,
 } from "@/src/services/product-color.service";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 

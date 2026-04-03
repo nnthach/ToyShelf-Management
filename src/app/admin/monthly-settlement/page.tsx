@@ -3,7 +3,7 @@
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getMonthlySettlementColumns } from "./columns";
 import { Button } from "@/src/styles/components/ui/button";
-import { Download, Upload } from "lucide-react";
+import {  Upload } from "lucide-react";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import useQueryParams from "@/src/hooks/useQueryParams";

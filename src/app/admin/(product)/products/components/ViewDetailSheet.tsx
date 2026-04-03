@@ -24,7 +24,6 @@ import {
   Shapes,
   Baby,
   Info,
-  Power,
   Edit,
   Lock,
   Trash2,

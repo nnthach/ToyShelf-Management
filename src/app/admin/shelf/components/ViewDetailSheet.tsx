@@ -6,12 +6,30 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/src/styles/components/ui/sheet";
-import { useQuery } from "@tanstack/react-query";
-import { getShelfTypeDetailAPI } from "@/src/services/shelf.service";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  deleteShelfTypeAPI,
+  disableShelfTypeAPI,
+  getShelfTypeDetailAPI,
+  restoreShelfTypeAPI,
+} from "@/src/services/shelf.service";
 import Image from "next/image";
-import { Box, Layers, Maximize2, Package2, Tag } from "lucide-react";
+import {
+  Box,
+  Edit,
+  Layers,
+  Loader2,
+  Lock,
+  Maximize2,
+  Package2,
+  RotateCcw,
+  Tag,
+  Trash2,
+} from "lucide-react";
 import { Shelf, ShelfLevelItem } from "@/src/types";
 import { Badge } from "@/src/styles/components/ui/badge";
+import { toast } from "react-toastify";
+import UpdateShelfTypeModal from "./UpdateShelfTypeModal";
 
 type ViewDetailSheetProps = {
   shelfTypeId: string | null;
@@ -24,12 +42,65 @@ function ViewDetailSheet({
   isOpen,
   onClose,
 }: ViewDetailSheetProps) {
+  const queryClient = useQueryClient();
+
   const { data: shelf, isLoading } = useQuery({
     queryKey: ["shelfType", shelfTypeId],
     queryFn: () => getShelfTypeDetailAPI(shelfTypeId!),
     select: (res) => res.data as Shelf,
     enabled: !!shelfTypeId,
   });
+
+  async function handleDisable() {
+    try {
+      await disableShelfTypeAPI(shelfTypeId!);
+
+      queryClient.invalidateQueries({
+        queryKey: ["shelfs"],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["shelfType", shelfTypeId],
+      });
+
+      toast.success("Vô hiệu hóa sản phẩm thành công");
+    } catch (error) {
+      toast.error("Vô hiệu hóa sản phẩm thất bại");
+    }
+  }
+
+  async function handleRestore() {
+    try {
+      await restoreShelfTypeAPI(shelfTypeId!);
+
+      queryClient.invalidateQueries({
+        queryKey: ["shelfs"],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["shelfType", shelfTypeId],
+      });
+
+      toast.success("Khôi phục sản phẩm thành công");
+    } catch (error) {
+      toast.error("Khôi phục sản phẩm thất bại");
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      await deleteShelfTypeAPI(shelfTypeId!);
+
+      queryClient.invalidateQueries({
+        queryKey: ["shelfs"],
+      });
+
+      onClose();
+      toast.success("Xóa sản phẩm thành công");
+    } catch (error) {
+      toast.error("Xóa sản phẩm thất bại");
+    }
+  }
 
   if (!shelfTypeId) return null;
 
@@ -45,7 +116,15 @@ function ViewDetailSheet({
           </SheetTitle>
         </SheetHeader>
 
-        <div className="p-6 space-y-8 overflow-y-auto h-full">
+        <div className="relative p-6 space-y-8 overflow-y-auto custom-scrollbar h-full">
+          {isLoading && (
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-50/60 backdrop-blur-[1px] transition-opacity">
+              <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-2" />
+              <span className="text-xs font-medium text-slate-500 uppercase tracking-widest">
+                Đang tải dữ liệu...
+              </span>
+            </div>
+          )}
           {/* 1. IMAGE SECTION - Theo style bạn yêu cầu */}
           <div className="relative group">
             <div className="w-full aspect-video rounded-3xl border bg-slate-50 overflow-hidden relative shadow-inner flex items-center justify-center">
@@ -212,6 +291,45 @@ function ViewDetailSheet({
             </div>
           </div>
         </div>
+
+        {/* Footer Action Bar */}
+        {!isLoading && (
+          <div className="p-4 border-t bg-white flex items-center gap-3 shadow-[0_-8px_20px_rgba(0,0,0,0.04)]">
+            <div className="flex gap-2 flex-1">
+              {shelf?.isActive ? (
+                <button
+                  onClick={handleDisable}
+                  title="Vô hiệu hóa sản phẩm"
+                  className="flex items-center justify-center w-full h-11 gap-2 rounded-xl border border-red-100 text-red-500 hover:bg-red-50 hover:border-red-200 transition-all"
+                >
+                  <Lock size={18} /> Vô hiệu hóa
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={handleDelete}
+                    title="Xóa vĩnh viễn"
+                    className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition-all font-medium text-sm"
+                  >
+                    <Trash2 size={18} />
+                    Xóa
+                  </button>
+
+                  <button
+                    onClick={handleRestore}
+                    title="Khôi phục hoạt động"
+                    className="flex-1 flex items-center justify-center gap-2 h-11 rounded-xl border border-blue-200 text-blue-600 hover:bg-blue-50 transition-all font-medium text-sm"
+                  >
+                    <RotateCcw size={18} />
+                    Mở lại
+                  </button>
+                </>
+              )}
+            </div>
+
+            <UpdateShelfTypeModal shelfTypeId={shelfTypeId} />
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   );
