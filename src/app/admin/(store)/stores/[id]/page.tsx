@@ -60,13 +60,13 @@ export default function PartnerStoreDetailPage() {
       </div>
 
       {/*Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 ">
+      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4">
         <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">
-          <TotalRevenueChart />
+          <TotalRevenueChart storeId={id} />
         </div>
 
         <div className="bg-background p-4 rounded-lg lg:col-span-3 min-h-[60vh] shadow-sm border border-gray-100">
-          <TotalOrderChart />
+          <TotalOrderChart storeId={id} />
         </div>
         <div className="bg-background p-4 rounded-lg shadow-sm border border-gray-100">
           <TopThreeProduct />

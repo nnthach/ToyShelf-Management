@@ -12,12 +12,12 @@ export default async function StoreManagerLayout({
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   return (
-    // <RolePermission allowedRoles={["Warehouse"]}>
-    <div className="flex bg-[#FAF9FE] dark:bg-neutral-800">
-      <SidebarProvider defaultOpen={defaultOpen}>
-        <StoreManagerClientShell>{children}</StoreManagerClientShell>
-      </SidebarProvider>
-    </div>
-    // </RolePermission>
+    <RolePermission allowedRoles={["Partner"]}>
+      <div className="flex bg-[#FAF9FE] dark:bg-neutral-800">
+        <SidebarProvider defaultOpen={defaultOpen}>
+          <StoreManagerClientShell>{children}</StoreManagerClientShell>
+        </SidebarProvider>
+      </div>
+    </RolePermission>
   );
 }

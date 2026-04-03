@@ -3,9 +3,6 @@
 import React from "react";
 import StoreMap from "./components/StoreMap";
 import { useAuth } from "@/src/hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
-import { getPartnerDetailAPI } from "@/src/services/partner.service";
-import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import PartnerStatCard from "./components/PartnerStatCard";
 import TotalRevenueChart from "./components/charts/TotalRevenueChart";
 import TotalOrderChart from "./components/charts/TotalOrderChart";
@@ -13,24 +10,13 @@ import TopThreeStore from "./components/TopThreeStore";
 import TopThreeProduct from "./components/TopThreeProduct";
 import PartnerBannerInfo from "./components/PartnerBannerInfo";
 
-export default function AdminDashboard() {
-  const { partner, isLoading: isAuthLoading } = useAuth();
-
-  const partnerId = partner?.partnerId;
-
-  const { data: partnerDetail, isLoading: isDetailLoading } = useQuery({
-    queryKey: ["partner", partnerId],
-    queryFn: () => getPartnerDetailAPI(partnerId!),
-    select: (res) => res.data,
-    enabled: !!partnerId,
-  });
-
-  if (isDetailLoading) return <LoadingPageComponent />;
+export default function PartnerAdminDashboard() {
+  const { partner } = useAuth();
 
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
-        <PartnerBannerInfo partnerDetail={partnerDetail} />
+        <PartnerBannerInfo />
       </div>
 
       {/*Statistic card */}

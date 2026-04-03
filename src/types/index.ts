@@ -424,3 +424,9 @@ export interface Shipment {
   receivedAt?: string;
   items: RefillRequestProductColor[];
 }
+
+export interface ChartItem {
+  dateLabel: string;
+  totalOrders: number;
+  totalRevenue: number;
+}

@@ -1,6 +1,5 @@
 import React from "react";
-
-export type ViewType = "week" | "month" | "year";
+import { ViewType } from "../types/SubType";
 
 type FilterValue = {
   viewType: ViewType;

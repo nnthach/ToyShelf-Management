@@ -1,7 +1,8 @@
 "use client";
 
-import ChartFilter, { ViewType } from "@/src/components/ChartFilter";
+import ChartFilter from "@/src/components/ChartFilter";
 import { useDebounce } from "@/src/hooks/useDebounce";
+import { ViewType } from "@/src/types/SubType";
 import { useEffect, useState } from "react";
 import {
   XAxis,

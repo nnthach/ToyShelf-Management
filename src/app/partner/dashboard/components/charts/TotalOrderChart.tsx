@@ -1,7 +1,12 @@
 "use client";
 
-import ChartFilter, { ViewType } from "@/src/components/ChartFilter";
+import ChartFilter from "@/src/components/ChartFilter";
+import { useAuth } from "@/src/hooks/useAuth";
 import { useDebounce } from "@/src/hooks/useDebounce";
+import { getDashboardPartnerChart } from "@/src/services/dashboard.service";
+import { ChartItem } from "@/src/types";
+import { ViewType } from "@/src/types/SubType";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import {
   XAxis,
@@ -63,39 +68,36 @@ const DATA_SOURCES: DataSources = {
 };
 
 const TotalOrderChart = () => {
+  const { partner } = useAuth();
+  const partnerId = partner?.partnerId;
+
   const [filters, setFilters] = useState({
     viewType: "month" as ViewType,
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
   });
 
-  const timeFrame = filters.viewType;
+  const debouncedFilters = useDebounce(filters, 1000);
 
-  const debouncedFilters = useDebounce(filters, 500);
+  const queryParams = {
+    viewType: debouncedFilters.viewType,
+    year: debouncedFilters.year,
+    ...(debouncedFilters.viewType === "month" && {
+      month: debouncedFilters.month,
+    }),
+  };
 
-  const totalOrders = DATA_SOURCES[timeFrame].reduce(
-    (acc, curr) => acc + curr.orders,
+  const { data: orderChart = [], isLoading } = useQuery({
+    queryKey: ["orderChart", queryParams],
+    queryFn: () => getDashboardPartnerChart(queryParams, partnerId),
+    select: (res) => res.data,
+    enabled: !!partnerId,
+  });
+
+  const totalOrders = orderChart.reduce(
+    (acc: number, curr: { totalOrders: number }) => acc + curr.totalOrders,
     0,
   );
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { viewType, month, year } = debouncedFilters;
-
-      const params: RevenueParams = { type: viewType };
-
-      if (viewType === "month") {
-        params.month = month;
-        params.year = year;
-      } else if (viewType === "year") {
-        params.year = year;
-      }
-
-      console.log("Orders API:", params);
-    };
-
-    fetchData();
-  }, [debouncedFilters]);
 
   return (
     <div className="flex flex-col h-full w-full bg-white">
@@ -104,11 +106,11 @@ const TotalOrderChart = () => {
         <div>
           <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">
             Tổng đơn hàng theo{" "}
-            {timeFrame === "week"
+            {filters.viewType === "week"
               ? "tuần này"
-              : timeFrame === "month"
-                ? "tháng"
-                : "năm"}
+              : filters.viewType === "month"
+                ? "tháng này"
+                : "năm nay"}
           </h3>
 
           <p className="text-2xl font-bold text-gray-900 mt-1">
@@ -124,7 +126,7 @@ const TotalOrderChart = () => {
       <div className="flex-1 min-h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={DATA_SOURCES[timeFrame]}
+            data={orderChart}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
             <defs>
@@ -141,11 +143,20 @@ const TotalOrderChart = () => {
             />
 
             <XAxis
-              dataKey="label"
+              dataKey="dateLabel"
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#9CA3AF", fontSize: 12 }}
               dy={10}
+              ticks={
+                filters.viewType === "month"
+                  ? orderChart
+                      .filter((_: ChartItem, i: number) =>
+                        [0, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29].includes(i),
+                      )
+                      .map((d: ChartItem) => d.dateLabel)
+                  : undefined
+              }
             />
 
             <YAxis
@@ -164,11 +175,13 @@ const TotalOrderChart = () => {
             />
 
             <Area
+              key={filters.viewType}
               type="monotone"
-              dataKey="orders"
+              dataKey="totalOrders"
               stroke="#6366F1"
               strokeWidth={2.5}
               fill="url(#colorOrders)"
+              isAnimationActive={true}
               dot={{ fill: "#6366F1", r: 4, strokeWidth: 0 }}
               activeDot={{ r: 6, fill: "#6366F1", strokeWidth: 0 }}
             />

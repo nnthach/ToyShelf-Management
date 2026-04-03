@@ -29,7 +29,7 @@ function PartnerStatCard() {
     <>
       <StatCardWithButton
         title="Doanh thu"
-        value={`${(partnerStatCard?.revenue ?? 0).toLocaleString()} VND`}
+        value={`${(partnerStatCard?.revenue ?? 0).toLocaleString() || 0} VND`}
         change="+30,215 VND"
         changePercent="+12%"
         icon={Box}
@@ -38,7 +38,7 @@ function PartnerStatCard() {
 
       <StatCardWithButton
         title="Hoa hồng"
-        value={`${(partnerStatCard?.commission ?? 0).toLocaleString()} VND`}
+        value={`${(partnerStatCard?.commission ?? 0).toLocaleString() || 0} VND`}
         change="+2,815"
         changePercent="+18%"
         icon={Box}
@@ -47,16 +47,17 @@ function PartnerStatCard() {
       />
       <StatCardWithButton
         title="Đơn hàng"
-        value={`${partnerStatCard?.orders}`}
+        value={`${partnerStatCard?.orders || 0}`}
         change="+2,815"
         changePercent="+18%"
         icon={Server}
         color="bg-pink-100 text-pink-900"
+        action={() => router.push(`/partner/orders`)}
       />
 
       <StatCardWithButton
         title="Cửa hàng"
-        value={`${partnerStatCard?.stores}`}
+        value={`${partnerStatCard?.stores || 0}`}
         change="+1,647"
         changePercent="+15%"
         icon={Store}

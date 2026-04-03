@@ -2,6 +2,7 @@
 
 import ChartFilter from "@/src/components/ChartFilter";
 import { useDebounce } from "@/src/hooks/useDebounce";
+import { ViewType } from "@/src/types/SubType";
 import { useEffect, useState } from "react";
 import {
   Area,
@@ -12,8 +13,6 @@ import {
   YAxis,
   CartesianGrid,
 } from "recharts";
-
-type ViewType = "week" | "month" | "year";
 
 interface RevenueData {
   label: string;

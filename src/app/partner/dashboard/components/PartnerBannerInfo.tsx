@@ -1,16 +1,25 @@
 "use client";
 
-import { Partner } from "@/src/types";
 import { Calendar, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
 import TimeGreetingSubBanner from "@/src/components/TimeGreetingSubBanner";
+import { useAuth } from "@/src/hooks/useAuth";
+import { getPartnerDetailAPI } from "@/src/services/partner.service";
+import { useQuery } from "@tanstack/react-query";
 
-function PartnerBannerInfo({
-  partnerDetail,
-}: {
-  partnerDetail: Partner | null;
-}) {
+function PartnerBannerInfo() {
+  const { partner, isLoading: isAuthLoading } = useAuth();
+
+  const partnerId = partner?.partnerId;
+
+  const { data: partnerDetail, isLoading: isDetailLoading } = useQuery({
+    queryKey: ["partner", partnerId],
+    queryFn: () => getPartnerDetailAPI(partnerId!),
+    select: (res) => res.data,
+    enabled: !!partnerId,
+  });
+
   return (
     <>
       {/* BANNER TRÁI: THÔNG TIN CHÍNH & CHIẾT KHẤU HIỆN TẠI (Col-span 3) */}

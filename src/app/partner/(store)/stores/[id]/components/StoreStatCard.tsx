@@ -1,4 +1,5 @@
 import StatCardWithButton from "@/src/components/StatCardWithButton";
+import { useAuth } from "@/src/hooks/useAuth";
 import { getDashboardStoreStatCard } from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
 import { Box, Store } from "lucide-react";
@@ -12,6 +13,7 @@ function StoreStatCard({
   inventoryLocationId: string;
 }) {
   const router = useRouter();
+  const { partner } = useAuth();
 
   const { data: storeStatCard } = useQuery({
     queryKey: ["storeStatCard", storeId],
@@ -20,7 +22,6 @@ function StoreStatCard({
     enabled: !!storeId,
   });
 
-  console.log("storestate card");
   return (
     <>
       <StatCardWithButton
@@ -40,7 +41,9 @@ function StoreStatCard({
         icon={Store}
         color="bg-yellow-100 text-yellow-900"
         action={() =>
-          router.push(`/admin/orders?storeId=${storeId}&from=store`)
+          router.push(
+            `/partner/orders?partnerId=${partner?.id}&storeId=${storeId}`,
+          )
         }
       />
 
@@ -52,7 +55,7 @@ function StoreStatCard({
         icon={Box}
         color="bg-blue-100 text-blue-900"
         action={() =>
-          router.push(`/admin/all-inventory?locationId=${inventoryLocationId}`)
+          router.push(`/partner/inventories?locationId=${inventoryLocationId}`)
         }
       />
       <StatCardWithButton

@@ -2,7 +2,6 @@ import { SidebarProvider } from "@/src/styles/components/ui/sidebar";
 import { cookies } from "next/headers";
 import { PartnerAdminClientShell } from "@/src/components/layout/PartnerAdminClient";
 import { RolePermission } from "@/src/components/RolePermission";
-import { redirect } from "next/navigation";
 
 export default async function PartnerAdminLayout({
   children,

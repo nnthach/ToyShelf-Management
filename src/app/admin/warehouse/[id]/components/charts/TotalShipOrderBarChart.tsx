@@ -2,22 +2,16 @@
 
 import ChartFilter from "@/src/components/ChartFilter";
 import { useDebounce } from "@/src/hooks/useDebounce";
-import { useEffect, useMemo, useState } from "react";
+import { ViewType } from "@/src/types/SubType";
+import { useMemo, useState } from "react";
 import {
-  BarChart,
-  Bar,
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
-  CartesianGrid,
-  Legend,
   AreaChart,
   Area,
-  LegendProps,
 } from "recharts";
 
-type ViewType = "week" | "month" | "year";
 
 interface ShipmentData {
   label: string;
@@ -27,11 +21,6 @@ interface ShipmentData {
   shelfReturn: number;
 }
 
-interface Params {
-  type: ViewType;
-  month?: number;
-  year?: number;
-}
 
 interface LegendPayloadItem {
   value: string;
@@ -39,10 +28,6 @@ interface LegendPayloadItem {
   type?: string;
 }
 
-// Định nghĩa interface cho props của hàm content
-interface CustomLegendProps {
-  payload?: LegendPayloadItem[];
-}
 
 // week: 7 ngày, year: 12 tháng — static mock
 const WEEK_DATA: ShipmentData[] = [

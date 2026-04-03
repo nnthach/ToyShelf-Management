@@ -1,5 +1,4 @@
 "use client";
-import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   logout,
@@ -57,12 +56,12 @@ export function useAuth() {
     const token = localStorage.getItem("token");
     const roles = JSON.parse(localStorage.getItem("roles") || "[]");
 
-    if (token && !user) {
-      dispatch(setLoading(true));
-      try {
+    dispatch(setLoading(true));
+
+    try {
+      if (token && !user) {
         const userProfile = await getMyProfileAPI();
         const data = userProfile.data;
-
         dispatch(setUser({ ...data, roles }));
 
         // if role partnerAdmin => get partner by userId
@@ -82,12 +81,11 @@ export function useAuth() {
           if (warehouseDetail?.data[0]?.warehouseRole === "Manager") {
             router.replace("/warehouse/dashboard");
             toast.success("Đăng nhập thành công");
-            return;
           } else {
             toast.error("Bạn không có quyền truy cập vào hệ thống!");
             logoutUser();
-            return;
           }
+          return;
         }
 
         // if role partner (manager/staff)=> get store detail
@@ -105,14 +103,12 @@ export function useAuth() {
         if (isAtAuthPage()) {
           navigateByRole(roles);
         }
-      } catch (error) {
+      } else {
         dispatch(logout());
-      } finally {
-        dispatch(setLoading(false));
       }
-    } else if (!token && user) {
+    } catch (error) {
       dispatch(logout());
-    } else if (!token && !user) {
+    } finally {
       dispatch(setLoading(false));
     }
   };
@@ -177,10 +173,6 @@ export function useAuth() {
     navigateByRole(roles);
   };
 
-  useEffect(() => {
-    initAuth();
-  }, []);
-
   const logoutUser = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("roles");
@@ -190,6 +182,7 @@ export function useAuth() {
   };
 
   return {
+    initAuth,
     user,
     partner,
     myStore,

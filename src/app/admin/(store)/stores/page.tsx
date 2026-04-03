@@ -85,15 +85,6 @@ export default function AdminStoreManage() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>

@@ -15,7 +15,7 @@ function StoreStatCard({
 
   const { data: storeStatCard } = useQuery({
     queryKey: ["storeStatCard", storeId],
-    queryFn: () => getDashboardStoreStatCard({ storeId }),
+    queryFn: () => getDashboardStoreStatCard({}, storeId),
     select: (res) => res.data,
     enabled: !!storeId,
   });

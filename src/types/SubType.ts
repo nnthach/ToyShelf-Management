@@ -87,3 +87,5 @@ export type PlaceDetail = {
   lng: number;
   address: string;
 };
+
+export type ViewType = "week" | "month" | "year";

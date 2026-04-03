@@ -1,7 +1,6 @@
 "use client";
 
 import ChartFilter from "@/src/components/ChartFilter";
-import { useAuth } from "@/src/hooks/useAuth";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { getDashboardStoreRevenueChart } from "@/src/services/dashboard.service";
 import { ChartItem } from "@/src/types";
@@ -9,19 +8,16 @@ import { ViewType } from "@/src/types/SubType";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import {
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
   Area,
   AreaChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
 
-const TotalOrderChart = () => {
-  const { myStore } = useAuth();
-  const storeId = myStore?.storeId;
-
+const TotalRevenueChart = ({ storeId }: { storeId: string }) => {
   const [filters, setFilters] = useState({
     viewType: "month" as ViewType,
     month: new Date().getMonth() + 1,
@@ -38,42 +34,41 @@ const TotalOrderChart = () => {
     }),
   };
 
-  const { data: orderChart = [], isLoading } = useQuery({
-    queryKey: ["orderChart", queryParams],
+  const { data: revenueChart = [], isLoading } = useQuery({
+    queryKey: ["revenueChart", queryParams],
     queryFn: () => getDashboardStoreRevenueChart(queryParams, storeId),
     select: (res) => res.data,
     enabled: !!storeId,
   });
 
-  const totalOrders = orderChart.reduce(
-    (acc: number, curr: { totalOrders: number }) => acc + curr.totalOrders,
+  const totalAmount = revenueChart.reduce(
+    (acc: number, curr: { totalRevenue: number }) => acc + curr.totalRevenue,
     0,
   );
 
   return (
     <div className="flex flex-col h-full w-full bg-white">
-      {/* HEADER */}
+      {/* HEADER: Tên bên trái - Filter bên phải */}
       <div className="flex justify-between items-start mb-6">
         <div>
           <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">
-            Tổng đơn hàng theo{" "}
+            Tổng doanh thu theo{" "}
             {filters.viewType === "week"
               ? "tuần này"
               : filters.viewType === "month"
                 ? "tháng này"
                 : "năm nay"}
           </h3>
-
           <p className="text-2xl font-bold text-gray-900 mt-1">
-            {totalOrders.toLocaleString()}
-            <span className="text-base ml-1">đơn</span>
+            {totalAmount.toLocaleString()}
+            <span className="text-xl">đ</span>
           </p>
         </div>
 
+        {/* BỘ LỌC FILTER */}
         <ChartFilter value={filters} onChange={setFilters} />
       </div>
 
-      {/* CHART */}
       <div className="flex-1 min-h-[300px]">
         {isLoading && (
           <div className="absolute inset-0 bg-white/60 flex items-center justify-center z-10 rounded-xl">
@@ -84,16 +79,15 @@ const TotalOrderChart = () => {
             </div>
           </div>
         )}
-
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={orderChart}
+            data={revenueChart}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
             <defs>
-              <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#6366F1" stopOpacity={0.15} />
-                <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
+              <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#1E88E5" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#1E88E5" stopOpacity={0} />
               </linearGradient>
             </defs>
 
@@ -111,7 +105,7 @@ const TotalOrderChart = () => {
               dy={10}
               ticks={
                 filters.viewType === "month"
-                  ? orderChart
+                  ? revenueChart
                       .filter((_: ChartItem, i: number) =>
                         [0, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29].includes(i),
                       )
@@ -124,6 +118,11 @@ const TotalOrderChart = () => {
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#9CA3AF", fontSize: 12 }}
+              tickFormatter={(value) => {
+                if (value >= 1000000) return `${value / 1000000}M`;
+                if (value >= 1000) return `${value / 1000}k`;
+                return value;
+              }}
             />
 
             <Tooltip
@@ -132,19 +131,22 @@ const TotalOrderChart = () => {
                 border: "none",
                 boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
               }}
-              formatter={(value: number) => [`${value} đơn`, "Đơn hàng"]}
+              formatter={(value: number) => [
+                `${value.toLocaleString()}đ`,
+                "Doanh thu",
+              ]}
             />
 
             <Area
               key={filters.viewType}
               type="monotone"
-              dataKey="totalOrders"
-              stroke="#6366F1"
-              strokeWidth={2.5}
-              fill="url(#colorOrders)"
+              dataKey="totalRevenue"
+              stroke="#1E88E5"
+              strokeWidth={3}
+              fill="url(#colorRevenue)"
               isAnimationActive={true}
-              dot={{ fill: "#6366F1", r: 4, strokeWidth: 0 }}
-              activeDot={{ r: 6, fill: "#6366F1", strokeWidth: 0 }}
+              dot={{ fill: "#1E88E5", r: 4, strokeWidth: 0 }}
+              activeDot={{ r: 6, fill: "#1E88E5", strokeWidth: 0 }}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -153,4 +155,4 @@ const TotalOrderChart = () => {
   );
 };
 
-export default TotalOrderChart;
+export default TotalRevenueChart;
