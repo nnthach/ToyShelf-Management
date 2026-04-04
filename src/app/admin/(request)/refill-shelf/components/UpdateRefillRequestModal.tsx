@@ -26,7 +26,6 @@ import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrd
 import {
   approveRefillShelfRequestAPI,
   getRefillShelfDetailAPI,
-  rejectRefillShelfRequestAPI,
 } from "@/src/services/refill-shelf.service";
 import ShipmentShelfListComponent from "@/src/components/ShipmentComponent/ShipmentShelfListComponent";
 import ReasonRejectRequestModal from "./ReasonRejectRequest";

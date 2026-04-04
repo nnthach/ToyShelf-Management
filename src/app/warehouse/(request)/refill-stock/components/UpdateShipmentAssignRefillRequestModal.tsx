@@ -26,6 +26,8 @@ import CreateShipmentModal from "./CreateShipmentModal";
 import WarehouseShipmentStoreInfo from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentStoreInfo";
 import WarehouseShipmentDetailSection from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentDetailSection";
 import WarehouseShipmentProductList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentProductList";
+import WarehouseShipmentShelfList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentShelfList";
+import CreateShipmentShelfModal from "./CreateShipmentShelfModal";
 
 type UpdateShipmentAssignRefillRequestModalProps = {
   requestId: string;
@@ -143,10 +145,17 @@ function UpdateShipmentAssignRefillRequestModal({
 
                 {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
                 <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
-                  <WarehouseShipmentProductList
-                    shipmentAssignDetail={shipmentAssignDetail}
-                    shipmentDetail={shipmentDetail}
-                  />
+                  {shipmentAssignDetail?.orderType === "STORE" ? (
+                    <WarehouseShipmentProductList
+                      shipmentAssignDetail={shipmentAssignDetail}
+                      shipmentDetail={shipmentDetail}
+                    />
+                  ) : (
+                    <WarehouseShipmentShelfList
+                      shipmentAssignDetail={shipmentAssignDetail}
+                      shipmentDetail={shipmentDetail}
+                    />
+                  )}
                 </div>
               </div>
             )}
@@ -156,27 +165,30 @@ function UpdateShipmentAssignRefillRequestModal({
           <div className="p-4 border-t bg-white">
             <DialogFooter className="flex flex-row items-center justify-between sm:justify-between">
               {/* BÊN TRÁI: THẺ GHI CHÚ (NOTES) */}
-              <div className="hidden md:flex items-center gap-3 bg-blue-50/80 px-4 py-2.5 rounded-2xl border border-blue-100/50 shadow-sm">
-                <div className="bg-blue-600 p-1.5 rounded-lg shadow-sm shadow-blue-200">
-                  <Info size={14} className="text-white animate-pulse" />
-                </div>
-                <div className="flex flex-col">
-                  <p className="text-[10px] font-black text-blue-600 uppercase tracking-wider leading-none mb-1">
-                    Hướng dẫn điều phối
-                  </p>
-                  <p className="text-[14px] text-blue-800 font-medium italic">
-                    {isPending && !shipmentAssignDetail?.shipperName
-                      ? "Hãy chọn nhân viên giao hàng"
-                      : isPending
-                        ? "Hãy chờ nhân viên giao hàng xác nhận"
-                        : isAccepted && !shipmentDetail
-                          ? "Hãy xác nhận xuất kho"
-                          : shipmentDetail
-                            ? "Đã xuất kho và tạo đơn giao hàng, chờ giao hàng"
-                            : "Xác nhận số lượng thực tế trước khi xuất kho cho Shipper."}
-                  </p>
-                </div>
-              </div>
+              {(shipmentDetail && shipmentDetail?.status !== "Shipping") ||
+                (shipmentDetail?.status !== "Delivered" && (
+                  <div className="hidden md:flex items-center gap-3 bg-blue-50/80 px-4 py-2.5 rounded-2xl border border-blue-100/50 shadow-sm">
+                    <div className="bg-blue-600 p-1.5 rounded-lg shadow-sm shadow-blue-200">
+                      <Info size={14} className="text-white animate-pulse" />
+                    </div>
+                    <div className="flex flex-col">
+                      <p className="text-[10px] font-black text-blue-600 uppercase tracking-wider leading-none mb-1">
+                        Hướng dẫn điều phối
+                      </p>
+                      <p className="text-[14px] text-blue-800 font-medium italic">
+                        {isPending && !shipmentAssignDetail?.shipperName
+                          ? "Hãy chọn nhân viên giao hàng"
+                          : isPending
+                            ? "Hãy chờ nhân viên giao hàng xác nhận"
+                            : isAccepted && !shipmentDetail
+                              ? "Hãy xác nhận xuất kho"
+                              : shipmentDetail
+                                ? "Đã xuất kho và tạo đơn giao hàng, chờ giao hàng"
+                                : "Xác nhận số lượng thực tế trước khi xuất kho cho Shipper."}
+                      </p>
+                    </div>
+                  </div>
+                ))}
 
               {/* BÊN PHẢI: CÁC NÚT ACTIONS (NHƯ CŨ) */}
               <div className="flex items-center gap-3">
@@ -239,13 +251,23 @@ function UpdateShipmentAssignRefillRequestModal({
         onSuccess={onClose}
       />
 
-      <CreateShipmentModal
-        requestId={requestId}
-        items={shipmentAssignDetail?.items || []}
-        isOpen={isOpenCreateShipmentModal}
-        onClose={() => setIsOpenCreateShipmentModal(false)}
-        onSuccess={onClose}
-      />
+      {shipmentAssignDetail?.orderType === "STORE" ? (
+        <CreateShipmentModal
+          requestId={requestId}
+          items={shipmentAssignDetail?.productItems || []}
+          isOpen={isOpenCreateShipmentModal}
+          onClose={() => setIsOpenCreateShipmentModal(false)}
+          onSuccess={onClose}
+        />
+      ) : (
+        <CreateShipmentShelfModal
+          requestId={requestId}
+          items={shipmentAssignDetail?.shelfItems || []}
+          isOpen={isOpenCreateShipmentModal}
+          onClose={() => setIsOpenCreateShipmentModal(false)}
+          onSuccess={onClose}
+        />
+      )}
     </>
   );
 }

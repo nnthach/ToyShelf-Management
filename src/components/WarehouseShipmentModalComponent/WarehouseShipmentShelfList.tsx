@@ -1,53 +1,51 @@
 import {
-  RefillRequestProductColor,
+  RefillShelfItem,
   Shipment,
   ShipmentAssign,
 } from "@/src/types";
-import { formatColorNameToVN } from "@/src/utils/format";
 import { Package } from "lucide-react";
 import Image from "next/image";
 
-interface WarehouseShipmentProductListProps {
+interface WarehouseShipmentShelfListProps {
   shipmentDetail: Shipment | undefined;
   shipmentAssignDetail: ShipmentAssign;
 }
 
-function WarehouseShipmentProductList({
+function WarehouseShipmentShelfList({
   shipmentDetail,
   shipmentAssignDetail,
-}: WarehouseShipmentProductListProps) {
+}: WarehouseShipmentShelfListProps) {
   console.log("shipment", shipmentDetail);
   console.log("shipmentAssignDetail", shipmentAssignDetail);
 
   // 1. Tạo Map để tra cứu nhanh thông tin từ shipmentDetail
   // Sử dụng đúng kiểu dữ liệu RefillRequestProductColor thay vì any
-  const shipmentItemMap = new Map<string, RefillRequestProductColor>(
-    (shipmentDetail?.productItems as RefillRequestProductColor[])?.map(
-      (item) => [item.productColorId as string, item],
-    ) || [],
+  const shipmentItemMap = new Map<string, RefillShelfItem>(
+    (shipmentDetail?.shelfItems as RefillShelfItem[])?.map((item) => [
+      item.shelfTypeId as string,
+      item,
+    ]) || [],
   );
 
   // 2. Map dữ liệu dựa trên danh sách của Assignment
-  const itemsWithQuantities: RefillRequestProductColor[] =
-    (shipmentAssignDetail?.productItems as RefillRequestProductColor[])?.map(
-      (item) => {
-        // Tra cứu thông tin shipment tương ứng từ Map
-        const shipmentItem = shipmentItemMap.get(item.productColorId as string);
+  const itemsWithQuantities: RefillShelfItem[] =
+    (shipmentAssignDetail?.shelfItems as RefillShelfItem[])?.map((item) => {
+      // Tra cứu thông tin shipment tương ứng từ Map
+      const shipmentItem = shipmentItemMap.get(item.shelfTypeId as string);
 
-        return {
-          ...item,
-          // Kho giao: Ưu tiên expectedQuantity từ shipment,
-          // nếu chưa có shipment thì fallback về fulfilledQuantity từ assign
-          displayExpected: shipmentItem
-            ? (shipmentItem.expectedQuantity ?? 0)
-            : (item.fulfilledQuantity ?? 0),
-          // Thực nhận: Lấy từ shipment
-          displayReceived: shipmentItem
-            ? (shipmentItem.receivedQuantity ?? 0)
-            : 0,
-        };
-      },
-    ) || [];
+      return {
+        ...item,
+        // Kho giao: Ưu tiên expectedQuantity từ shipment,
+        // nếu chưa có shipment thì fallback về fulfilledQuantity từ assign
+        displayExpected: shipmentItem
+          ? (shipmentItem.expectedQuantity ?? 0)
+          : (item.fulfilledQuantity ?? 0),
+        // Thực nhận: Lấy từ shipment
+        displayReceived: shipmentItem
+          ? (shipmentItem.receivedQuantity ?? 0)
+          : 0,
+      };
+    }) || [];
 
   return (
     <>
@@ -55,7 +53,7 @@ function WarehouseShipmentProductList({
       <div className="p-4 border-b bg-white flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center gap-2">
           <Package className="h-4 w-4 text-primary" />
-          <h4 className="font-bold text-sm uppercase">Sản phẩm & Số lượng</h4>
+          <h4 className="font-bold text-sm uppercase">Loại kệ & Số lượng</h4>
         </div>
         <span className="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
           {itemsWithQuantities.length}
@@ -74,7 +72,7 @@ function WarehouseShipmentProductList({
 
           return (
             <div
-              key={item.productColorId || index}
+              key={item.shelfTypeId || index}
               className="bg-white border rounded-xl p-3 shadow-sm hover:shadow-md transition-all flex items-center gap-4"
             >
               {/* BÊN TRÁI: THÔNG TIN SẢN PHẨM (Chiếm phần lớn diện tích) */}
@@ -97,16 +95,16 @@ function WarehouseShipmentProductList({
 
                 <div className="min-w-0">
                   <h5 className="font-bold text-[13px] uppercase text-slate-800 leading-tight truncate">
-                    {item.productName}
+                    {item.shelfTypeName}
                   </h5>
-                  <div className="flex items-center gap-2 mt-1">
+                  {/* <div className="flex items-center gap-2 mt-1">
                     <span className="text-[10px] font-mono text-slate-400 font-medium">
                       {item.sku || "N/A"}
                     </span>
                     <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 leading-none">
                       {formatColorNameToVN(item?.color as string)}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -163,4 +161,4 @@ function WarehouseShipmentProductList({
   );
 }
 
-export default WarehouseShipmentProductList;
+export default WarehouseShipmentShelfList;

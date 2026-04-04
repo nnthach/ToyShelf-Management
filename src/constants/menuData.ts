@@ -294,12 +294,6 @@ export const WarehouseManagerSidebarGroups = [
       },
 
       {
-        title: "Đặt kệ",
-        url: "/warehouse/refill-shelf",
-        icon: LayoutGrid,
-      },
-
-      {
         title: "Trả hàng",
         url: "/warehouse/return-request",
         icon: RotateCcw,

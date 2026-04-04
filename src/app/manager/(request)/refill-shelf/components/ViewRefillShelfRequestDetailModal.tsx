@@ -70,16 +70,16 @@ function ViewRefillShelfRequestModalDetail({
   });
 
   const shipmentItemMap = new Map(
-    shipmentDetail?.items?.map((item: RefillRequestProductColor) => [
-      item.productColorId,
+    shipmentDetail?.shelfItems?.map((item: RefillShelfRequestItem) => [
+      item.shelfTypeId,
       item,
     ]) || [],
   );
 
   const itemsWithQuantities = storeOrderShelfDetail?.items?.map(
-    (item: RefillRequestProductColor) => {
+    (item: RefillShelfRequestItem) => {
       // Tra cứu thông tin shipment tương ứng
-      const shipmentItem = shipmentItemMap.get(item.productColorId);
+      const shipmentItem = shipmentItemMap.get(item.shelfTypeId);
 
       return {
         ...item,
@@ -174,6 +174,14 @@ function ViewRefillShelfRequestModalDetail({
                         label="Quản trị viên chấp nhận"
                         value={storeOrderShelfDetail?.approveName}
                         icon={<User className="h-3 w-3" />}
+                      />
+                    )}
+                    {storeOrderShelfDetail?.note && (
+                      <ShipInfoItem
+                        label="Ghi chú từ cửa hàng"
+                        value={storeOrderShelfDetail?.note}
+                        icon={<User className="h-3 w-3" />}
+                        isNote
                       />
                     )}
                   </div>
@@ -389,7 +397,7 @@ function ViewRefillShelfRequestModalDetail({
       <ConfirmReceiveModal
         shipmentId={shipmentId}
         requestId={requestId}
-        items={shipmentDetail?.items || []}
+        items={shipmentDetail?.shelfItems || []}
         isOpen={isOpenConfirmReceive}
         onClose={() => setIsOpenConfirmReceive(false)}
         onSuccess={onClose}

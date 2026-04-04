@@ -282,3 +282,25 @@ export const formatOrderStatusColor = (status: string) => {
       return "bg-gray-100 text-gray-800 px-3 py-1 rounded-2xl";
   }
 };
+
+export const formatShipmentAssignTypeText = (status: string) => {
+  switch (status) {
+    case "STORE":
+      return "Giao sản phẩm";
+    case "SHELF":
+      return "Giao kệ";
+    default:
+      return "N/A";
+  }
+};
+
+export const formatShipmentAssignTypeColor = (status: string) => {
+  switch (status) {
+    case "STORE":
+      return "bg-indigo-100 text-indigo-700 font-bold border border-indigo-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "SHELF":
+      return "bg-orange-100 text-orange-700 font-bold border border-orange-200 px-3 py-1 rounded-2xl shadow-sm";
+    default:
+      return "bg-slate-100 text-slate-600 px-3 py-1 rounded-2xl";
+  }
+};

@@ -16,7 +16,7 @@ function ShipmentShelfListComponent({
   storeOrderDetail,
 }: ShipmentShelfListComponentProps) {
   const shipmentItemMap = new Map(
-    shipmentDetail?.items?.map((item: RefillShelfRequestItem) => [
+    shipmentDetail?.shelfItems?.map((item: RefillShelfRequestItem) => [
       item.shelfTypeId,
       item,
     ]) || [],

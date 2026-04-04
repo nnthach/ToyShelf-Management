@@ -72,7 +72,7 @@ function AssignWarehouseModal({
     try {
       await createShipmentAssignWarehouseAPI({
         warehouseLocationId: selectedWarehouseId,
-        storeOrderId: requestId,
+        shelfOrderId: requestId,
       });
 
       queryClient.invalidateQueries({ queryKey: ["requestDetail", requestId] });

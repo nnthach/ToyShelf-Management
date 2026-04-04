@@ -2,7 +2,6 @@ import { RefillRequest } from "@/src/types";
 import { MapPin, Notebook, Store, User } from "lucide-react";
 import ShipInfoItem from "./ShipInfoItem";
 import { memo } from "react";
-import { cn } from "@/src/styles/lib/utils";
 
 interface StoreOrderDetailSectionProps {
   storeOrderDetail: RefillRequest | undefined;
@@ -53,6 +52,16 @@ function StoreOrderDetailSection({
             value={storeOrderDetail?.approveName}
             icon={<User className="h-3 w-3" />}
           />
+        )}
+        {storeOrderDetail?.note && (
+          <div className="col-span-2">
+            <ShipInfoItem
+              label="Ghi chú từ cửa hàng"
+              value={storeOrderDetail?.note}
+              icon={<Notebook className="h-3 w-3" />}
+              isNote
+            />
+          </div>
         )}
       </div>
     </section>

@@ -17,7 +17,7 @@ function ShipmentProductListComponent({
   storeOrderDetail,
 }: ShipmentProductListComponentProps) {
   const shipmentItemMap = new Map(
-    shipmentDetail?.items?.map((item: RefillRequestProductColor) => [
+    shipmentDetail?.productItems?.map((item: RefillRequestProductColor) => [
       item.productColorId,
       item,
     ]) || [],

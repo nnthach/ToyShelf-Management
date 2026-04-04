@@ -4,6 +4,8 @@ import { ShipmentAssign, Store } from "@/src/types";
 import {
   formatShipmentAssignStatusColor,
   formatShipmentAssignStatusText,
+  formatShipmentAssignTypeColor,
+  formatShipmentAssignTypeText,
   formatShipmentStatusColor,
   formatShipmentStatusText,
 } from "@/src/utils/formatStatus";
@@ -17,8 +19,17 @@ export const getShipmentAssignColumnColumns = (
   onEdit: (shipmentAssignId: string) => void,
 ): ColumnDef<ShipmentAssign>[] => [
   {
-    accessorKey: "warehouseLocationName",
-    header: "Từ kho",
+    accessorKey: "orderType",
+    header: "Loại đơn",
+    cell: ({ row }) => {
+      const orderType = row.getValue("orderType") as string;
+
+      return (
+        <span className={`${formatShipmentAssignTypeColor(orderType)}`}>
+          {formatShipmentAssignTypeText(orderType)}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "storeLocationName",

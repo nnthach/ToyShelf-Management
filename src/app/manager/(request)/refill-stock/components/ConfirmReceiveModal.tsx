@@ -38,7 +38,6 @@ function ConfirmReceiveModal({
   onClose,
   onSuccess,
 }: ConfirmReceiveModalProps) {
-  console.log("items", items);
   const queryClient = useQueryClient();
 
   const formSchema = z.object({

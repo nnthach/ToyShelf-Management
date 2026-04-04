@@ -71,7 +71,7 @@ function ViewRefillRequestModalDetail({
   });
 
   const shipmentItemMap = new Map(
-    shipmentDetail?.items?.map((item: RefillRequestProductColor) => [
+    shipmentDetail?.productItems?.map((item: RefillRequestProductColor) => [
       item.productColorId,
       item,
     ]) || [],
@@ -378,7 +378,7 @@ function ViewRefillRequestModalDetail({
       <ConfirmReceiveModal
         shipmentId={shipmentId}
         requestId={requestId}
-        items={shipmentDetail?.items || []}
+        items={shipmentDetail?.productItems || []}
         isOpen={isOpenConfirmReceive}
         onClose={() => setIsOpenConfirmReceive(false)}
         onSuccess={onClose}

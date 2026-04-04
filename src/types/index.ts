@@ -309,6 +309,19 @@ export interface RefillRequestProductColor {
   availableQuantity?: number;
 }
 
+export interface RefillShelfItem {
+  shelfTypeName?: string;
+  shelfTypeId?: string;
+  imageUrl?: string;
+  quantity: number;
+  fulfilledQuantity?: number;
+  expectedQuantity?: number;
+  receivedQuantity?: number;
+  displayExpected?: number;
+  displayReceived?: number;
+  availableQuantity?: number;
+}
+
 export interface RefillRequest {
   id: string;
   code: string;
@@ -326,6 +339,7 @@ export interface RefillRequest {
   createdAt: string;
   approvedAt: string;
   rejectedAt: string;
+  note: string;
   items: RefillRequestProductColor[];
 }
 
@@ -396,6 +410,9 @@ export interface ShipmentAssign {
   id: string;
   storeOrderId: string;
   storeOrderCode: string;
+  shelfOrderId: string;
+  shelfOrderCode: string;
+  orderType: string;
   warehouseLocationId: string;
   warehouseLocationName: string;
   storeLocationId: string;
@@ -403,10 +420,12 @@ export interface ShipmentAssign {
   shipperName: string;
   createdByName: string;
   assignedByName: string;
+  shipmentStatus: string;
   status: string;
   createdAt: string;
   respondedAt: string;
-  items: RefillRequestProductColor[];
+  productItems: RefillRequestProductColor[];
+  shelfItems: RefillShelfItem[];
 }
 
 export interface Shipment {
@@ -423,7 +442,8 @@ export interface Shipment {
   pickedUpAt?: string;
   deliveredAt?: string;
   receivedAt?: string;
-  items: RefillRequestProductColor[];
+  productItems: RefillRequestProductColor[];
+  shelfItems: RefillShelfItem[];
 }
 
 export interface ChartItem {

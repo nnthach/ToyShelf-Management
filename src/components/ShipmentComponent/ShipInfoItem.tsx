@@ -6,11 +6,13 @@ function ShipInfoItem({
   value,
   icon,
   isStatus = false,
+  isNote = false,
 }: {
   label: string;
   value: ReactNode;
   icon?: ReactNode;
   isStatus?: boolean;
+  isNote?: boolean;
 }) {
   return (
     <div className="space-y-1">
@@ -20,9 +22,15 @@ function ShipInfoItem({
       <p
         className={cn(
           "text-sm font-bold px-2.5 py-1 rounded-lg w-fit transition-all",
-          isStatus
-            ? "bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-sm"
-            : "text-slate-700 bg-slate-50 border border-transparent",
+          isStatus &&
+            "bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-sm",
+
+          isNote &&
+            "bg-amber-100 text-amber-700 border border-amber-200 italic shadow-md mt-2",
+
+          !isStatus &&
+            !isNote &&
+            "text-slate-700 bg-slate-50 border border-transparent",
         )}
       >
         {value || "---"}
