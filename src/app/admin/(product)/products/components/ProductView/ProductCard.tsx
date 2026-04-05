@@ -92,7 +92,10 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
             {visibleColors.map((color, index) => (
               <button
                 key={color.id}
-                onClick={() => setSelectedColorIndex(index)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedColorIndex(index);
+                }}
                 className={`w-5 h-5 rounded-full border transition-all duration-300 transform hover:scale-110 ${
                   selectedColorIndex === index
                     ? "border-gray-500 scale-110"
@@ -111,7 +114,10 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
             {hasMore && (
               <div className="relative">
                 <button
-                  onClick={() => setShowMore(!showMore)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowMore(!showMore);
+                  }}
                   className="w-5 h-5 rounded-full border-2 border-gray-200 bg-gray-50 flex items-center justify-center text-[10px] font-bold hover:bg-gray-100 transition"
                 >
                   +{remainingColors.length}
@@ -130,7 +136,8 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
                       {remainingColors.map((color, index) => (
                         <button
                           key={color.id}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setSelectedColorIndex(index + displayLimit);
                             setShowMore(false);
                           }}

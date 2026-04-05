@@ -80,7 +80,6 @@ export function useAuth() {
           dispatch(setWarehouse(warehouseDetail.data[0]));
           if (warehouseDetail?.data[0]?.warehouseRole === "Manager") {
             router.replace("/warehouse/dashboard");
-            toast.success("Đăng nhập thành công");
           } else {
             toast.error("Bạn không có quyền truy cập vào hệ thống!");
             logoutUser();

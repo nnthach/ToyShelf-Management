@@ -1,9 +1,5 @@
-import {
-  RefillRequest,
-  RefillShelfRequestItem,
-  Shipment,
-} from "@/src/types";
-import { Package } from "lucide-react";
+import { RefillRequest, RefillShelfRequestItem, Shipment } from "@/src/types";
+import { Layers, Package } from "lucide-react";
 import Image from "next/image";
 
 interface ShipmentShelfListComponentProps {
@@ -22,17 +18,18 @@ function ShipmentShelfListComponent({
     ]) || [],
   );
 
-  const itemsWithQuantities = storeOrderDetail?.items?.map(
-    (item: RefillShelfRequestItem) => {
-      const shipmentItem = shipmentItemMap.get(item.shelfTypeId);
+  const itemsWithQuantities = (
+    storeOrderDetail?.items as RefillShelfRequestItem[]
+  )?.map((item) => {
+    const shipmentItem = shipmentItemMap.get(item.shelfTypeId);
 
-      return {
-        ...item,
-        expectedQuantity: shipmentItem?.expectedQuantity || 0,
-        receivedQuantity: shipmentItem?.receivedQuantity || 0,
-      };
-    },
-  );
+    return {
+      ...item,
+      expectedQuantity: shipmentItem?.expectedQuantity || 0,
+      receivedQuantity: shipmentItem?.receivedQuantity || 0,
+    };
+  });
+
   return (
     <>
       {/* Header */}
@@ -60,26 +57,45 @@ function ShipmentShelfListComponent({
                 className="bg-white border rounded-xl p-3 shadow-sm hover:shadow-md transition-all flex items-center gap-4"
               >
                 {/* BÊN TRÁI: THÔNG TIN SẢN PHẨM (Chiếm phần lớn diện tích) */}
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="h-12 w-12 rounded-lg border bg-slate-50 flex-shrink-0 overflow-hidden relative shadow-sm">
+                <div className="flex items-center gap-4 flex-1 min-w-0 group">
+                  <div className="h-14 w-14 rounded-xl border bg-slate-50 flex-shrink-0 overflow-hidden relative shadow-sm">
                     {item?.imageUrl ? (
                       <Image
                         src={item.imageUrl}
                         alt=""
                         fill
                         className="object-cover"
-                        sizes="48px"
+                        sizes="56px"
                       />
                     ) : (
-                      <div className="flex items-center justify-center h-full w-full bg-slate-100">
+                      <div className="flex items-center justify-center h-full w-full bg-slate-50">
                         <Package className="h-5 w-5 text-slate-300" />
                       </div>
                     )}
                   </div>
 
-                  <h5 className="font-bold text-[13px] uppercase text-slate-800 leading-tight">
-                    {item.shelfTypeName || "N/A"}
-                  </h5>
+                  <div className="min-w-0">
+                    <h5 className="font-bold text-[14px] text-slate-900 leading-tight truncate">
+                      {item.shelfTypeName || "N/A"}
+                    </h5>
+
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
+                        <span className="font-medium">
+                          {item.width}×{item.height}×{item.depth}
+                        </span>
+                      </div>
+
+                      <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+
+                      <div className="flex items-center gap-1 text-[12px]">
+                        <Layers className="w-3.5 h-3.5 text-blue-500" />
+                        <span className="font-semibold text-slate-700">
+                          {item.totalLevels} tầng
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* BÊN PHẢI: 3 NHÓM SỐ LIỆU (Gom cụm đối soát) */}

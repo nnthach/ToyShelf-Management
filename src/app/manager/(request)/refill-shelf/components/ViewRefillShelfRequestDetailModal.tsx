@@ -16,18 +16,16 @@ import {
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { useState } from "react";
-import { getRefillDetailAPI } from "@/src/services/refill.service";
 import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
 import ConfirmReceiveModal from "./ConfirmReceiveModal";
 import {
-  RefillRequestProductColor,
   RefillShelfRequestItem,
   Shipment,
 } from "@/src/types";
 import {
   AlertCircle,
+  Layers,
   MapPin,
-  Notebook,
   Package,
   Store,
   Truck,
@@ -37,7 +35,6 @@ import {
 } from "lucide-react";
 import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
-import { formatColorNameToVN } from "@/src/utils/format";
 import Image from "next/image";
 import { getRefillShelfDetailAPI } from "@/src/services/refill-shelf.service";
 
@@ -78,7 +75,6 @@ function ViewRefillShelfRequestModalDetail({
 
   const itemsWithQuantities = storeOrderShelfDetail?.items?.map(
     (item: RefillShelfRequestItem) => {
-      // Tra cứu thông tin shipment tương ứng
       const shipmentItem = shipmentItemMap.get(item.shelfTypeId);
 
       return {
@@ -215,7 +211,7 @@ function ViewRefillShelfRequestModalDetail({
                     </span>
                   </div>
 
-                  <div className="flex flex-col divide-y bg-muted/20 p-4 rounded-xl border border-dashed gap-4 max-h-[300px] overflow-y-auto custom-scrollbar">
+                  <div className="flex flex-col gap-4 divide-y bg-muted/20 p-4 rounded-xl border border-dashed gap-4 max-h-[300px] overflow-y-auto custom-scrollbar">
                     {itemsWithQuantities?.map(
                       (item: RefillShelfRequestItem, index: number) => {
                         const expected = item.quantity || 0;
@@ -225,7 +221,7 @@ function ViewRefillShelfRequestModalDetail({
                         return (
                           <div
                             key={item.shelfTypeId || index}
-                            className="flex items-center justify-between pb-4 hover:bg-white transition-colors"
+                            className="flex items-center justify-between hover:bg-white transition-colors"
                           >
                             {/* BÊN TRÁI: IMAGE + THÔNG TIN SẢN PHẨM */}
                             <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -246,10 +242,28 @@ function ViewRefillShelfRequestModalDetail({
                                 )}
                               </div>
 
-                              {/* Text Info */}
-                              <h5 className="font-bold text-[13px] text-slate-800 uppercase leading-tight truncate mb-1">
-                                {item.shelfTypeName}
-                              </h5>
+                              <div className="min-w-0">
+                                <h5 className="font-bold text-[14px] text-slate-900 leading-tight truncate">
+                                  {item.shelfTypeName || "N/A"}
+                                </h5>
+
+                                <div className="flex items-center gap-2 mt-1.5">
+                                  <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
+                                    <span className="font-medium">
+                                      {item.width}×{item.height}×{item.depth}
+                                    </span>
+                                  </div>
+
+                                  <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+
+                                  <div className="flex items-center gap-1 text-[12px]">
+                                    <Layers className="w-3.5 h-3.5 text-blue-500" />
+                                    <span className="font-semibold text-slate-700">
+                                      {item.totalLevels} tầng
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
 
                             {/* BÊN PHẢI: THÔNG TIN YÊU CẦU & THỰC NHẬN */}
@@ -381,14 +395,14 @@ function ViewRefillShelfRequestModalDetail({
                 Đóng cửa sổ
               </Button>
 
-              {shipmentDetail && shipmentDetail?.status === "Delivered" && (
+              {/* {shipmentDetail && shipmentDetail?.status === "Delivered" && ( */}
                 <Button
                   variant="success"
                   onClick={() => setIsOpenConfirmReceive(true)}
                 >
                   Xác nhận đã nhận hàng
                 </Button>
-              )}
+              {/* )} */}
             </DialogFooter>
           </div>
         </DialogContent>
@@ -397,7 +411,6 @@ function ViewRefillShelfRequestModalDetail({
       <ConfirmReceiveModal
         shipmentId={shipmentId}
         requestId={requestId}
-        items={shipmentDetail?.shelfItems || []}
         isOpen={isOpenConfirmReceive}
         onClose={() => setIsOpenConfirmReceive(false)}
         onSuccess={onClose}

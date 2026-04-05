@@ -15,7 +15,7 @@ import ShelfListView from "./components/ShelfView/ShelfListView";
 import ShelfGridView from "./components/ShelfView/ShelfGridView";
 import CreateShelfTypeModal from "./components/CreateShelfTypeModal";
 
-export default function AdminCabinetManage() {
+export default function AdminShelfTypeManage() {
   const [selectedShelfId, setSelectShelfId] = useState<string | null>(null);
   const [shelfView, setShelfView] = useState<"list" | "grid">("grid");
 

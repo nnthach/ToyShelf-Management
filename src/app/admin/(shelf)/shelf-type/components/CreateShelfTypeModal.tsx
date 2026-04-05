@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { useForm, useFieldArray, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ClipboardList, Layers, Maximize, Edit } from "lucide-react";
+import { Plus, ClipboardList, Send, Layers, Maximize } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,26 +12,26 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { Button } from "@/src/styles/components/ui/button";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import {
-  getShelfTypeDetailAPI,
-  updateShelfTypeAPI,
-} from "@/src/services/shelf.service";
+import { createShelfTypeAPI } from "@/src/services/shelf.service";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import { toast } from "react-toastify";
 import { uploadFileToCloudinary } from "@/src/config/cloundinary";
 import { ImageUploadField } from "@/src/components/UploadImageField";
-import { ShelfFormValues, shelfSchema } from "@/src/schemas/shelf.schema";
+import {
+  createShelfSchema,
+  CreateShelfFormValues,
+} from "@/src/schemas/shelf.schema";
 import MultiSelectCategory from "./MuiltiSelectCategory";
-import { ShelfLevelItem } from "@/src/types";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
-function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
+function CreateShelfTypeModal() {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [imageFile, setImageFile] = useState<File | string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const { data: categoryList = [] } = useQuery({
@@ -40,15 +40,8 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
     select: (res) => res.data,
   });
 
-  const { data: shelfTypeDetail } = useQuery({
-    queryKey: ["shelfType", shelfTypeId],
-    queryFn: () => getShelfTypeDetailAPI(shelfTypeId!),
-    select: (res) => res.data,
-    enabled: open && !!shelfTypeId,
-  });
-
-  const form = useForm<ShelfFormValues>({
-    resolver: zodResolver(shelfSchema),
+  const form = useForm<CreateShelfFormValues>({
+    resolver: zodResolver(createShelfSchema),
     defaultValues: {
       imageFile: undefined,
       imageUrl: "",
@@ -77,33 +70,6 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
     name: "levels",
   });
 
-  useEffect(() => {
-    if (!shelfTypeDetail) return;
-
-    form.reset({
-      imageFile: undefined,
-      imageUrl: shelfTypeDetail.imageUrl,
-      name: shelfTypeDetail.name,
-      width: shelfTypeDetail.width,
-      height: shelfTypeDetail.height,
-      depth: shelfTypeDetail.depth,
-      totalLevels: shelfTypeDetail.totalLevels,
-      suitableProductCategoryTypes:
-        shelfTypeDetail.suitableProductCategoryTypes,
-      displayGuideline: shelfTypeDetail.displayGuideline,
-      levels: shelfTypeDetail.levels.map((l: ShelfLevelItem) => ({
-        level: l.level,
-        name: l.name,
-        clearanceHeight: l.clearanceHeight,
-        recommendedCapacity: l.recommendedCapacity,
-        suitableProductCategoryTypes: l.suitableProductCategoryTypes,
-        displayGuideline: l.displayGuideline,
-      })),
-    });
-
-    // set preview riêng
-    setImagePreview(shelfTypeDetail.imageUrl);
-  }, [shelfTypeDetail, form]);
 
   // Tự động cập nhật số lượng tầng khi totalLevels thay đổi
   const watchTotalLevels = form.watch("totalLevels");
@@ -125,7 +91,7 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
     }
   }, [watchTotalLevels, replace, form]);
 
-  const validateSubLevelCateType = (data: ShelfFormValues) => {
+  const validateSubLevelCateType = (data: CreateShelfFormValues) => {
     const parentCats = data.suitableProductCategoryTypes;
 
     for (let i = 0; i < data.levels.length; i++) {
@@ -142,26 +108,22 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
   };
 
   // submit form
-  async function onSubmit(data: ShelfFormValues) {
-    console.log("data", data);
-
+  async function onSubmit(data: CreateShelfFormValues) {
     const isValid = validateSubLevelCateType(data);
     if (!isValid) return;
+
     setIsLoading(true);
 
     try {
-      let imageUrl = data.imageUrl || null;
+      const imageUrl = data.imageFile
+        ? await uploadFileToCloudinary(data.imageFile, "shelf")
+        : null;
 
-      if (data.imageFile instanceof File) {
-        imageUrl = await uploadFileToCloudinary(data.imageFile, "shelf");
-      }
-
-      await updateShelfTypeAPI({ ...data, imageUrl: imageUrl }, shelfTypeId);
+      await createShelfTypeAPI({ ...data, imageUrl: imageUrl });
 
       queryClient.invalidateQueries({ queryKey: ["shelfs"] });
-      queryClient.invalidateQueries({ queryKey: ["shelfType"] });
 
-      toast.success("Chỉnh sửa loại kệ thành công!");
+      toast.success("Tạo loại kệ thành công!");
       form.reset();
 
       setOpen(false);
@@ -172,29 +134,31 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
     }
   }
 
+  if (isLoading) {
+    return <LoadingPageComponent />;
+  }
+
   return (
     <Dialog
       open={open}
       onOpenChange={(val) => {
         setOpen(val);
-        if (!val) {
-          form.reset();
-          setImageFile(null);
-          setImagePreview(null);
-        }
+        if (!val) form.reset();
+
+        setImageFile(null);
+        setImagePreview(null);
       }}
     >
       <DialogTrigger asChild>
-        <button className="flex-[2] flex items-center justify-center gap-2 h-11 rounded-xl bg-black text-white text-sm font-bold hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-lg shadow-black/10">
-          <Edit size={18} />
-          Chỉnh sửa
-        </button>
+        <Button className="btn-primary-gradient">
+          <Plus className="mr-2" /> Thêm loại kệ
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden border-none shadow-2xl">
         <DialogHeader className="p-6 bg-slate-50 border-b">
           <DialogTitle className="text-xl font-bold flex items-center gap-2">
-            <Layers className="text-blue-600" /> Chỉnh sửa loại kệ
+            <Layers className="text-blue-600" /> Thêm loại kệ mới
           </DialogTitle>
         </DialogHeader>
 
@@ -225,12 +189,11 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
                     preview={imagePreview}
                     error={form.formState.errors.imageFile?.message}
                     onChange={(file, preview) => {
-                      form.setValue("imageFile", file ?? undefined, {
-                        shouldValidate: true,
-                      });
-
-                      form.setValue("imageUrl", file ? "" : "");
-
+                      if (file) {
+                        form.setValue("imageFile", file, {
+                          shouldValidate: true,
+                        });
+                      }
                       setImageFile(file);
                       setImagePreview(preview);
                     }}
@@ -349,7 +312,7 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
             variant="success"
             className="px-10"
           >
-            <Edit className="mr-2 h-4 w-4" /> Chỉnh sửa
+            <Send className="mr-2 h-4 w-4" /> Xác nhận thêm
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -357,4 +320,4 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
   );
 }
 
-export default memo(UpdateShelfTypeModal);
+export default memo(CreateShelfTypeModal);

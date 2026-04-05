@@ -57,14 +57,16 @@ export const AdminSidebarGroups = [
       { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
     ],
   },
-
-  {
-    label: "Quản lý loại kệ",
-    items: [{ title: "Danh sách loại kệ", url: "/admin/shelf", icon: Server }],
-  },
 ];
 
 export const AdminSidebarNested = [
+  {
+    label: "Quản lý loại kệ",
+    sub: [
+      { title: "Kệ", url: "/admin/shelf", icon: Server },
+      { title: "Danh sách loại kệ", url: "/admin/shelf-type", icon: Server },
+    ],
+  },
   {
     label: "Quản lý đối tác",
     sub: [

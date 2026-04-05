@@ -28,7 +28,7 @@ export const rejectRefillShelfRequestAPI = async (
   return res.data;
 };
 
-export const getStoreOrderAvailableWarehouseAPI = async (id: string) => {
+export const getShelfOrderAvailableWarehouseAPI = async (id: string) => {
   const res = await api.get(`/ShelfOrder/${id}/available-warehouses`);
   return res.data;
 };

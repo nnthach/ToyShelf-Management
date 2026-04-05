@@ -14,10 +14,11 @@ import { Send, Warehouse, Box, Package } from "lucide-react";
 import { memo, useState, useMemo } from "react";
 import { createShipmentAssignWarehouseAPI } from "@/src/services/shipment-assignment.service";
 import { getStoreOrderAvailableWarehouseAPI } from "@/src/services/refill.service";
-import { RefillRequestProductColor } from "@/src/types";
+import { RefillRequestProductColor, RefillShelfRequestItem } from "@/src/types";
 import { cn } from "@/src/styles/lib/utils";
 import { formatColorNameToVN } from "@/src/utils/format";
 import Image from "next/image";
+import { getShelfOrderAvailableWarehouseAPI } from "@/src/services/refill-shelf.service";
 
 type AssignWarehouseModalProps = {
   requestId: string;
@@ -31,7 +32,7 @@ interface WarehouseInventory {
   warehouseId: string;
   warehouseName: string;
   warehouseCode: string;
-  items: RefillRequestProductColor[];
+  items: RefillShelfRequestItem[];
 }
 
 function AssignWarehouseModal({
@@ -50,7 +51,7 @@ function AssignWarehouseModal({
     isLoading: isLoadingAvailableWarehouse,
   } = useQuery({
     queryKey: ["availableWarehouses", requestId],
-    queryFn: () => getStoreOrderAvailableWarehouseAPI(requestId),
+    queryFn: () => getShelfOrderAvailableWarehouseAPI(requestId),
     select: (res) => res.data,
     enabled: isOpen,
   });
@@ -178,7 +179,7 @@ function AssignWarehouseModal({
                               : "bg-green-50 text-green-700 border-green-100",
                           )}
                         >
-                          Có sẵn {wh.items?.length || 0} Sản phẩm phù hợp
+                          Có sẵn {wh.items?.length || 0} loại kệ phù hợp
                         </div>
                       </div>
                     </div>
@@ -215,8 +216,9 @@ function AssignWarehouseModal({
                     <table className="w-full text-sm text-left">
                       <thead className="bg-gray-50 text-gray-600 border-b">
                         <tr>
-                          <th className="px-4 py-2 font-medium">Sản phẩm</th>
-                          <th className="px-4 py-2 font-medium">Màu</th>
+                          <th className="px-4 py-2 font-medium">Kệ</th>
+                          <th className="px-4 py-2 font-medium">Kích thước</th>
+                          <th className="px-4 py-2 font-medium">Số tầng</th>
                           <th className="px-4 py-2 font-medium text-right">
                             Số lượng
                           </th>
@@ -224,7 +226,7 @@ function AssignWarehouseModal({
                       </thead>
                       <tbody className="divide-y divide-gray-50">
                         {selectedWarehouse.items.map(
-                          (item: RefillRequestProductColor, idx: number) => (
+                          (item: RefillShelfRequestItem, idx: number) => (
                             <tr
                               key={idx}
                               className="hover:bg-blue-50/30 transition-colors"
@@ -237,27 +239,21 @@ function AssignWarehouseModal({
                                         item.imageUrl ||
                                         "/placeholder-product.png"
                                       }
-                                      alt={item.productName as string}
+                                      alt={item.shelfTypeName as string}
                                       fill
                                       className="object-cover"
                                     />
                                   </div>
 
-                                  <div>
-                                    <div className="text-sm font-semibold">
-                                      {item.productName}
-                                    </div>
-                                    <p className="text-[10px] text-gray-400 font-mono">
-                                      {item.sku}
-                                    </p>
-                                  </div>
+                                  <p className="text-sm font-semibold">
+                                    {item.shelfTypeName}
+                                  </p>
                                 </div>
                               </td>
                               <td className="px-4 py-3">
-                                <span className="px-2 py-0.5 rounded-full text-[10px] bg-gray-100 border font-bold">
-                                  {formatColorNameToVN(item?.color as string)}
-                                </span>
+                                {item.width} x {item.height} x {item.depth}
                               </td>
+                              <td className="px-4 py-3">{item.totalLevels}</td>
                               <td className="px-4 py-3 text-right">
                                 <span
                                   className={cn(

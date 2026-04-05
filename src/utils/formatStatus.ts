@@ -201,6 +201,10 @@ export const formatStoreOrderRefillRequestStatusText = (status: string) => {
       return "Đã giao một phần";
     case "Fulfilled":
       return "Đã giao đủ";
+    case "Processing":
+      return "Đang giao hàng";
+    default:
+      return "N/A";
   }
 };
 
@@ -216,6 +220,8 @@ export const formatStoreOrderRefillRequestStatusColor = (status: string) => {
       return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl";
     case "Fulfilled":
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
+    case "Processing":
+      return "bg-purple-100 text-purple-800 px-3 py-1 rounded-2xl";
   }
 };
 

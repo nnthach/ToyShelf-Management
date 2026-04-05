@@ -40,7 +40,7 @@ const renderFieldByType = (
   field: RHFField,
   placeholder?: string,
   selectData?: SelectOption[],
-  props?: CommonFieldProps,
+  props: CommonFieldProps = {},
   error?: string | undefined,
   switchColor?: string,
 ) => {
@@ -79,7 +79,19 @@ const renderFieldByType = (
           type="number"
           placeholder={placeholder}
           className={`${props?.className ?? ""} ${invalidClass}`}
-          onChange={(e) => field.onChange(e.target.valueAsNumber)}
+          onChange={(e) => {
+            const value = e.target.valueAsNumber;
+            const max = (props as React.InputHTMLAttributes<HTMLInputElement>)
+              ?.max;
+
+            if (max !== undefined && value > Number(max)) {
+              field.onChange(Number(max));
+            } else if (value < 0) {
+              field.onChange(0);
+            } else {
+              field.onChange(value);
+            }
+          }}
         />
       );
 

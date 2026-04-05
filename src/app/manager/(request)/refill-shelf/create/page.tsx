@@ -12,7 +12,6 @@ import CartDetailSheet from "./components/CartDetailSheet";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import Pagination from "@/src/components/Pagination";
 import { Shelf } from "@/src/types";
-import { createRefillAPI } from "@/src/services/refill.service";
 import { toast } from "react-toastify";
 import { getAllShelfTypeAPI } from "@/src/services/shelf.service";
 import ShelfCardOrder from "./components/ShelfCardOrder";

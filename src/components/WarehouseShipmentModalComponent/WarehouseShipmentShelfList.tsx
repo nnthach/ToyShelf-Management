@@ -1,9 +1,5 @@
-import {
-  RefillShelfItem,
-  Shipment,
-  ShipmentAssign,
-} from "@/src/types";
-import { Package } from "lucide-react";
+import { RefillShelfItem, Shipment, ShipmentAssign } from "@/src/types";
+import { Layers, Package } from "lucide-react";
 import Image from "next/image";
 
 interface WarehouseShipmentShelfListProps {
@@ -18,8 +14,6 @@ function WarehouseShipmentShelfList({
   console.log("shipment", shipmentDetail);
   console.log("shipmentAssignDetail", shipmentAssignDetail);
 
-  // 1. Tạo Map để tra cứu nhanh thông tin từ shipmentDetail
-  // Sử dụng đúng kiểu dữ liệu RefillRequestProductColor thay vì any
   const shipmentItemMap = new Map<string, RefillShelfItem>(
     (shipmentDetail?.shelfItems as RefillShelfItem[])?.map((item) => [
       item.shelfTypeId as string,
@@ -27,20 +21,15 @@ function WarehouseShipmentShelfList({
     ]) || [],
   );
 
-  // 2. Map dữ liệu dựa trên danh sách của Assignment
   const itemsWithQuantities: RefillShelfItem[] =
     (shipmentAssignDetail?.shelfItems as RefillShelfItem[])?.map((item) => {
-      // Tra cứu thông tin shipment tương ứng từ Map
       const shipmentItem = shipmentItemMap.get(item.shelfTypeId as string);
 
       return {
         ...item,
-        // Kho giao: Ưu tiên expectedQuantity từ shipment,
-        // nếu chưa có shipment thì fallback về fulfilledQuantity từ assign
         displayExpected: shipmentItem
           ? (shipmentItem.expectedQuantity ?? 0)
           : (item.fulfilledQuantity ?? 0),
-        // Thực nhận: Lấy từ shipment
         displayReceived: shipmentItem
           ? (shipmentItem.receivedQuantity ?? 0)
           : 0,
@@ -67,7 +56,6 @@ function WarehouseShipmentShelfList({
           const received = item.displayReceived ?? 0;
           const request = item.quantity ?? 0;
 
-          // Shortfall: Thực nhận < Kho giao (Chỉ khi đã có thông tin shipment)
           const isShortfall = shipmentDetail && received < expected;
 
           return (
@@ -92,19 +80,27 @@ function WarehouseShipmentShelfList({
                     </div>
                   )}
                 </div>
-
                 <div className="min-w-0">
-                  <h5 className="font-bold text-[13px] uppercase text-slate-800 leading-tight truncate">
-                    {item.shelfTypeName}
+                  <h5 className="font-bold text-[14px] text-slate-900 leading-tight truncate">
+                    {item.shelfTypeName || "N/A"}
                   </h5>
-                  {/* <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[10px] font-mono text-slate-400 font-medium">
-                      {item.sku || "N/A"}
-                    </span>
-                    <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 leading-none">
-                      {formatColorNameToVN(item?.color as string)}
-                    </span>
-                  </div> */}
+
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
+                      <span className="font-medium">
+                        {item.width}×{item.height}×{item.depth}
+                      </span>
+                    </div>
+
+                    <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+
+                    <div className="flex items-center gap-1 text-[12px]">
+                      <Layers className="w-3.5 h-3.5 text-blue-500" />
+                      <span className="font-semibold text-slate-700">
+                        {item.totalLevels} tầng
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
 

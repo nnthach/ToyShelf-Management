@@ -313,6 +313,10 @@ export interface RefillShelfItem {
   shelfTypeName?: string;
   shelfTypeId?: string;
   imageUrl?: string;
+  width: number;
+  height: number;
+  depth: number;
+  totalLevels: number;
   quantity: number;
   fulfilledQuantity?: number;
   expectedQuantity?: number;
@@ -340,13 +344,17 @@ export interface RefillRequest {
   approvedAt: string;
   rejectedAt: string;
   note: string;
-  items: RefillRequestProductColor[];
+  items: RefillRequestProductColor[] | RefillShelfRequestItem[];
 }
 
 export interface RefillShelfRequestItem {
   shelfTypeId?: string;
   shelfTypeName?: string;
   imageUrl?: string;
+  width: number;
+  height: number;
+  depth: number;
+  totalLevels: number;
   quantity: number;
   fulfilledQuantity?: number;
   expectedQuantity?: number;
@@ -372,6 +380,13 @@ export interface RefillShelfRequest {
   approvedAt: string;
   rejectedAt: string;
   items: RefillShelfRequestItem[];
+}
+
+export interface CheckReceiveShelfItem {
+  shelfId: string;
+  code: string;
+  shelfTypeName: string;
+  status: string;
 }
 
 export interface Payment {

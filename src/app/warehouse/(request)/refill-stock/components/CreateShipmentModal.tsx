@@ -187,6 +187,7 @@ function CreateShipmentModal({
                         type="number"
                         placeholder="0"
                         label="Số lượng"
+                        max={item.quantity}
                         className="h-9 text-sm font-bold"
                       />
                     </div>

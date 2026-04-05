@@ -146,24 +146,32 @@ function CreateShipmentShelfModal({
 
                       {/* 2. Nội dung chi tiết */}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-slate-700 truncate uppercase tracking-tight">
+                        {/* Tên kệ: Giữ font đậm nhưng dùng slate-800 cho dịu mắt hơn black */}
+                        <h5 className="text-[13px] font-bold text-slate-800 uppercase truncate tracking-tight">
                           {item.shelfTypeName}
-                        </p>
+                        </h5>
 
-                        {/* SKU & Color (Thay thế cho ID cũ) */}
-                        {/* <div className="flex items-center gap-2 mt-1">
-                          <span className="text-[10px] font-mono text-slate-400 font-medium">
-                            {item.sku || "N/A"}
+                        {/* Thông số: Tất cả trên 1 hàng */}
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {/* Kích thước */}
+                          <span className="text-[11px] font-medium text-slate-500">
+                            {item.width}×{item.height}×{item.depth}
                           </span>
-                          <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 leading-none">
-                            {formatColorNameToVN(item?.color as string)}
-                          </span>
-                        </div> */}
 
-                        {/* Số lượng yêu cầu */}
-                        <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+                          {/* Dấu gạch đứng phân cách nhẹ */}
+                          <span className="w-[1px] h-3 bg-slate-200"></span>
+
+                          {/* Số tầng & Yêu cầu */}
+                          <span className="text-[11px] text-slate-500">
+                            <span className="font-semibold text-indigo-600">
+                              {item.totalLevels}
+                            </span>{" "}
+                            tầng
+                          </span>
+                        </div>
+                        <span className="text-[12px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
                           Yêu cầu:{" "}
-                          <span className="text-slate-900">
+                          <span className=" text-slate-900">
                             {item.quantity}
                           </span>
                         </span>
@@ -177,6 +185,7 @@ function CreateShipmentShelfModal({
                         type="number"
                         placeholder="0"
                         label="Số lượng"
+                        max={item.quantity}
                         className="h-9 text-sm font-bold"
                       />
                     </div>

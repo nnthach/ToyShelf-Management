@@ -34,3 +34,8 @@ export const receiveShipmentAPI = async <T>(id: string, data: T) => {
   const res = await api.patch(`/Shipment/${id}/receive`, data);
   return res.data;
 };
+
+export const checkShelfItemsShipmentAPI = async (id: string) => {
+  const res = await api.get(`/Shipment/${id}/shelf-items`);
+  return res.data;
+};

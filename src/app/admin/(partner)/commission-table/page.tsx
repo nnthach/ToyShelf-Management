@@ -18,7 +18,6 @@ import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import CreatePartnerTierModal from "./components/CreateCommisionTableModal";
 import {
   deleteCommissionTableAPI,
   disableCommissionTableAPI,
@@ -87,7 +86,6 @@ export default function AdminCommissionTable() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     order: "",
-    search: "",
   });
 
   const {
@@ -192,7 +190,6 @@ export default function AdminCommissionTable() {
             query={query}
             loading={loading}
             resultCount={commissionTableList?.length || 0}
-            onSearch={(val) => updateQuery({ search: val })}
             onApplyFilter={(filter) =>
               updateQuery({
                 ...filter,
@@ -201,10 +198,6 @@ export default function AdminCommissionTable() {
             onReset={() => resetQuery()}
             onRefresh={() => refetch()}
           />
-
-          <Button variant={"outline"}>
-            <Upload /> Xuất dữ liệu
-          </Button>
         </div>
 
         {/* render card price table */}
