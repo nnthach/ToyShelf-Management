@@ -54,7 +54,8 @@ function ProductColorItem({
                 placeholder="Chọn màu sắc"
                 type="select"
                 selectData={colorOptions}
-                icon={<Palette size={18} />} // Icon bảng màu
+                icon={<Palette size={18} />}
+                required
               />
 
               <FormFieldCustom
@@ -62,7 +63,8 @@ function ProductColorItem({
                 label="Giá theo màu"
                 placeholder="Nhập giá cho màu này"
                 type="number"
-                icon={<Banknote size={18} />} // Icon tiền mặt
+                icon={<Banknote size={18} />}
+                required
               />
             </div>
           </div>

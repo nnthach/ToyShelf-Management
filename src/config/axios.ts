@@ -28,12 +28,14 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Xử lý lỗi chung (401, 403, 500...)
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("roles");
       window.location.href = "/";
     }
+
+    const message = error.response?.data?.error || "Đã có lỗi xảy ra";
+    error.message = message;
 
     return Promise.reject(error);
   },

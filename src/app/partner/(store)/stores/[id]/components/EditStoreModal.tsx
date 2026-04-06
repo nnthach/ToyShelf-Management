@@ -37,6 +37,7 @@ import {
 } from "@/src/services/store.service";
 import { getAllCityAPI } from "@/src/services/city.service";
 import { City } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function EditStoreModal({ storeId }: { storeId: string }) {
   const queryClient = useQueryClient();
@@ -121,7 +122,7 @@ function EditStoreModal({ storeId }: { storeId: string }) {
       toast.success("Cập nhật cửa hàng thành công");
       setOpen(false);
     } catch (error) {
-      toast.error("Cập nhật cửa hàng thất bại");
+      toast.error(getErrorMessage(error, "Cập nhật cửa hàng thất bại"));
     } finally {
       setIsLoading(false);
     }

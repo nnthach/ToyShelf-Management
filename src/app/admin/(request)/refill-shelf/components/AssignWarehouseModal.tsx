@@ -19,6 +19,7 @@ import { cn } from "@/src/styles/lib/utils";
 import { formatColorNameToVN } from "@/src/utils/format";
 import Image from "next/image";
 import { getShelfOrderAvailableWarehouseAPI } from "@/src/services/refill-shelf.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type AssignWarehouseModalProps = {
   requestId: string;
@@ -82,7 +83,7 @@ function AssignWarehouseModal({
       toast.success("Điều phối kho thành công");
       onClose();
     } catch (error) {
-      toast.error("Điều phối kho thất bại");
+      toast.error(getErrorMessage(error,"Điều phối kho thất bại"));
     } finally {
       setIsLoading(false);
     }

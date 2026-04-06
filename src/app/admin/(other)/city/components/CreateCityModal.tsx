@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { formatToInitials } from "@/src/utils/format";
 import { createCityAPI } from "@/src/services/city.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateCityModal() {
   const queryClient = useQueryClient();
@@ -54,7 +55,7 @@ function CreateCityModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Thêm thành phố mới thất bại");
+      toast.error(getErrorMessage(error, "Thêm thành phố thất bại"));
     }
   }
 
@@ -98,6 +99,7 @@ function CreateCityModal() {
                 label="Tên thành phố / Tỉnh"
                 placeholder="Ví dụ: TP. Hồ Chí Minh, Hà Nội..."
                 icon={<Building2 size={18} />}
+                required
               />
             </form>
           </FormProvider>

@@ -41,6 +41,7 @@ import {
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import { cn } from "@/src/styles/lib/utils";
 import { formatCommissionTableTypeToVN } from "@/src/utils/format";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type EditPriceTableModalProps = {
   commissionTableId: string;
@@ -156,11 +157,11 @@ function EditPriceTableModal({
     try {
       await updateCommissionTableAPI(payload, commissionTableId);
       queryClient.invalidateQueries({ queryKey: ["commissionTables"] });
-      toast.success("Thành công!");
+      toast.success("Chỉnh sửa bảng hoa hồng thành công");
       form.reset();
       onClose();
     } catch (error) {
-      toast.error("Thất bại!");
+      toast.error(getErrorMessage(error, "Chỉnh sửa bảng hoa hồng thất bại"));
     }
   }
 
@@ -204,6 +205,7 @@ function EditPriceTableModal({
                     name="name"
                     label="Tên bảng giá"
                     placeholder="Nhập tên bảng giá..."
+                    required
                   />
                   <FormFieldCustom
                     name="type"
@@ -213,6 +215,7 @@ function EditPriceTableModal({
                       value: v,
                       label: formatCommissionTableTypeToVN(v),
                     }))}
+                    required
                   />
                   <FormFieldCustom
                     name="partnerTierId"
@@ -222,6 +225,7 @@ function EditPriceTableModal({
                       value: t.id,
                       label: t.name,
                     }))}
+                    required
                   />
                 </div>
               </section>
@@ -276,7 +280,8 @@ function EditPriceTableModal({
                         {/* Chọn danh mục */}
                         <div>
                           <label className="text-sm font-semibold text-slate-700 mb-3 block">
-                            Danh mục sản phẩm áp dụng
+                            Danh mục sản phẩm áp dụng{" "}
+                            <span className="text-red-500 ml-0.5">*</span>
                           </label>
                           <Controller
                             control={form.control}
@@ -336,6 +341,7 @@ function EditPriceTableModal({
                             type="number"
                             placeholder="Ví dụ: 10"
                             icon={<Percent size={14} />}
+                            required
                           />
                         </div>
                       </div>

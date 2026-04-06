@@ -44,6 +44,7 @@ import { getAllCityAPI } from "@/src/services/city.service";
 import { City, Warehouse } from "@/src/types";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import MapCreate from "@/src/components/MapCreate";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
   const queryClient = useQueryClient();
@@ -119,7 +120,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
       toast.success("Cập nhật kho thành công");
       setOpen(false);
     } catch (error) {
-      toast.error("Cập nhật kho thất bại");
+      toast.error(getErrorMessage(error, "Cập nhật kho thất bại"));
     }
   }
 
@@ -138,7 +139,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
       form.reset();
       toast.success("Vô hiệu hóa kho thành công");
     } catch (error) {
-      toast.error("Vô hiệu hóa kho thất bại");
+      toast.error(getErrorMessage(error, "Vô hiệu hóa kho thất bại"));
     }
   }
 
@@ -157,7 +158,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
       form.reset();
       toast.success("Khôi phục kho thành công");
     } catch (error) {
-      toast.error("Khôi phục kho thất bại");
+      toast.error(getErrorMessage(error, "Khôi phục kho thất bại"));
     }
   }
 
@@ -224,6 +225,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
                     label="Tên kho"
                     placeholder="Ví dụ: Kho trung chuyển phía Nam"
                     icon={<WarehouseIcon size={18} />}
+                    required
                   />
 
                   <FormFieldCustom
@@ -233,6 +235,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
                     type="select"
                     selectData={cityOptions}
                     icon={<Globe2 size={18} />}
+                    required
                   />
 
                   <div className="relative group">
@@ -248,6 +251,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
                         setInput(value);
                         form.setValue("address", value);
                       }}
+                      required
                     />
 
                     {/* SUGGESTIONS BOX - Làm lại UI cho mượt */}
@@ -298,18 +302,18 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
                       label="Vĩ độ"
                       placeholder="0.000000"
                       type="number"
-                      readOnly={true}
                       icon={<Navigation size={16} className="rotate-45" />}
                       className="bg-white/50"
+                      required
                     />
                     <FormFieldCustom
                       name="longitude"
                       label="Kinh độ"
                       placeholder="0.000000"
                       type="number"
-                      readOnly={true}
                       icon={<Navigation size={16} />}
                       className="bg-white/50"
+                      required
                     />
                   </div>
                 </form>

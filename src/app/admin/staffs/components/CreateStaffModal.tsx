@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { Warehouse } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -88,7 +89,7 @@ function CreateStaffModal() {
       setOpen(false);
       toast.success("Tạo nhân viên thành công");
     } catch (error) {
-      toast.error("Tạo nhân viên thất bại");
+      toast.error(getErrorMessage(error, "Tạo nhân viên thất bại"));
     }
   }
 
@@ -133,6 +134,7 @@ function CreateStaffModal() {
                   label="Họ và tên"
                   icon={<User size={18} />}
                   placeholder="Nhập tên người quản lý..."
+                  required
                 />
 
                 <FormFieldCustom
@@ -140,6 +142,7 @@ function CreateStaffModal() {
                   label="Email đăng nhập"
                   icon={<Mail size={18} />}
                   placeholder="example@gmail.com"
+                  required
                 />
 
                 <FormFieldCustom
@@ -149,6 +152,7 @@ function CreateStaffModal() {
                   placeholder="Chọn chức vụ"
                   type="select"
                   selectData={roleOptions}
+                  required
                 />
 
                 <FormFieldCustom
@@ -158,6 +162,7 @@ function CreateStaffModal() {
                   placeholder="Chọn kho làm việc"
                   type="select"
                   selectData={warehouseOptions}
+                  required
                 />
               </div>
             </form>

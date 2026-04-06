@@ -17,6 +17,7 @@ import { Product } from "@/src/types";
 import { createRefillAPI } from "@/src/services/refill.service";
 import { toast } from "react-toastify";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export interface CartItem {
   productColorId: string;
@@ -112,7 +113,7 @@ export default function CreateStoreOrderRefill() {
       toast.success("Tạo đơn thành công");
       router.back();
     } catch (error) {
-      toast.error("Tạo đơn thất bại");
+      toast.error(getErrorMessage(error, "Tạo đơn thất bại"));
     }
   };
   return (

@@ -31,6 +31,7 @@ import {
   UserCheck,
   UserPlus,
 } from "lucide-react";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type UpdateStoreCreateRequestModalProps = {
   requestId: string;
@@ -51,7 +52,7 @@ function UpdateStoreCreateRequestModal({
     queryKey: ["requestDetail", requestId],
     queryFn: () => getStoreCreationRequestDetailAPI(requestId!),
     select: (res) => res.data,
-    enabled: !!requestId,
+    enabled: !!requestId && isOpen,
   });
 
   async function handleApprove() {
@@ -65,8 +66,8 @@ function UpdateStoreCreateRequestModal({
       toast.success("Chấp nhận yêu cầu thành công");
 
       onClose();
-    } catch {
-      toast.error("Chấp nhận yêu cầu thất bại");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
     }
   }
 

@@ -1,8 +1,6 @@
 "use client";
 import { createAllRoleAccountAPI } from "@/src/services/account.service";
-import {
-  getAllPartnerAPI,
-} from "@/src/services/partner.service";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
 import { getAllRoleAPI } from "@/src/services/role.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
@@ -17,6 +15,7 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { Partner, Role } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -91,7 +90,7 @@ function CreatePartnerAccountModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Tạo đối tác thất bại");
+      toast.error(getErrorMessage(error, "Tạo đối tác thất bại"));
     }
   }
 
@@ -141,6 +140,7 @@ function CreatePartnerAccountModal() {
                   label="Họ và tên"
                   icon={<User size={18} />}
                   placeholder="Nhập tên người quản lý..."
+                  required
                 />
 
                 <FormFieldCustom
@@ -148,6 +148,7 @@ function CreatePartnerAccountModal() {
                   label="Email đăng nhập"
                   icon={<Mail size={18} />}
                   placeholder="example@gmail.com"
+                  required
                 />
 
                 <FormFieldCustom
@@ -157,6 +158,7 @@ function CreatePartnerAccountModal() {
                   placeholder="Chọn công ty sở hữu"
                   type="select"
                   selectData={partnerCompanyOptions}
+                  required
                 />
               </div>
             </form>

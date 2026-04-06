@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { PartnerTier } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -47,8 +48,6 @@ function UpgradePartnerTierModal({ partnerId }: { partnerId: string }) {
     },
   });
 
-  console.log("Form Errors:", form.formState.errors);
-
   const { data: partnerTierList = [], isLoading } = useQuery({
     queryKey: ["partnerTiers", { isActive: undefined }],
     queryFn: () => getAllPartnerTierAPI({ isActive: undefined }),
@@ -68,7 +67,7 @@ function UpgradePartnerTierModal({ partnerId }: { partnerId: string }) {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Nâng cấp thất bại");
+      toast.error(getErrorMessage(error, "Nâng cấp thất bại"));
     }
   }
 
@@ -138,6 +137,7 @@ function UpgradePartnerTierModal({ partnerId }: { partnerId: string }) {
                 placeholder="Chọn hạng (Đồng, Bạc, Vàng...)"
                 type="select"
                 selectData={partnerTierOptions}
+                required
               />
 
               {/* Hidden input cho partnerId */}

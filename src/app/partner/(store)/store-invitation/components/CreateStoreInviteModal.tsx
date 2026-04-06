@@ -17,6 +17,7 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { Role, Store } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -78,7 +79,7 @@ function CreateStoreInviteModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Mời nhân viên thất bại");
+      toast.error(getErrorMessage(error, "Mời nhân viên thất bại"));
     }
   }
 
@@ -125,6 +126,7 @@ function CreateStoreInviteModal() {
                 type="select"
                 selectData={storeOptions}
                 icon={<StoreIcon size={18} />}
+                required
               />
 
               {/* NHẬP EMAIL */}
@@ -133,6 +135,7 @@ function CreateStoreInviteModal() {
                 label="Email người nhận"
                 placeholder="email@gmail.com"
                 icon={<Mail size={18} />}
+                required
               />
 
               <FormFieldCustom
@@ -142,6 +145,7 @@ function CreateStoreInviteModal() {
                 type="select"
                 selectData={roleOptions}
                 icon={<StoreIcon size={18} />}
+                required
               />
 
               <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100">

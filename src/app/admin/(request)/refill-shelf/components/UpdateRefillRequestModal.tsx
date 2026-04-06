@@ -29,6 +29,7 @@ import {
 } from "@/src/services/refill-shelf.service";
 import ShipmentShelfListComponent from "@/src/components/ShipmentComponent/ShipmentShelfListComponent";
 import ReasonRejectRequestModal from "./ReasonRejectRequest";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type UpdateRefillShelfRequestModalProps = {
   requestId: string;
@@ -84,8 +85,8 @@ function UpdateRefillShelfRequestModal({
       });
 
       toast.success("Hãy điều phối kho thực hiện");
-    } catch {
-      toast.error("Chấp nhận yêu cầu thất bại");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
     }
   }
 

@@ -29,6 +29,7 @@ import { createShipmentAPI } from "@/src/services/shipment.service";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { formatColorNameToVN } from "@/src/utils/format";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type CreateShipmentModalProps = {
   requestId: string;
@@ -95,7 +96,7 @@ function CreateShipmentModal({
       toast.success("Tạo đơn giao thành công");
       onClose();
     } catch (error) {
-      toast.error("Tạo đơn giao thất bại");
+      toast.error(getErrorMessage(error,"Tạo đơn giao thất bại"));
     }
   }
 

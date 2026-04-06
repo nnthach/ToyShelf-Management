@@ -23,6 +23,7 @@ import {
 import { User as UserType, WarehouseStaff } from "@/src/types";
 import { memo } from "react";
 import { useAuth } from "@/src/hooks/useAuth";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type AssignShipperModalProps = {
   requestId: string;
@@ -81,7 +82,7 @@ function AssignShipperModal({
       toast.success("Điều phối giao hàng thành công");
       onClose();
     } catch (error) {
-      toast.error("Điều phối giao hàng thất bại");
+      toast.error(getErrorMessage(error, "Điều phối giao hàng thất bại"));
     }
   }
 

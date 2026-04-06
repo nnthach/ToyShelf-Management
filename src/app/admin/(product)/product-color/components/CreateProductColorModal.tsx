@@ -21,6 +21,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { memo, useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateProductColorModal() {
   const queryClient = useQueryClient();
@@ -54,7 +55,7 @@ function CreateProductColorModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Thêm màu mới thất bại");
+      toast.error(getErrorMessage(error, "Thêm màu mới thất bại"));
     }
   }
 
@@ -101,6 +102,7 @@ function CreateProductColorModal() {
                   labelNote="Tên tiếng anh"
                   placeholder="Ví dụ: Đỏ đô"
                   icon={<Palette size={18} />}
+                  required
                 />
 
                 {/* HEX INPUT */}
@@ -109,6 +111,7 @@ function CreateProductColorModal() {
                   label="Mã HEX"
                   placeholder="#000000"
                   icon={<Hash size={18} />}
+                  required
                 />
               </div>
 

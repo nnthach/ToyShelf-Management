@@ -22,6 +22,7 @@ import { CommissionTable, Partner } from "@/src/types";
 import { getAllCommissionTableAPI } from "@/src/services/commission-table.service";
 import { getAllPartnerAPI } from "@/src/services/partner.service";
 import { createCommissionTableApplyAPI } from "@/src/services/commission-table-apply.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateCommissionPolicyModal() {
   const queryClient = useQueryClient();
@@ -83,7 +84,7 @@ function CreateCommissionPolicyModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Áp dụng bảng hoa hồng thất bại");
+      toast.error(getErrorMessage(error, "Áp dụng bảng hoa hồng thất bại"));
     }
   }
 
@@ -131,6 +132,7 @@ function CreateCommissionPolicyModal() {
                     type="select"
                     selectData={partnerOptions}
                     icon={<Trophy size={16} />}
+                    required
                   />
                 </div>
 
@@ -142,6 +144,7 @@ function CreateCommissionPolicyModal() {
                     placeholder="Chọn bảng hoa hồng"
                     selectData={commissionTableOptions}
                     icon={<Layers size={16} />}
+                    required
                   />
                 </div>
 
@@ -150,6 +153,7 @@ function CreateCommissionPolicyModal() {
                   label="Tên"
                   placeholder="Tên"
                   icon={<Trophy size={16} />}
+                  required
                 />
 
                 <FormFieldCustom
@@ -157,12 +161,14 @@ function CreateCommissionPolicyModal() {
                   label="Ngày bắt đầu"
                   type="date"
                   icon={<Calendar size={16} />}
+                  required
                 />
                 <FormFieldCustom
                   name="endDate"
                   label="Ngày kết thúc"
                   type="date"
                   icon={<Calendar size={16} />}
+                  required
                 />
               </div>
             </form>

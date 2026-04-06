@@ -19,6 +19,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { createPartnerTierAPI } from "@/src/services/partner-tier.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreatePartnerTierModal() {
   const queryClient = useQueryClient();
@@ -28,10 +29,6 @@ function CreatePartnerTierModal() {
   const formSchema = z.object({
     name: z.string().min(1, "Tên cấp bậc đối tác là bắt buộc"),
     priority: z.number().min(1, "Hãy nhập độ ưu tiên"),
-    // .string()
-    // .min(1, "Ưu tiên là bắt buộc")
-    // .refine((val) => !isNaN(Number(val)), "Ưu tiên phải là số")
-    // .refine((val) => Number(val) >= 1, "Ưu tiên phải >= 1"),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
@@ -55,7 +52,7 @@ function CreatePartnerTierModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Thêm cấp bậc đối tác mới thất bại");
+      toast.error(getErrorMessage(error, "Thêm cấp bậc đối tác mới thất bại"));
     }
   }
 
@@ -98,7 +95,8 @@ function CreatePartnerTierModal() {
                 name="name"
                 label="Tên cấp bậc đối tác"
                 placeholder="Ví dụ: Vàng, Bạch Kim..."
-                icon={<Trophy size={18} />} // Icon nhỏ kế Label
+                icon={<Trophy size={18} />}
+                required
               />
 
               <FormFieldCustom
@@ -107,7 +105,8 @@ function CreatePartnerTierModal() {
                 labelNote="Số càng nhỏ ưu tiên càng cao"
                 placeholder="Ví dụ: 1"
                 type="number"
-                icon={<Hash size={18} />} // Icon nhỏ kế Label
+                icon={<Hash size={18} />}
+                required
               />
             </form>
           </FormProvider>

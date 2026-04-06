@@ -29,6 +29,7 @@ import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDe
 import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
 import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";
 import ShipmentProductListComponent from "@/src/components/ShipmentComponent/ShipmentProductListComponent";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type UpdateRefillRequestModalProps = {
   requestId: string;
@@ -50,7 +51,7 @@ function UpdateRefillRequestModal({
     queryKey: ["requestDetail", requestId],
     queryFn: () => getRefillDetailAPI(requestId!),
     select: (res) => res.data,
-    enabled: !!requestId,
+    enabled: !!requestId && isOpen,
   });
 
   const assignmentId = requestDetail?.shipmentAssignmentIds?.[0];
@@ -58,7 +59,7 @@ function UpdateRefillRequestModal({
     queryKey: ["shipmentAssignDetail", assignmentId],
     queryFn: () => getShipmentAssignDetailByIdAPI(assignmentId!),
     select: (res) => res.data,
-    enabled: !!assignmentId,
+    enabled: !!assignmentId && isOpen,
   });
 
   const shipmentId = requestDetail?.shipmentIds?.[0];
@@ -66,7 +67,7 @@ function UpdateRefillRequestModal({
     queryKey: ["shipmentDetail", shipmentId],
     queryFn: () => getShipmentDetailByIdAPI(shipmentId!),
     select: (res) => res.data as Shipment,
-    enabled: !!shipmentId,
+    enabled: !!shipmentId && isOpen,
   });
 
   async function handleReject() {
@@ -80,8 +81,8 @@ function UpdateRefillRequestModal({
       toast.success("Từ chối yêu cầu thành công");
 
       onClose();
-    } catch {
-      toast.error("Từ chối yêu cầu thất bại");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Từ chối yêu cầu thất bại"));
     }
   }
 
@@ -98,8 +99,8 @@ function UpdateRefillRequestModal({
       });
 
       toast.success("Hãy điều phối kho thực hiện");
-    } catch {
-      toast.error("Chấp nhận yêu cầu thất bại");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
     }
   }
 

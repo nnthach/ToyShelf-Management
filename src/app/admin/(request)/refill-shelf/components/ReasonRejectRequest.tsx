@@ -14,6 +14,7 @@ import { AlertCircle, Send, XCircle } from "lucide-react";
 import { rejectRefillShelfRequestAPI } from "@/src/services/refill-shelf.service";
 import { useState } from "react";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type ReasonRejectRequestModalProps = {
   requestId: string;
@@ -46,8 +47,8 @@ function ReasonRejectRequestModal({
 
       onClose();
       onSuccess();
-    } catch {
-      toast.error("Từ chối yêu cầu thất bại");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Từ chối yêu cầu thất bại"));
     } finally {
       onClose();
       setIsSubmitting(false);

@@ -19,6 +19,7 @@ import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom"
 import { getCityDetailAPI, updateCityAPI } from "@/src/services/city.service";
 import { formatToInitials } from "@/src/utils/format";
 import { Building2, Edit, Sparkles } from "lucide-react";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type EditCityModalProps = {
   cityId: string;
@@ -75,7 +76,7 @@ function EditCityModal({ cityId, isOpen, onClose }: EditCityModalProps) {
       toast.success("Chỉnh sửa thành phố thành công");
       onClose();
     } catch (error) {
-      toast.error("Chỉnh sửa thành phố thất bại");
+      toast.error(getErrorMessage(error, "Chỉnh sửa thành phố thất bại"));
     }
   }
 
@@ -110,7 +111,8 @@ function EditCityModal({ cityId, isOpen, onClose }: EditCityModalProps) {
                 name="name"
                 label="Tên thành phố / Tỉnh"
                 placeholder="Ví dụ: TP. Hồ Chí Minh, Hà Nội..."
-                icon={<Building2 size={18}/>}
+                icon={<Building2 size={18} />}
+                required
               />
             </form>
           </FormProvider>

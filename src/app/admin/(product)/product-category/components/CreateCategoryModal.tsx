@@ -23,6 +23,7 @@ import {
   productCateSchema,
 } from "@/src/schemas/product-category.schema";
 import { createProductCategoryAPI } from "@/src/services/product-category.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateCategoryModal() {
   const queryClient = useQueryClient();
@@ -47,7 +48,7 @@ function CreateCategoryModal() {
       toast.success("Tạo danh mục thành công");
       setOpen(false);
     } catch (error) {
-      toast.error("Tạo danh mục thất bại");
+      toast.error(getErrorMessage(error, "Tạo danh mục thất bại"));
     }
   }
 
@@ -91,7 +92,8 @@ function CreateCategoryModal() {
                 name="name"
                 label="Tên danh mục"
                 placeholder="Ví dụ: Đồ chơi gỗ, Quần áo sơ sinh..."
-                icon={<Tag size={18} />} // Icon nhãn dán cho danh mục
+                icon={<Tag size={18} />}
+                required
               />
 
               <FormFieldCustom
@@ -99,7 +101,7 @@ function CreateCategoryModal() {
                 label="Mô tả danh mục"
                 placeholder="Nhập vài dòng mô tả ngắn gọn về nhóm sản phẩm này..."
                 type="textarea"
-                icon={<FileText size={18} />} // Icon văn bản cho mô tả
+                icon={<FileText size={18} />}
                 className="min-h-[100px]"
               />
             </form>

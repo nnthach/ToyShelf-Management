@@ -20,6 +20,7 @@ import { Trash2 } from "lucide-react";
 import { uploadFileToCloudinary } from "../config/cloundinary";
 import { setUser } from "../redux/slice/authSlice";
 import LoadingPageComponent from "./LoadingPageComponent";
+import { getErrorMessage } from "../utils/getErrorMessage";
 
 function AccountAdminProfileModal({
   open,
@@ -110,7 +111,7 @@ function AccountAdminProfileModal({
       toast.success("Cập nhật thông tin thành công");
       onClose();
     } catch (error) {
-      toast.error("Cập nhật thông tin thất bại");
+      toast.error(getErrorMessage(error, "Cập nhật thông tin thất bại"));
     } finally {
       setIsLoading(false);
     }

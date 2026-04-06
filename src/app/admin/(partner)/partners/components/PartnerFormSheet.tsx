@@ -4,6 +4,7 @@ import { updatePartnerAPI } from "@/src/services/partner.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import { Partner, PartnerTier } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Lock, RotateCcw, Trash2 } from "lucide-react";
@@ -50,7 +51,7 @@ function PartnerFormSheet({ partner, onClose }: PartnerFormSheetProps) {
       form.reset();
       toast.success("Cập nhật đối tác thành công");
     } catch (error) {
-      toast.error("Cập nhật đối tác thất bại");
+      toast.error(getErrorMessage(error, "Cập nhật đối tác thất bại"));
     }
   }
 

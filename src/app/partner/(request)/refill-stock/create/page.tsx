@@ -18,6 +18,7 @@ import ProductOrderCard from "./components/ProductOrderCard";
 import FilterSearch from "./components/FilterSearch";
 import { getAllInventoryLocationAPI } from "@/src/services/inventory-location.service";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function ManagerCreateRefillRequestPage() {
   const router = useRouter();
@@ -99,7 +100,7 @@ export default function ManagerCreateRefillRequestPage() {
       toast.success("Tạo yêu cầu thành công");
       router.back();
     } catch (error) {
-      console.log("refill err", error);
+      toast.error(getErrorMessage(error, "Tạo yêu cầu thất bại"));
     }
   };
 

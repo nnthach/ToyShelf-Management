@@ -22,6 +22,7 @@ import {
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { CheckReceiveShelfItem } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type ConfirmReceiveModalProps = {
   shipmentId: string;
@@ -46,12 +47,12 @@ function ConfirmReceiveModal({
   const { data: checkShelfShipmentItems, isLoading } = useQuery({
     queryKey: [
       "checkShelfShipmentItems",
-      "e1df5160-b153-41e9-82a8-c0ed6d1f12e8",
+      shipmentId,
     ],
     queryFn: () =>
-      checkShelfItemsShipmentAPI("e1df5160-b153-41e9-82a8-c0ed6d1f12e8"!),
+      checkShelfItemsShipmentAPI(shipmentId!),
     select: (res) => res.data,
-    // enabled: !!shipmentId,
+    enabled: !!shipmentId && isOpen,
   });
 
   useEffect(() => {
@@ -89,7 +90,7 @@ function ConfirmReceiveModal({
       toast.success("Xác nhận thành công");
       onClose();
     } catch (error) {
-      toast.error("Xác nhận thất bại");
+      toast.error(getErrorMessage(error, "Xác nhận thất bại"));
     }
   }
 

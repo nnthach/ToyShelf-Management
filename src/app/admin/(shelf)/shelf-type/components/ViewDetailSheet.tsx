@@ -30,6 +30,7 @@ import { Shelf, ShelfLevelItem } from "@/src/types";
 import { Badge } from "@/src/styles/components/ui/badge";
 import { toast } from "react-toastify";
 import UpdateShelfTypeModal from "./UpdateShelfTypeModal";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type ViewDetailSheetProps = {
   shelfTypeId: string | null;
@@ -48,7 +49,7 @@ function ViewDetailSheet({
     queryKey: ["shelfType", shelfTypeId],
     queryFn: () => getShelfTypeDetailAPI(shelfTypeId!),
     select: (res) => res.data as Shelf,
-    enabled: !!shelfTypeId,
+    enabled: !!shelfTypeId && isOpen,
   });
 
   async function handleDisable() {
@@ -65,7 +66,7 @@ function ViewDetailSheet({
 
       toast.success("Vô hiệu hóa sản phẩm thành công");
     } catch (error) {
-      toast.error("Vô hiệu hóa sản phẩm thất bại");
+      toast.error(getErrorMessage(error, "Vô hiệu hóa sản phẩm thất bại"));
     }
   }
 
@@ -83,7 +84,7 @@ function ViewDetailSheet({
 
       toast.success("Khôi phục sản phẩm thành công");
     } catch (error) {
-      toast.error("Khôi phục sản phẩm thất bại");
+      toast.error(getErrorMessage(error, "Khôi phục sản phẩm thất bại"));
     }
   }
 
@@ -98,7 +99,7 @@ function ViewDetailSheet({
       onClose();
       toast.success("Xóa sản phẩm thành công");
     } catch (error) {
-      toast.error("Xóa sản phẩm thất bại");
+      toast.error(getErrorMessage(error, "Xóa sản phẩm thất bại"));
     }
   }
 

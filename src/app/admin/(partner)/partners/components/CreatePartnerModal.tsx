@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { CommissionTable, PartnerTier } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -74,7 +75,7 @@ function CreatePartnerModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Tạo đối tác thất bại");
+      toast.error(getErrorMessage(error, "Tạo đối tác thất bại"));
     }
   }
 
@@ -128,6 +129,7 @@ function CreatePartnerModal() {
                   label="Tên công ty"
                   icon={<Building2 size={18} />}
                   placeholder="Nhập tên chính thức của doanh nghiệp..."
+                  required
                 />
 
                 <FormFieldCustom
@@ -137,6 +139,7 @@ function CreatePartnerModal() {
                   placeholder="Chọn hạng mức hợp tác"
                   type="select"
                   selectData={partnerTierOptions}
+                  required
                 />
 
                 <FormFieldCustom
@@ -145,6 +148,7 @@ function CreatePartnerModal() {
                   type="select"
                   placeholder="Chọn bảng hoa hồng"
                   selectData={commissionTableOptions}
+                  required
                   icon={<Layers size={16} />}
                 />
                 <FormFieldCustom
@@ -152,12 +156,14 @@ function CreatePartnerModal() {
                   label="Ngày bắt đầu"
                   type="date"
                   icon={<Calendar size={16} />}
+                  required
                 />
                 <FormFieldCustom
                   name="tableEndDate"
                   label="Ngày kết thúc"
                   type="date"
                   icon={<Calendar size={16} />}
+                  required
                 />
               </div>
             </form>

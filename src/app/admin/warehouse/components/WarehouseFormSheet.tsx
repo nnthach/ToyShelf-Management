@@ -14,6 +14,7 @@ import {
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import { City, Warehouse } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -106,7 +107,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       form.reset();
       toast.success("Cập nhật kho thành công");
     } catch (error) {
-      toast.error("Cập nhật kho thất bại");
+      toast.error(getErrorMessage(error, "Cập nhật kho thất bại"));
     }
   }
 
@@ -125,7 +126,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       form.reset();
       toast.success("Vô hiệu hóa kho thành công");
     } catch (error) {
-      toast.error("Vô hiệu hóa kho thất bại");
+      toast.error(getErrorMessage(error, "Vô hiệu hóa kho thất bại"));
     }
   }
 
@@ -144,7 +145,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       form.reset();
       toast.success("Khôi phục kho thành công");
     } catch (error) {
-      toast.error("Khôi phục kho thất bại");
+      toast.error(getErrorMessage(error, "Khôi phục kho thất bại"));
     }
   }
 
@@ -160,7 +161,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
       onClose();
       toast.success("Xóa kho thành công");
     } catch (error) {
-      toast.error("Xóa kho thất bại");
+      toast.error(getErrorMessage(error, "Xóa kho thất bại"));
     }
   }
 

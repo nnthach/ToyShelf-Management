@@ -17,6 +17,7 @@ import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom"
 
 import { reviewStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
 import { AlertCircle, Send, XCircle } from "lucide-react";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type ReasonStoreCreateRequestModalProps = {
   requestId: string;
@@ -65,7 +66,7 @@ function ReasonStoreCreateRequestModal({
       onClose();
       onSuccess();
     } catch (error) {
-      toast.error("Cập nhật yêu cầu thất bại");
+      toast.error(getErrorMessage(error, "Cập nhật yêu cầu thất bại"));
     }
   }
 

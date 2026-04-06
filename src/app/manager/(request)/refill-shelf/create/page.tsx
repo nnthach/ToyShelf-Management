@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { getAllShelfTypeAPI } from "@/src/services/shelf.service";
 import ShelfCardOrder from "./components/ShelfCardOrder";
 import { createRefillShelfAPI } from "@/src/services/refill-shelf.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export interface CartItem {
   shelfTypeId: string;
@@ -107,7 +108,7 @@ export default function CreateStoreOrderRefillShelf() {
       toast.success("Tạo đơn thành công");
       router.back();
     } catch (error) {
-      toast.error("Tạo đơn thất bại");
+      toast.error(getErrorMessage(error, "Tạo đơn thất bại"));
     }
   };
   return (

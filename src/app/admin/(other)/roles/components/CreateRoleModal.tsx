@@ -26,6 +26,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { createRoleAPI } from "@/src/services/role.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateRoleModal() {
   const queryClient = useQueryClient();
@@ -34,7 +35,7 @@ function CreateRoleModal() {
 
   const formSchema = z.object({
     name: z.string().min(1, "Tên cấp bậc vai trò là bắt buộc"),
-    description: z.string().min(1, "Mô tả cấp bậc vai trò là bắt buộc"),
+    description: z.string().optional(),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
@@ -54,11 +55,11 @@ function CreateRoleModal() {
       });
 
       form.reset();
-      toast.success("Thêm cấp bậc vai trò mới thành công");
+      toast.success("Thêm chức vụ vai trò mới thành công");
 
       setOpen(false);
     } catch (error) {
-      toast.error("Thêm cấp bậc vai trò mới thất bại");
+      toast.error(getErrorMessage(error, "Thêm chức vụ vai trò mới thất bại"));
     }
   }
 
@@ -103,6 +104,7 @@ function CreateRoleModal() {
                 label="Tên cấp bậc vai trò"
                 placeholder="Ví dụ: Quản trị viên cao cấp, Nhân viên..."
                 icon={<ShieldCheck size={18} />}
+                required
               />
 
               {/* MÔ TẢ */}

@@ -40,6 +40,7 @@ import { getAllProductCategoryAPI } from "@/src/services/product-category.servic
 import { createCommissionTableAPI } from "@/src/services/commission-table.service";
 import { cn } from "@/src/styles/lib/utils";
 import { formatCommissionTableTypeToVN } from "@/src/utils/format";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateCommissionTableModal() {
   const queryClient = useQueryClient();
@@ -124,11 +125,11 @@ function CreateCommissionTableModal() {
     try {
       await createCommissionTableAPI(payload);
       queryClient.invalidateQueries({ queryKey: ["commissionTables"] });
-      toast.success("Thành công!");
+      toast.success("Tạo bảng hoa hồng thành công!");
       setOpen(false);
       form.reset();
     } catch (error) {
-      toast.error("Thất bại!");
+      toast.error(getErrorMessage(error, "Tạo bảng hoa hồng thất bại"));
     }
   }
 
@@ -179,6 +180,7 @@ function CreateCommissionTableModal() {
                     name="name"
                     label="Tên bảng giá"
                     placeholder="Nhập tên bảng giá..."
+                    required
                   />
                   <FormFieldCustom
                     name="type"
@@ -188,6 +190,7 @@ function CreateCommissionTableModal() {
                       value: v,
                       label: formatCommissionTableTypeToVN(v),
                     }))}
+                    required
                   />
                   <FormFieldCustom
                     name="partnerTierId"
@@ -197,6 +200,7 @@ function CreateCommissionTableModal() {
                       value: t.id,
                       label: t.name,
                     }))}
+                    required
                   />
                 </div>
               </section>
@@ -251,7 +255,8 @@ function CreateCommissionTableModal() {
                         {/* Chọn danh mục */}
                         <div>
                           <label className="text-sm font-semibold text-slate-700 mb-3 block">
-                            Danh mục sản phẩm áp dụng
+                            Danh mục sản phẩm áp dụng{" "}
+                            <span className="text-red-500 ml-0.5">*</span>
                           </label>
                           <Controller
                             control={form.control}
@@ -311,6 +316,7 @@ function CreateCommissionTableModal() {
                             type="number"
                             placeholder="Ví dụ: 10"
                             icon={<Percent size={14} />}
+                            required
                           />
                         </div>
                       </div>

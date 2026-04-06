@@ -20,6 +20,7 @@ import { receiveShipmentAPI } from "@/src/services/shipment.service";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { formatColorNameToVN } from "@/src/utils/format";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type ConfirmReceiveModalProps = {
   shipmentId: string;
@@ -85,9 +86,8 @@ function ConfirmReceiveModal({
       form.reset();
       toast.success("Xác nhận thành công");
       onClose();
-      // onSuccess();
     } catch (error) {
-      toast.error("Xác nhận thất bại");
+      toast.error(getErrorMessage(error, "Xác nhận thất bại"));
     }
   }
 

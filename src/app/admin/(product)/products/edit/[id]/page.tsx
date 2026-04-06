@@ -23,6 +23,7 @@ import EditProductMediaRight from "../components/EditProductMediaRight";
 import ConfirmPopup from "../../create/ConfirmPopup";
 import { uploadFileToCloudinary } from "@/src/config/cloundinary";
 import { formatColorNameToVN } from "@/src/utils/format";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -176,7 +177,7 @@ export default function EditProductPage() {
       setOpenVerifyCreateForm(false);
       router.back();
     } catch (error) {
-      toast.error("Cập nhật sản phẩm thất bại");
+      toast.error(getErrorMessage(error,"Cập nhật sản phẩm thất bại"));
     } finally {
       setIsLoading(false);
     }

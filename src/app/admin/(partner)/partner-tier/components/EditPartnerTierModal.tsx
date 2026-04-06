@@ -22,6 +22,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type EditPartnerTierModalProps = {
   tierId: string;
@@ -85,7 +86,7 @@ function EditPartnerTierModal({
       toast.success("Chỉnh sửa cấp bậc đối tác thành công");
       onClose();
     } catch (error) {
-      toast.error("Chỉnh sửa cấp bậc đối tác thất bại");
+      toast.error(getErrorMessage(error, "Chỉnh sửa cấp bậc đối tác thất bại"));
     }
   }
 
@@ -120,7 +121,8 @@ function EditPartnerTierModal({
                 name="name"
                 label="Tên cấp bậc đối tác"
                 placeholder="Ví dụ: Vàng, Bạch Kim..."
-                icon={<Trophy size={18} />} // Icon nhỏ kế Label
+                icon={<Trophy size={18} />}
+                required
               />
 
               <FormFieldCustom
@@ -129,7 +131,8 @@ function EditPartnerTierModal({
                 labelNote="Số càng nhỏ ưu tiên càng cao"
                 placeholder="Ví dụ: 1"
                 type="number"
-                icon={<Hash size={18} />} // Icon nhỏ kế Label
+                icon={<Hash size={18} />}
+                required
               />
             </form>
           </FormProvider>

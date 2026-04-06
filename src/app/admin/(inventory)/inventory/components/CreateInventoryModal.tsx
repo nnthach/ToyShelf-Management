@@ -17,6 +17,7 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { InventoryLocation, ProductColorItem } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Mail, MapPin, Plus, Send, Sparkles, User } from "lucide-react";
@@ -52,10 +53,10 @@ function CreateInventoryModal() {
         queryKey: ["inventories"],
       });
       form.reset();
-      toast.success("Bổ sung hàng thành công");
+      toast.success("Nhập hàng thành công");
       setOpen(false);
     } catch (error) {
-      toast.error("Bổ sung hàng thất bại");
+      toast.error(getErrorMessage(error, "Nhập hàng thất bại"));
     }
   }
 

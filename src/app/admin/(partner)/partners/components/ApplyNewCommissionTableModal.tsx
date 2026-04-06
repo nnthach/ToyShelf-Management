@@ -29,6 +29,7 @@ import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom"
 import { CommissionTable } from "@/src/types";
 import { getAllCommissionTableAPI } from "@/src/services/commission-table.service";
 import { createCommissionTableApplyAPI } from "@/src/services/commission-table-apply.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
   const queryClient = useQueryClient();
@@ -64,7 +65,6 @@ function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
   }));
 
   async function onSubmit(data: z.output<typeof formSchema>) {
-    console.log("data", data);
     try {
       await createCommissionTableApplyAPI({ ...data, partnerId });
 
@@ -77,11 +77,9 @@ function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Áp dụng bảng hoa hồng thất bại");
+      toast.error(getErrorMessage(error, "Áp dụng bảng hoa hồng thất bại"));
     }
   }
-
-  console.log("Form Errors:", form.formState.errors);
 
   return (
     <Dialog
@@ -131,6 +129,7 @@ function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
                     placeholder="Chọn bảng hoa hồng"
                     selectData={commissionTableOptions}
                     icon={<Layers size={16} />}
+                    required
                   />
                 </div>
 
@@ -139,6 +138,7 @@ function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
                   label="Tên"
                   placeholder="Tên"
                   icon={<Trophy size={16} />}
+                  required
                 />
 
                 <FormFieldCustom
@@ -146,12 +146,14 @@ function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
                   label="Ngày bắt đầu"
                   type="date"
                   icon={<Calendar size={16} />}
+                  required
                 />
                 <FormFieldCustom
                   name="endDate"
                   label="Ngày kết thúc"
                   type="date"
                   icon={<Calendar size={16} />}
+                  required
                 />
               </div>
             </form>

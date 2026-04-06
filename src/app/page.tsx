@@ -26,6 +26,7 @@ import z from "zod";
 import { loginAPI } from "../services/user.service";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { useAuth } from "../hooks/useAuth";
+import { getErrorMessage } from "../utils/getErrorMessage";
 
 const formSchema = z.object({
   email: z.string("Not correct email format."),
@@ -56,7 +57,7 @@ export default function HomePage() {
       const res = await loginAPI(data);
       await handleLoginSuccess(res);
     } catch (error) {
-      toast.error("Đăng nhập thất bại");
+      toast.error(getErrorMessage(error, "Đăng nhập thất bại"));
     } finally {
       setIsLoading(false);
       form.reset();

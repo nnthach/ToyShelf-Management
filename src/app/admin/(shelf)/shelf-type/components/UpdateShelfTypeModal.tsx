@@ -27,6 +27,7 @@ import {
 } from "@/src/schemas/shelf.schema";
 import MultiSelectCategory from "./MuiltiSelectCategory";
 import { ShelfLevelItem } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
   const queryClient = useQueryClient();
@@ -179,7 +180,7 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Có lỗi xảy ra!");
+      toast.error(getErrorMessage(error, "Có lỗi xảy ra!"));
     } finally {
       setIsLoading(false);
     }
@@ -243,6 +244,7 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
                         name="name"
                         label="Tên loại kệ"
                         placeholder="VD: Kệ gỗ 5 tầng..."
+                        required
                       />
                       <ImageUploadField
                         value={imageFile}
@@ -277,21 +279,25 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
                         name="width"
                         label="Rộng (cm)"
                         type="number"
+                        required
                       />
                       <FormFieldCustom
                         name="height"
                         label="Cao (cm)"
                         type="number"
+                        required
                       />
                       <FormFieldCustom
                         name="depth"
                         label="Sâu (cm)"
                         type="number"
+                        required
                       />
                       <FormFieldCustom
                         name="totalLevels"
                         label="Số tầng"
                         type="number"
+                        required
                       />
                     </div>
 
@@ -338,16 +344,19 @@ function UpdateShelfTypeModal({ shelfTypeId }: { shelfTypeId: string }) {
                               name={`levels.${index}.name`}
                               label="Thứ tự tầng"
                               placeholder="VD: Tầng đáy"
+                              required
                             />
                             <FormFieldCustom
                               name={`levels.${index}.clearanceHeight`}
                               label="Chiều cao tầng (cm)"
                               type="number"
+                              required
                             />
                             <FormFieldCustom
                               name={`levels.${index}.recommendedCapacity`}
                               label="Sức chứa (sản phẩm)"
                               type="number"
+                              required
                             />
                           </div>
 

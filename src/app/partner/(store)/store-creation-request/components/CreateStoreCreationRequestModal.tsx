@@ -36,6 +36,7 @@ import { StoreFormValues, storeSchema } from "@/src/schemas/store.schema";
 import { createStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
 import { City } from "@/src/types";
 import { getAllCityAPI } from "@/src/services/city.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateStoreRequestModal() {
   const queryClient = useQueryClient();
@@ -88,7 +89,7 @@ function CreateStoreRequestModal() {
       toast.success("Tạo cửa hàng thành công");
       setOpen(false);
     } catch (error) {
-      toast.error("Tạo cửa hàng thất bại");
+      toast.error(getErrorMessage(error, "Tạo cửa hàng thất bại"));
     } finally {
       setIsLoading(false);
     }
@@ -156,6 +157,7 @@ function CreateStoreRequestModal() {
                     label="Tên cửa hàng"
                     placeholder="Ví dụ: Cửa hàng Tiện lợi A"
                     icon={<Store size={18} />}
+                    required
                   />
 
                   {/* Số điện thoại */}
@@ -164,6 +166,7 @@ function CreateStoreRequestModal() {
                     label="Số điện thoại liên hệ"
                     placeholder="Ví dụ: 0901234567"
                     icon={<Phone size={18} />}
+                    required
                   />
 
                   <FormFieldCustom
@@ -173,6 +176,7 @@ function CreateStoreRequestModal() {
                     type="select"
                     selectData={cityOptions}
                     icon={<Globe2 size={18} />}
+                    required
                   />
 
                   {/* Địa chỉ với Suggestions */}
@@ -189,6 +193,7 @@ function CreateStoreRequestModal() {
                         setInput(value);
                         form.setValue("storeAddress", value);
                       }}
+                      required
                     />
 
                     {/* SUGGESTIONS BOX */}
@@ -237,20 +242,22 @@ function CreateStoreRequestModal() {
                     <FormFieldCustom
                       name="latitude"
                       label="Vĩ độ"
+                      labelNote="Tự động cập nhật khi tìm kiếm địa chỉ"
                       placeholder="0.000000"
                       type="number"
-                      readOnly={true}
                       icon={<Navigation size={16} className="rotate-45" />}
                       className="bg-white/50"
+                      required
                     />
                     <FormFieldCustom
                       name="longitude"
                       label="Kinh độ"
+                      labelNote="Tự động cập nhật khi tìm kiếm địa chỉ"
                       placeholder="0.000000"
                       type="number"
-                      readOnly={true}
                       icon={<Navigation size={16} />}
                       className="bg-white/50"
+                      required
                     />
                   </div>
                 </form>

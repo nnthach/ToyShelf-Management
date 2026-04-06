@@ -41,6 +41,7 @@ import {
   restoreProductAPI,
 } from "@/src/services/product.service";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type ViewDetailSheetProps = {
   productId: string | null;
@@ -85,7 +86,7 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
 
       toast.success("Vô hiệu hóa sản phẩm thành công");
     } catch (error) {
-      toast.error("Vô hiệu hóa sản phẩm thất bại");
+      toast.error(getErrorMessage(error, "Vô hiệu hóa sản phẩm thất bại"));
     }
   }
 
@@ -103,13 +104,18 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
 
       toast.success("Khôi phục sản phẩm thành công");
     } catch (error) {
-      toast.error("Khôi phục sản phẩm thất bại");
+      toast.error(getErrorMessage(error, "Khôi phục sản phẩm thất bại"));
     }
   }
 
   async function handleDelete() {
+    const confirmed = window.confirm(
+      "Bạn có chắc chắn muốn xóa sản phẩm này không?",
+    );
+    if (!confirmed) return;
     try {
-      await deleteProductAPI(productId!);
+      await deleteProductAPI("11"!);
+      // await deleteProductAPI(productId!);
 
       queryClient.invalidateQueries({
         queryKey: ["products"],
@@ -118,7 +124,7 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
       onClose();
       toast.success("Xóa sản phẩm thành công");
     } catch (error) {
-      toast.error("Xóa sản phẩm thất bại");
+      toast.error(getErrorMessage(error, "Xóa sản phẩm thất bại"));
     }
   }
 

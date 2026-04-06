@@ -20,6 +20,7 @@ import { uploadFileToCloudinary } from "@/src/config/cloundinary";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import { SelectOption } from "@/src/types/SubType";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -161,7 +162,7 @@ export default function CreateProductPage() {
 
       setOpenVerifyCreateForm(false);
     } catch (error) {
-      toast.error("Thêm sản phẩm thất bại");
+      toast.error(getErrorMessage(error, "Thêm sản phẩm thất bại"));
     } finally {
       setIsLoading(false);
     }

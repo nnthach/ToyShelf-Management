@@ -33,6 +33,7 @@ type FormFieldProps = CommonFieldProps & {
   loading?: boolean;
   icon?: React.ReactNode;
   switchColor?: string;
+  required?: boolean;
 };
 
 const renderFieldByType = (
@@ -148,6 +149,7 @@ export function FormFieldCustom({
   selectData,
   loading,
   switchColor,
+  required,
   ...props
 }: FormFieldProps) {
   const { control } = useFormContext();
@@ -170,6 +172,7 @@ export function FormFieldCustom({
                 </span>
               )}
               <span>{label}</span>
+              {required && <span className="text-red-500 ml-0.5">*</span>}
               {labelNote && (
                 <span className="text-xs font-normal text-muted-foreground ml-auto italic">
                   ({labelNote})

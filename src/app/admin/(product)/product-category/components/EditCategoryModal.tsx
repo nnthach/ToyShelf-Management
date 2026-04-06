@@ -25,6 +25,7 @@ import {
   getProductCategoryDetailAPI,
   updateProductCategoryAPI,
 } from "@/src/services/product-category.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type EditProductCategoryModalProps = {
   categoryId: string;
@@ -77,7 +78,7 @@ function EditCategoryModal({
       toast.success("Cập nhật danh mục thành công");
       onClose();
     } catch (error) {
-      toast.error("Cập nhật danh mục thất bại");
+      toast.error(getErrorMessage(error,"Cập nhật danh mục thất bại"));
     }
   }
 

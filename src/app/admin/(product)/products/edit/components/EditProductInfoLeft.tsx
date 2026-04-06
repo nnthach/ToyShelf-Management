@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  ProductBrandOption,
-  ProductMaterialOption,
-} from "@/src/constants/product-option";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { ProductCategory } from "@/src/types";
@@ -74,7 +70,8 @@ function EditProductInfoLeft() {
             name="name"
             label="Tên sản phẩm"
             placeholder="Ví dụ: Giày Sneaker Nam A1"
-            icon={<Package size={18} />} // Icon Tên sản phẩm
+            icon={<Package size={18} />}
+            required
           />
           <FormFieldCustom
             name="productCategoryId"
@@ -82,7 +79,8 @@ function EditProductInfoLeft() {
             placeholder="Chọn danh mục"
             type="select"
             selectData={categoryOptions}
-            icon={<Tags size={18} />} // Icon Danh mục
+            icon={<Tags size={18} />}
+            required
           />
         </div>
 
@@ -92,39 +90,46 @@ function EditProductInfoLeft() {
             label="Giá nhập"
             placeholder="0"
             type="number"
-            icon={<DollarSign size={18} />} // Icon Giá
-          />
-          <FormFieldCustom
-            name="weight"
-            label="Cân nặng"
-            placeholder="0"
-            labelNote="(gram)"
-            type="number"
-            icon={<Weight size={18} />} // Icon Cân nặng
-          />
-          <FormFieldCustom
-            name="material"
-            label="Chất liệu"
-            placeholder="Nhập chất liệu"
-            icon={<Box size={18} />} // Icon Chất liệu
+            icon={<DollarSign size={18} />}
+            required
           />
           <FormFieldCustom
             name="brand"
             label="Thương hiệu"
             placeholder="Nhập thương hiệu"
-            icon={<Tags size={18} />} // Icon Thương hiệu (dùng chung với Tag)
+            icon={<Tags size={18} />}
+            required
           />
+
+          <FormFieldCustom
+            name="material"
+            label="Chất liệu"
+            placeholder="Nhập chất liệu"
+            icon={<Box size={18} />}
+            required
+          />
+
           <FormFieldCustom
             name="originCountry"
             label="Quốc gia"
             placeholder="Ví dụ: Việt Nam"
-            icon={<Flag size={18} />} // Icon Quốc gia
+            icon={<Flag size={18} />}
+            required
           />
           <FormFieldCustom
             name="ageRange"
             label="Độ tuổi"
             placeholder="Ví dụ: 5-10"
-            icon={<Baby size={18} />} // Icon Độ tuổi
+            icon={<Baby size={18} />}
+            required
+          />
+          <FormFieldCustom
+            name="weight"
+            label="Trọng lượng"
+            placeholder="0"
+            labelNote="(gram)"
+            type="number"
+            icon={<Weight size={18} />}
           />
         </div>
 

@@ -8,10 +8,10 @@ export const createShelfSchema = z.object({
 
   imageUrl: z.string().optional(),
   name: z.string().min(1, "Tên loại kệ là bắt buộc"),
-  width: z.coerce.number().min(1, "Chiều rộng > 0"),
-  height: z.coerce.number().min(1, "Chiều cao > 0"),
-  depth: z.coerce.number().min(1, "Chiều sâu > 0"),
-  totalLevels: z.coerce.number().min(1).max(20),
+  width: z.coerce.number().min(1, "Chiều rộng phải lớn hơn 0"),
+  height: z.coerce.number().min(1, "Chiều cao phải lớn hơn 0"),
+  depth: z.coerce.number().min(1, "Chiều sâu phải lớn hơn 0"),
+  totalLevels: z.coerce.number().min(1, "Số tầng phải lớn hơn 1"),
   suitableProductCategoryTypes: z
     .array(z.string())
     .min(1, "Chọn ít nhất 1 loại danh mục chung"),
@@ -20,9 +20,15 @@ export const createShelfSchema = z.object({
     z.object({
       level: z.number(),
       name: z.string().min(1, "Tên tầng là bắt buộc"),
-      clearanceHeight: z.coerce.number().min(1),
-      recommendedCapacity: z.coerce.number().min(1),
-      suitableProductCategoryTypes: z.array(z.string()).min(1),
+      clearanceHeight: z.coerce
+        .number()
+        .min(1, "Chiều cao tầng phải lớn hơn 0"),
+      recommendedCapacity: z.coerce
+        .number()
+        .min(1, "Sưc chứa sản phẩm phải lớn hơn 0"),
+      suitableProductCategoryTypes: z
+        .array(z.string())
+        .min(1, "Hãy chọn ít nhất 1 danh mục"),
       displayGuideline: z.string().optional(),
     }),
   ),
@@ -37,19 +43,27 @@ export const updateShelfSchema = z
       .optional(),
     imageUrl: z.string().optional(),
     name: z.string().min(1, "Tên loại kệ là bắt buộc"),
-    width: z.coerce.number().min(1),
-    height: z.coerce.number().min(1),
-    depth: z.coerce.number().min(1),
-    totalLevels: z.coerce.number().min(1).max(20),
-    suitableProductCategoryTypes: z.array(z.string()).min(1),
+    width: z.coerce.number().min(1, "Chiều rộng phải lớn hơn 0"),
+    height: z.coerce.number().min(1, "Chiều cao phải lớn hơn 0"),
+    depth: z.coerce.number().min(1, "Chiều sâu phải lớn hơn 0"),
+    totalLevels: z.coerce.number().min(1, "Số tầng phải lớn hơn 1"),
+    suitableProductCategoryTypes: z
+      .array(z.string())
+      .min(1, "Chọn ít nhất 1 loại danh mục chung"),
     displayGuideline: z.string().optional(),
     levels: z.array(
       z.object({
         level: z.number(),
-        name: z.string().min(1),
-        clearanceHeight: z.coerce.number().min(1),
-        recommendedCapacity: z.coerce.number().min(1),
-        suitableProductCategoryTypes: z.array(z.string()).min(1),
+        name: z.string().min(1, "Tên tầng là bắt buộc"),
+        clearanceHeight: z.coerce
+          .number()
+          .min(1, "Chiều cao tầng phải lớn hơn 0"),
+        recommendedCapacity: z.coerce
+          .number()
+          .min(1, "Sưc chứa sản phẩm phải lớn hơn 0"),
+        suitableProductCategoryTypes: z
+          .array(z.string())
+          .min(1, "Hãy chọn ít nhất 1 danh mục"),
         displayGuideline: z.string().optional(),
       }),
     ),

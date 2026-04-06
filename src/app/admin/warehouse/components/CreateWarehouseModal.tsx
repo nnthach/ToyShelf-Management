@@ -38,6 +38,7 @@ import { getAllCityAPI } from "@/src/services/city.service";
 import { City } from "@/src/types";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import MapCreate from "@/src/components/MapCreate";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateWarehouseModal() {
   const queryClient = useQueryClient();
@@ -89,7 +90,7 @@ function CreateWarehouseModal() {
       toast.success("Tạo kho thành công");
       setOpen(false);
     } catch (error) {
-      toast.error("Tạo kho thất bại");
+      toast.error(getErrorMessage(error, "Tạo kho thất bại"));
     } finally {
       setIsLoading(false);
     }
@@ -154,6 +155,7 @@ function CreateWarehouseModal() {
                     label="Tên kho"
                     placeholder="Ví dụ: Kho trung chuyển phía Nam"
                     icon={<Warehouse size={18} />}
+                    required
                   />
 
                   <FormFieldCustom
@@ -163,6 +165,7 @@ function CreateWarehouseModal() {
                     type="select"
                     selectData={cityOptions}
                     icon={<Globe2 size={18} />}
+                    required
                   />
 
                   <div className="relative group">
@@ -178,6 +181,7 @@ function CreateWarehouseModal() {
                         setInput(value);
                         form.setValue("address", value);
                       }}
+                      required
                     />
 
                     {/* SUGGESTIONS BOX - Làm lại UI cho mượt */}

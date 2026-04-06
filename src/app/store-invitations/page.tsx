@@ -10,6 +10,7 @@ import {
 } from "@/src/services/store-invite.service";
 import { getMyProfileAPI } from "@/src/services/user.service";
 import { formatStoreRoleToVN } from "@/src/utils/format";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Calendar, Check, Store, User, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -70,7 +71,7 @@ export default function StoreInvitations() {
       router.replace("/manager/dashboard");
     } catch (error) {
       console.log("accept invite err", error);
-      toast.error("accept invite err");
+      toast.error(getErrorMessage(error, "Chấp nhận lời mời thất bại"));
     }
   };
 
@@ -81,7 +82,7 @@ export default function StoreInvitations() {
       queryClient.invalidateQueries({ queryKey: ["storeInvites"] });
     } catch (error) {
       console.log("reject invite err", error);
-      toast.error("reject invite err");
+      toast.error(getErrorMessage(error, "Từ chối lời mời thất bại"));
     }
   };
 

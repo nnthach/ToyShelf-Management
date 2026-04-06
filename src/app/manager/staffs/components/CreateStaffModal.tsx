@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { Mail, Plus, Send, Sparkles, User } from "lucide-react";
@@ -52,7 +53,7 @@ function CreateStaffModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Tạo nhân viên thất bại");
+      toast.error(getErrorMessage(error, "Tạo nhân viên thất bại"));
     }
   }
 
@@ -96,6 +97,7 @@ function CreateStaffModal() {
                 label="Họ và tên"
                 placeholder="Ví dụ: Nguyễn Văn A"
                 icon={<User size={18} />}
+                required
               />
 
               <FormFieldCustom
@@ -103,6 +105,7 @@ function CreateStaffModal() {
                 label="Địa chỉ Email"
                 placeholder="nva@company.com"
                 icon={<Mail size={18} />}
+                required
               />
             </form>
           </FormProvider>

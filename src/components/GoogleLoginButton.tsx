@@ -6,6 +6,7 @@ import Image from "next/image";
 import { loginGoogleAPI } from "../services/user.service";
 import { toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
+import { getErrorMessage } from "../utils/getErrorMessage";
 
 interface GoogleCredentialResponse {
   credential: string;
@@ -29,7 +30,7 @@ export default function GoogleLoginButton() {
         await handleLoginSuccess(res);
       } catch (error) {
         console.error("Google login error:", error);
-        toast.error("Đăng nhập thất bại");
+        toast.error(getErrorMessage(error, "Đăng nhập thất bại"));
       }
     },
     [],

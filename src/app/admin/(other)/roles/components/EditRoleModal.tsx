@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { getRoleDetailAPI, updateRoleAPI } from "@/src/services/role.service";
 import { Edit, FileText, ShieldCheck, Sparkles } from "lucide-react";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type EditRoleModalProps = {
   roleId: string;
@@ -38,7 +39,7 @@ function EditRoleModal({ roleId, isOpen, onClose }: EditRoleModalProps) {
 
   const formSchema = z.object({
     name: z.string().min(1, "Tên cấp độ vai trò là bắt buộc"),
-    description: z.string().min(1, "Mô tả cấp độ vai trò là bắt buộc"),
+    description: z.string().optional(),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
@@ -71,10 +72,10 @@ function EditRoleModal({ roleId, isOpen, onClose }: EditRoleModalProps) {
       });
 
       form.reset();
-      toast.success("Chỉnh sửa cấp độ vai trò thành công");
+      toast.success("Chỉnh sửa chức vụ vai trò thành công");
       onClose();
     } catch (error) {
-      toast.error("Chỉnh sửa cấp độ vai trò thất bại");
+      toast.error(getErrorMessage(error, "Chỉnh sửa chức vụ vai trò thất bại"));
     }
   }
 
@@ -111,6 +112,7 @@ function EditRoleModal({ roleId, isOpen, onClose }: EditRoleModalProps) {
                 label="Tên cấp bậc vai trò"
                 placeholder="Ví dụ: Quản trị viên cao cấp, Nhân viên..."
                 icon={<ShieldCheck size={18} />}
+                required
               />
 
               {/* MÔ TẢ */}

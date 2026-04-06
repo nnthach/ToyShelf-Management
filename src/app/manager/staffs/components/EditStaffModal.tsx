@@ -1,6 +1,5 @@
 "use client";
 import { PartnerFormValues, partnerSchema } from "@/src/schemas/partner.schema";
-import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
 import { createPartnerAPI } from "@/src/services/partner.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
@@ -13,9 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/styles/components/ui/dialog";
-import { PartnerTier } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Edit, Mail, Sparkles, User } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -34,12 +33,6 @@ function EditStaffModal() {
     },
   });
 
-  const { data: partnerTierList = [], isLoading } = useQuery({
-    queryKey: ["partnerTiers", { isActive: undefined }],
-    queryFn: () => getAllPartnerTierAPI({ isActive: undefined }),
-    select: (res) => res.data as PartnerTier[],
-  });
-
   async function onSubmit(data: PartnerFormValues) {
     try {
       await createPartnerAPI(data);
@@ -53,14 +46,9 @@ function EditStaffModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error("Tạo đối tác thất bại");
+      toast.error(getErrorMessage(error, "Tạo đối tác thất bại"));
     }
   }
-
-  const partnerTierOptions = partnerTierList.map((s) => ({
-    value: s.id,
-    label: s.name,
-  }));
 
   return (
     <Dialog
@@ -97,6 +85,7 @@ function EditStaffModal() {
                 label="Họ và tên"
                 placeholder="Ví dụ: Nguyễn Văn A"
                 icon={<User size={18} />}
+                required
               />
 
               <FormFieldCustom
@@ -104,6 +93,7 @@ function EditStaffModal() {
                 label="Địa chỉ Email"
                 placeholder="nva@company.com"
                 icon={<Mail size={18} />}
+                required
               />
             </form>
           </FormProvider>

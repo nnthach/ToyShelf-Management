@@ -24,6 +24,7 @@ import MapCreate from "@/src/components/MapCreate";
 import { StoreFormValues, storeSchema } from "@/src/schemas/store.schema";
 import { createStoreAPI } from "@/src/services/store.service";
 import { useAuth } from "@/src/hooks/useAuth";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateStoreModal() {
   const queryClient = useQueryClient();
@@ -75,7 +76,7 @@ function CreateStoreModal() {
       toast.success("Tạo cửa hàng thành công");
       setOpen(false);
     } catch (error) {
-      toast.error("Tạo cửa hàng thất bại");
+      toast.error(getErrorMessage(error, "Tạo cửa hàng thất bại"));
     } finally {
       setIsLoading(false);
     }

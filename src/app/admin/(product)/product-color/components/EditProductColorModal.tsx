@@ -23,6 +23,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type EditProductColorModalProps = {
   colorId: string;
@@ -85,7 +86,7 @@ function EditProductColorModal({
       toast.success("Chỉnh sửa màu mới thành công");
       onClose();
     } catch (error) {
-      toast.error("Chỉnh sửa màu mới thất bại");
+      toast.error(getErrorMessage(error, "Chỉnh sửa màu mới thất bại"));
     }
   }
 
@@ -124,6 +125,7 @@ function EditProductColorModal({
                   labelNote="Tên tiếng anh"
                   placeholder="Ví dụ: Đỏ đô"
                   icon={<Palette size={18} />}
+                  required
                 />
 
                 {/* HEX INPUT */}
@@ -132,6 +134,7 @@ function EditProductColorModal({
                   label="Mã HEX"
                   placeholder="#000000"
                   icon={<Hash size={18} />}
+                  required
                 />
               </div>
 

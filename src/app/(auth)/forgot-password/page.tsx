@@ -15,6 +15,7 @@ import {
 } from "@/src/styles/components/ui/card";
 import { FieldGroup, FieldLabel } from "@/src/styles/components/ui/field";
 import { Input } from "@/src/styles/components/ui/input";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { ArrowLeft, Eye, EyeOff, LogIn, LogOut, Mail } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -47,7 +48,7 @@ export default function ForgotPasswordPage() {
 
         setForgotPasswordStep(2);
       } catch (error) {
-        toast.error("Gửi mã OTP thất bại");
+        toast.error(getErrorMessage(error, "Gửi mã OTP thất bại"));
       } finally {
         setIsLoading(false);
       }
@@ -66,7 +67,7 @@ export default function ForgotPasswordPage() {
 
         router.replace("/");
       } catch (error) {
-        toast.error("Đặt lại mật khẩu thất bại");
+        toast.error(getErrorMessage(error, "Đặt lại mật khẩu thất bại"));
       } finally {
         setIsLoading(false);
       }

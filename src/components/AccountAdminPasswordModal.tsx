@@ -15,6 +15,9 @@ import {
   changePasswordRequestAPI,
   updateMyProfileAPI,
 } from "../services/user.service";
+import { getErrorMessage } from "../utils/getErrorMessage";
+import { toast } from "react-toastify";
+import { useAuth } from "../hooks/useAuth";
 
 function AccountAdminPasswordModal({
   open,
@@ -23,6 +26,7 @@ function AccountAdminPasswordModal({
   open: boolean;
   onClose: () => void;
 }) {
+  const { logout } = useAuth();
   const formSchema = z.object({
     newPassword: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
     confirmPassword: z
@@ -40,9 +44,12 @@ function AccountAdminPasswordModal({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
-       await changePasswordRequestAPI(data);
+      await changePasswordRequestAPI(data);
+      toast.success("Đặt lại mật khẩu thành công");
+      logout();
     } catch (error) {
       console.log("update profile err", error);
+      toast.error(getErrorMessage(error, "Đặt lại mật khẩu thất bại"));
     }
   }
 
