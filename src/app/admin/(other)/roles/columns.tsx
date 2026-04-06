@@ -29,18 +29,18 @@ export const getRoleColumns = (
       return (
         <div className="flex items-center gap-3">
           <span
-            onClick={() => onEdit(role.id)}
-            title="Chi tiết"
-            className="cursor-pointer text-blue-400"
-          >
-            <Edit size={20} />
-          </span>
-          <span
             onClick={() => onDelete(role.id)}
             title="Xóa"
             className="cursor-pointer text-red-400"
           >
             <Trash size={20} />
+          </span>
+          <span
+            onClick={() => onEdit(role.id)}
+            title="Chi tiết"
+            className="cursor-pointer text-blue-400"
+          >
+            <Edit size={20} />
           </span>
         </div>
       );

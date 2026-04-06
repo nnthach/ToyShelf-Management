@@ -233,16 +233,16 @@ function CreateWarehouseModal() {
                       label="Vĩ độ"
                       placeholder="0.000000"
                       type="number"
-                      readOnly={true}
+                      labelNote="Tự động cập nhật khi chọn địa chỉ"
                       icon={<Navigation size={16} className="rotate-45" />}
                       className="bg-white/50"
                     />
                     <FormFieldCustom
                       name="longitude"
                       label="Kinh độ"
+                      labelNote="Tự động cập nhật khi chọn địa chỉ"
                       placeholder="0.000000"
                       type="number"
-                      readOnly={true}
                       icon={<Navigation size={16} />}
                       className="bg-white/50"
                     />

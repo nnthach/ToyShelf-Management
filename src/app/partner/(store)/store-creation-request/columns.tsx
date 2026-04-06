@@ -62,18 +62,18 @@ export const getStoreCreateRequestColumns = (
       return (
         <div className="flex items-center gap-3">
           <span
-            onClick={() => onView(storeCreateRequest.id)}
-            title="Chi tiết"
-            className="cursor-pointer text-blue-400"
-          >
-            <Eye size={20} />
-          </span>
-          <span
             onClick={() => onDelete(storeCreateRequest.id)}
             title="Xóa"
             className="cursor-pointer text-red-400"
           >
             <Trash size={20} />
+          </span>
+          <span
+            onClick={() => onView(storeCreateRequest.id)}
+            title="Chi tiết"
+            className="cursor-pointer text-blue-400"
+          >
+            <Eye size={20} />
           </span>
         </div>
       );

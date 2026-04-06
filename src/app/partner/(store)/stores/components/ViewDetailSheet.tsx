@@ -94,10 +94,9 @@ function ViewDetailSheet({
                 <Button
                   type="submit"
                   className="flex-1"
-                  onClick={
-                    () => router.push(`/admin/stores/edit/1`)
-                    // router.push(`/admin/stores/edit/${product.id}`)
-                  }
+                  // onClick={() =>
+                  //   router.push(`/admin/stores/edit/${product.id}`)
+                  // }
                 >
                   <Edit />
                   Chỉnh sửa

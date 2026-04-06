@@ -3,6 +3,7 @@
 import { User } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
 import {
+  formatPartnerTierTextColor,
   formatUserStatusColor,
   formatUserStatusText,
 } from "@/src/utils/formatStatus";
@@ -41,6 +42,15 @@ export const getPartnerColumns = (): ColumnDef<User>[] => [
   {
     accessorKey: "partnerTierName",
     header: "Cấp bậc",
+    cell: ({ row }) => {
+      const partnerTierName = row.getValue("partnerTierName") as string;
+
+      return (
+        <span className={`${formatPartnerTierTextColor(partnerTierName)}`}>
+          {partnerTierName}
+        </span>
+      );
+    },
   },
 
   {

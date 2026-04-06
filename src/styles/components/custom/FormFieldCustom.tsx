@@ -166,13 +166,15 @@ export function FormFieldCustom({
               htmlFor={name}
               className="flex items-center gap-1 text-[14px] font-semibold text-slate-700"
             >
-              {icon && (
-                <span className="text-primary/80 group-data-[invalid=true]:text-red-500">
-                  {icon}
-                </span>
-              )}
-              <span>{label}</span>
-              {required && <span className="text-red-500 ml-0.5">*</span>}
+              <div className="flex items-center w-[60%] gap-1 text-[14px] font-semibold text-slate-700">
+                {icon && (
+                  <span className="text-primary/80 group-data-[invalid=true]:text-red-500">
+                    {icon}
+                  </span>
+                )}
+                <span>{label}</span>
+                {required && <span className="text-red-500 ml-0.5">*</span>}
+              </div>
               {labelNote && (
                 <span className="text-xs font-normal text-muted-foreground ml-auto italic">
                   ({labelNote})

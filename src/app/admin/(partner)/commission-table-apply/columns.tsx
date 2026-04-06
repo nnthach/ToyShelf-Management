@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { CommissionTableApply } from "@/src/types";
-import { Edit, Trash } from "lucide-react";
+import { Edit } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.

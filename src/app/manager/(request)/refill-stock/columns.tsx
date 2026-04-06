@@ -1,15 +1,13 @@
 "use client";
 
-import { RefillRequest, Store } from "@/src/types";
+import { RefillRequest } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
 import {
-  formatStoreCreateRequestStatusColor,
-  formatStoreCreateRequestStatusText,
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Eye, Trash } from "lucide-react";
+import { Eye } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
