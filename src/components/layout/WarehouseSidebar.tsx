@@ -30,6 +30,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/src/hooks/useAuth";
 import { usePathname } from "next/navigation";
+import { cn } from "@/src/styles/lib/utils";
 
 const WarehouseSidebar = () => {
   const { user } = useAuth();
@@ -177,21 +178,29 @@ const WarehouseSidebar = () => {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="flex items-center gap-3 p-2 hover:bg-accent rounded-xl h-11">
-              <Avatar className="h-10 w-10 rounded-full">
+            <SidebarMenuButton
+              className={cn(
+                "flex items-center rounded-xl h-11 hover:bg-accent",
+                isCollapsed ? "justify-center p-0 gap-0" : "gap-3 p-2",
+              )}
+            >
+              <Avatar className="h-10 w-10 shrink-0 rounded-full overflow-hidden">
                 <AvatarImage
                   src={user?.avatarUrl || "https://github.com/shadcn.png"}
                   alt="@shadcn"
                   className="rounded-full"
                 />
               </Avatar>
-
-              <div className="flex flex-col text-left">
-                <span className="font-medium text-sm">{user?.fullName}</span>
-                <span className="text-xs text-muted-foreground">
-                  Quản lý kho
-                </span>
-              </div>
+              {!isCollapsed && (
+                <div className="flex flex-col text-left min-w-0">
+                  <span className="font-medium text-sm truncate">
+                    {user?.fullName}
+                  </span>
+                  <span className="text-xs text-muted-foreground truncate">
+                    Quản lý kho
+                  </span>
+                </div>
+              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
