@@ -392,16 +392,16 @@ export const StoreManagerSidebarGroups = [
 ];
 
 export const StoreManagerSidebarNested = [
-  {
-    label: "Yêu cầu",
-    sub: [
-      {
-        title: "Trả hàng",
-        url: "/manager/return-request",
-        icon: RotateCcw,
-      },
-    ],
-  },
+  // {
+  //   label: "Yêu cầu",
+  //   sub: [
+  //     {
+  //       title: "Trả hàng",
+  //       url: "/manager/return-request",
+  //       icon: RotateCcw,
+  //     },
+  //   ],
+  // },
 ];
 
 export const StoreStaffSidebarGroups = [

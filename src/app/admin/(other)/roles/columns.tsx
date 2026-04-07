@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Role } from "@/src/types";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Lock, Trash } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -30,10 +30,10 @@ export const getRoleColumns = (
         <div className="flex items-center gap-3">
           <span
             onClick={() => onDelete(role.id)}
-            title="Xóa"
+            title="Vô hiệu hóa"
             className="cursor-pointer text-red-400"
           >
-            <Trash size={20} />
+            <Lock size={20} />
           </span>
           <span
             onClick={() => onEdit(role.id)}

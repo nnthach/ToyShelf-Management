@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CommissionTableApply } from "@/src/types";
 import { Edit } from "lucide-react";
+import { formatUserStatusColor, formatUserStatusText } from "@/src/utils/formatStatus";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -42,6 +43,20 @@ export const getCommissionTableApplyColumns = (
     cell: ({ row }) => {
       const commissionTableApply = row.original;
       return new Date(commissionTableApply.endDate).toLocaleDateString("vi-VN");
+    },
+  },
+
+  {
+    accessorKey: "isActive",
+    header: "Trạng thái",
+    cell: ({ row }) => {
+      const status = row.getValue("isActive") as boolean;
+
+      return (
+        <span className={`${formatUserStatusColor(status)}`}>
+          {formatUserStatusText(status)}
+        </span>
+      );
     },
   },
 

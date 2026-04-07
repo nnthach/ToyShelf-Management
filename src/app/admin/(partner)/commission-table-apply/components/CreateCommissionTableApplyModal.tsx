@@ -192,7 +192,7 @@ function CreateCommissionPolicyModal() {
             variant="success"
           >
             <Send className="h-4 w-4" />
-            Xác nhận thêm
+            Xác nhận
           </Button>
         </DialogFooter>
       </DialogContent>

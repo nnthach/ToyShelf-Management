@@ -1,7 +1,7 @@
 "use client";
 
 import { StoreInvite, User } from "@/src/types";
-import { formatDateTime } from "@/src/utils/format";
+import { formatDateTime, formatStoreRoleToVN } from "@/src/utils/format";
 import {
   formatStoreInviteStatusColor,
   formatStoreInviteStatusText,
@@ -31,6 +31,21 @@ export const getStoreInviteColumns = (
   {
     accessorKey: "storeRole",
     header: "Chức vụ",
+    cell: ({ row }) => {
+      const storeRole = row.getValue("storeRole") as string;
+
+      return (
+        <span
+          className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
+            storeRole === "Manager"
+              ? "bg-amber-100/50 text-amber-700 border border-amber-200/50"
+              : "bg-slate-100 text-slate-500"
+          }`}
+        >
+          {formatStoreRoleToVN(storeRole)}
+        </span>
+      );
+    },
   },
 
   {

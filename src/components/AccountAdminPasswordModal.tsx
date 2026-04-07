@@ -13,7 +13,6 @@ import { FormFieldCustom } from "../styles/components/custom/FormFieldCustom";
 import { Button } from "../styles/components/ui/button";
 import {
   changePasswordRequestAPI,
-  updateMyProfileAPI,
 } from "../services/user.service";
 import { getErrorMessage } from "../utils/getErrorMessage";
 import { toast } from "react-toastify";

@@ -70,15 +70,6 @@ export default function WarehouseShipperManage() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập dữ liệu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất dữ liệu
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>

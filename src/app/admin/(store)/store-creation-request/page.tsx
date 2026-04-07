@@ -42,32 +42,7 @@ export default function AdminStoreCreationRequestManage() {
     setSelectedRequestId(cityId);
   };
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteStoreCreationRequestAPI,
-    onSuccess: () => {
-      toast.success("Xóa thành công");
-
-      // reload danh sách
-      queryClient.invalidateQueries({
-        queryKey: ["storeRequests"],
-      });
-    },
-    onError: () => {
-      toast.error("Xóa thất bại");
-    },
-  });
-
-  const handleDelete = (cityId: string) => {
-    const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xóa yêu cầu này không?",
-    );
-
-    if (!confirmDelete) return;
-
-    deleteMutation.mutate(cityId);
-  };
-
-  const columns = getStoreCreateRequestColumns(handleDelete, handleEdit);
+  const columns = getStoreCreateRequestColumns( handleEdit);
 
   return (
     <>
@@ -105,15 +80,6 @@ export default function AdminStoreCreationRequestManage() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập khẩu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất khẩu
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>

@@ -49,20 +49,4 @@ export const getStaffColumns = (
       );
     },
   },
-  {
-    accessorKey: "action",
-    header: "Hành động",
-    cell: ({ row }) => {
-      const partner = row.original;
-      return (
-        <span
-          onClick={() => onViewDetail(partner.id)}
-          title="Detail"
-          className="cursor-pointer text-blue-400"
-        >
-          <Eye />
-        </span>
-      );
-    },
-  },
 ];

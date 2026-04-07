@@ -8,7 +8,7 @@ import {
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Eye } from "lucide-react";
+import { Eye, Lock } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -37,7 +37,17 @@ export const getStaffColumns = (
     cell: ({ row }) => {
       const storeRole = row.getValue("storeRole") as string;
 
-      return <span>{formatStoreRoleToVN(storeRole)}</span>;
+      return (
+        <span
+          className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
+            storeRole === "Manager"
+              ? "bg-amber-100/50 text-amber-700 border border-amber-200/50"
+              : "bg-slate-100 text-slate-500"
+          }`}
+        >
+          {formatStoreRoleToVN(storeRole)}
+        </span>
+      );
     },
   },
 
@@ -65,7 +75,7 @@ export const getStaffColumns = (
           title="Detail"
           className="cursor-pointer text-blue-400"
         >
-          <Eye />
+          <Lock />
         </span>
       );
     },

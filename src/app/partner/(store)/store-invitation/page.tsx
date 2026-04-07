@@ -106,7 +106,6 @@ export default function PartnerManageStoreInvites() {
               loading={isLoading}
               resultCount={storeInviteList.length}
               storeOptions={storeOptions}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,
@@ -115,15 +114,6 @@ export default function PartnerManageStoreInvites() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập dữ liệu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất dữ liệu
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>

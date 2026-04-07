@@ -74,7 +74,6 @@ export default function ManagerRefillRequestManage() {
               query={query}
               loading={isLoading}
               resultCount={refillRequestList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,
@@ -84,14 +83,6 @@ export default function ManagerRefillRequestManage() {
               onRefresh={() => refetch()}
             />
 
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập khẩu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất khẩu
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>

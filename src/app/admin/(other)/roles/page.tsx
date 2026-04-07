@@ -6,18 +6,10 @@ import { useState } from "react";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { Button } from "@/src/styles/components/ui/button";
 import { Upload } from "lucide-react";
-import useFetchList from "@/src/hooks/useFetchList";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
-import { PartnerTier } from "@/src/types";
-import {
-  deletePartnerTierAPI,
-  getAllPartnerTierAPI,
-} from "@/src/services/partner-tier.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import CreatePartnerTierModal from "./components/CreateRoleModal";
-import EditPartnerTierModal from "./components/EditRoleModal";
 import { deleteRoleAPI, getAllRoleAPI } from "@/src/services/role.service";
 import CreateRoleModal from "./components/CreateRoleModal";
 import EditRoleModal from "./components/EditRoleModal";
@@ -89,28 +81,11 @@ export default function AdminManageRole() {
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={roleList ?? []} isLoading={loading}>
-          <div className="p-4 border-b flex justify-between items-center">
-            {/*Filter search */}
-            <FilterSearch
-              query={query}
-              loading={loading}
-              resultCount={roleList.length}
-              onSearch={(val) => updateQuery({ search: val })}
-              onApplyFilter={(filter) =>
-                updateQuery({
-                  ...filter,
-                })
-              }
-              onReset={() => resetQuery()}
-              onRefresh={() => refetch()}
-            />
-
-            <Button variant={"outline"}>
-              <Upload /> Xuất dữ liệu
-            </Button>
-          </div>
-        </DataTable>
+        <DataTable
+          columns={columns}
+          data={roleList ?? []}
+          isLoading={loading}
+        />
       </div>
 
       {selectedRoleId && (

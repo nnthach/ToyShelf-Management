@@ -75,7 +75,7 @@ function CreateRoleModal() {
     >
       <DialogTrigger asChild>
         <Button className="btn-primary-gradient">
-          <Plus /> Thêm cấp bậc vai trò
+          <Plus /> Thêm chức vụ vai trò
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden border-none shadow-2xl">

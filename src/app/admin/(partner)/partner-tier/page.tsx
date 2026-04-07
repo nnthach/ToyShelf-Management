@@ -88,28 +88,7 @@ export default function AdminPartnerLevel() {
           columns={columns}
           data={partnerTierList ?? []}
           isLoading={loading}
-        >
-          <div className="p-4 border-b flex justify-between items-center">
-            {/*Filter search */}
-            <FilterSearch
-              query={query}
-              loading={loading}
-              resultCount={partnerTierList.length}
-              onSearch={(val) => updateQuery({ search: val })}
-              onApplyFilter={(filter) =>
-                updateQuery({
-                  ...filter,
-                })
-              }
-              onReset={() => resetQuery()}
-              onRefresh={() => refetch()}
-            />
-
-            <Button variant={"outline"}>
-              <Upload /> Xuất dữ liệu
-            </Button>
-          </div>
-        </DataTable>
+        />
       </div>
 
       {selectedPartnerTierId && (

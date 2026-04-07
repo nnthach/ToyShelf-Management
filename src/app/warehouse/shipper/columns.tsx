@@ -62,17 +62,4 @@ export const getShipperColumns = (): ColumnDef<WarehouseStaff>[] => [
       return <span>{formatDateTime(value).full}</span>;
     },
   },
-  {
-    accessorKey: "action",
-    header: "Hành động",
-    cell: ({ row }) => {
-      const user = row.original;
-      // return <ViewDetailSheet user={user} />;
-      return (
-        <span title="Detail" className="cursor-pointer text-blue-400">
-          <Eye />
-        </span>
-      );
-    },
-  },
 ];

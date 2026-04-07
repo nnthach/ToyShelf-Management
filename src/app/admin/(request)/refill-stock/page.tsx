@@ -21,7 +21,6 @@ export default function AdminRefillRequestManage() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
-    search: "",
   });
 
   const {
@@ -65,7 +64,6 @@ export default function AdminRefillRequestManage() {
               query={query}
               loading={isLoading}
               resultCount={refillRequestList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,
@@ -74,15 +72,6 @@ export default function AdminRefillRequestManage() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập khẩu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất khẩu
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>
