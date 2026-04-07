@@ -24,3 +24,13 @@ export const deletePartnerAPI = async (id: string) => {
   const res = await api.delete(`/partner/${id}`);
   return res.data;
 };
+
+export const disablePartnerAPI = async (id: string) => {
+  const res = await api.patch(`/partner/${id}/disable`);
+  return res.data;
+};
+
+export const restorePartnerAPI = async (id: string) => {
+  const res = await api.patch(`/partner/${id}/restore`);
+  return res.data;
+};

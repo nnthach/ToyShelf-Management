@@ -21,6 +21,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Edit,
   Globe2,
+  Lock,
   MapIcon,
   MapPin,
   Navigation,
@@ -29,6 +30,9 @@ import {
   Search,
   Send,
   Sparkles,
+  Trash,
+  Trash2,
+  Unlock,
   Warehouse as WarehouseIcon,
 } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -36,6 +40,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useMapCreate } from "@/src/hooks/useMapCreate";
 import {
+  deleteWarehouseAPI,
   disableWarehouseAPI,
   restoreWarehouseAPI,
   updateWarehouseAPI,
@@ -45,9 +50,11 @@ import { City, Warehouse } from "@/src/types";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import MapCreate from "@/src/components/MapCreate";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import { useRouter } from "next/navigation";
 
 function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const [open, setOpen] = useState(false);
 
@@ -162,6 +169,22 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
     }
   }
 
+  async function handleDelete() {
+    try {
+      await deleteWarehouseAPI(warehouse.id!);
+
+      queryClient.invalidateQueries({
+        queryKey: ["warehouses"],
+      });
+
+      form.reset();
+      toast.success("Xóa kho thành công");
+      router.replace("/admin/warehouse");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Khôi phục kho thất bại"));
+    }
+  }
+
   return (
     <>
       {isLoading && <LoadingPageComponent />}
@@ -179,9 +202,9 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
           <Button
             size="icon"
             variant="secondary"
-            className="h-7 w-7 bg-white/5 hover:bg-white/10 text-white/70 rounded-full border border-white/10"
+            className="h-8 w-8 bg-white/30 hover:bg-white/10 text-white/80 rounded-full border border-white/10"
           >
-            <Pencil size={12} />
+            <Pencil size={14} />
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl">
@@ -207,9 +230,6 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
                 </label>
                 <div className="w-full h-[180px] rounded-xl overflow-hidden border-2 border-slate-100 shadow-inner bg-slate-50 relative group">
                   <MapCreate />
-                  <div className="absolute top-2 right-2 px-2 py-1 bg-white/80 backdrop-blur-sm rounded text-[10px] font-bold text-slate-500 uppercase tracking-tight border shadow-sm">
-                    Live Preview
-                  </div>
                 </div>
               </div>
 
@@ -322,24 +342,53 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
           </div>
 
           {/* Footer đồng bộ */}
-          <DialogFooter className="p-4 py-2 bg-slate-50/50 border-t flex gap-3">
-            <DialogClose asChild>
+          <DialogFooter className="p-4 py-3 bg-slate-50/50 border-t grid grid-cols-2 gap-2 items-center">
+            <div className="col-span-1 flex items-center gap-2">
+              {!warehouse?.isActive ? (
+                <>
+                  <Button
+                    onClick={() => handleDelete()}
+                    variant="ghost"
+                    size="sm"
+                    className="flex-1 font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-2"
+                  >
+                    <Trash2 size={16} className="mr-1.5" />
+                    Xóa
+                  </Button>
+
+                  <Button
+                    onClick={() => handleRestore()}
+                    variant="ghost"
+                    size="sm"
+                    className="flex-1 font-semibold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 px-2"
+                  >
+                    <Unlock size={16} className="mr-1.5" />
+                    Kích hoạt
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  onClick={() => handleDisable()}
+                  variant="ghost"
+                  className="w-full font-semibold text-amber-600 hover:text-amber-700 hover:bg-amber-50"
+                >
+                  <Lock size={16} className="mr-2" />
+                  Vô hiệu hóa
+                </Button>
+              )}
+            </div>
+
+            <div className="col-span-1 w-full">
               <Button
-                variant="ghost"
-                className="flex-1 font-medium text-slate-600"
+                type="submit"
+                form="form-update-warehouse"
+                variant="success"
+                className="w-full gap-2 font-black shadow-md active:scale-95 transition-all uppercase text-[12px] tracking-wider"
               >
-                Hủy bỏ
+                <Send size={16} />
+                Xác nhận
               </Button>
-            </DialogClose>
-            <Button
-              type="submit"
-              form="form-update-warehouse"
-              variant="success"
-              className="flex-1 min-w-[140px] gap-2 font-bold shadow-md active:scale-95 transition-all"
-            >
-              <Send size={16} />
-              Xác nhận
-            </Button>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -49,6 +49,10 @@ export interface Partner {
   partnerAccount: User;
   currentCommission: CommissionTable;
   commissionHistories: CommissionTable[];
+  address: string;
+  latitude: number;
+  longitude: number;
+  maxShelvesPerStore: number;
 }
 
 export interface Store {

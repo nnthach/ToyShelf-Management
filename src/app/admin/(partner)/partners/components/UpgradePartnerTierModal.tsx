@@ -85,13 +85,13 @@ function UpgradePartnerTierModal({ partnerId }: { partnerId: string }) {
       }}
     >
       <DialogTrigger asChild>
-        <button className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-black uppercase tracking-wider rounded-lg transition-all border border-blue-400/50 shadow-lg shadow-blue-900/40 flex items-center gap-2 group">
-          <TrendingUp
-            size={14}
-            className="group-hover:-translate-y-0.5 transition-transform"
-          />
+        <Button
+          variant="secondary"
+          className="px-2 py-0.5 bg-white/5 hover:bg-white/10 text-white/80 rounded-md text-[12px] border border-white/10"
+        >
+          <TrendingUp />
           Nâng cấp đối tác
-        </button>
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[420px] p-0 overflow-hidden border-none shadow-2xl rounded-2xl">

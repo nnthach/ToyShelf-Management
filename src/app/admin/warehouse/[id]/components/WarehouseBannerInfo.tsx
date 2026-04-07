@@ -43,10 +43,35 @@ function WarehouseBannerInfo({ warehouseDetail }: WarehouseBannerInfoProps) {
           <Sparkles className="absolute -top-4 -right-4 h-24 w-24 text-blue-400 opacity-10 rotate-12" />
 
           <div className="flex justify-between items-center mb-2 relative">
-            <h2 className="text-sm font-bold flex items-center gap-2 uppercase tracking-widest text-blue-200/80">
-              <Building size={16} /> Chi tiết kho hàng
-            </h2>
-            <UpdateWarehouseModal warehouse={warehouseDetail?.warehouse} />
+            <div className="flex items-center gap-3">
+              <h2 className="text-sm font-bold flex items-center gap-2 uppercase tracking-widest text-blue-200/80">
+                <Building size={16} /> Chi tiết kho hàng
+              </h2>
+
+              {/* STATUS BADGE */}
+              <span
+                className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-tighter backdrop-blur-md border ${
+                  warehouseDetail?.warehouse?.isActive
+                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                    : "bg-rose-500/10 text-rose-400 border-rose-500/20"
+                }`}
+              >
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    warehouseDetail?.warehouse?.isActive
+                      ? "bg-emerald-400 animate-pulse"
+                      : "bg-rose-400"
+                  }`}
+                />
+                {warehouseDetail?.warehouse?.isActive
+                  ? "Đang hoạt động"
+                  : "Vô hiệu hóa"}
+              </span>
+            </div>
+            <div>
+              {" "}
+              <UpdateWarehouseModal warehouse={warehouseDetail?.warehouse} />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 relative">

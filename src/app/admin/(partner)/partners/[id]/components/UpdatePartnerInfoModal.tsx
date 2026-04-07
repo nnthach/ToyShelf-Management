@@ -1,10 +1,11 @@
-"use client";
 import MapCreate from "@/src/components/MapCreate";
 import { useMapCreate } from "@/src/hooks/useMapCreate";
-import { PartnerFormValues, partnerSchema } from "@/src/schemas/partner.schema";
-import { getAllCommissionTableAPI } from "@/src/services/commission-table.service";
+import {
+  UpdatePartnerFormValues,
+  updatePartnerSchema,
+} from "@/src/schemas/partner.schema";
 import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
-import { createPartnerAPI } from "@/src/services/partner.service";
+import { updatePartnerAPI } from "@/src/services/partner.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import {
@@ -17,29 +18,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import { CommissionTable, PartnerTier } from "@/src/types";
+import { Partner, PartnerTier } from "@/src/types";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Building2,
-  Calendar,
+  Edit,
   Info,
-  Layers,
   MapIcon,
   MapPin,
   Navigation,
-  Plus,
+  Pencil,
   Search,
-  Send,
   ShieldCheck,
 } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-function CreatePartnerModal() {
+function UpdatePartnerInfoModal({ partner }: { partner: Partner }) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -52,19 +50,34 @@ function CreatePartnerModal() {
     setSuggestions,
   } = useMapCreate();
 
-  const form = useForm<PartnerFormValues>({
-    resolver: zodResolver(partnerSchema),
+  const form = useForm<UpdatePartnerFormValues>({
+    resolver: zodResolver(updatePartnerSchema),
     defaultValues: {
       companyName: "",
       partnerTierId: "",
-      commissionTableId: "",
-      tableStartDate: "",
-      tableEndDate: "",
       address: "",
       latitude: 0,
       longitude: 0,
     },
   });
+
+  useEffect(() => {
+    if (partner) {
+      form.reset({
+        companyName: partner.companyName,
+        address: partner.address,
+        latitude: partner.latitude,
+        longitude: partner.longitude,
+        partnerTierId: partner.partnerTierId,
+      });
+
+      window.dispatchEvent(
+        new CustomEvent("map:flyTo", {
+          detail: { lat: partner.latitude, lng: partner.longitude },
+        }),
+      );
+    }
+  }, [partner, form]);
 
   const { data: partnerTierList = [] } = useQuery({
     queryKey: ["partnerTiers", { isActive: undefined }],
@@ -72,35 +85,28 @@ function CreatePartnerModal() {
     select: (res) => res.data as PartnerTier[],
   });
 
-  const { data: commissionTableList } = useQuery({
-    queryKey: ["commissionTables"],
-    queryFn: () => getAllCommissionTableAPI({}),
-    select: (res) => res.data as CommissionTable[],
-  });
-
-  async function onSubmit(data: PartnerFormValues) {
+  async function onSubmit(data: UpdatePartnerFormValues) {
     try {
-      await createPartnerAPI(data);
+      await updatePartnerAPI(data, partner.id!);
 
       queryClient.invalidateQueries({
         queryKey: ["partners"],
       });
 
+      await queryClient.invalidateQueries({
+        queryKey: ["partner", partner.id],
+      });
+
       form.reset();
-      toast.success("Tạo đối tác thành công");
+      toast.success("Chỉnh sửa đối tác thành công");
 
       setOpen(false);
     } catch (error) {
-      toast.error(getErrorMessage(error, "Tạo đối tác thất bại"));
+      toast.error(getErrorMessage(error, "Chỉnh sửa đối tác thất bại"));
     }
   }
 
   const partnerTierOptions = partnerTierList.map((s) => ({
-    value: s.id,
-    label: s.name,
-  }));
-
-  const commissionTableOptions = commissionTableList?.map((s) => ({
     value: s.id,
     label: s.name,
   }));
@@ -116,24 +122,29 @@ function CreatePartnerModal() {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="btn-primary-gradient">
-          <Plus /> Thêm đối tác
+        <Button
+          variant="secondary"
+          className="px-2 py-0.5 bg-white/5 hover:bg-white/10 text-white/80 rounded-md text-[12px] border border-white/10"
+        >
+          <Edit />
+          Chỉnh sửa thông tin
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl">
         {/* Header với Background nhẹ */}
         <DialogHeader className="p-6 bg-slate-50/50 border-b">
           <DialogTitle className="text-xl font-bold text-slate-800">
-            Thêm đối tác mới
+            Chỉnh sửa đối tác
           </DialogTitle>
           <DialogDescription className="text-slate-500 flex items-center gap-1 mt-0.5">
-            <Info size={14} /> Điền thông tin để thiết lập quan hệ đối tác mới.
+            <Info size={14} /> Cập nhật thông tin đối tác chính xác.
           </DialogDescription>
         </DialogHeader>
 
         {/* Form Body */}
         <div className="p-6 py-0 max-h-[65vh] overflow-y-auto custom-scrollbar">
           <div className="space-y-6">
+            {/* SECTION: BẢN ĐỒ */}
             <div className="space-y-1">
               <label className="text-[14px] font-semibold text-slate-700 flex items-center gap-2">
                 <MapIcon size={16} className="text-primary" />
@@ -143,6 +154,7 @@ function CreatePartnerModal() {
                 <MapCreate />
               </div>
             </div>
+
             <FormProvider {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -190,7 +202,6 @@ function CreatePartnerModal() {
                         {suggestions.map((item) => (
                           <div
                             key={item.properties.id}
-                            title={item.properties.label}
                             className="flex items-start gap-3 px-3 py-2.5 hover:bg-slate-50 cursor-pointer rounded-lg transition-colors group/item"
                             onClick={async () => {
                               const detail = await fetchPlaceDetail(
@@ -226,50 +237,23 @@ function CreatePartnerModal() {
                     )}
                   </div>
 
-                  {/* COORDINATES GRID */}
                   <div className="grid grid-cols-2 gap-4">
                     <FormFieldCustom
                       name="latitude"
                       label="Vĩ độ"
                       placeholder="0.000000"
                       type="number"
-                      labelNote="Tự động cập nhật khi chọn địa chỉ"
                       icon={<Navigation size={16} className="rotate-45" />}
                       className="bg-white/50"
+                      required
                     />
                     <FormFieldCustom
                       name="longitude"
                       label="Kinh độ"
-                      labelNote="Tự động cập nhật khi chọn địa chỉ"
                       placeholder="0.000000"
                       type="number"
                       icon={<Navigation size={16} />}
                       className="bg-white/50"
-                    />
-                  </div>
-
-                  <FormFieldCustom
-                    name="commissionTableId"
-                    label="Bảng hoa hồng"
-                    type="select"
-                    placeholder="Chọn bảng hoa hồng"
-                    selectData={commissionTableOptions}
-                    icon={<Layers size={16} />}
-                    required
-                  />
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormFieldCustom
-                      name="tableStartDate"
-                      label="Ngày bắt đầu"
-                      type="date"
-                      icon={<Calendar size={16} />}
-                      required
-                    />
-                    <FormFieldCustom
-                      name="tableEndDate"
-                      label="Ngày kết thúc"
-                      type="date"
-                      icon={<Calendar size={16} />}
                       required
                     />
                   </div>
@@ -295,8 +279,8 @@ function CreatePartnerModal() {
             className="flex-1 sm:flex-none min-w-[120px] gap-2 font-bold shadow-sm"
             variant="success"
           >
-            <Send className="h-4 w-4" />
-            Xác nhận tạo
+            <Edit className="h-4 w-4" />
+            Lưu
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -304,4 +288,4 @@ function CreatePartnerModal() {
   );
 }
 
-export default CreatePartnerModal;
+export default UpdatePartnerInfoModal;

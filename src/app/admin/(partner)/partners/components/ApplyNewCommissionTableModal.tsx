@@ -92,15 +92,15 @@ function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
       }}
     >
       <DialogTrigger asChild>
-        <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-[11px] font-black uppercase tracking-wider rounded-lg transition-all border border-white/20 backdrop-blur-sm flex items-center gap-2 group">
-          <FilePlus
-            size={14}
-            className="group-hover:scale-110 transition-transform text-orange-400"
-          />
+        <Button
+          variant="secondary"
+          className="px-2 py-0.5 bg-white/5 hover:bg-white/10 text-white/80 rounded-md text-[12px] border border-white/10"
+        >
+          <FilePlus />
           Áp dụng hoa hồng mới
-        </button>
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden border-none shadow-2xl">
+      <DialogContent className="sm:max-w-[520px] p-0 overflow-hidden border-none shadow-2xl">
         {/* Header tối giản */}
         <DialogHeader className="p-6 bg-slate-50/50 border-b">
           <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
