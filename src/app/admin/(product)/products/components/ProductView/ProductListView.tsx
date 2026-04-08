@@ -39,14 +39,6 @@ function ProductListView({
         <div className="p-4 border-b flex justify-between items-center">
           {/*Filter search */}
           {children}
-          <div className="space-x-3">
-            <Button>
-              <Download /> Nhập dữ liệu
-            </Button>
-            <Button variant={"outline"}>
-              <Upload /> Xuất dữ liệu
-            </Button>
-          </div>
         </div>
       </DataTable>
     </div>

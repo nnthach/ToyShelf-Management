@@ -1,6 +1,6 @@
 import { Button } from "@/src/styles/components/ui/button";
 import { Product } from "@/src/types";
-import { Eye } from "lucide-react";
+import { Badge, Eye } from "lucide-react";
 import Image from "next/image";
 import { memo, useState } from "react";
 
@@ -38,6 +38,19 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
           />
         )}
+        <div className="absolute top-2 left-2 z-10">
+          <span
+            className={`h-5 flex items-center justify-center rounded-2xl gap-1.5 border-none shadow-sm backdrop-blur-sm px-2.5 w-auto max-w-fit min-w-max ${
+              selectedColor?.isActive
+                ? "bg-green-500/90 text-white"
+                : "bg-gray-500/90 text-white"
+            }`}
+          >
+            <span className="text-[10px] font-semibold whitespace-nowrap block">
+              {selectedColor?.isActive ? "Hoạt động" : "Ngưng hoạt động"}
+            </span>
+          </span>
+        </div>
 
         {/* Hover info */}
         <div

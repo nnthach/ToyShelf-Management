@@ -2,15 +2,9 @@
 
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStaffColumns } from "./columns";
-import { Button } from "@/src/styles/components/ui/button";
-import { Download, Upload } from "lucide-react";
 import CreateStaffModal from "./components/CreateStaffModal";
-import useFetchList from "@/src/hooks/useFetchList";
-import { useDebounce } from "@/src/hooks/useDebounce";
-import { useMemo } from "react";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
-import { User } from "@/src/types";
 import { getAllUserAPI } from "@/src/services/user.service";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
@@ -70,15 +64,6 @@ export default function AdminUserManage() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập dữ liệu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất dữ liệu
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>

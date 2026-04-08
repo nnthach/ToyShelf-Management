@@ -16,8 +16,8 @@ import {
   FilePlus,
   Info,
   Layers,
-  Plus,
   Send,
+  StickyNote,
   Trophy,
 } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -38,7 +38,7 @@ function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
 
   const formSchema = z.object({
     commissionTableId: z.string().min(1, "Bảng giá là bắt buộc"),
-    name: z.string().min(1, "Tên là bắt buộc"),
+    name: z.string().optional(),
     startDate: z.string().min(1, "Ngày bắt đầu là bắt buộc"),
     endDate: z.string().min(1, "Ngày kết thúc là bắt buộc"),
   });
@@ -134,14 +134,6 @@ function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
                 </div>
 
                 <FormFieldCustom
-                  name="name"
-                  label="Tên"
-                  placeholder="Tên"
-                  icon={<Trophy size={16} />}
-                  required
-                />
-
-                <FormFieldCustom
                   name="startDate"
                   label="Ngày bắt đầu"
                   type="date"
@@ -155,6 +147,15 @@ function ApplyNewCommissionTableModal({ partnerId }: { partnerId: string }) {
                   icon={<Calendar size={16} />}
                   required
                 />
+
+                <div className="col-span-2 sm:col-span-1">
+                  <FormFieldCustom
+                    name="name"
+                    label="Ghi chú"
+                    placeholder="Ghi chú"
+                    icon={<StickyNote size={16} />}
+                  />
+                </div>
               </div>
             </form>
           </FormProvider>

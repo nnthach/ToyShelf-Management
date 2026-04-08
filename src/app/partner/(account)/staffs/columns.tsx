@@ -8,17 +8,24 @@ import {
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Eye, Lock } from "lucide-react";
+import { Eye, Lock, UnlockIcon } from "lucide-react";
+import { Unlock } from "next/font/google";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export const getStaffColumns = (
-  onViewDetail: (partnerId: string) => void,
+  onDisable: (staffId: string) => void,
+  onRestore: (staffId: string) => void,
 ): ColumnDef<User>[] => [
   {
     accessorKey: "fullName",
     header: "Tên đầy đủ",
+    cell: ({ row }) => {
+      const fullName = row.getValue("fullName") as string;
+
+      return <p className={`font-bold`}>{fullName}</p>;
+    },
   },
 
   {
@@ -68,14 +75,23 @@ export const getStaffColumns = (
     accessorKey: "action",
     header: "Hành động",
     cell: ({ row }) => {
-      const partner = row.original;
-      return (
+      const staff = row.original;
+
+      return staff?.isActive ? (
         <span
-          onClick={() => onViewDetail(partner.id)}
-          title="Detail"
-          className="cursor-pointer text-blue-400"
+          onClick={() => onDisable(staff.id)}
+          title="Disable"
+          className="cursor-pointer text-red-400"
         >
           <Lock />
+        </span>
+      ) : (
+        <span
+          onClick={() => onRestore(staff.id)}
+          title="Kích hoạt"
+          className="cursor-pointer text-green-400"
+        >
+          <UnlockIcon />
         </span>
       );
     },

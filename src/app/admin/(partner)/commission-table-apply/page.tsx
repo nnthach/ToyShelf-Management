@@ -1,22 +1,22 @@
 "use client";
 
 import useQueryParams from "@/src/hooks/useQueryParams";
-
-import { useState } from "react";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { Button } from "@/src/styles/components/ui/button";
 import { Upload } from "lucide-react";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
 import { getCommissionTableApplyColumns } from "./columns";
 import CreateCommissionPolicyModal from "./components/CreateCommissionTableApplyModal";
-import { getAllCommissionTableApplyAPI } from "@/src/services/commission-table-apply.service";
+import {
+  disableCommissionTableApplyAPI,
+  getAllCommissionTableApplyAPI,
+  restoreCommissionTableApplyAPI,
+} from "@/src/services/commission-table-apply.service";
+import { toast } from "react-toastify";
 
 export default function AdminCommissionTableApply() {
-  const [selectedCommissionTableApplyId, setSelectedCommissionTableApplyId] =
-    useState("");
   const queryClient = useQueryClient();
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
@@ -34,11 +34,49 @@ export default function AdminCommissionTableApply() {
     select: (res) => res.data,
   });
 
-  const handleEdit = (commissionTableApplyId: string) => {
-    setSelectedCommissionTableApplyId(commissionTableApplyId);
+  const disableMutation = useMutation({
+    mutationFn: disableCommissionTableApplyAPI,
+    onSuccess: () => {
+      toast.success("Vô hiệu hóa thành công");
+
+      queryClient.invalidateQueries({
+        queryKey: ["commissionTableApplies"],
+      });
+    },
+    onError: () => {
+      toast.error("Vô hiệu hóa thất bại");
+    },
+  });
+
+  const handleDisable = (commissionId: string) => {
+    const confirmDisable = window.confirm(
+      "Bạn có chắc muốn vô hiệu hóa không?",
+    );
+
+    if (!confirmDisable) return;
+
+    disableMutation.mutate(commissionId);
   };
 
-  const columns = getCommissionTableApplyColumns(handleEdit);
+  const restoreMutation = useMutation({
+    mutationFn: restoreCommissionTableApplyAPI,
+    onSuccess: () => {
+      toast.success("Kích hoạt thành công");
+
+      queryClient.invalidateQueries({
+        queryKey: ["commissionTableApplies"],
+      });
+    },
+    onError: () => {
+      toast.error("Kích hoạt thất bại");
+    },
+  });
+
+  const handleRestore = (commissionId: string) => {
+    restoreMutation.mutate(commissionId);
+  };
+
+  const columns = getCommissionTableApplyColumns(handleRestore, handleDisable);
 
   return (
     <div>

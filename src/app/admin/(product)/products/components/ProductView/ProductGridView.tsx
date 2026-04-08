@@ -33,15 +33,6 @@ function ProductGridView({
       <div className="bg-white rounded-xl overflow-hidden ">
         <div className="mb-4 p-4 border-b flex justify-between items-center bg-white dark:bg-sidebar">
           {children}
-          <div className="space-x-3">
-            <Button>
-              <Download /> Nhập dữ liệu
-            </Button>
-            <Button variant={"outline"}>
-              <Upload />
-              Xuất dữ liệu
-            </Button>
-          </div>
         </div>
         <div className="px-4 pb-4">
           {isLoading ? (

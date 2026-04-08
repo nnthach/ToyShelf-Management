@@ -10,7 +10,12 @@ import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { deleteRoleAPI, getAllRoleAPI } from "@/src/services/role.service";
+import {
+  deleteRoleAPI,
+  disableRoleAPI,
+  getAllRoleAPI,
+  restoreRoleAPI,
+} from "@/src/services/role.service";
 import CreateRoleModal from "./components/CreateRoleModal";
 import EditRoleModal from "./components/EditRoleModal";
 import { getRoleColumns } from "./columns";
@@ -38,6 +43,7 @@ export default function AdminManageRole() {
     setSelectedRoleId(tierId);
   };
 
+  // delete
   const deleteMutation = useMutation({
     mutationFn: deleteRoleAPI,
     onSuccess: () => {
@@ -63,7 +69,50 @@ export default function AdminManageRole() {
     deleteMutation.mutate(roleId);
   };
 
-  const columns = getRoleColumns(handleEdit, handleDelete);
+  // disable
+  const disableMutation = useMutation({
+    mutationFn: disableRoleAPI,
+    onSuccess: () => {
+      toast.success("Vô hiệu hóa thành công");
+
+      queryClient.invalidateQueries({
+        queryKey: ["roles"],
+      });
+    },
+    onError: () => {
+      toast.error("Vô hiệu hóa thất bại");
+    },
+  });
+
+  const handleDisable = (roleId: string) => {
+    const confirmDisable = window.confirm(
+      "Bạn có chắc muốn vô hiệu hóa chức vụ này không?",
+    );
+
+    if (!confirmDisable) return;
+
+    disableMutation.mutate(roleId);
+  };
+  // restore
+  const restoreMutation = useMutation({
+    mutationFn: restoreRoleAPI,
+    onSuccess: () => {
+      toast.success("Kích hoạt thành công");
+
+      queryClient.invalidateQueries({
+        queryKey: ["roles"],
+      });
+    },
+    onError: () => {
+      toast.error("Kích hoạt thất bại");
+    },
+  });
+
+  const handleRestore = (roleId: string) => {
+    restoreMutation.mutate(roleId);
+  };
+
+  const columns = getRoleColumns(handleEdit, handleDelete,handleDisable, handleRestore);
 
   return (
     <div>

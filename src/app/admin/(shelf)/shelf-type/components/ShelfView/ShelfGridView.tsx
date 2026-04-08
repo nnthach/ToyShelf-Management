@@ -34,9 +34,6 @@ function ShelfGridView({
         <div className="mb-4 p-4 border-b flex justify-between items-center bg-white dark:bg-sidebar">
           {children}
           <div className="space-x-3">
-            <Button>
-              <Download /> Nhập dữ liệu
-            </Button>
             <Button variant={"outline"}>
               <Upload />
               Xuất dữ liệu

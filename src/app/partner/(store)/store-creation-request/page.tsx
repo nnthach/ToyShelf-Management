@@ -106,15 +106,6 @@ export default function PartnerStoreCreationRequestManage() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <div className="space-x-3">
-              <Button>
-                <Download /> Nhập khẩu
-              </Button>
-              <Button variant={"outline"}>
-                <Upload /> Xuất khẩu
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>

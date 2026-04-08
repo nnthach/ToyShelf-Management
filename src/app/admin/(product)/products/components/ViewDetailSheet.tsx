@@ -8,7 +8,12 @@ import {
 } from "@/src/styles/components/ui/sheet";
 import { useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getProductDetailAPI } from "@/src/services/product.service";
+import {
+  deleteProductColorColorAPI,
+  disableProductColorColorAPI,
+  getProductDetailAPI,
+  restoreProductColorColorAPI,
+} from "@/src/services/product.service";
 import ModelThreeDPreview from "@/src/styles/components/custom/ModelThreeDPreview";
 import Image from "next/image";
 import { Product } from "@/src/types";
@@ -35,11 +40,6 @@ import {
 } from "@/src/utils/formatStatus";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { useRouter } from "next/navigation";
-import {
-  deleteProductAPI,
-  disableProductAPI,
-  restoreProductAPI,
-} from "@/src/services/product.service";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
@@ -60,6 +60,8 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
     enabled: !!productId,
   });
 
+  console.log("product", productDetail);
+
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [viewMode, setViewMode] = useState<"image" | "3d">("image");
 
@@ -74,7 +76,7 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
 
   async function handleDisable() {
     try {
-      await disableProductAPI(productId!);
+      await disableProductColorColorAPI(selectedColor?.id || ""!);
 
       queryClient.invalidateQueries({
         queryKey: ["products"],
@@ -92,7 +94,7 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
 
   async function handleRestore() {
     try {
-      await restoreProductAPI(productId!);
+      await restoreProductColorColorAPI(selectedColor?.id || ""!);
 
       queryClient.invalidateQueries({
         queryKey: ["products"],
@@ -114,8 +116,7 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
     );
     if (!confirmed) return;
     try {
-      await deleteProductAPI("11"!);
-      // await deleteProductAPI(productId!);
+      await deleteProductColorColorAPI(selectedColor?.id || ""!);
 
       queryClient.invalidateQueries({
         queryKey: ["products"],
@@ -203,15 +204,15 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
                   {productDetail?.name}
                 </h2>
 
-                {productDetail?.isActive && (
+                {selectedColor?.isActive && (
                   <span
                     className={`
           shrink-0 whitespace-nowrap
           text-[10px] font-bold uppercase border rounded-full px-2 py-1
-          ${formatBooleanIsActiveStatusColor(productDetail?.isActive)}
+          ${formatBooleanIsActiveStatusColor(selectedColor?.isActive)}
         `}
                   >
-                    {formatBooleanIsActiveStatusText(productDetail?.isActive)}
+                    {formatBooleanIsActiveStatusText(selectedColor?.isActive)}
                   </span>
                 )}
               </div>
@@ -380,7 +381,7 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
         {/* Footer Action Bar */}
         <div className="p-4 border-t bg-white flex items-center gap-3 shadow-[0_-8px_20px_rgba(0,0,0,0.04)]">
           <div className="flex gap-2 flex-1">
-            {productDetail?.isActive ? (
+            {selectedColor?.isActive ? (
               <button
                 onClick={handleDisable}
                 title="Vô hiệu hóa sản phẩm"

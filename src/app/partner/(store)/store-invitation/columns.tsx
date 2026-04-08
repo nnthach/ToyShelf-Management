@@ -36,7 +36,7 @@ export const getStoreInviteColumns = (
 
       return (
         <span
-          className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
+          className={`px-3 py-1 rounded-2xl text-[12px] font-semibold uppercase ${
             storeRole === "Manager"
               ? "bg-amber-100/50 text-amber-700 border border-amber-200/50"
               : "bg-slate-100 text-slate-500"
@@ -75,14 +75,17 @@ export const getStoreInviteColumns = (
     header: "Hành động",
     cell: ({ row }) => {
       const invite = row.original;
+
       return (
-        <span
-          onClick={() => onDelete(invite.id)}
-          title="Xóa"
-          className="cursor-pointer text-red-400"
-        >
-          <Trash size={20} />
-        </span>
+        invite.status === "Pending" && (
+          <span
+            onClick={() => onDelete(invite.id)}
+            title="Xóa"
+            className="cursor-pointer text-red-400"
+          >
+            <Trash size={20} />
+          </span>
+        )
       );
     },
   },

@@ -17,7 +17,12 @@ export const getStoreCreateRequestColumns = (
 ): ColumnDef<Store>[] => [
   {
     accessorKey: "name",
-    header: "Tên",
+    header: "Tên cửa hàng",
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+
+      return <p className="font-bold">{name}</p>;
+    },
   },
   {
     accessorKey: "phoneNumber",
@@ -59,15 +64,19 @@ export const getStoreCreateRequestColumns = (
     header: "Hành động",
     cell: ({ row }) => {
       const storeCreateRequest = row.original;
+      const status = row.getValue("status") as string;
+
       return (
         <div className="flex items-center gap-3">
-          <span
-            onClick={() => onDelete(storeCreateRequest.id)}
-            title="Xóa"
-            className="cursor-pointer text-red-400"
-          >
-            <Trash size={20} />
-          </span>
+          {status === "Pending" && (
+            <span
+              onClick={() => onDelete(storeCreateRequest.id)}
+              title="Xóa"
+              className="cursor-pointer text-red-400"
+            >
+              <Trash size={20} />
+            </span>
+          )}
           <span
             onClick={() => onView(storeCreateRequest.id)}
             title="Chi tiết"

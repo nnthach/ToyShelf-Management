@@ -71,3 +71,13 @@ export const getAllWarehouseStaffAPI = async <T>(params: T) => {
   const res = await api.get("/user/warehouse-users", { params });
   return res.data;
 };
+
+export const disableUserAPI = async (id: string) => {
+  const res = await api.patch(`/user/${id}/disable`);
+  return res.data;
+};
+
+export const restoreUserAPI = async (id: string) => {
+  const res = await api.patch(`/user/${id}/restore`);
+  return res.data;
+};

@@ -15,14 +15,13 @@ import {
   Table,
   FilePlus,
   PackagePlus,
-  Wallet,
   LayoutGrid,
   RotateCcw,
   ArchiveRestore,
   MapPin,
   ShieldCheck,
-  PlusCircle,
   Ticket,
+  Box,
 } from "lucide-react";
 
 // Admin
@@ -136,11 +135,6 @@ export const AdminSidebarNested = [
   {
     label: "Yêu cầu",
     sub: [
-      {
-        title: "Thanh toán hoa hồng",
-        url: "/admin/monthly-settlement",
-        icon: Wallet,
-      },
       {
         title: "Đặt hàng",
         url: "/admin/refill-stock",
@@ -281,7 +275,7 @@ export const WarehouseManagerSidebarGroups = [
       {
         title: "Quản lý hàng tồn kho",
         url: "/warehouse/inventory",
-        icon: UserStar,
+        icon: Box,
       },
     ],
   },
@@ -311,16 +305,16 @@ export const WarehouseManagerSidebarGroups = [
 ];
 
 export const WarehouseManagerSidebarNested = [
-  {
-    label: "Yêu cầu",
-    sub: [
-      {
-        title: "Trả hàng",
-        url: "/admin/return-request",
-        icon: RotateCcw,
-      },
-    ],
-  },
+  // {
+  //   label: "Yêu cầu",
+  //   sub: [
+  //     {
+  //       title: "Trả hàng",
+  //       url: "/admin/return-request",
+  //       icon: RotateCcw,
+  //     },
+  //   ],
+  // },
 ];
 
 // Store manager

@@ -16,6 +16,10 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "storeName",
     header: "Cửa hàng",
+    cell: ({ row }) => {
+      const { storeName } = row.original;
+      return <p className="font-semibold">{storeName}</p>;
+    },
   },
   {
     accessorKey: "customer",

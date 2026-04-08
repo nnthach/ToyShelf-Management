@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit, Hash, Plus, Send, Sparkles, Trophy } from "lucide-react";
+import { Edit, Hash, Layers, Plus, Send, Sparkles, Trophy } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import {
@@ -46,18 +46,16 @@ function EditPartnerTierModal({
 
   const formSchema = z.object({
     name: z.string().min(1, "Tên cấp độ đối tác là bắt buộc"),
-    priority: z
-      .string()
-      .min(1, "Giá tối thiểu là bắt buộc")
-      .refine((val) => !isNaN(Number(val)), "Giá tối thiểu phải là số")
-      .refine((val) => Number(val) >= 1, "Giá tối thiểu phải >= 1"),
+    priority: z.number().min(1, "Hãy nhập độ ưu tiên"),
+    maxShelvesPerStore: z.number().min(1, "Hãy nhập số lượng kệ tối đa"),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      priority: "1",
+      priority: 1,
+      maxShelvesPerStore: 1,
     },
   });
 
@@ -65,7 +63,8 @@ function EditPartnerTierModal({
     if (partnerTierDetail) {
       form.reset({
         name: partnerTierDetail.name,
-        priority: partnerTierDetail.priority.toString(),
+        priority: partnerTierDetail.priority || 1,
+        maxShelvesPerStore: partnerTierDetail.maxShelvesPerStore || 1,
       });
     }
   }, [partnerTierDetail, form]);
@@ -132,6 +131,14 @@ function EditPartnerTierModal({
                 placeholder="Ví dụ: 1"
                 type="number"
                 icon={<Hash size={18} />}
+                required
+              />
+              <FormFieldCustom
+                name="maxShelvesPerStore"
+                label="Số lượng kệ tối đa ở mỗi cửa hàng"
+                placeholder="Ví dụ: 1"
+                type="number"
+                icon={<Layers size={18} />}
                 required
               />
             </form>

@@ -36,6 +36,11 @@ export const getPartnerTierColumns = (
   },
 
   {
+    accessorKey: "maxShelvesPerStore",
+    header: "Số lượng kệ tối đa mỗi cửa hàng",
+  },
+
+  {
     accessorKey: "action",
     header: "Hành động",
     cell: ({ row }) => {

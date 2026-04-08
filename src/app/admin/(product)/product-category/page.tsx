@@ -11,7 +11,9 @@ import CreateCategoryModal from "./components/CreateCategoryModal";
 import { QueryParams } from "@/src/types/SubType";
 import {
   deleteProductCategoryAPI,
+  disableProductCategoryAPI,
   getAllProductCategoryAPI,
+  restoreProductCategoryAPI,
 } from "@/src/services/product-category.service";
 import EditCategoryModal from "./components/EditCategoryModal";
 import { toast } from "react-toastify";
@@ -43,12 +45,12 @@ export default function AdminProductType() {
     setSelectedCategoryId(categoryId);
   };
 
+  // delete
   const deleteMutation = useMutation({
     mutationFn: deleteProductCategoryAPI,
     onSuccess: () => {
       toast.success("Xóa danh mục thành công");
 
-      // reload danh sách
       queryClient.invalidateQueries({
         queryKey: ["categories"],
       });
@@ -68,7 +70,50 @@ export default function AdminProductType() {
     deleteMutation.mutate(categoryId);
   };
 
-  const columns = getProductCategoryColumns(handleEdit, handleDelete);
+  // disable
+  const disableMutation = useMutation({
+    mutationFn: disableProductCategoryAPI,
+    onSuccess: () => {
+      toast.success("Vô hiệu hóa thành công");
+
+      queryClient.invalidateQueries({
+        queryKey: ["categories"],
+      });
+    },
+    onError: () => {
+      toast.error("Vô hiệu hóa thất bại");
+    },
+  });
+
+  const handleDisable = (categoryId: string) => {
+    const confirmDisable = window.confirm(
+      "Bạn có chắc muốn vô hiệu hóa danh mục này không?",
+    );
+
+    if (!confirmDisable) return;
+
+    disableMutation.mutate(categoryId);
+  };
+  // restore
+  const restoreMutation = useMutation({
+    mutationFn: restoreProductCategoryAPI,
+    onSuccess: () => {
+      toast.success("Kích hoạt thành công");
+
+      queryClient.invalidateQueries({
+        queryKey: ["categories"],
+      });
+    },
+    onError: () => {
+      toast.error("Kích hoạt thất bại");
+    },
+  });
+
+  const handleRestore = (categoryId: string) => {
+    restoreMutation.mutate(categoryId);
+  };
+
+  const columns = getProductCategoryColumns(handleEdit, handleDelete,handleDisable, handleRestore);
 
   return (
     <>

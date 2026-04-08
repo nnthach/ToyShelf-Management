@@ -24,9 +24,21 @@ function ShelfCard({ shelf, handleViewDetail }: ShelfCardProps) {
         />
 
         {/* Badge số tầng ở góc trái trên */}
-        <div className="absolute top-2 left-2 z-10">
-          <Badge className="bg-white/90 text-gray-900 hover:bg-white/100 border-none shadow-sm backdrop-blur-sm">
+        <div className="absolute top-2 inset-x-2 flex justify-between items-start z-10">
+          <Badge className="h-6 min-w-[60px] justify-center bg-white/90 text-gray-900 border-none shadow-sm backdrop-blur-sm px-2">
             {shelf?.totalLevels} tầng
+          </Badge>
+
+          <Badge
+            className={`h-6 flex items-center gap-1.5 border-none shadow-sm backdrop-blur-sm px-2 ${
+              shelf.isActive
+                ? "bg-green-500/90 text-white"
+                : "bg-gray-500/90 text-white"
+            }`}
+          >
+            <span className="text-[11px] font-medium">
+              {shelf.isActive ? "Hoạt động" : "Ngưng hoạt động"}
+            </span>
           </Badge>
         </div>
       </div>

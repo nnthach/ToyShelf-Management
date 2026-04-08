@@ -7,7 +7,7 @@ import {
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Edit, Eye, Trash } from "lucide-react";
+import { Edit, Eye, Lock, Trash, Unlock } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -15,6 +15,8 @@ import { Edit, Eye, Trash } from "lucide-react";
 export const getProductCategoryColumns = (
   onEdit: (categoryId: string) => void,
   onDelete: (categoryId: string) => void,
+  onDisable: (categoryId: string) => void,
+  onRestore: (categoryId: string) => void,
 ): ColumnDef<ProductCategory>[] => [
   {
     accessorKey: "code",
@@ -49,13 +51,33 @@ export const getProductCategoryColumns = (
       const color = row.original;
       return (
         <div className="flex items-center gap-3">
-          <span
-            onClick={() => onDelete(color.id)}
-            title="Xóa"
-            className="cursor-pointer text-red-400"
-          >
-            <Trash size={20} />
-          </span>
+          {color.isActive ? (
+            <span
+              onClick={() => onDisable(color.id)}
+              title="Vô hiệu hóa"
+              className="cursor-pointer text-red-400"
+            >
+              <Lock size={20} />
+            </span>
+          ) : (
+            <>
+              <span
+                onClick={() => onDelete(color.id)}
+                title="Xóa"
+                className="cursor-pointer text-red-400"
+              >
+                <Trash size={20} />
+              </span>
+              <span
+                onClick={() => onRestore(color.id)}
+                title="Kích hoạt"
+                className="cursor-pointer text-green-400"
+              >
+                <Unlock size={20} />
+              </span>
+            </>
+          )}
+
           <span
             onClick={() => onEdit(color.id)}
             title="Chi tiết"

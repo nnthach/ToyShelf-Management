@@ -11,7 +11,15 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar, Info, Layers, Plus, Send, Trophy } from "lucide-react";
+import {
+  Calendar,
+  Info,
+  Layers,
+  Plus,
+  Send,
+  StickyNote,
+  Trophy,
+} from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -32,7 +40,7 @@ function CreateCommissionPolicyModal() {
   const formSchema = z.object({
     partnerId: z.string().min(1, "Đối tác là bắt buộc"),
     commissionTableId: z.string().min(1, "Bảng giá là bắt buộc"),
-    name: z.string().min(1, "Tên là bắt buộc"),
+    name: z.string().optional(),
     startDate: z.string().min(1, "Ngày bắt đầu là bắt buộc"),
     endDate: z.string().min(1, "Ngày kết thúc là bắt buộc"),
   });
@@ -103,7 +111,7 @@ function CreateCommissionPolicyModal() {
           <Plus /> Áp dụng bảng hoa hồng
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden border-none shadow-2xl">
+      <DialogContent className="sm:max-w-[520px] p-0 overflow-hidden border-none shadow-2xl">
         {/* Header tối giản */}
         <DialogHeader className="p-6 bg-slate-50/50 border-b">
           <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">
@@ -149,14 +157,6 @@ function CreateCommissionPolicyModal() {
                 </div>
 
                 <FormFieldCustom
-                  name="name"
-                  label="Tên"
-                  placeholder="Tên"
-                  icon={<Trophy size={16} />}
-                  required
-                />
-
-                <FormFieldCustom
                   name="startDate"
                   label="Ngày bắt đầu"
                   type="date"
@@ -170,6 +170,15 @@ function CreateCommissionPolicyModal() {
                   icon={<Calendar size={16} />}
                   required
                 />
+
+                <div className="col-span-2">
+                  <FormFieldCustom
+                    name="name"
+                    label="Ghi chú"
+                    placeholder="Ghi chú"
+                    icon={<StickyNote size={16} />}
+                  />
+                </div>
               </div>
             </form>
           </FormProvider>

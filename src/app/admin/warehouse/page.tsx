@@ -75,10 +75,10 @@ export default function AdminWarehouseManagement() {
 
             <div className="space-x-3">
               <Button>
-                <Download /> Nhập khẩu
+                <Download /> Nhập dữ liệu
               </Button>
               <Button variant={"outline"}>
-                <Upload /> Xuất khẩu
+                <Upload /> Xuất dữ liệu
               </Button>
             </div>
           </div>

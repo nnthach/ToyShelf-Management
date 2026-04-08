@@ -41,3 +41,18 @@ export const getAllProductColorColorAPI = async <T>(params: T) => {
   const res = await api.get("/ProductColor", { params });
   return res.data;
 };
+
+export const disableProductColorColorAPI = async (id: string) => {
+  const res = await api.patch(`/ProductColor/${id}/disable`);
+  return res.data;
+};
+
+export const restoreProductColorColorAPI = async (id: string) => {
+  const res = await api.patch(`/ProductColor/${id}/restore`);
+  return res.data;
+};
+
+export const deleteProductColorColorAPI = async (id: string) => {
+  const res = await api.delete(`/ProductColor/${id}/delete`);
+  return res.data;
+};

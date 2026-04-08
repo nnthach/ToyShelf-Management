@@ -1,31 +1,25 @@
 "use client";
 
-import { Download, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
-import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {  useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
 import { Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreCreateRequestColumns } from "./columns";
 import {
-  deleteStoreCreationRequestAPI,
   getAllStoreCreationRequestAPI,
 } from "@/src/services/store-create-request.service";
-import { toast } from "react-toastify";
 import { useState } from "react";
 import UpdateStoreCreateRequestModal from "./components/UpdateStoreCreationRequestModal";
 
 export default function AdminStoreCreationRequestManage() {
-  const queryClient = useQueryClient();
 
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
-    search: "",
   });
 
   const {
@@ -71,7 +65,6 @@ export default function AdminStoreCreationRequestManage() {
               query={query}
               loading={isLoading}
               resultCount={storeCreateRequestList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

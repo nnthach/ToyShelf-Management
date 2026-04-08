@@ -4,7 +4,7 @@ import { DataTable } from "@/src/styles/components/ui/data-table";
 import { Button } from "@/src/styles/components/ui/button";
 import { Download, Upload } from "lucide-react";
 import useQueryParams from "../../../../hooks/useQueryParams";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllPartnerAPI } from "@/src/services/partner.service";
@@ -12,15 +12,18 @@ import { getStaffColumns } from "./columns";
 import CreateStaffModal from "./components/CreateStaffModal";
 import FilterSearch from "./components/FilterSearch";
 import { useAuth } from "@/src/hooks/useAuth";
-import { getAllPartnerStaffAPI } from "@/src/services/user.service";
+import {
+  disableUserAPI,
+  getAllPartnerStaffAPI,
+  restoreUserAPI,
+} from "@/src/services/user.service";
 import { getAllStoreAPI } from "@/src/services/store.service";
 import { Store } from "@/src/types";
+import { toast } from "react-toastify";
 
 export default function PartnerManageStaff() {
-  const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
-
   const { partner } = useAuth();
-
+  const queryClient = useQueryClient();
   const partnerId = partner?.partnerId;
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
@@ -52,11 +55,50 @@ export default function PartnerManageStaff() {
     value: s.id,
   }));
 
-  const handleViewDetail = (partnerId: string) => {
-    setSelectedStaffId(partnerId);
+  // disable
+  const disableMutation = useMutation({
+    mutationFn: disableUserAPI,
+    onSuccess: () => {
+      toast.success("Vô hiệu hóa thành công");
+
+      queryClient.invalidateQueries({
+        queryKey: ["staffs"],
+      });
+    },
+    onError: () => {
+      toast.error("Vô hiệu hóa thất bại");
+    },
+  });
+
+  const handleDisable = (roleId: string) => {
+    const confirmDisable = window.confirm(
+      "Bạn có chắc muốn vô hiệu hóa chức vụ này không?",
+    );
+
+    if (!confirmDisable) return;
+
+    disableMutation.mutate(roleId);
+  };
+  // restore
+  const restoreMutation = useMutation({
+    mutationFn: restoreUserAPI,
+    onSuccess: () => {
+      toast.success("Kích hoạt thành công");
+
+      queryClient.invalidateQueries({
+        queryKey: ["staffs"],
+      });
+    },
+    onError: () => {
+      toast.error("Kích hoạt thất bại");
+    },
+  });
+
+  const handleRestore = (roleId: string) => {
+    restoreMutation.mutate(roleId);
   };
 
-  const columns = getStaffColumns(handleViewDetail);
+  const columns = getStaffColumns(handleDisable, handleRestore);
 
   return (
     <>

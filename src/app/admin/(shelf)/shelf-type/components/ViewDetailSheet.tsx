@@ -153,30 +153,48 @@ function ViewDetailSheet({
           </div>
 
           {/* 2. BASIC INFO SECTION */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] uppercase font-bold text-blue-500">
-                Rộng
-              </span>
-              <span className="text-lg font-bold text-blue-900">
-                {shelf?.width} <small>cm</small>
-              </span>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center gap-3">
+              <h2 className="text-xl font-bold tracking-tight">
+                {shelf?.name || "N/A"}
+              </h2>
+              <Badge
+                className={`h-6 flex items-center gap-1.5 border-none shadow-sm backdrop-blur-sm px-2 ${
+                  shelf?.isActive
+                    ? "bg-green-500/90 text-white"
+                    : "bg-gray-500/90 text-white"
+                }`}
+              >
+                <span className="text-[11px] font-medium">
+                  {shelf?.isActive ? "Hoạt động" : "Ngưng hoạt động"}
+                </span>
+              </Badge>
             </div>
-            <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] uppercase font-bold text-indigo-500">
-                Cao
-              </span>
-              <span className="text-lg font-bold text-indigo-900">
-                {shelf?.height} <small>cm</small>
-              </span>
-            </div>
-            <div className="p-4 rounded-2xl bg-violet-50/50 border border-violet-100 flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] uppercase font-bold text-violet-500">
-                Sâu
-              </span>
-              <span className="text-lg font-bold text-violet-900">
-                {shelf?.depth} <small>cm</small>
-              </span>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 flex flex-col items-center justify-center text-center">
+                <span className="text-[10px] uppercase font-bold text-blue-500">
+                  Rộng
+                </span>
+                <span className="text-lg font-bold text-blue-900">
+                  {shelf?.width} <small>cm</small>
+                </span>
+              </div>
+              <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 flex flex-col items-center justify-center text-center">
+                <span className="text-[10px] uppercase font-bold text-indigo-500">
+                  Cao
+                </span>
+                <span className="text-lg font-bold text-indigo-900">
+                  {shelf?.height} <small>cm</small>
+                </span>
+              </div>
+              <div className="p-4 rounded-2xl bg-violet-50/50 border border-violet-100 flex flex-col items-center justify-center text-center">
+                <span className="text-[10px] uppercase font-bold text-violet-500">
+                  Sâu
+                </span>
+                <span className="text-lg font-bold text-violet-900">
+                  {shelf?.depth} <small>cm</small>
+                </span>
+              </div>
             </div>
           </div>
 

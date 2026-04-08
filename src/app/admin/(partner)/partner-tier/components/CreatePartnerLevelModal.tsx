@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Hash, Plus, Send, Sparkles, Trophy } from "lucide-react";
+import { Hash, Layers, Plus, Send, Sparkles, Trophy } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -29,6 +29,7 @@ function CreatePartnerTierModal() {
   const formSchema = z.object({
     name: z.string().min(1, "Tên cấp bậc đối tác là bắt buộc"),
     priority: z.number().min(1, "Hãy nhập độ ưu tiên"),
+    maxShelvesPerStore: z.number().min(1, "Hãy nhập số lượng kệ tối đa"),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
@@ -36,6 +37,7 @@ function CreatePartnerTierModal() {
     defaultValues: {
       name: "",
       priority: 1,
+      maxShelvesPerStore: 1,
     },
   });
 
@@ -106,6 +108,15 @@ function CreatePartnerTierModal() {
                 placeholder="Ví dụ: 1"
                 type="number"
                 icon={<Hash size={18} />}
+                required
+              />
+
+              <FormFieldCustom
+                name="maxShelvesPerStore"
+                label="Số lượng kệ tối đa ở mỗi cửa hàng"
+                placeholder="Ví dụ: 1"
+                type="number"
+                icon={<Layers size={18} />}
                 required
               />
             </form>

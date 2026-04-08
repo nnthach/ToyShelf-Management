@@ -24,3 +24,12 @@ export const deleteRoleAPI = async (id: string) => {
   const res = await api.delete(`/Role/${id}/delete`);
   return res.data;
 };
+
+export const restoreRoleAPI = async (id: string) => {
+  const res = await api.patch(`/Role/${id}/restore`);
+  return res.data;
+};
+export const disableRoleAPI = async (id: string) => {
+  const res = await api.patch(`/Role/${id}/disable`);
+  return res.data;
+};
