@@ -78,13 +78,13 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
               <div className="space-y-1">
                 <p className="text-sm text-slate-500">Số điện thoại</p>
                 <p className="font-semibold text-md flex items-center gap-1">
-                  <Phone size={12} /> {orderDetail.customerPhone}
+                  {orderDetail.customerPhone}
                 </p>
               </div>
               <div className="space-y-1 col-span-2">
                 <p className="text-sm text-slate-500">Cửa hàng</p>
                 <p className="font-semibold text-md flex items-center gap-1">
-                  <MapPin size={12} /> {orderDetail.storeName}
+                  {orderDetail.storeName}
                 </p>
               </div>
             </div>

@@ -80,7 +80,7 @@ function CreateStaffModal() {
           </DialogTitle>
           <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
             <Sparkles size={14} className="text-violet-500" />
-            Cấp tài khoản mới để nhân viên có thể truy cập hệ thống quản trị.
+            Cấp tài khoản mới để nhân viên có thể truy cập hệ thống.
           </DialogDescription>
         </DialogHeader>
 

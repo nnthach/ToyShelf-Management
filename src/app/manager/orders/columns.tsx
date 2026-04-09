@@ -1,9 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import ViewDetailSheet from "./components/ViewDetailSheet";
 import { Order } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
+import ViewDetailSheet from "./components/ViewDetailSheet";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.

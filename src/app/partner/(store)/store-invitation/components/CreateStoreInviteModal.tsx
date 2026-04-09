@@ -1,6 +1,5 @@
 "use client";
 
-import { getAllRoleAPI } from "@/src/services/role.service";
 import { inviteToStoreAPI } from "@/src/services/store-invite.service";
 import { getAllPartnerStoreAPI } from "@/src/services/store.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
@@ -15,7 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import { Role, Store } from "@/src/types";
+import {  Store } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
@@ -106,7 +105,7 @@ function CreateStoreInviteModal() {
           </DialogTitle>
           <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
             <Sparkles size={14} className="text-emerald-500" />
-            Gửi email mời quản trị viên tham gia quản lý cửa hàng.
+            Gửi email mời nhân viên tham gia quản lý cửa hàng.
           </DialogDescription>
         </DialogHeader>
 
