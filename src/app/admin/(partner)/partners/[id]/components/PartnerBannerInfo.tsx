@@ -142,7 +142,7 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
                     Giới hạn kệ/Cửa hàng
                   </p>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-black text-white italic leading-none">
+                    <span className="text-xl font-bold text-white leading-none">
                       {partnerDetail?.maxShelvesPerStore || 0}
                     </span>
                     <span className="text-[10px] text-white/40 uppercase font-bold">
@@ -154,8 +154,8 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
             </div>
 
             {/* DÒNG CUỐI: ĐỊA CHỈ */}
-            <p className="text-sm text-white/60 line-clamp-1 w-[500px] flex items-center gap-2">
-              <MapPin size={14} className="text-blue-400" />
+            <p className="text-sm text-white/80 line-clamp-1 w-[500px] flex items-center gap-2">
+              <MapPin size={26} className="text-blue-400" />
               {partnerDetail.address || "N/A"}
             </p>
           </div>

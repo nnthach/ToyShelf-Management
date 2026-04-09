@@ -68,9 +68,6 @@ export default function AdminPartnerManage() {
             />
 
             <div className="space-x-3">
-              <Button>
-                <Download /> Nhập dữ liệu
-              </Button>
               <Button variant={"outline"}>
                 <Upload /> Xuất dữ liệu
               </Button>

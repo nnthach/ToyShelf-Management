@@ -27,6 +27,8 @@ export default function PartnerManageInventory() {
     },
   );
 
+  console.log("partnerStores", partnerStoreList);
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
       isActive: undefined,

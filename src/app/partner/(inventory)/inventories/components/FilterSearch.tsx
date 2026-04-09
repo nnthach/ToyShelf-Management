@@ -214,7 +214,7 @@ export default function FilterSearch({
         onChange={(e) => setLocationValue(e.target.value)}
       >
         {partnerStoreList?.map((lo) => (
-          <option key={lo.id} value={lo.id}>
+          <option key={lo.id} value={lo.inventoryLocationId}>
             {lo.name}
           </option>
         ))}

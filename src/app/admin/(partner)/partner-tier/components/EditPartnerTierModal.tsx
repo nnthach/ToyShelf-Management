@@ -135,7 +135,7 @@ function EditPartnerTierModal({
               />
               <FormFieldCustom
                 name="maxShelvesPerStore"
-                label="Số lượng kệ tối đa ở mỗi cửa hàng"
+                label="Giới hạn kệ mỗi cửa hàng"
                 placeholder="Ví dụ: 1"
                 type="number"
                 icon={<Layers size={18} />}
