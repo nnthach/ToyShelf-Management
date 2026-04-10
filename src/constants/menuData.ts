@@ -184,7 +184,13 @@ export const PartnerAdminSidebarGroups = [
     label: "Ứng dụng",
     items: [
       { title: "Tổng quan", url: "/partner/dashboard", icon: LayoutDashboard },
-      { title: "Thông báo", url: "#", icon: Bell, badge: true },
+      {
+        title: "Thông báo",
+        url: "#",
+        icon: Bell,
+        badge: true,
+        action: "notification",
+      },
     ],
   },
   {

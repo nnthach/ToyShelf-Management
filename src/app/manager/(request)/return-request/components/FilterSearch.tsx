@@ -1,3 +1,4 @@
+// import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { Button } from "@/src/styles/components/ui/button";
 import { Input } from "@/src/styles/components/ui/input";
@@ -56,7 +57,7 @@ export default function FilterSearch({
 
   const handleApply = () => {
     onApplyFilter({
-      isActive: tempFilter.isActive || undefined,
+      isActive: tempFilter.isActive,
       order: tempFilter.order || undefined,
     });
   };
@@ -69,6 +70,7 @@ export default function FilterSearch({
     });
     onReset();
   };
+
   return (
     <div className="inline-flex items-center gap-3">
       {/* FILTER */}

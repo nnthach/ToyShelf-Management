@@ -1,20 +1,18 @@
 "use client";
 
-import { Plus } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
-import { Button } from "@/src/styles/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
 import { RefillRequest, Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillRequestColumns } from "./columns";
 import { useState } from "react";
-import { getAllRefillAPI } from "@/src/services/refill.service";
-import ViewRefillRequestModalDetail from "./components/ViewRefillRequestDetailModal";
 import FilterSearch from "./components/FilterSearch";
 import { getAllStoreAPI } from "@/src/services/store.service";
+import ViewRefillShelfRequestModalDetail from "./components/ViewRefillShelfRequestDetailModal";
+import { getAllRefillShelfAPI } from "@/src/services/refill-shelf.service";
 
-export default function PartnerRefillRequestManage() {
+export default function PartnerRefillShelfRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
@@ -24,12 +22,12 @@ export default function PartnerRefillRequestManage() {
   });
 
   const {
-    data: refillRequestList = [],
+    data: refillShelfRequestList = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["refillRequests", query],
-    queryFn: () => getAllRefillAPI(query),
+    queryKey: ["refillShelfRequests", query],
+    queryFn: () => getAllRefillShelfAPI(query),
     select: (res) => res.data as RefillRequest[],
   });
 
@@ -51,10 +49,10 @@ export default function PartnerRefillRequestManage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Quản lý đặt hàng
+            Quản lý đặt kệ
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
-            Danh sách tất cả các đơn đặt hàng từ cửa hàng
+            Danh sách tất cả các đơn đặt kệ từ cửa hàng
           </p>
         </div>
       </div>
@@ -63,7 +61,7 @@ export default function PartnerRefillRequestManage() {
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={refillRequestList ?? []}
+          data={refillShelfRequestList ?? []}
           isLoading={isLoading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -71,7 +69,7 @@ export default function PartnerRefillRequestManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={refillRequestList.length}
+              resultCount={refillShelfRequestList.length}
               storeList={storeList}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -86,7 +84,7 @@ export default function PartnerRefillRequestManage() {
       </div>
 
       {selectedRequestId && (
-        <ViewRefillRequestModalDetail
+        <ViewRefillShelfRequestModalDetail
           requestId={selectedRequestId}
           isOpen={!!selectedRequestId}
           onClose={() => {

@@ -1,49 +1,48 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { Download, Plus, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
+import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
-import { RefillRequest, Store } from "@/src/types";
+import { RefillRequest } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { getStoreRefillRequestColumns } from "./columns";
+import { getStoreRefillShelfRequestColumns } from "./columns";
 import { useState } from "react";
 import { getAllRefillAPI } from "@/src/services/refill.service";
-import ViewRefillRequestModalDetail from "./components/ViewRefillRequestDetailModal";
-import FilterSearch from "./components/FilterSearch";
-import { getAllStoreAPI } from "@/src/services/store.service";
+import ViewRefillRequestModalDetail from "./components/ViewRefillShelfRequestDetailModal";
+import { useRouter } from "next/navigation";
+import { getAllRefillShelfAPI } from "@/src/services/refill-shelf.service";
+import CreateReturnModal from "./components/CreateReturnModal";
 
-export default function PartnerRefillRequestManage() {
+export default function ManagerReturnRequestManage() {
+  const router = useRouter();
+
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
+    isActive: undefined,
     order: "",
-    storeId: "",
+    search: "",
+    status: "",
   });
 
   const {
-    data: refillRequestList = [],
+    data: refillShelfRequestList = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["refillRequests", query],
-    queryFn: () => getAllRefillAPI(query),
+    queryKey: ["refillShelfRequests", query],
+    queryFn: () => getAllRefillShelfAPI(query),
     select: (res) => res.data as RefillRequest[],
-  });
-
-  const { data: storeList } = useQuery({
-    queryKey: ["stores"],
-    queryFn: () => getAllStoreAPI({}),
-    select: (res) => res.data as Store[],
   });
 
   const handleEdit = (requestId: string) => {
     setSelectedRequestId(requestId);
   };
 
-  const columns = getStoreRefillRequestColumns(handleEdit);
+  const columns = getStoreRefillShelfRequestColumns(handleEdit);
 
   return (
     <>
@@ -51,19 +50,20 @@ export default function PartnerRefillRequestManage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Quản lý đặt hàng
+            Quản lý trả hàng
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
-            Danh sách tất cả các đơn đặt hàng từ cửa hàng
+            Danh sách tất cả các đơn trả hàng của cửa hàng
           </p>
         </div>
+        <CreateReturnModal />
       </div>
 
       {/*Table */}
       <div className="container mx-auto py-10">
         <DataTable
           columns={columns}
-          data={refillRequestList ?? []}
+          data={refillShelfRequestList ?? []}
           isLoading={isLoading}
         >
           <div className="p-4 border-b flex justify-between items-center">
@@ -71,8 +71,8 @@ export default function PartnerRefillRequestManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              resultCount={refillRequestList.length}
-              storeList={storeList}
+              resultCount={refillShelfRequestList.length}
+              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

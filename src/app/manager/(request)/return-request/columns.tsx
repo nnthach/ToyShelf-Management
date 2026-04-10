@@ -1,6 +1,6 @@
 "use client";
 
-import { RefillRequest } from "@/src/types";
+import { RefillRequest, Store } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
 import {
   formatStoreOrderRefillRequestStatusColor,
@@ -12,7 +12,7 @@ import { Eye } from "lucide-react";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const getStoreRefillRequestColumns = (
+export const getStoreRefillShelfRequestColumns = (
   onEdit: (requestId: string) => void,
 ): ColumnDef<RefillRequest>[] => [
   {

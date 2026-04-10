@@ -31,6 +31,7 @@ import Link from "next/link";
 import { useAuth } from "@/src/hooks/useAuth";
 import { usePathname } from "next/navigation";
 import { cn } from "@/src/styles/lib/utils";
+import NotificationModal from "../NotificationModal";
 
 const PartnerAdminSidebar = () => {
   const { user } = useAuth();
@@ -75,6 +76,15 @@ const PartnerAdminSidebar = () => {
               <SidebarMenu>
                 {group.items.map((item) => {
                   const isActive = pathname === item.url;
+
+                  if (item.action === "notification") {
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <NotificationModal item={item} />
+                      </SidebarMenuItem>
+                    );
+                  }
+
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
@@ -92,12 +102,6 @@ const PartnerAdminSidebar = () => {
                           <span>{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
-
-                      {item.badge && (
-                        <SidebarMenuBadge className="bg-green-100 text-green-700">
-                          <Bell className="w-4 h-4" />
-                        </SidebarMenuBadge>
-                      )}
                     </SidebarMenuItem>
                   );
                 })}
