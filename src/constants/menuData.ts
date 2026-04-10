@@ -1,9 +1,7 @@
 import {
   Bell,
   LayoutDashboard,
-  Settings,
   Store,
-  User,
   UserStar,
   Users,
   Server,
@@ -22,6 +20,10 @@ import {
   ShieldCheck,
   Ticket,
   Box,
+  ShoppingCart,
+  Package,
+  Archive,
+  BarChart3,
 } from "lucide-react";
 
 // Admin
@@ -31,12 +33,11 @@ export const AdminSidebarGroups = [
     items: [
       { title: "Tổng quan", url: "/admin/dashboard", icon: LayoutDashboard },
       { title: "Thông báo", url: "#", icon: Bell, badge: true },
-      { title: "Cài đặt", url: "#", icon: Settings },
     ],
   },
   {
     label: "Giám sát đơn hàng",
-    items: [{ title: "Đơn hàng", url: "/admin/orders", icon: ClipboardList }],
+    items: [{ title: "Đơn hàng", url: "/admin/orders", icon: ShoppingCart }],
   },
 
   {
@@ -56,16 +57,16 @@ export const AdminSidebarGroups = [
       { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
     ],
   },
-];
 
-export const AdminSidebarNested = [
   {
     label: "Quản lý loại kệ",
-    sub: [
-      { title: "Kệ", url: "/admin/shelf", icon: Server },
+    items: [
       { title: "Danh sách loại kệ", url: "/admin/shelf-type", icon: Server },
     ],
   },
+];
+
+export const AdminSidebarNested = [
   {
     label: "Quản lý đối tác",
     sub: [
@@ -91,7 +92,7 @@ export const AdminSidebarNested = [
   {
     label: "Quản lý sản phẩm",
     sub: [
-      { title: "Sản phẩm", url: "/admin/products", icon: User },
+      { title: "Sản phẩm", url: "/admin/products", icon: Box },
       { title: "Màu sắc sản phẩm", url: "/admin/product-color", icon: Palette },
       {
         title: "Danh mục sản phẩm",
@@ -119,15 +120,24 @@ export const AdminSidebarNested = [
     label: "Quản lý hàng tồn kho",
     sub: [
       {
-        title: "Quản lý bổ sung hàng",
+        title: "Quản lý hàng hóa",
         url: "/admin/inventory",
-        icon: UserStar,
+        icon: Package,
       },
-
+      {
+        title: "Quản lý kệ",
+        url: "/admin/shelf",
+        icon: Archive,
+      },
       {
         title: "Giám sát hàng tồn kho",
         url: "/admin/all-inventory",
-        icon: UserStar,
+        icon: Box,
+      },
+      {
+        title: "Giám sát kệ tồn kho",
+        url: "/admin/shelf-inventory",
+        icon: Server,
       },
     ],
   },

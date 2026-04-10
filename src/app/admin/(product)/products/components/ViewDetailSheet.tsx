@@ -212,7 +212,9 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
           ${formatBooleanIsActiveStatusColor(selectedColor?.isActive)}
         `}
                   >
-                    {formatBooleanIsActiveStatusText(selectedColor?.isActive)}
+                    {selectedColor?.isActive
+                      ? "Hoạt động"
+                      : "Ngưng hoạt động"}
                   </span>
                 )}
               </div>

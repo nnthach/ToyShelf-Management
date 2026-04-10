@@ -1,7 +1,7 @@
 import StatCardWithButton from "@/src/components/StatCardWithButton";
 import { getDashboardPartnerStatCard } from "@/src/services/dashboard.service";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, Box, Server, Store } from "lucide-react";
+import { ArrowRight, Box, DollarSign, Server, ShoppingCart, Store } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
 
@@ -28,7 +28,7 @@ function PartnerStatCard({ partnerId }: { partnerId: string }) {
         value={`${(partnerStatCard?.revenue ?? 0).toLocaleString()} VND`}
         change="+30,215 VND"
         changePercent="+12%"
-        icon={Box}
+        icon={DollarSign}
         color="bg-green-100 text-green-900"
       />
 
@@ -46,7 +46,7 @@ function PartnerStatCard({ partnerId }: { partnerId: string }) {
         value={`${partnerStatCard?.orders}`}
         change="+2,815"
         changePercent="+18%"
-        icon={Server}
+        icon={ShoppingCart}
         color="bg-pink-100 text-pink-900"
       />
 

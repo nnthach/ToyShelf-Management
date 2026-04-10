@@ -8,6 +8,8 @@ import TopThreeStore from "./components/TopThreeStore";
 import TopThreeProduct from "./components/TopThreeProduct";
 import TopThreePartner from "./components/TopThreePartner";
 import WarehouseMap from "./components/WarehouseMap";
+import StatCardWithButton from "@/src/components/StatCardWithButton";
+import AdminStatCard from "./components/AdminStatCard";
 
 export default function AdminDashboard() {
   return (
@@ -19,39 +21,7 @@ export default function AdminDashboard() {
 
       {/*Statistic card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Doanh thu"
-          value="250,520 VND"
-          change="+30,215 VND"
-          changePercent="+12%"
-          icon={Box}
-          color="bg-green-100 text-green-900"
-        />
-
-        <StatCard
-          title="Đơn hàng"
-          value="200"
-          change="+25"
-          changePercent="+15%"
-          icon={Star}
-          color="bg-yellow-100 text-yellow-900"
-        />
-        <StatCard
-          title="Đối tác"
-          value="53"
-          change="+2"
-          changePercent="+18%"
-          icon={ClipboardList}
-          color="bg-blue-100 text-blue-900"
-        />
-        <StatCard
-          title="Cửa hàng"
-          value="230"
-          change="+2,815"
-          changePercent="+18%"
-          icon={ClipboardList}
-          color="bg-pink-100 text-pink-900"
-        />
+        <AdminStatCard />
       </div>
 
       {/* Sử dụng hệ 4 cột làm chuẩn */}

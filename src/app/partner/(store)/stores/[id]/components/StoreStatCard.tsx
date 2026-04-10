@@ -2,7 +2,7 @@ import StatCardWithButton from "@/src/components/StatCardWithButton";
 import { useAuth } from "@/src/hooks/useAuth";
 import { getDashboardStoreStatCard } from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
-import { Box, Store } from "lucide-react";
+import { Box, DollarSign, ShoppingCart, Store } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 function StoreStatCard({
@@ -29,7 +29,7 @@ function StoreStatCard({
         value={`${(storeStatCard?.totalRevenue ?? 0).toLocaleString()} VND`}
         change="+$30,215"
         changePercent="+12%"
-        icon={Box}
+        icon={DollarSign}
         color="bg-green-100 text-green-900"
       />
 
@@ -38,7 +38,7 @@ function StoreStatCard({
         value={`${storeStatCard?.totalOrders}`}
         change="+1,647"
         changePercent="+15%"
-        icon={Store}
+        icon={ShoppingCart}
         color="bg-yellow-100 text-yellow-900"
         action={() =>
           router.push(
