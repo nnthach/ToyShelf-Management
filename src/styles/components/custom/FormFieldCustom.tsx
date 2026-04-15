@@ -166,7 +166,9 @@ export function FormFieldCustom({
               htmlFor={name}
               className="flex items-center gap-1 text-[14px] font-semibold text-slate-700"
             >
-              <div className="flex items-center w-[60%] gap-1 text-[14px] font-semibold text-slate-700">
+              <div
+                className={`flex items-center ${labelNote ? "w-[60%]" : "w-full"} gap-1 text-[14px] font-semibold text-slate-700`}
+              >
                 {icon && (
                   <span className="text-primary/80 group-data-[invalid=true]:text-red-500">
                     {icon}

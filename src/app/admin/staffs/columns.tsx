@@ -26,10 +26,10 @@ export const getStaffColumns = (): ColumnDef<User>[] => [
   },
 
   {
-    accessorKey: "roles",
+    accessorKey: "businessRole",
     header: "Chức vụ",
     cell: ({ row }) => {
-      const roles = row.getValue("roles") as string[];
+      const roles = row.getValue("businessRole") as string[];
 
       return (
         <span className={`${formatSystemRoleColor(roles[0])}`}>

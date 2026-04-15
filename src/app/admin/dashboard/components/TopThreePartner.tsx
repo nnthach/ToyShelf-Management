@@ -10,6 +10,7 @@ import {
 import { User, Mail, Percent, Award, TrendingUp } from "lucide-react";
 import { getDashboardTopPartnerAPI } from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 interface Partner {
   partnerId: string;
@@ -36,6 +37,7 @@ const getTierStyle = (tier: string) => {
 };
 
 const TopThreePartner = () => {
+  const router = useRouter();
   const {
     data: topPartners,
     isLoading,
@@ -59,8 +61,9 @@ const TopThreePartner = () => {
         {topPartners?.map((partner, index) => (
           <div
             key={partner.partnerId}
+            onClick={() => router.push(`/admin/partners/${partner.partnerId}`)}
             className={`
-              group relative p-2 flex gap-4 rounded-2xl border border-transparent transition-all hover:border-blue-100 hover:shadow-md
+              group cursor-pointer relative p-2 flex gap-4 rounded-2xl border border-transparent transition-all hover:border-blue-100 hover:shadow-md
               ${
                 index === 0
                   ? "bg-yellow-100 border-yellow-100"

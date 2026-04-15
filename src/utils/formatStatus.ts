@@ -259,6 +259,38 @@ export const formatSystemRoleColor = (role: string) => {
   }
 };
 
+export const formatSystemBusinessRoleText = (status: string) => {
+  switch (status) {
+    case "warehouse_shipper":
+      return "Nhân viên giao hàng";
+    case "warehouse_manager":
+      return "Nhân viên kho";
+    case "Partner":
+      return "Nhân viên đối tác";
+    case "PartnerAdmin":
+      return "Đối tác";
+    case "Admin":
+      return "Quản trị viên";
+  }
+};
+
+export const formatSystemBusinessRoleColor = (role: string) => {
+  switch (role) {
+    case "warehouse_shipper":
+      return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
+    case "warehouse_manager":
+      return "bg-purple-100 text-purple-800 px-3 py-1 rounded-2xl";
+    case "Partner":
+      return "bg-teal-100 text-teal-800 px-3 py-1 rounded-2xl";
+    case "PartnerAdmin":
+      return "bg-indigo-100 text-indigo-800 px-3 py-1 rounded-2xl";
+    case "Admin":
+      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+    default:
+      return "bg-gray-100 text-gray-800 px-3 py-1 rounded-2xl";
+  }
+};
+
 export const formatOrderStatusText = (status: string) => {
   switch (status) {
     case "PAID":

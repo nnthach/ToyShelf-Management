@@ -120,11 +120,6 @@ export const AdminSidebarNested = [
     label: "Quản lý hàng tồn kho",
     sub: [
       {
-        title: "Quản lý hàng hóa",
-        url: "/admin/inventory",
-        icon: Package,
-      },
-      {
         title: "Quản lý kệ",
         url: "/admin/shelf",
         icon: Archive,

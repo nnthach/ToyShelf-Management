@@ -15,6 +15,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/src/styles/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import CreateInventoryModal from "./components/CreateInventoryModal";
 
 export default function AdminViewAllInventory() {
   const searchParams = useSearchParams();
@@ -92,6 +93,7 @@ export default function AdminViewAllInventory() {
             </p>
           </div>
         </div>
+        <CreateInventoryModal />
       </div>
 
       {/*main content */}

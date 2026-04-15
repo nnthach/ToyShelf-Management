@@ -57,7 +57,7 @@ const TopThreeStore = () => {
             key={store.storeId}
             onClick={() => router.push(`/admin/stores/${store.storeId}`)}
             className={`
-  group py-3 flex flex-col gap-4 border-b last:border-none border-gray-100 rounded-lg px-3 transition-colors
+  group cursor-pointer py-3 flex flex-col gap-4 border-b last:border-none border-gray-100 rounded-lg px-3 transition-colors
   ${
     index === 0
       ? "bg-yellow-50"

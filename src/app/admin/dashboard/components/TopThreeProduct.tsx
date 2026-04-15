@@ -51,7 +51,7 @@ const TopThreeProduct = () => {
             key={product.productColorId}
             onClick={() => openById(product.productColorId)}
             className={`
-        group relative cursor-pointer p-3 flex flex-col rounded-2xl border border-transparent transition-all hover:border-blue-100 hover:shadow-md
+        group cursor-pointer relative cursor-pointer p-3 flex flex-col rounded-2xl border border-transparent transition-all hover:border-blue-100 hover:shadow-md
         ${
           index === 0
             ? "bg-yellow-100 border-yellow-100"

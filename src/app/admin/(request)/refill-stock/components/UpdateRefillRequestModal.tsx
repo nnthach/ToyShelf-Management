@@ -208,7 +208,7 @@ function UpdateRefillRequestModal({
                   <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
                 </Button>
               )}
-              {isApproved && !assignmentId && (
+              {isApproved && (
                 <Button
                   variant="success"
                   onClick={() => setIsOpenAssignWarehouseModal(true)}

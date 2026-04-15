@@ -81,10 +81,19 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
                   {orderDetail.customerPhone}
                 </p>
               </div>
-              <div className="space-y-1 col-span-2">
+              <div className="space-y-1 col-span-1">
                 <p className="text-sm text-slate-500">Cửa hàng</p>
                 <p className="font-semibold text-md flex items-center gap-1">
                   {orderDetail.storeName}
+                </p>
+              </div>
+              <div className="space-y-1 col-span-1">
+                <p className="text-sm text-slate-500">Nhân viên thực hiện</p>
+                <p className="font-semibold text-md flex items-center gap-1">
+                  {orderDetail.staffName}
+                </p>
+                <p className="font-semibold text-sm flex items-center gap-1 text-slate-500">
+                  {orderDetail?.staffEmail}
                 </p>
               </div>
             </div>

@@ -1,4 +1,3 @@
-import { StoreStatus } from "../enums/store-status.enum";
 import { UserStatus } from "../enums/user-status.enum";
 
 export type UserRole = "ADMIN" | "USER" | "PARTNER" | "STAFF";
@@ -13,6 +12,7 @@ export interface User {
   createdAt: string;
   isActive: boolean;
   roles: string[];
+  businessRole: string;
 }
 
 export interface StoreStaff {
@@ -300,6 +300,7 @@ export interface Shelf {
 export interface RefillRequestProductColor {
   productColorId?: string;
   productName?: string;
+  itemId?: string;
   sku?: string;
   imageUrl?: string;
   price?: number;

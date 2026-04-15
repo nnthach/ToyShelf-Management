@@ -18,12 +18,12 @@ function AdminStatCard() {
     queryFn: () => getDashboardAdminStatCard({}),
     select: (res) => res.data,
   });
-  
+
   return (
     <>
       <StatCardWithButton
         title="Doanh thu"
-        value={`${(adminStatCard?.revenue ?? 0).toLocaleString() || 0} VND`}
+        value={`${(adminStatCard?.totalRevenue ?? 0).toLocaleString() || 0} VND`}
         change="+30,215 VND"
         changePercent="+12%"
         icon={DollarSign}
@@ -32,7 +32,7 @@ function AdminStatCard() {
 
       <StatCardWithButton
         title="Đơn hàng"
-        value={`${adminStatCard?.orders || 0}`}
+        value={`${adminStatCard?.totalOrders || 0}`}
         change="+25"
         changePercent="+15%"
         icon={ShoppingCart}
@@ -41,7 +41,7 @@ function AdminStatCard() {
       />
       <StatCardWithButton
         title="Đối tác"
-        value={`${adminStatCard?.partners || 0}`}
+        value={`${adminStatCard?.totalPartners || 0}`}
         change="+2"
         changePercent="+18%"
         icon={Users}
@@ -50,7 +50,7 @@ function AdminStatCard() {
       />
       <StatCardWithButton
         title="Cửa hàng"
-        value={`${adminStatCard?.stores || 0}`}
+        value={`${adminStatCard?.totalStores || 0}`}
         change="+2,815"
         changePercent="+18%"
         icon={Store}

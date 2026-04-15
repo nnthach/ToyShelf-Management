@@ -10,8 +10,8 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Send, Warehouse, Box, Package } from "lucide-react";
-import { memo, useState, useMemo } from "react";
+import { Send, Warehouse, Box, Package, Pencil } from "lucide-react";
+import { memo, useState, useMemo, useEffect } from "react";
 import { createShipmentAssignWarehouseAPI } from "@/src/services/shipment-assignment.service";
 import { getStoreOrderAvailableWarehouseAPI } from "@/src/services/refill.service";
 import { RefillRequestProductColor } from "@/src/types";
@@ -45,6 +45,9 @@ function AssignWarehouseModal({
     null,
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [assignQuantities, setAssignQuantities] = useState<
+    Record<string, number | "">
+  >({});
 
   const {
     data: availableWarehouseList,
@@ -69,11 +72,17 @@ function AssignWarehouseModal({
     }
 
     setIsLoading(true);
+
+    const payload = {
+      warehouseLocationId: selectedWarehouseId,
+      storeOrderId: requestId,
+      storeItems: Object.entries(assignQuantities)
+        .filter(([_, qty]) => Number(qty) > 0)
+        .map(([itemId, qty]) => ({ itemId, quantity: Number(qty) })),
+    };
+
     try {
-      await createShipmentAssignWarehouseAPI({
-        warehouseLocationId: selectedWarehouseId,
-        storeOrderId: requestId,
-      });
+      await createShipmentAssignWarehouseAPI(payload);
 
       queryClient.invalidateQueries({ queryKey: ["requestDetail", requestId] });
       queryClient.invalidateQueries({ queryKey: ["shipmentAssignDetail"] });
@@ -89,7 +98,7 @@ function AssignWarehouseModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-[1000px] h-[90vh] flex flex-col p-0 overflow-hidden">
         <DialogHeader className="p-6 pb-2">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
@@ -106,10 +115,11 @@ function AssignWarehouseModal({
           </div>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {/* SECTION 1: DANH SÁCH KHO */}
-          <section className="space-y-3">
-            <div className="flex items-center gap-3 py-2">
+        {/*Main content */}
+        <div className="grid grid-cols-2 flex-1 min-h-0 overflow-hidden">
+          {/*thông tin kho */}
+          <div className="flex flex-col gap-4 min-h-0 px-6 border-r border-slate-100">
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white shadow-md shadow-blue-200">
                 <Warehouse className="h-4 w-4" />
               </div>
@@ -122,11 +132,15 @@ function AssignWarehouseModal({
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-3 bg-slate-100 p-2 rounded-xl">
+            {/* DANH SÁCH - Đây là phần quan trọng nhất */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar min-h-0 max-h-[410px] pr-2 space-y-3 bg-slate-100 p-2 rounded-xl">
               {availableWarehouseList?.map((wh: WarehouseInventory) => (
                 <div
                   key={wh.warehouseId}
-                  onClick={() => setSelectedWarehouseId(wh.warehouseLocationId)}
+                  onClick={() => {
+                    setSelectedWarehouseId(wh.warehouseLocationId);
+                    setAssignQuantities({});
+                  }}
                   className={cn(
                     "cursor-pointer p-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-between",
                     selectedWarehouseId === wh.warehouseLocationId
@@ -163,29 +177,28 @@ function AssignWarehouseModal({
                           : "bg-green-50 text-green-700 border-green-100",
                       )}
                     >
-                      Có sẵn {wh.items?.length || 0} Sản phẩm phù hợp
+                      {wh.items?.length || 0} Sản phẩm phù hợp
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
 
-          {/* SECTION 2: CHI TIẾT SẢN PHẨM TRONG KHO */}
-          <section className="space-y-3 min-h-[200px]">
-            <div className="flex items-center justify-between border-b border-emerald-100 pb-3 mb-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm">
-                  <Box className="h-5 w-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-tight">
-                    Chi tiết tồn kho thực tế
-                  </h3>
-                  <p className="text-[10px] text-slate-400 font-medium">
-                    Hãy chọn một kho để xem chi tiết
-                  </p>
-                </div>
+          {/* RIGHT PANEL */}
+          <div className="flex flex-col gap-4 overflow-y-auto h-[470px] px-6">
+            {/* Header */}
+            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600 text-white">
+                <Pencil className="h-4 w-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-tight">
+                  Nhập số lượng giao
+                </h3>
+                <p className="text-[10px] text-slate-400 font-medium">
+                  Chỉ định số lượng từng sản phẩm kho sẽ giao
+                </p>
               </div>
             </div>
 
@@ -193,99 +206,150 @@ function AssignWarehouseModal({
               <div className="h-32 flex flex-col items-center justify-center border-2 border-dashed rounded-xl text-gray-400 bg-gray-50">
                 <Package className="h-8 w-8 mb-2 opacity-20" />
                 <p className="text-sm italic">
-                  Chọn một kho bên trên để xem chi tiết
+                  Chọn một kho bên trái để nhập số lượng
                 </p>
               </div>
             ) : (
-              <div className="rounded-xl border border-gray-100 overflow-hidden bg-white shadow-sm">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-gray-50 text-gray-600 border-b">
-                    <tr>
-                      <th className="px-4 py-2 font-medium">Sản phẩm</th>
-                      <th className="px-4 py-2 font-medium">Màu</th>
-                      <th className="px-4 py-2 font-medium text-right">
-                        Số lượng
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {selectedWarehouse.items.map(
-                      (item: RefillRequestProductColor, idx: number) => (
-                        <tr
-                          key={idx}
-                          className="hover:bg-blue-50/30 transition-colors"
-                        >
-                          <td className="px-4 py-3 font-medium text-gray-700">
-                            <div className="flex items-center gap-3">
-                              <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                <Image
-                                  src={
-                                    item.imageUrl || "/placeholder-product.png"
-                                  }
-                                  alt={item.productName as string}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-
-                              <div>
-                                <div className="text-sm font-semibold">
-                                  {item.productName}
+              <>
+                <div className="rounded-xl border border-gray-100 overflow-y-auto custom-scrollbar bg-white shadow-sm">
+                  <table className="w-full text-sm text-left">
+                    <thead className="bg-gray-50 text-gray-600 border-b">
+                      <tr>
+                        <th className="px-4 py-2 font-medium">Sản phẩm</th>
+                        <th className="px-4 py-2 font-medium text-center">
+                          Sẵn
+                        </th>
+                        <th className="px-4 py-2 font-medium text-right">
+                          SL giao
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {selectedWarehouse.items.map(
+                        (item: RefillRequestProductColor) => (
+                          <tr
+                            key={item.productColorId}
+                            className="hover:bg-violet-50/30 transition-colors"
+                          >
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-3">
+                                <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                  <Image
+                                    src={
+                                      item.imageUrl ||
+                                      "/placeholder-product.png"
+                                    }
+                                    alt={item.productName as string}
+                                    fill
+                                    className="object-cover"
+                                  />
                                 </div>
-                                <p className="text-[10px] text-gray-400 font-mono">
-                                  {item.sku}
-                                </p>
+                                <div>
+                                  <div className="text-sm font-semibold">
+                                    {item.productName}
+                                  </div>
+                                  <span className="text-[10px] font-bold mr-2">
+                                    {item?.sku as string}
+                                  </span>
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] bg-gray-100 border font-bold">
+                                    {formatColorNameToVN(item?.color as string)}
+                                  </span>
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className="px-2 py-0.5 rounded-full text-[10px] bg-gray-100 border font-bold">
-                              {formatColorNameToVN(item?.color as string)}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-right">
-                            <span
-                              className={cn(
-                                "font-bold",
-                                item?.availableQuantity || 0 > 0
-                                  ? "text-emerald-600"
-                                  : "text-red-500",
-                              )}
-                            >
-                              {item.availableQuantity}
-                            </span>
-                          </td>
-                        </tr>
-                      ),
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <span className="font-bold text-emerald-600">
+                                {item.availableQuantity}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              <input
+                                type="number"
+                                min={0}
+                                max={item.availableQuantity ?? 0}
+                                value={
+                                  assignQuantities[item.productColorId!] ?? ""
+                                }
+                                onChange={(e) => {
+                                  const raw = e.target.value;
+                                  const id = item.productColorId!;
+                                  setAssignQuantities((prev) => ({
+                                    ...prev,
+                                    [id]:
+                                      raw === ""
+                                        ? ""
+                                        : Math.min(
+                                            Math.max(0, Number(raw)),
+                                            item.availableQuantity ?? 0,
+                                          ),
+                                  }));
+                                }}
+                                onBlur={() => {
+                                  const id = item.productColorId!;
+                                  if (assignQuantities[id] === "") {
+                                    setAssignQuantities((prev) => ({
+                                      ...prev,
+                                      [id]: 0,
+                                    }));
+                                  }
+                                }}
+                                className="w-20 text-center border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                              />
+                            </td>
+                          </tr>
+                        ),
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Summary */}
+                <div className="bg-slate-50 rounded-xl p-4 text-sm space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Kho thực hiện</span>
+                    <span className="font-semibold text-slate-800">
+                      {selectedWarehouse.warehouseName}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Tổng số lượng giao</span>
+                    <span className="font-bold text-blue-600">
+                      {Object.values(assignQuantities).reduce(
+                        (a, b) => Number(a) + Number(b),
+                        0,
+                      )}{" "}
+                      sản phẩm
+                    </span>
+                  </div>
+                </div>
+              </>
             )}
-          </section>
+          </div>
         </div>
 
         <DialogFooter className="p-6 pt-2 gap-3 bg-gray-50 border-t">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            className="flex-1 rounded-lg border-gray-300"
-          >
-            Huỷ bỏ
-          </Button>
-          <Button
-            disabled={isLoading || !selectedWarehouseId}
-            onClick={onSubmit}
-            className="flex-1 rounded-lg bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-100"
-          >
-            {isLoading ? (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-            ) : (
-              <>
-                <Send className="mr-2 h-4 w-4" /> Xác nhận điều phối
-              </>
-            )}
-          </Button>
+          <div className="w-[50%] flex items-center justify-between gap-2">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="flex-1 rounded-lg border-gray-300"
+            >
+              Huỷ bỏ
+            </Button>
+            <Button
+              disabled={isLoading || !selectedWarehouseId}
+              onClick={onSubmit}
+              className="flex-1 rounded-lg bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-100"
+            >
+              {isLoading ? (
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                <>
+                  <Send className="mr-2 h-4 w-4" /> Xác nhận điều phối
+                </>
+              )}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
