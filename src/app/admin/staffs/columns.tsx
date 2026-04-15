@@ -5,6 +5,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import ViewDetailSheet from "./components/ViewDetailSheet";
 import { User } from "@/src/types";
 import {
+  formatSystemBusinessRoleColor,
+  formatSystemBusinessRoleText,
   formatSystemRoleColor,
   formatSystemRoleText,
   formatUserStatusColor,
@@ -29,11 +31,11 @@ export const getStaffColumns = (): ColumnDef<User>[] => [
     accessorKey: "businessRole",
     header: "Chức vụ",
     cell: ({ row }) => {
-      const roles = row.getValue("businessRole") as string[];
+      const roles = row.getValue("businessRole") as string;
 
       return (
-        <span className={`${formatSystemRoleColor(roles[0])}`}>
-          {formatSystemRoleText(roles[0])}
+        <span className={`${formatSystemBusinessRoleColor(roles)}`}>
+          {formatSystemBusinessRoleText(roles)}
         </span>
       );
     },

@@ -264,30 +264,36 @@ export const formatSystemBusinessRoleText = (status: string) => {
     case "warehouse_shipper":
       return "Nhân viên giao hàng";
     case "warehouse_manager":
-      return "Nhân viên kho";
-    case "Partner":
-      return "Nhân viên đối tác";
-    case "PartnerAdmin":
+      return "Quản lý kho";
+    case "partner_staff":
+      return "Nhân viên cửa hàng";
+    case "partner_manager":
+      return "Quản lý cửa hàng";
+    case "partner_admin":
       return "Đối tác";
-    case "Admin":
+    case "customer":
       return "Quản trị viên";
+    default:
+      return "N/A";
   }
 };
 
 export const formatSystemBusinessRoleColor = (role: string) => {
   switch (role) {
     case "warehouse_shipper":
-      return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
+      return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl font-medium";
     case "warehouse_manager":
-      return "bg-purple-100 text-purple-800 px-3 py-1 rounded-2xl";
-    case "Partner":
-      return "bg-teal-100 text-teal-800 px-3 py-1 rounded-2xl";
-    case "PartnerAdmin":
-      return "bg-indigo-100 text-indigo-800 px-3 py-1 rounded-2xl";
-    case "Admin":
-      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+      return "bg-purple-100 text-purple-800 px-3 py-1 rounded-2xl font-medium";
+    case "partner_staff":
+      return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl font-medium";
+    case "partner_manager":
+      return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl font-medium";
+    case "partner_admin":
+      return "bg-cyan-100 text-cyan-800 px-3 py-1 rounded-2xl font-medium";
+    case "customer":
+      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl font-medium";
     default:
-      return "bg-gray-100 text-gray-800 px-3 py-1 rounded-2xl";
+      return "bg-gray-100 text-gray-800 px-3 py-1 rounded-2xl font-medium";
   }
 };
 
