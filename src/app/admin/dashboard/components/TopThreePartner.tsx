@@ -7,54 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/styles/components/ui/card";
-import {
-  User,
-  Mail,
-  DollarSign,
-  Percent,
-  Award,
-  TrendingUp,
-} from "lucide-react";
+import { User, Mail, Percent, Award, TrendingUp } from "lucide-react";
+import { getDashboardTopPartnerAPI } from "@/src/services/dashboard.service";
+import { useQuery } from "@tanstack/react-query";
 
 interface Partner {
-  id: string;
+  partnerId: string;
   companyName: string;
-  ownerEmail: string;
-  ownerName: string;
-  revenue: number;
-  commission: number;
-  partnerTier: string; // Đồng, Bạc, Vàng, Kim Cương
+  email: string;
+  contactName: string;
+  totalRevenue: number;
+  totalCommission: number;
+  tier: string;
 }
-
-const TOP_PARTNERS: Partner[] = [
-  {
-    id: "1",
-    companyName: "Công ty Đồ Chơi Luffy Gear",
-    ownerEmail: "luffy.gear@gmail.com",
-    ownerName: "Monkey D. Luffy",
-    revenue: 150000000,
-    commission: 15000000,
-    partnerTier: "Kim Cương",
-  },
-  {
-    id: "2",
-    companyName: "Tiệm Kiếm Sĩ Zoro",
-    ownerEmail: "zoro.wano@gmail.com",
-    ownerName: "Roronoa Zoro",
-    revenue: 95000000,
-    commission: 8500000,
-    partnerTier: "Vàng",
-  },
-  {
-    id: "3",
-    companyName: "Shop Thời Trang Nami",
-    ownerEmail: "nami.money@gmail.com",
-    ownerName: "Nami",
-    revenue: 75000000,
-    commission: 6000000,
-    partnerTier: "Bạc",
-  },
-];
 
 // Hàm bổ trợ màu sắc cho Tier
 const getTierStyle = (tier: string) => {
@@ -71,6 +36,16 @@ const getTierStyle = (tier: string) => {
 };
 
 const TopThreePartner = () => {
+  const {
+    data: topPartners,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["topPartners"],
+    queryFn: () => getDashboardTopPartnerAPI({}),
+    select: (res) => res.data as Partner[],
+  });
+
   return (
     <Card className="border-none shadow-none bg-transparent w-full h-full py-0 gap-2">
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
@@ -81,9 +56,9 @@ const TopThreePartner = () => {
       </CardHeader>
 
       <CardContent className="p-0 flex flex-1 flex-col justify-between gap-3">
-        {TOP_PARTNERS.map((partner, index) => (
+        {topPartners?.map((partner, index) => (
           <div
-            key={partner.id}
+            key={partner.partnerId}
             className={`
               group relative p-2 flex gap-4 rounded-2xl border border-transparent transition-all hover:border-blue-100 hover:shadow-md
               ${
@@ -101,7 +76,7 @@ const TopThreePartner = () => {
               {/* Avatar thay thế cho ảnh sản phẩm */}
               <div className="relative w-16 h-16 shrink-0 rounded-full border-2 border-white bg-gradient-to-br from-slate-100 to-slate-200 shadow-sm flex items-center justify-center overflow-hidden">
                 <span className="text-xl font-black text-slate-400 group-hover:scale-110 transition-transform">
-                  {partner.ownerName.charAt(0)}
+                  {partner.contactName.charAt(0)}
                 </span>
                 <div
                   className={`
@@ -114,9 +89,9 @@ const TopThreePartner = () => {
               </div>
 
               <div
-                className={`px-2 py-0.5 rounded-full text-center border text-[9px] font-black uppercase tracking-tighter ${getTierStyle(partner.partnerTier)}`}
+                className={`px-2 py-0.5 rounded-full text-center border text-[9px] font-black uppercase tracking-tighter ${getTierStyle(partner.tier)}`}
               >
-                {partner.partnerTier}
+                {partner.tier}
               </div>
             </div>
 
@@ -131,13 +106,13 @@ const TopThreePartner = () => {
                   <div className="flex items-center gap-1.5 text-slate-500">
                     <User size={10} />
                     <span className="text-[12px] font-medium">
-                      {partner.ownerName}
+                      {partner.contactName}
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5 text-slate-400">
                     <Mail size={10} />
                     <span className="text-[12px] truncate">
-                      {partner.ownerEmail}
+                      {partner.email}
                     </span>
                   </div>
                 </div>
@@ -148,13 +123,13 @@ const TopThreePartner = () => {
                 <div className="flex items-center gap-1">
                   <TrendingUp size={12} className="text-emerald-500" />
                   <span className="text-[12px] font-bold text-slate-900">
-                    {partner.revenue.toLocaleString()}đ
+                    {partner.totalRevenue.toLocaleString()}đ
                   </span>
                 </div>
                 <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100">
                   <Percent size={10} />
                   <span className="text-[11px] font-bold">
-                    {(partner.commission / 1000000).toFixed(1)}M
+                    {(partner.totalCommission / 1000000).toFixed(1)}M
                   </span>
                 </div>
               </div>

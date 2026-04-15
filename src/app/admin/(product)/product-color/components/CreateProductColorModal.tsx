@@ -74,7 +74,7 @@ function CreateProductColorModal() {
           <Plus /> Thêm màu sắc sản phẩm
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden border-none shadow-2xl">
+      <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl">
         {/* Header đồng bộ */}
         <DialogHeader className="p-6 bg-slate-50/50 border-b">
           <DialogTitle className="text-xl font-bold text-slate-800 flex items-center gap-2">

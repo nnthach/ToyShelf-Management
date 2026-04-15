@@ -17,46 +17,31 @@ import {
   Trophy,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getDashboardTopStoreAPI } from "@/src/services/dashboard.service";
+import { useQuery } from "@tanstack/react-query";
 
 interface Store {
-  id: string;
-  name: string;
+  storeId: string;
+  storeName: string;
   partnerName: string;
   city: string;
   totalOrders: number;
   totalRevenue: number;
 }
 
-// Giả lập dữ liệu
-const TOP_STORES: Store[] = [
-  {
-    id: "1",
-    name: "ToyShelf Quận 1",
-    partnerName: "Nguyễn Văn A",
-    city: "HCM",
-    totalOrders: 1200,
-    totalRevenue: 25000000,
-  },
-  {
-    id: "2",
-    name: "ToyShelf Hà Nội",
-    partnerName: "Trần Văn B",
-    city: "Hà Nội",
-    totalOrders: 980,
-    totalRevenue: 21000000,
-  },
-  {
-    id: "3",
-    name: "ToyShelf Đà Nẵng",
-    partnerName: "Lê Văn C",
-    city: "Đà Nẵng",
-    totalOrders: 870,
-    totalRevenue: 18000000,
-  },
-];
-
 const TopThreeStore = () => {
   const router = useRouter();
+
+  const {
+    data: topStores,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["topStores"],
+    queryFn: () => getDashboardTopStoreAPI({}),
+    select: (res) => res.data as Store[],
+  });
+
   return (
     <Card className="border-none shadow-none bg-transparent w-full h-full py-0 gap-2">
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
@@ -67,10 +52,10 @@ const TopThreeStore = () => {
       </CardHeader>
 
       <CardContent className="p-0 flex flex-1 flex-col justify-between gap-3">
-        {TOP_STORES.map((store, index) => (
+        {topStores?.map((store, index) => (
           <div
-            key={store.id}
-            onClick={() => router.push(`/admin/stores/${store.id}`)}
+            key={store.storeId}
+            onClick={() => router.push(`/admin/stores/${store.storeId}`)}
             className={`
   group py-3 flex flex-col gap-4 border-b last:border-none border-gray-100 rounded-lg px-3 transition-colors
   ${
@@ -104,7 +89,7 @@ const TopThreeStore = () => {
                   Top {index + 1}
                 </div>
                 <span className="text-[15px] font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                  {store.name}
+                  {store.storeName}
                 </span>
               </div>
               <div className="flex items-center gap-1 text-[12px] text-gray-700 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">

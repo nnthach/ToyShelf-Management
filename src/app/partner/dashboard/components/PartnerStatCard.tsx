@@ -23,8 +23,6 @@ function PartnerStatCard() {
     enabled: !!partnerId,
   });
 
-  console.log("partnerStatCard", partnerStatCard);
-
   return (
     <>
       <StatCardWithButton

@@ -1,25 +1,29 @@
 "use client";
 
 import StatCardWithButton from "@/src/components/StatCardWithButton";
-import {
-  Box,
-  ClipboardList,
-  DollarSign,
-  ShoppingCart,
-  Star,
-  Store,
-  Users,
-  Wallet,
-} from "lucide-react";
+import { getDashboardAdminStatCard } from "@/src/services/dashboard.service";
+import { useQuery } from "@tanstack/react-query";
+import { DollarSign, ShoppingCart, Store, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 function AdminStatCard() {
   const router = useRouter();
+
+  const {
+    data: adminStatCard,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["adminStatCard"],
+    queryFn: () => getDashboardAdminStatCard({}),
+    select: (res) => res.data,
+  });
+  
   return (
     <>
       <StatCardWithButton
         title="Doanh thu"
-        value="250,520 VND"
+        value={`${(adminStatCard?.revenue ?? 0).toLocaleString() || 0} VND`}
         change="+30,215 VND"
         changePercent="+12%"
         icon={DollarSign}
@@ -28,7 +32,7 @@ function AdminStatCard() {
 
       <StatCardWithButton
         title="Đơn hàng"
-        value="200"
+        value={`${adminStatCard?.orders || 0}`}
         change="+25"
         changePercent="+15%"
         icon={ShoppingCart}
@@ -37,7 +41,7 @@ function AdminStatCard() {
       />
       <StatCardWithButton
         title="Đối tác"
-        value="53"
+        value={`${adminStatCard?.partners || 0}`}
         change="+2"
         changePercent="+18%"
         icon={Users}
@@ -46,7 +50,7 @@ function AdminStatCard() {
       />
       <StatCardWithButton
         title="Cửa hàng"
-        value="230"
+        value={`${adminStatCard?.stores || 0}`}
         change="+2,815"
         changePercent="+18%"
         icon={Store}
