@@ -285,6 +285,9 @@ export interface ShelfLevelItem {
 
 export interface Shelf {
   id: string;
+  shelfTypeId: string;
+  shelfTypeName: string;
+  quantity: number;
   name: string;
   imageUrl: string;
   width: number;

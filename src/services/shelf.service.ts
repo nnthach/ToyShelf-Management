@@ -1,34 +1,39 @@
 import api from "../config/axios";
 
 export const getAllShelfTypeAPI = async <T>(params: T) => {
-  const res = await api.get("/ShefType", { params });
+  const res = await api.get("/ShelfType", { params });
   return res.data;
 };
 
 export const getShelfTypeDetailAPI = async (id: string) => {
-  const res = await api.get(`/ShefType/${id}`);
+  const res = await api.get(`/ShelfType/${id}`);
   return res.data;
 };
 
 export const createShelfTypeAPI = async <T>(data: T) => {
-  const res = await api.post("/ShefType", data);
+  const res = await api.post("/ShelfType", data);
+  return res.data;
+};
+
+export const createShelfLocationAPI = async <T>(data: T) => {
+  const res = await api.post("/Shelf", data);
   return res.data;
 };
 
 export const updateShelfTypeAPI = async <T>(data: T, id: string) => {
-  const res = await api.put(`/ShefType/${id}`, data);
+  const res = await api.put(`/ShelfType/${id}`, data);
   return res.data;
 };
 
 export const deleteShelfTypeAPI = async (id: string) => {
-  const res = await api.delete(`/ShefType/${id}/delete`);
+  const res = await api.delete(`/ShelfType/${id}/delete`);
   return res.data;
 };
 export const disableShelfTypeAPI = async (id: string) => {
-  const res = await api.patch(`/ShefType/${id}/disable`);
+  const res = await api.patch(`/ShelfType/${id}/disable`);
   return res.data;
 };
 export const restoreShelfTypeAPI = async (id: string) => {
-  const res = await api.patch(`/ShefType/${id}/restore`);
+  const res = await api.patch(`/ShelfType/${id}/restore`);
   return res.data;
 };

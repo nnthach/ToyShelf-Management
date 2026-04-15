@@ -115,11 +115,16 @@ function CreateShelfTypeModal() {
     setIsLoading(true);
 
     try {
-      const imageUrl = data.imageFile
-        ? await uploadFileToCloudinary(data.imageFile, "shelf")
+      const { imageFile, ...restData } = data;
+
+      const imageUrl = imageFile
+        ? await uploadFileToCloudinary(imageFile, "shelf")
         : null;
 
-      await createShelfTypeAPI({ ...data, imageUrl: imageUrl });
+      await createShelfTypeAPI({
+        ...restData,
+        imageUrl,
+      });
 
       queryClient.invalidateQueries({ queryKey: ["shelfs"] });
 
@@ -270,17 +275,20 @@ function CreateShelfTypeModal() {
                         <FormFieldCustom
                           name={`levels.${index}.name`}
                           label="Thứ tự tầng"
-                          placeholder="VD: Tầng đáy"required
+                          placeholder="VD: Tầng đáy"
+                          required
                         />
                         <FormFieldCustom
                           name={`levels.${index}.clearanceHeight`}
                           label="Chiều cao tầng (cm)"
-                          type="number"required
+                          type="number"
+                          required
                         />
                         <FormFieldCustom
                           name={`levels.${index}.recommendedCapacity`}
                           label="Sức chứa (sản phẩm)"
-                          type="number"required
+                          type="number"
+                          required
                         />
                       </div>
 
