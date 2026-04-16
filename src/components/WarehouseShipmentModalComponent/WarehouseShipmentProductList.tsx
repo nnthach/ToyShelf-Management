@@ -16,8 +16,6 @@ function WarehouseShipmentProductList({
   shipmentDetail,
   shipmentAssignDetail,
 }: WarehouseShipmentProductListProps) {
-  console.log("shipment", shipmentDetail);
-  console.log("shipmentAssignDetail", shipmentAssignDetail);
 
   // 1. Tạo Map để tra cứu nhanh thông tin từ shipmentDetail
   // Sử dụng đúng kiểu dữ liệu RefillRequestProductColor thay vì any

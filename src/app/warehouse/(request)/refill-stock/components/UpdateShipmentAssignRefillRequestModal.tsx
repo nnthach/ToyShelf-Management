@@ -99,7 +99,8 @@ function UpdateShipmentAssignRefillRequestModal({
                 <div>
                   <DialogTitle className="text-xl flex items-center gap-2">
                     <Truck className="h-5 w-5 text-primary" />
-                    Điều phối vận chuyển: {shipmentAssignDetail?.storeOrderCode}
+                    Điều phối vận chuyển:{" "}
+                    {shipmentAssignDetail?.storeOrders[0].code}
                   </DialogTitle>
                   <DialogDescription>
                     Quản lý lộ trình và xác nhận bàn giao hàng hóa
@@ -253,6 +254,7 @@ function UpdateShipmentAssignRefillRequestModal({
 
       {shipmentAssignDetail?.orderType === "STORE" ? (
         <CreateShipmentModal
+        storeOrderId={shipmentAssignDetail.storeOrders[0].id}
           requestId={requestId}
           items={shipmentAssignDetail?.productItems || []}
           isOpen={isOpenCreateShipmentModal}

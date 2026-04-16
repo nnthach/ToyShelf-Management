@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/src/styles/components/ui/dialog";
@@ -13,15 +12,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import {
-  AlertCircle,
-  ClipboardList,
-  Hash,
-  PackageCheck,
-  Send,
-  Text,
-  XCircle,
-} from "lucide-react";
+import { PackageCheck, Send, XCircle } from "lucide-react";
 import { RefillRequestProductColor } from "@/src/types";
 import { memo, useEffect } from "react";
 import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
@@ -32,6 +23,7 @@ import { formatColorNameToVN } from "@/src/utils/format";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type CreateShipmentModalProps = {
+  storeOrderId: string;
   requestId: string;
   isOpen: boolean;
   items: RefillRequestProductColor[];
@@ -41,17 +33,18 @@ type CreateShipmentModalProps = {
 
 function CreateShipmentModal({
   requestId,
+  storeOrderId,
   isOpen,
   items,
   onClose,
-  onSuccess,
 }: CreateShipmentModalProps) {
   const queryClient = useQueryClient();
 
   const formSchema = z.object({
     shipmentAssignmentId: z.string(),
-    items: z.array(
+    products: z.array(
       z.object({
+        storeOrderId: z.string(),
         productColorId: z.string(),
         expectedQuantity: z.coerce.number().min(1, "Số lượng phải lớn hơn 0"),
       }),
@@ -61,7 +54,7 @@ function CreateShipmentModal({
     resolver: zodResolver(formSchema),
     defaultValues: {
       shipmentAssignmentId: requestId,
-      items: [],
+      products: [],
     },
   });
 
@@ -69,7 +62,8 @@ function CreateShipmentModal({
     if (isOpen && items.length > 0) {
       form.reset({
         shipmentAssignmentId: requestId,
-        items: items.map((item) => ({
+        products: items.map((item) => ({
+          storeOrderId: storeOrderId,
           productColorId: item.productColorId,
           expectedQuantity: item.quantity,
         })),
@@ -96,7 +90,7 @@ function CreateShipmentModal({
       toast.success("Tạo đơn giao thành công");
       onClose();
     } catch (error) {
-      toast.error(getErrorMessage(error,"Tạo đơn giao thất bại"));
+      toast.error(getErrorMessage(error, "Tạo đơn giao thất bại"));
     }
   }
 

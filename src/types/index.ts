@@ -313,6 +313,7 @@ export interface Shelf {
 }
 
 export interface RefillRequestProductColor {
+  shipmentItemId?: string;
   storeOrderItemId?: string;
   productColorId?: string;
   productName?: string;
@@ -419,6 +420,8 @@ export interface RefillShelfRequestItem {
   receivedQuantity?: number;
   displayExpected?: number;
   displayReceived?: number;
+  originalQuantity?: number;
+  remainingQuantity?: number;
   availableQuantity?: number;
 }
 
@@ -438,6 +441,27 @@ export interface RefillShelfRequest {
   approvedAt: string;
   rejectedAt: string;
   items: RefillShelfRequestItem[];
+}
+
+export interface ShipmentReceiveResponse {
+  data: ShipmentReceiveData;
+}
+
+export interface ShipmentReceiveData {
+  shipmentId: string;
+  shipmentCode: string;
+  fromLocationName: string;
+  toLocationName: string;
+  productItems: ShipmentProductItem[];
+}
+
+export interface ShipmentProductItem {
+  shipmentItemId: string;
+  productColorId: string;
+  productName: string;
+  colorName: string;
+  imageUrl: string;
+  expectedQuantity: number;
 }
 
 export interface CheckReceiveShelfItem {
@@ -515,6 +539,7 @@ export interface Shipment {
   pickedUpAt?: string;
   deliveredAt?: string;
   receivedAt?: string;
+  storeReceivedAt?: string;
   productItems: RefillRequestProductColor[];
   shelfItems: RefillShelfItem[];
 }

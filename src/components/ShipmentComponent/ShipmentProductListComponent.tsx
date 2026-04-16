@@ -1,73 +1,59 @@
-import {
-  RefillRequest,
-  RefillRequestProductColor,
-  Shipment,
-} from "@/src/types";
+import { RefillRequest, RefillRequestProductColor } from "@/src/types";
 import { formatColorNameToVN } from "@/src/utils/format";
-import { Package } from "lucide-react";
+import { Package, AlertCircle, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import { memo } from "react";
 
 interface ShipmentProductListComponentProps {
-  shipmentDetail: Shipment | undefined;
   storeOrderDetail: RefillRequest | undefined;
 }
 
 function ShipmentProductListComponent({
-  shipmentDetail,
   storeOrderDetail,
 }: ShipmentProductListComponentProps) {
-  const shipmentItemMap = new Map(
-    shipmentDetail?.productItems?.map((item: RefillRequestProductColor) => [
-      item.productColorId,
-      item,
-    ]) || [],
-  );
+  const itemList = storeOrderDetail?.items;
 
-  const itemsWithQuantities = storeOrderDetail?.items?.map(
-    (item: RefillRequestProductColor) => {
-      // Tra cứu thông tin shipment tương ứng
-      const shipmentItem = shipmentItemMap.get(item.productColorId);
-
-      return {
-        ...item,
-        expectedQuantity: shipmentItem?.expectedQuantity || 0,
-        receivedQuantity: shipmentItem?.receivedQuantity || 0,
-      };
-    },
-  );
   return (
-    <>
+    <div className="flex flex-col h-full overflow-hidden bg-slate-50/50">
       {/* Header */}
-      <div className="p-4 border-b bg-white flex items-center justify-between sticky top-0 z-10">
+      <div className="p-4 border-b bg-white flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-2">
           <Package className="h-4 w-4 text-primary" />
-          <h4 className="font-bold text-sm uppercase">Sản phẩm & Số lượng</h4>
+          <h4 className="font-bold text-xs uppercase tracking-wider text-slate-700">
+            Sản phẩm & Đối soát số lượng
+          </h4>
         </div>
-        <span className="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
-          {itemsWithQuantities?.length || 0}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-medium text-slate-400 uppercase">
+            Tổng mục:
+          </span>
+          <span className="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+            {itemList?.length || 0}
+          </span>
+        </div>
       </div>
 
       {/* Danh sách sản phẩm */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-        {itemsWithQuantities?.map(
-          (item: RefillRequestProductColor, index: number) => {
-            const expected = item?.expectedQuantity ?? 0;
-            const received = item?.receivedQuantity ?? 0;
-            const isShortfall = received < expected;
+        {itemList?.length ? (
+          itemList.map((item: RefillRequestProductColor, index: number) => {
+            const received = item.fulfilledQuantity || 0;
+            const requested = item.quantity || 0;
+            const isShortfall = received < requested;
+            const isFullyReceived = received >= requested && requested > 0;
 
             return (
               <div
                 key={item.productColorId || index}
-                className="bg-white border rounded-xl p-3 shadow-sm hover:shadow-md transition-all flex items-center gap-4"
+                className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm hover:shadow-md transition-all flex items-center gap-4 group"
               >
-                {/* BÊN TRÁI: THÔNG TIN SẢN PHẨM (Chiếm phần lớn diện tích) */}
+                {/* BÊN TRÁI: THÔNG TIN SẢN PHẨM */}
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="h-12 w-12 rounded-lg border bg-slate-50 flex-shrink-0 overflow-hidden relative shadow-sm">
+                  <div className="h-12 w-12 rounded-lg border border-slate-100 bg-slate-50 flex-shrink-0 overflow-hidden relative shadow-sm group-hover:border-primary/20 transition-colors">
                     {item?.imageUrl ? (
                       <Image
                         src={item.imageUrl}
-                        alt=""
+                        alt={item.productName || "Product"}
                         fill
                         className="object-cover"
                         sizes="48px"
@@ -79,76 +65,88 @@ function ShipmentProductListComponent({
                     )}
                   </div>
 
-                  <div className="min-w-0">
-                    <h5 className="font-bold text-[13px] uppercase text-slate-800 leading-tight truncate">
+                  <div className="min-w-0 flex-1">
+                    <h5 className="font-bold text-[13px] text-slate-800 leading-tight truncate mb-1">
                       {item.productName}
                     </h5>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-[10px] font-mono text-slate-400 font-medium">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-[10px] font-mono text-slate-400 font-medium bg-slate-50 px-1 rounded border border-slate-100">
                         {item.sku || "N/A"}
                       </span>
-                      <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 leading-none">
+                      <span className="text-[10px] bg-violet-50 text-violet-600 px-1.5 py-0.5 rounded font-medium border border-violet-100 leading-none">
                         {formatColorNameToVN(item?.color as string)}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* BÊN PHẢI: 3 NHÓM SỐ LIỆU (Gom cụm đối soát) */}
-                <div className="flex items-center gap-4 shrink-0 pr-2">
-                  {/* Yêu cầu */}
-                  <div className="flex flex-col items-center min-w-[45px]">
-                    <span className="text-[8px] text-slate-400 uppercase font-bold tracking-tighter mb-0.5">
-                      Yêu cầu
-                    </span>
-                    <span className="text-sm font-semibold text-slate-500">
-                      {item.quantity}
-                    </span>
-                  </div>
+                {/* BÊN PHẢI: CỤM SỐ LIỆU ĐỐI SOÁT */}
+                <div className="flex items-center shrink-0">
+                  <div className="flex items-center bg-slate-50/80 rounded-lg border border-slate-100 p-1">
+                    {/* Cột Yêu cầu */}
+                    <div className="flex flex-col items-center px-3 py-1">
+                      <span className="text-[8px] text-slate-400 uppercase font-black leading-none mb-1">
+                        Yêu cầu
+                      </span>
+                      <span className="text-xs font-bold text-slate-600">
+                        {requested}
+                      </span>
+                    </div>
 
-                  {/* Điều phối */}
-                  <div className="flex flex-col items-center min-w-[45px] border-l border-slate-100 pl-4">
-                    <span className="text-[8px] text-violet-400 uppercase font-bold tracking-tighter mb-0.5">
-                      Điều phối
-                    </span>
-                    <span className="text-sm font-semibold text-slate-500">
-                      {item.fulfilledQuantity || 0}
-                    </span>
-                  </div>
+                    {/* Đường chia dọc */}
+                    <div className="h-6 w-px bg-slate-200" />
 
-                  {/* Kho giao */}
-                  <div className="flex flex-col items-center min-w-[45px] border-l border-slate-100 pl-4">
-                    <span className="text-[8px] text-blue-500 uppercase font-bold tracking-tighter mb-0.5">
-                      Xuất kho
-                    </span>
-                    <span
-                      className={`text-sm font-bold ${expected > 0 ? "text-blue-600" : "text-slate-300"}`}
-                    >
-                      {expected}
-                    </span>
-                  </div>
+                    {/* Cột Thực nhận */}
+                    <div className="flex flex-col items-center px-3 py-1 min-w-[60px]">
+                      <span
+                        className={`text-[8px] uppercase font-black leading-none mb-1 ${
+                          isShortfall && received > 0
+                            ? "text-destructive"
+                            : isFullyReceived
+                              ? "text-emerald-600"
+                              : "text-slate-400"
+                        }`}
+                      >
+                        Thực nhận
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <span
+                          className={`text-sm font-black ${
+                            isShortfall && received > 0
+                              ? "text-destructive"
+                              : isFullyReceived
+                                ? "text-emerald-600"
+                                : received === 0
+                                  ? "text-slate-300"
+                                  : "text-slate-600"
+                          }`}
+                        >
+                          {received}
+                        </span>
 
-                  {/* Thực nhận */}
-                  <div className="flex flex-col items-center min-w-[45px] border-l border-slate-100 pl-4">
-                    <span
-                      className={`text-[8px] uppercase font-bold tracking-tighter mb-0.5 ${isShortfall && received > 0 ? "text-destructive" : "text-green-600"}`}
-                    >
-                      Nhận
-                    </span>
-                    <span
-                      className={`text-sm font-bold ${isShortfall && received > 0 ? "text-destructive" : received > 0 ? "text-green-600" : "text-slate-300"}`}
-                    >
-                      {received}
-                    </span>
+                        {/* Biểu tượng trạng thái */}
+                        {isFullyReceived && (
+                          <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+                        )}
+                        {isShortfall && received > 0 && (
+                          <AlertCircle className="h-3 w-3 text-destructive animate-pulse" />
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             );
-          },
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 text-slate-400 opacity-60">
+            <Package className="h-10 w-10 mb-2 stroke-1" />
+            <p className="text-sm italic">Danh sách sản phẩm trống</p>
+          </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
-export default ShipmentProductListComponent;
+export default memo(ShipmentProductListComponent);

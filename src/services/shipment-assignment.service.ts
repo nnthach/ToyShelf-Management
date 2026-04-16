@@ -14,6 +14,10 @@ export const getShipmentAssignDetailByStoreOrderIdAPI = async (id: string) => {
   const res = await api.get(`/ShipmentAssignment/store-order/${id}`);
   return res.data;
 };
+export const getShipmentAssignDetailByShelfOrderIdAPI = async (id: string) => {
+  const res = await api.get(`/ShipmentAssignment/shelf-order/${id}`);
+  return res.data;
+};
 
 export const getShipmentAssignDetailByIdAPI = async (id: string) => {
   const res = await api.get(`/ShipmentAssignment/${id}`);

@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/styles/components/ui/dialog";
-import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
   formatStoreOrderRefillRequestStatusColor,
@@ -20,14 +20,11 @@ import {
   getRefillDetailAPI,
   rejectRefillRequestAPI,
 } from "@/src/services/refill.service";
-import { Shipment, ShipmentAssign } from "@/src/types";
+import { Shipment } from "@/src/types";
 import { useState } from "react";
 import AssignWarehouseModal from "./AssignWarehouseModal";
-import {
-  getShipmentAssignDetailByIdAPI,
-  getShipmentAssignDetailByStoreOrderIdAPI,
-} from "@/src/services/shipment-assignment.service";
-import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
+import { getShipmentAssignDetailByStoreOrderIdAPI } from "@/src/services/shipment-assignment.service";
+import { getShipmentDetailByStoreOrderIdAPI } from "@/src/services/shipment.service";
 import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
 import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
 import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";
@@ -65,12 +62,11 @@ function UpdateRefillRequestModal({
     enabled: !!requestId && isOpen,
   });
 
-  const shipmentId = requestDetail?.shipmentIds?.[0];
   const { data: shipmentDetail } = useQuery({
-    queryKey: ["shipmentDetail", shipmentId],
-    queryFn: () => getShipmentDetailByIdAPI(shipmentId!),
-    select: (res) => res.data as Shipment,
-    enabled: !!shipmentId && isOpen,
+    queryKey: ["shipmentDetail", requestId],
+    queryFn: () => getShipmentDetailByStoreOrderIdAPI(requestId!),
+    select: (res) => res.data as Shipment[],
+    enabled: !!requestId && isOpen,
   });
 
   async function handleReject() {
@@ -119,7 +115,7 @@ function UpdateRefillRequestModal({
           if (!value) onClose();
         }}
       >
-        <DialogContent className="sm:max-w-[1200px] h-[90vh] flex flex-col p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[1000px] h-[90vh] flex flex-col p-0 overflow-hidden">
           <div className="p-6 border-b bg-slate-50/50">
             <DialogHeader>
               <div className="flex justify-between items-start">
@@ -160,7 +156,7 @@ function UpdateRefillRequestModal({
               </div>
             ) : (
               <div className="grid grid-cols-12 h-full">
-                <div className="col-span-6 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
+                <div className="col-span-7 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
                   <StoreOrderDetailSection storeOrderDetail={requestDetail} />
                   <ShipmentAssignDetailSection
                     shipmentAssignments={shipmentAssigns ?? []}
@@ -169,9 +165,8 @@ function UpdateRefillRequestModal({
                 </div>
 
                 {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
-                <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
+                <div className="col-span-5 flex flex-col bg-slate-50/50 overflow-hidden">
                   <ShipmentProductListComponent
-                    shipmentDetail={shipmentDetail}
                     storeOrderDetail={requestDetail}
                   />
                 </div>

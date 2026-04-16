@@ -1,6 +1,7 @@
 "use client";
 
 import { ShipmentAssign, Store } from "@/src/types";
+import { formatDateTime } from "@/src/utils/format";
 import {
   formatShipmentAssignStatusColor,
   formatShipmentAssignStatusText,
@@ -36,10 +37,6 @@ export const getShipmentAssignColumnColumns = (
     header: "Đến cửa hàng",
   },
   {
-    accessorKey: "createdByName",
-    header: "Người duyệt đơn",
-  },
-  {
     accessorKey: "shipperName",
     header: "Người giao hàng",
   },
@@ -68,6 +65,15 @@ export const getShipmentAssignColumnColumns = (
           {formatShipmentStatusText(shipmentStatus)}
         </span>
       );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Ngày tạo",
+    cell: ({ row }) => {
+      const createdAt = row.getValue("createdAt") as string;
+
+      return <span>{formatDateTime(createdAt).full}</span>;
     },
   },
   {

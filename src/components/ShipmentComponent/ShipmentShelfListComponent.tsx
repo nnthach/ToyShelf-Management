@@ -1,55 +1,42 @@
 import { RefillRequest, RefillShelfRequestItem, Shipment } from "@/src/types";
-import { Layers, Package } from "lucide-react";
+import { AlertCircle, CheckCircle2, Layers, Package } from "lucide-react";
 import Image from "next/image";
 
 interface ShipmentShelfListComponentProps {
-  shipmentDetail: Shipment | undefined;
-  storeOrderDetail: RefillRequest | undefined;
+  shelfOrderDetail: RefillRequest | undefined;
 }
 
 function ShipmentShelfListComponent({
-  shipmentDetail,
-  storeOrderDetail,
+  shelfOrderDetail,
 }: ShipmentShelfListComponentProps) {
-  const shipmentItemMap = new Map(
-    shipmentDetail?.shelfItems?.map((item: RefillShelfRequestItem) => [
-      item.shelfTypeId,
-      item,
-    ]) || [],
-  );
-
-  const itemsWithQuantities = (
-    storeOrderDetail?.items as RefillShelfRequestItem[]
-  )?.map((item) => {
-    const shipmentItem = shipmentItemMap.get(item.shelfTypeId);
-
-    return {
-      ...item,
-      expectedQuantity: shipmentItem?.expectedQuantity || 0,
-      receivedQuantity: shipmentItem?.receivedQuantity || 0,
-    };
-  });
+  const itemList = shelfOrderDetail?.items as RefillShelfRequestItem[] | [];
 
   return (
-    <>
+    <div className="flex flex-col h-full overflow-hidden bg-slate-50/50">
       {/* Header */}
       <div className="p-4 border-b bg-white flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center gap-2">
           <Package className="h-4 w-4 text-primary" />
           <h4 className="font-bold text-sm uppercase">Sản phẩm & Số lượng</h4>
         </div>
-        <span className="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
-          {itemsWithQuantities?.length || 0}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-medium text-slate-400 uppercase">
+            Tổng mục:
+          </span>
+          <span className="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+            {itemList?.length || 0}
+          </span>
+        </div>
       </div>
 
       {/* Danh sách sản phẩm */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-        {itemsWithQuantities?.map(
-          (item: RefillShelfRequestItem, index: number) => {
-            const expected = item?.expectedQuantity ?? 0;
-            const received = item?.receivedQuantity ?? 0;
-            const isShortfall = received < expected;
+        {itemList?.length ? (
+          itemList.map((item: RefillShelfRequestItem, index: number) => {
+            const received = item.fulfilledQuantity || 0;
+            const requested = item.quantity || 0;
+            const isShortfall = received < requested;
+            const isFullyReceived = received >= requested && requested > 0;
 
             return (
               <div
@@ -99,49 +86,71 @@ function ShipmentShelfListComponent({
                 </div>
 
                 {/* BÊN PHẢI: 3 NHÓM SỐ LIỆU (Gom cụm đối soát) */}
-                <div className="flex items-center gap-4 shrink-0 pr-2">
-                  {/* Yêu cầu */}
-                  <div className="flex flex-col items-center min-w-[45px]">
-                    <span className="text-[8px] text-slate-400 uppercase font-bold tracking-tighter mb-0.5">
-                      Yêu cầu
-                    </span>
-                    <span className="text-sm font-semibold text-slate-500">
-                      {item.quantity}
-                    </span>
-                  </div>
+                <div className="flex items-center shrink-0">
+                  <div className="flex items-center bg-slate-50/80 rounded-lg border border-slate-100 p-1">
+                    {/* Cột Yêu cầu */}
+                    <div className="flex flex-col items-center px-3 py-1">
+                      <span className="text-[8px] text-slate-400 uppercase font-black leading-none mb-1">
+                        Yêu cầu
+                      </span>
+                      <span className="text-xs font-bold text-slate-600">
+                        {requested}
+                      </span>
+                    </div>
 
-                  {/* Kho giao */}
-                  <div className="flex flex-col items-center min-w-[45px] border-l border-slate-100 pl-4">
-                    <span className="text-[8px] text-blue-500 uppercase font-bold tracking-tighter mb-0.5">
-                      Xuất kho
-                    </span>
-                    <span
-                      className={`text-sm font-bold ${expected > 0 ? "text-blue-600" : "text-slate-300"}`}
-                    >
-                      {expected}
-                    </span>
-                  </div>
+                    {/* Đường chia dọc */}
+                    <div className="h-6 w-px bg-slate-200" />
 
-                  {/* Thực nhận */}
-                  <div className="flex flex-col items-center min-w-[45px] border-l border-slate-100 pl-4">
-                    <span
-                      className={`text-[8px] uppercase font-bold tracking-tighter mb-0.5 ${isShortfall && received > 0 ? "text-destructive" : "text-green-600"}`}
-                    >
-                      Nhận
-                    </span>
-                    <span
-                      className={`text-sm font-bold ${isShortfall && received > 0 ? "text-destructive" : received > 0 ? "text-green-600" : "text-slate-300"}`}
-                    >
-                      {received}
-                    </span>
+                    {/* Cột Thực nhận */}
+                    <div className="flex flex-col items-center px-3 py-1 min-w-[60px]">
+                      <span
+                        className={`text-[8px] uppercase font-black leading-none mb-1 ${
+                          isShortfall && received > 0
+                            ? "text-destructive"
+                            : isFullyReceived
+                              ? "text-emerald-600"
+                              : "text-slate-400"
+                        }`}
+                      >
+                        Thực nhận
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <span
+                          className={`text-sm font-black ${
+                            isShortfall && received > 0
+                              ? "text-destructive"
+                              : isFullyReceived
+                                ? "text-emerald-600"
+                                : received === 0
+                                  ? "text-slate-300"
+                                  : "text-slate-600"
+                          }`}
+                        >
+                          {received}
+                        </span>
+
+                        {/* Biểu tượng trạng thái */}
+                        {isFullyReceived && (
+                          <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+                        )}
+                        {isShortfall && received > 0 && (
+                          <AlertCircle className="h-3 w-3 text-destructive animate-pulse" />
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             );
-          },
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 text-slate-400 opacity-60">
+            <Package className="h-10 w-10 mb-2 stroke-1" />
+            <p className="text-sm italic">Danh sách sản phẩm trống</p>
+          </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

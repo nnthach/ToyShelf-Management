@@ -42,7 +42,10 @@ function WarehouseShipmentDetailSection({
           <div className="grid grid-cols-3 gap-2">
             <ShipTimeNode label="Lấy hàng" time={shipmentDetail.pickedUpAt} />
             <ShipTimeNode label="Giao hàng" time={shipmentDetail.deliveredAt} />
-            <ShipTimeNode label="Hoàn tất" time={shipmentDetail.receivedAt} />
+            <ShipTimeNode
+              label="Hoàn tất"
+              time={shipmentDetail.storeReceivedAt}
+            />
           </div>
         </div>
       ) : (

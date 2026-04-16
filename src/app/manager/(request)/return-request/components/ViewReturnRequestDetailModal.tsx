@@ -29,6 +29,7 @@ import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import Image from "next/image";
 import { getDamageReportDetailAPI } from "@/src/services/damage-report.service";
 import { formatColorNameToVN } from "@/src/utils/format";
+import { ImageView } from "@/src/components/ImageView";
 
 type ViewReturnRequestModalDetailProps = {
   requestId: string;
@@ -375,16 +376,22 @@ const ProductDamageItem = ({ item }: { item: DamageReportItem }) => {
               </span>
             </div>
           </div>
+          <ImageView
+            mediaUrls={item.mediaUrls}
+            productName={item.productName}
+          />
         </div>
       </div>
 
-      <div className="flex items-center gap-10 ml-6 shrink-0">
-        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-1">
+      <div className="flex flex-col items-end ml-auto shrink-0">
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em] mb-0.5">
           Số lượng
         </span>
-        <span className="text-base font-bold text-slate-900">
-          {item.quantity}
-        </span>
+        <div className="flex items-baseline gap-0.5">
+          <span className="text-xl font-black text-slate-900 leading-none">
+            {item.quantity}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -423,16 +430,19 @@ const ShelfDamageItem = ({ item }: { item: DamageReportItem }) => {
               {item.shelfCode}
             </div>
           </div>
+          <ImageView mediaUrls={item.mediaUrls} productName={item.shelfName} />
         </div>
       </div>
 
-      <div className="flex items-center gap-10 ml-6 shrink-0">
-        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-1">
+      <div className="flex flex-col items-end ml-auto shrink-0">
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em] mb-0.5">
           Số lượng
         </span>
-        <span className="text-base font-bold text-slate-900">
-          {item.quantity}
-        </span>
+        <div className="flex items-baseline gap-0.5">
+          <span className="text-xl font-black text-slate-900 leading-none">
+            {item.quantity}
+          </span>
+        </div>
       </div>
     </div>
   );

@@ -85,7 +85,7 @@ function AssignWarehouseModal({
       await createShipmentAssignWarehouseAPI(payload);
 
       queryClient.invalidateQueries({ queryKey: ["requestDetail", requestId] });
-      queryClient.invalidateQueries({ queryKey: ["shipmentAssignDetail"] });
+      queryClient.invalidateQueries({ queryKey: ["shipmentAssigns"] });
 
       toast.success("Điều phối kho thành công");
       setSelectedWarehouseId(null);

@@ -1,49 +1,161 @@
 import { Shipment } from "@/src/types";
+import { Truck, Package, ArrowRight, Calendar, MapPin } from "lucide-react";
 import ShipInfoItem from "./ShipInfoItem";
-import { ArrowRight, Package, Truck } from "lucide-react";
 import ShipTimeNode from "./ShipTimeNode";
 import EmptySection from "./EmptySection";
 import { memo } from "react";
+import { formatShipmentStatusText } from "@/src/utils/formatStatus";
+import { formatColorNameToVN } from "@/src/utils/format";
+import Image from "next/image";
 
 interface ShipmentDetailSectionProps {
-  shipmentDetail: Shipment | undefined;
+  shipmentDetail: Shipment[] | undefined;
 }
 
 function ShipmentDetailSection({ shipmentDetail }: ShipmentDetailSectionProps) {
+  // Kiểm tra nếu có dữ liệu trong mảng
+  const hasShipments = shipmentDetail && shipmentDetail.length > 0;
+
   return (
-    <section>
-      <div className="flex items-center gap-2 mb-4 text-primary font-bold uppercase text-xs tracking-wider">
+    <section className="space-y-4">
+      {/* Tiêu đề Section */}
+      <div className="flex items-center gap-2 font-bold uppercase text-xs tracking-wider">
         <Truck className="h-4 w-4" /> 3. Vận chuyển & Giao hàng
       </div>
-      {shipmentDetail ? (
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4 bg-green-50/30 p-4 rounded-xl border border-green-100">
-            <ShipInfoItem
-              label="Đơn vị/Người giao"
-              value={shipmentDetail.shipperName}
-              icon={<Truck className="h-3 w-3" />}
-            />
-            <ShipInfoItem
-              label="Mã vận đơn"
-              value={shipmentDetail.code}
-              icon={<Package className="h-3 w-3" />}
-            />
-            <div className="col-span-2 flex items-center gap-2 text-sm font-medium py-2 border-y border-green-100 border-dashed">
-              <span className="text-muted-foreground">
-                {shipmentDetail.fromLocationName}
-              </span>
-              <ArrowRight className="h-3 w-3 text-green-500" />
-              <span className="text-green-700">
-                {shipmentDetail.toLocationName}
-              </span>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-3 gap-2">
-            <ShipTimeNode label="Lấy hàng" time={shipmentDetail.pickedUpAt} />
-            <ShipTimeNode label="Giao hàng" time={shipmentDetail.deliveredAt} />
-            <ShipTimeNode label="Hoàn tất" time={shipmentDetail.receivedAt} />
-          </div>
+      {hasShipments ? (
+        <div className="space-y-6">
+          {shipmentDetail.map((shipment, index) => (
+            <div
+              key={shipment.id || index}
+              className="bg-white rounded-xl border border-emerald-100 overflow-hidden shadow-sm"
+            >
+              {/* Header của từng chuyến giao hàng */}
+              <div className="bg-emerald-50/50 px-4 py-2 border-b border-emerald-100 flex justify-between items-center">
+                <span className="text-[11px] font-bold text-emerald-700 uppercase flex items-center gap-1">
+                  <Package className="h-3 w-3" /> Phiếu giao hàng #{index + 1}
+                </span>
+                <span className="text-[10px] text-emerald-600/60 font-mono font-bold">
+                  {shipment.code}
+                </span>
+              </div>
+
+              <div className="p-4 space-y-4">
+                {/* Thông tin người giao và mã vận đơn */}
+                <div className="grid grid-cols-2 gap-4">
+                  <ShipInfoItem
+                    label="Đơn vị/Người giao"
+                    value={shipment.shipperName || "Chưa xác định"}
+                    icon={<Truck className="h-3.5 w-3.5" />}
+                  />
+                  <ShipInfoItem
+                    label="Trạng thái"
+                    value={formatShipmentStatusText(shipment.status)} // Bạn có thể bọc thêm hàm formatStatus ở đây
+                    isStatus
+                  />
+                </div>
+
+                {/* Lộ trình di chuyển */}
+                <div className="flex items-center gap-3 p-3 bg-emerald-50/30 rounded-lg border border-emerald-50 text-[12px]">
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <span className="text-[10px] text-slate-400 uppercase font-bold">
+                      Từ
+                    </span>
+                    <span className="text-slate-600 truncate font-medium">
+                      {shipment.fromLocationName}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col items-center px-2">
+                    <ArrowRight className="h-4 w-4 text-emerald-500" />
+                  </div>
+
+                  <div className="flex flex-col flex-1 text-right min-w-0">
+                    <span className="text-[10px] text-slate-400 uppercase font-bold">
+                      Đến
+                    </span>
+                    <span className="text-emerald-700 truncate font-bold">
+                      {shipment.toLocationName}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Timeline các mốc thời gian */}
+                <div className="grid grid-cols-3 gap-2 pt-2">
+                  <ShipTimeNode label="Lấy hàng" time={shipment.pickedUpAt} />
+                  <ShipTimeNode label="Giao hàng" time={shipment.deliveredAt} />
+                  <ShipTimeNode
+                    label="Hoàn tất"
+                    time={shipment.storeReceivedAt}
+                  />
+                </div>
+
+                {/* Danh sách sản phẩm trong shipment */}
+                <div className="space-y-2">
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                    <Package className="h-3 w-3" /> Chi tiết hàng hóa
+                  </p>
+                  <div className="bg-slate-50/50 rounded-lg border border-slate-100 divide-y divide-slate-100">
+                    {shipment.productItems?.map((product, pIdx) => (
+                      <div
+                        key={pIdx}
+                        className="p-2 flex items-center justify-between gap-4"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                          <div className="h-8 w-8 rounded border bg-white shrink-0 overflow-hidden relative">
+                            <Image
+                              src={product.imageUrl || ""}
+                              alt=""
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[13px] font-bold text-slate-800 truncate mb-0.5">
+                              {product.productName}
+                            </p>
+
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 font-mono rounded border border-slate-200/50">
+                                {product.sku}
+                              </span>
+                              <span className="text-slate-300 text-[10px]">
+                                |
+                              </span>
+                              <p className="text-[11px] text-slate-500 font-medium">
+                                {formatColorNameToVN(product?.color || "")}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Đối soát số lượng */}
+                        <div className="flex items-center gap-3 shrink-0">
+                          <div className="text-center min-w-[30px]">
+                            <p className="text-[8px] text-slate-400 uppercase font-bold">
+                              Giao
+                            </p>
+                            <p className="text-xs font-bold text-slate-600">
+                              {product.expectedQuantity}
+                            </p>
+                          </div>
+                          <div className="h-4 w-px bg-slate-200" />
+                          <div className="text-center min-w-[30px]">
+                            <p className="text-[8px] text-emerald-600 uppercase font-bold">
+                              Nhận
+                            </p>
+                            <p className="text-xs font-black text-emerald-600">
+                              {product.receivedQuantity}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <EmptySection message="Chưa có thông tin vận chuyển" />

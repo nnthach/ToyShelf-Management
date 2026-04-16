@@ -36,12 +36,12 @@ function WarehouseShipmentStoreInfo({
           />
           <ShipInfoItem
             label="Người điều phối"
-            value={shipmentAssignDetail.assignedByName || "Chưa có"}
+            value={shipmentAssignDetail.assignedByName}
             icon={<UserCheck className="h-3 w-3" />}
           />
           <ShipInfoItem
             label="Nhân viên giao hàng"
-            value={shipmentAssignDetail.shipperName || "Chưa có"}
+            value={shipmentAssignDetail.shipperName}
             icon={<Truck className="h-3 w-3" />}
           />
           <ShipInfoItem

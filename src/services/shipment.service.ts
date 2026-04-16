@@ -15,6 +15,21 @@ export const getShipmentDetailByIdAPI = async (id: string) => {
   return res.data;
 };
 
+export const getShipmentForReceiveByIdAPI = async (id: string) => {
+  const res = await api.get(`/Shipment/${id}/for-receiving`);
+  return res.data;
+};
+
+export const getShipmentDetailByStoreOrderIdAPI = async (id: string) => {
+  const res = await api.get(`/Shipment/store-order/${id}`);
+  return res.data;
+};
+
+export const getShipmentDetailByShelfOrderIdAPI = async (id: string) => {
+  const res = await api.get(`/Shipment/shelf-order/${id}`);
+  return res.data;
+};
+
 export const createShipmentAPI = async <T>(data: T) => {
   const res = await api.post("/Shipment", data);
   return res.data;
@@ -31,7 +46,7 @@ export const deliveryShipmentAPI = async <T>(id: string, data: T) => {
 };
 
 export const receiveShipmentAPI = async <T>(id: string, data: T) => {
-  const res = await api.patch(`/Shipment/${id}/receive`, data);
+  const res = await api.patch(`/Shipment/${id}/store-receive`, data);
   return res.data;
 };
 

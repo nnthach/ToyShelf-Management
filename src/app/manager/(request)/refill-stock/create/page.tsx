@@ -18,6 +18,7 @@ import { createRefillAPI } from "@/src/services/refill.service";
 import { toast } from "react-toastify";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export interface CartItem {
   productColorId: string;
@@ -36,6 +37,7 @@ export default function CreateStoreOrderRefill() {
   const queryClient = useQueryClient();
 
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
@@ -96,6 +98,7 @@ export default function CreateStoreOrderRefill() {
   };
 
   const onSubmit = async () => {
+    setIsLoadingSubmit(true);
     const payload = {
       items: cart.map((item) => ({
         productColorId: item.productColorId,
@@ -114,8 +117,14 @@ export default function CreateStoreOrderRefill() {
       router.back();
     } catch (error) {
       toast.error(getErrorMessage(error, "Tạo đơn thất bại"));
+    } finally {
+      setIsLoadingSubmit(false);
     }
   };
+
+  if (isLoadingSubmit) {
+    return <LoadingPageComponent />;
+  }
   return (
     <>
       {/*Header */}
@@ -160,7 +169,7 @@ export default function CreateStoreOrderRefill() {
               }
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
-            />{" "}
+            />
           </div>
 
           <div className="px-4 pb-4">
@@ -170,9 +179,9 @@ export default function CreateStoreOrderRefill() {
                   <ProductCardSkeleton key={i} />
                 ))}
               </div>
-            ) : productList.items.length > 0 ? (
+            ) : productList?.items?.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
-                {productList.items.map((product: Product) => (
+                {productList?.items?.map((product: Product) => (
                   <ProductCardOrder
                     key={product.id}
                     product={product}

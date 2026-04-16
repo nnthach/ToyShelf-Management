@@ -18,10 +18,15 @@ import { CheckCircle2, Package, XCircle } from "lucide-react";
 import { Shipment } from "@/src/types";
 import { useState } from "react";
 import AssignWarehouseModal from "./AssignWarehouseModal";
-import { getShipmentAssignDetailByIdAPI } from "@/src/services/shipment-assignment.service";
-import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
+import {
+  getShipmentAssignDetailByIdAPI,
+  getShipmentAssignDetailByShelfOrderIdAPI,
+} from "@/src/services/shipment-assignment.service";
+import {
+  getShipmentDetailByIdAPI,
+  getShipmentDetailByShelfOrderIdAPI,
+} from "@/src/services/shipment.service";
 import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
-import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
 import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";
 import {
   approveRefillShelfRequestAPI,
@@ -30,6 +35,7 @@ import {
 import ShipmentShelfListComponent from "@/src/components/ShipmentComponent/ShipmentShelfListComponent";
 import ReasonRejectRequestModal from "./ReasonRejectRequest";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
 
 type UpdateRefillShelfRequestModalProps = {
   requestId: string;
@@ -56,20 +62,19 @@ function UpdateRefillShelfRequestModal({
     enabled: !!requestId,
   });
 
-  const assignmentId = requestDetail?.shipmentAssignmentIds?.[0];
-  const { data: shipmentAssignDetail } = useQuery({
-    queryKey: ["shipmentAssignDetail", assignmentId],
-    queryFn: () => getShipmentAssignDetailByIdAPI(assignmentId!),
+  // 2. Fetch toàn bộ chi tiết của các assignment cùng lúc
+  const { data: shipmentAssigns, isLoading: isLoadingAssigns } = useQuery({
+    queryKey: ["shipmentAssigns", requestId],
+    queryFn: () => getShipmentAssignDetailByShelfOrderIdAPI(requestId!),
     select: (res) => res.data,
-    enabled: !!assignmentId,
+    enabled: !!requestId && isOpen,
   });
 
-  const shipmentId = requestDetail?.shipmentIds?.[0];
   const { data: shipmentDetail } = useQuery({
-    queryKey: ["shipmentDetail", shipmentId],
-    queryFn: () => getShipmentDetailByIdAPI(shipmentId!),
-    select: (res) => res.data as Shipment,
-    enabled: !!shipmentId,
+    queryKey: ["shipmentDetail", requestId],
+    queryFn: () => getShipmentDetailByShelfOrderIdAPI(requestId!),
+    select: (res) => res.data as Shipment[],
+    enabled: !!requestId && isOpen,
   });
 
   async function handleApprove() {
@@ -143,18 +148,17 @@ function UpdateRefillShelfRequestModal({
               </div>
             ) : (
               <div className="grid grid-cols-12 h-full">
-                <div className="col-span-6 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
+                <div className="col-span-7 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
                   <StoreOrderDetailSection storeOrderDetail={requestDetail} />
-                  {/* <ShipmentAssignDetailSection
-                    shipmentAssignDetail={shipmentAssignDetail}
-                  /> */}
+                  <ShipmentAssignDetailSection
+                    shipmentAssignments={shipmentAssigns ?? []}
+                  />
                   <ShipmentDetailSection shipmentDetail={shipmentDetail} />
                 </div>
 
-                <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
+                <div className="col-span-5 flex flex-col bg-slate-50/50 overflow-hidden">
                   <ShipmentShelfListComponent
-                    shipmentDetail={shipmentDetail}
-                    storeOrderDetail={requestDetail}
+                    shelfOrderDetail={requestDetail}
                   />
                 </div>
               </div>
@@ -184,7 +188,7 @@ function UpdateRefillShelfRequestModal({
                   </Button>
                 </>
               )}
-              {isApproved && !assignmentId && (
+              {isApproved && (
                 <Button
                   variant="success"
                   onClick={() => setIsOpenAssignWarehouseModal(true)}
