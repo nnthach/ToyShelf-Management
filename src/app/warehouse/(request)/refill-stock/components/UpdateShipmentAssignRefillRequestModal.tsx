@@ -28,6 +28,7 @@ import WarehouseShipmentDetailSection from "@/src/components/WarehouseShipmentMo
 import WarehouseShipmentProductList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentProductList";
 import WarehouseShipmentShelfList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentShelfList";
 import CreateShipmentShelfModal from "./CreateShipmentShelfModal";
+import WarehouseShipmentDamageList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentDamageList";
 
 type UpdateShipmentAssignRefillRequestModalProps = {
   requestId: string;
@@ -100,7 +101,11 @@ function UpdateShipmentAssignRefillRequestModal({
                   <DialogTitle className="text-xl flex items-center gap-2">
                     <Truck className="h-5 w-5 text-primary" />
                     Điều phối vận chuyển:{" "}
-                    {shipmentAssignDetail?.storeOrders[0].code}
+                    {shipmentAssignDetail?.orderType === "DAMAGE"
+                      ? shipmentAssignDetail?.damageReports[0].code
+                      : shipmentAssignDetail?.orderType === "SHELF"
+                        ? shipmentAssignDetail?.shelfOrders[0].code
+                        : shipmentAssignDetail?.storeOrders[0].code || "N/A"}
                   </DialogTitle>
                   <DialogDescription>
                     Quản lý lộ trình và xác nhận bàn giao hàng hóa
@@ -133,12 +138,9 @@ function UpdateShipmentAssignRefillRequestModal({
               <div className="grid grid-cols-12 h-full">
                 {/* CỘT TRÁI: THÔNG TIN CHI TIẾT (7 columns) */}
                 <div className="col-span-6 p-6 space-y-8 border-r overflow-y-auto custom-scrollbar">
-                  {/* Section 1: Thông tin Điều phối (Shipment Assign) */}
                   <WarehouseShipmentStoreInfo
                     shipmentAssignDetail={shipmentAssignDetail}
                   />
-
-                  {/* Section 2: Thông tin Vận chuyển (Shipment Detail) */}
                   <WarehouseShipmentDetailSection
                     shipmentDetail={shipmentDetail}
                   />
@@ -151,8 +153,13 @@ function UpdateShipmentAssignRefillRequestModal({
                       shipmentAssignDetail={shipmentAssignDetail}
                       shipmentDetail={shipmentDetail}
                     />
-                  ) : (
+                  ) : shipmentAssignDetail?.orderType === "SHELF" ? (
                     <WarehouseShipmentShelfList
+                      shipmentAssignDetail={shipmentAssignDetail}
+                      shipmentDetail={shipmentDetail}
+                    />
+                  ) : (
+                    <WarehouseShipmentDamageList
                       shipmentAssignDetail={shipmentAssignDetail}
                       shipmentDetail={shipmentDetail}
                     />
@@ -225,17 +232,18 @@ function UpdateShipmentAssignRefillRequestModal({
                     >
                       Đóng
                     </Button>
-                    {!shipmentDetail && (
-                      <Button
-                        variant="success"
-                        disabled={isLoading}
-                        onClick={() => setIsOpenCreateShipmentModal(true)}
-                        className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02] active:scale-[0.98]"
-                      >
-                        <CheckCircle2 className="mr-2 h-4 w-4" /> Tạo đơn giao
-                        hàng và xuất kho
-                      </Button>
-                    )}
+                    {!shipmentDetail &&
+                      shipmentAssignDetail.orderType !== "DAMAGE" && (
+                        <Button
+                          variant="success"
+                          disabled={isLoading}
+                          onClick={() => setIsOpenCreateShipmentModal(true)}
+                          className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                          <CheckCircle2 className="mr-2 h-4 w-4" /> Tạo đơn giao
+                          hàng và xuất kho
+                        </Button>
+                      )}
                   </>
                 )}
               </div>
@@ -244,7 +252,6 @@ function UpdateShipmentAssignRefillRequestModal({
         </DialogContent>
       </Dialog>
 
-      {/* Reject reason modal */}
       <AssignShipperModal
         requestId={requestId}
         isOpen={isOpenAssignShipperModal}
@@ -254,14 +261,14 @@ function UpdateShipmentAssignRefillRequestModal({
 
       {shipmentAssignDetail?.orderType === "STORE" ? (
         <CreateShipmentModal
-        storeOrderId={shipmentAssignDetail.storeOrders[0].id}
+          storeOrderId={shipmentAssignDetail.storeOrders[0].id}
           requestId={requestId}
           items={shipmentAssignDetail?.productItems || []}
           isOpen={isOpenCreateShipmentModal}
           onClose={() => setIsOpenCreateShipmentModal(false)}
           onSuccess={onClose}
         />
-      ) : (
+      ) : shipmentAssignDetail?.orderType === "SHELF" ? (
         <CreateShipmentShelfModal
           requestId={requestId}
           items={shipmentAssignDetail?.shelfItems || []}
@@ -269,7 +276,7 @@ function UpdateShipmentAssignRefillRequestModal({
           onClose={() => setIsOpenCreateShipmentModal(false)}
           onSuccess={onClose}
         />
-      )}
+      ) : null}
     </>
   );
 }

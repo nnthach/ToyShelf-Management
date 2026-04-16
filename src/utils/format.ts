@@ -120,3 +120,20 @@ export const formatWarehouseRoleToVN = (text: string) => {
       return "N/A";
   }
 };
+
+export const formatSourceDamageReport = (text: string): string => {
+  switch (text) {
+    case "Manufacturer":
+      return "Lỗi NSX";
+    case "StoreHandling":
+      return "Cửa hàng làm hỏng";
+    case "CustomerUsage":
+      return "Khách hàng làm hỏng";
+    case "Transportation":
+      return "Lỗi vận chuyển";
+    case "IoTSystemError":
+      return "Lỗi hệ thống IoT";
+    default:
+      return text || "Không xác định";
+  }
+};

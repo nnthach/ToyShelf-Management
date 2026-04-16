@@ -1,7 +1,7 @@
 import StatCardWithButton from "@/src/components/StatCardWithButton";
 import { getDashboardWarehouseStatCard } from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
-import { Box, Server, ShoppingCart } from "lucide-react";
+import { Box, PackageCheck, Server, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
 
@@ -22,7 +22,7 @@ function WarehouseStatCard({ warehouseId }: { warehouseId: string }) {
         value={warehouseStatCard?.totalOrders}
         change="+10"
         changePercent="+12%"
-        icon={ShoppingCart}
+        icon={PackageCheck}
         color="bg-green-100 text-green-900"
       />
       <StatCardWithButton

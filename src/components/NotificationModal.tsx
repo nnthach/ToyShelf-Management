@@ -13,6 +13,7 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDateTime } from "../utils/format";
 import { Notification } from "../types";
+import { useSidebar } from "../styles/components/ui/sidebar";
 
 type SidebarItem = {
   title: string;
@@ -26,11 +27,10 @@ function NotificationModal({ item }: { item: SidebarItem }) {
   const userId = user?.id || "";
   const queryClient = useQueryClient();
 
-  const {
-    data: notificationList = [],
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
+
+  const { data: notificationList = [] } = useQuery({
     queryKey: ["notifications", userId],
     queryFn: () => getNotificationByUserIdAPI(userId!),
     select: (res) => res.data,
@@ -57,23 +57,35 @@ function NotificationModal({ item }: { item: SidebarItem }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div
-          className="flex items-center justify-between transition-colors cursor-pointer
-              text-muted-foreground hover:bg-accent px-2 py-1"
-        >
-          <button className="flex items-center gap-2 rounded-md w-full">
-            <Icon className="w-4 h-4" />
-            <span>{item.title}</span>
-          </button>
+        <div className="relative flex items-center transition-colors cursor-pointer text-muted-foreground hover:bg-accent rounded-md group">
+          <div
+            className={`flex items-center w-full px-2 py-2 ${!isCollapsed ? "justify-between" : "justify-center"}`}
+          >
+            <div className="flex items-center gap-2">
+              <Icon className="w-4 h-4 shrink-0" />
+              {!isCollapsed && <span className="truncate">{item.title}</span>}
+            </div>
 
-          <Badge className="relative bg-green-100 text-green-700 rounded-full w-7 h-7 p-0 flex items-center justify-center">
-            <Bell className="w-4 h-4" />
-          </Badge>
-          {unreadCount > 0 && (
-            <span className="absolute top-0 right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white ring-2 ring-white">
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          )}
+            <div
+              className={`relative flex items-center justify-center rounded-full transition-colors 
+              ${!isCollapsed ? "bg-green-100 text-green-700 w-7 h-7" : "w-4 h-4 text-muted-foreground group-hover:text-primary"}`}
+            >
+              {!isCollapsed ? <Bell className="w-4 h-4" /> : null}
+
+              {unreadCount > 0 && (
+                <span
+                  className={`absolute flex items-center justify-center rounded-full bg-red-500 font-bold text-white ring-2 ring-white
+                  ${
+                    !isCollapsed
+                      ? "-top-1 -right-1 h-4 min-w-[16px] text-[10px] px-1"
+                      : "-top-2 -right-2 h-4 min-w-[16px] text-[9px] px-0.5"
+                  }`}
+                >
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </div>
+          </div>
         </div>
       </PopoverTrigger>
 

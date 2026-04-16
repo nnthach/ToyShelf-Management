@@ -6,17 +6,11 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/src/styles/components/ui/card";
-import {
-  ShoppingCart,
-  DollarSign,
-  MapPin,
-  User,
-  Badge,
-  Trophy,
-} from "lucide-react";
+import { ShoppingCart, DollarSign, MapPin, Trophy } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getDashboardTopStoreAPI } from "@/src/services/dashboard.service";
+import { useQuery } from "@tanstack/react-query";
 
 interface Store {
   id: string;
@@ -27,36 +21,15 @@ interface Store {
   totalRevenue: number;
 }
 
-// Giả lập dữ liệu
-const TOP_STORES: Store[] = [
-  {
-    id: "1",
-    name: "ToyShelf Quận 1",
-    partnerName: "Nguyễn Văn A",
-    city: "HCM",
-    totalOrders: 1200,
-    totalRevenue: 25000000,
-  },
-  {
-    id: "2",
-    name: "ToyShelf Hà Nội",
-    partnerName: "Trần Văn B",
-    city: "Hà Nội",
-    totalOrders: 980,
-    totalRevenue: 21000000,
-  },
-  {
-    id: "3",
-    name: "ToyShelf Đà Nẵng",
-    partnerName: "Lê Văn C",
-    city: "Đà Nẵng",
-    totalOrders: 870,
-    totalRevenue: 18000000,
-  },
-];
-
-const TopThreeStore = () => {
+const TopThreeStore = ({ partnerId }: { partnerId: string }) => {
   const router = useRouter();
+
+  const { data: topStores } = useQuery({
+    queryKey: ["topStores"],
+    queryFn: () => getDashboardTopStoreAPI({ partnerId }),
+    select: (res) => res.data as Store[],
+  });
+
   return (
     <Card className="border-none shadow-none bg-transparent w-full h-full py-0 gap-2">
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
@@ -67,7 +40,7 @@ const TopThreeStore = () => {
       </CardHeader>
 
       <CardContent className="p-0 flex flex-1 flex-col justify-between gap-3">
-        {TOP_STORES.map((store, index) => (
+        {topStores?.map((store, index) => (
           <div
             key={store.id}
             onClick={() => router.push(`/admin/stores/${store.id}`)}

@@ -1,6 +1,7 @@
 import {
   Calendar,
   Store,
+  Tag,
   Truck,
   User,
   UserCheck,
@@ -10,6 +11,7 @@ import ShipInfoItem from "../ShipmentComponent/ShipInfoItem";
 import { ShipmentAssign } from "@/src/types";
 import ShipTimeNode from "../ShipmentComponent/ShipTimeNode";
 import { formatDateTime } from "@/src/utils/format";
+import { formatShipmentAssignTypeText } from "@/src/utils/formatStatus";
 
 interface WarehouseShipmentStoreInfoProps {
   shipmentAssignDetail: ShipmentAssign;
@@ -24,15 +26,44 @@ function WarehouseShipmentStoreInfo({
       </div>
       {shipmentAssignDetail ? (
         <div className="grid grid-cols-2 gap-4 bg-blue-50/30 p-4 rounded-xl border border-blue-100">
+          <div className="col-span-2">
+            <ShipInfoItem
+              label="Loại đơn"
+              value={formatShipmentAssignTypeText(
+                shipmentAssignDetail.orderType,
+              )}
+              icon={<Tag className="h-3 w-3" />}
+            />
+          </div>
+
           <ShipInfoItem
-            label="Quản trị viên"
+            label={
+              shipmentAssignDetail?.orderType === "DAMAGE"
+                ? "Cửa hàng"
+                : "Cửa hàng nhận"
+            }
+            value={shipmentAssignDetail.storeLocationName}
+            icon={<Store className="h-3 w-3" />}
+          />
+          <ShipInfoItem
+            label={
+              shipmentAssignDetail?.orderType === "DAMAGE"
+                ? "Kho thực hiện"
+                : "Kho xuất hàng"
+            }
+            value={shipmentAssignDetail.warehouseLocationName}
+            icon={<Warehouse className="h-3 w-3" />}
+          />
+
+          <ShipInfoItem
+            label="Quản trị viên duyệt"
             value={shipmentAssignDetail.createdByName}
             icon={<User className="h-3 w-3" />}
           />
           <ShipInfoItem
-            label="Kho xuất hàng"
-            value={shipmentAssignDetail.warehouseLocationName}
-            icon={<Warehouse className="h-3 w-3" />}
+            label="Ngày tạo"
+            value={formatDateTime(shipmentAssignDetail.createdAt).full}
+            icon={<Calendar className="h-3 w-3" />}
           />
           <ShipInfoItem
             label="Người điều phối"
@@ -43,16 +74,6 @@ function WarehouseShipmentStoreInfo({
             label="Nhân viên giao hàng"
             value={shipmentAssignDetail.shipperName}
             icon={<Truck className="h-3 w-3" />}
-          />
-          <ShipInfoItem
-            label="Cửa hàng nhận"
-            value={shipmentAssignDetail.storeLocationName}
-            icon={<Store className="h-3 w-3" />}
-          />
-          <ShipInfoItem
-            label="Ngày tạo"
-            value={formatDateTime(shipmentAssignDetail.createdAt).full}
-            icon={<Calendar className="h-3 w-3" />}
           />
         </div>
       ) : (

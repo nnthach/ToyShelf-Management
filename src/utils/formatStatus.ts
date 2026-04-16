@@ -335,6 +335,8 @@ export const formatShipmentAssignTypeText = (status: string) => {
       return "Giao sản phẩm";
     case "SHELF":
       return "Giao kệ";
+    case "DAMAGE":
+      return "Thu hồi";
     default:
       return "N/A";
   }
@@ -346,6 +348,8 @@ export const formatShipmentAssignTypeColor = (status: string) => {
       return "bg-indigo-100 text-indigo-700 font-bold border border-indigo-200 px-3 py-1 rounded-2xl shadow-sm";
     case "SHELF":
       return "bg-orange-100 text-orange-700 font-bold border border-orange-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "DAMAGE":
+      return "bg-rose-100 text-rose-700 font-bold border border-rose-200 px-3 py-1 rounded-2xl shadow-sm";
     default:
       return "bg-slate-100 text-slate-600 px-3 py-1 rounded-2xl";
   }

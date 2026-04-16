@@ -40,10 +40,8 @@ export default function PartnerAdminDashboard() {
         <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
           <TopThreeProduct />
         </div>
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
-          <h1>Dashboard</h1>
-        </div>
-        <div className="bg-background rounded-lg col-span-1 md:col-span-2 2xl:col-span-2 p-2 min-h-[50vh] w-full border border-gray-100 shadow-sm">
+
+        <div className="bg-background rounded-lg col-span-3 md:col-span-3 2xl:col-span-3 p-2 min-h-[50vh] w-full border border-gray-100 shadow-sm">
           <StoreMap />
         </div>
       </div>

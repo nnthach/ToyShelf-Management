@@ -11,61 +11,33 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/styles/components/ui/card";
+import { getDashboardTopSellingAPI } from "@/src/services/dashboard.service";
+import { useQuery } from "@tanstack/react-query";
 
 interface Product {
   id: string;
-  name: string;
+  productName: string;
   categoryName: string;
   brand: string;
-  SKU: string;
+  sku: string;
   colorName: string;
   price: number;
   imageUrl: string;
   totalSold: number;
 }
 
-// Dữ liệu giả lập theo Interface Product
-const TOP_PRODUCTS: Product[] = [
-  {
-    id: "1",
-    name: "Luffy Gear 5 Special Edition",
-    categoryName: "Mô hình",
-    brand: "Bandai",
-    SKU: "OP-LFG5-01",
-    colorName: "Trắng chân thật",
-    price: 1250000,
-    imageUrl:
-      "https://res.cloudinary.com/dcbkhfbqs/image/upload/v1774937890/toyscabin/product/images/a7i3lwkuyf8qrhxgw79x.webp",
-    totalSold: 1200,
-  },
-  {
-    id: "2",
-    name: "Zoro Wano Kuni",
-    categoryName: "Mô hình",
-    brand: "Banpresto",
-    SKU: "OP-ZR-02",
-    colorName: "Xanh lá",
-    price: 850000,
-    imageUrl:
-      "https://res.cloudinary.com/dcbkhfbqs/image/upload/v1774937890/toyscabin/product/images/a7i3lwkuyf8qrhxgw79x.webp",
-    totalSold: 980,
-  },
-  {
-    id: "3",
-    name: "Nami Onigashima",
-    categoryName: "Mô hình",
-    brand: "Megahouse",
-    SKU: "OP-NM-03",
-    colorName: "Cam rực rỡ",
-    price: 2100000,
-    imageUrl:
-      "https://res.cloudinary.com/dcbkhfbqs/image/upload/v1774937890/toyscabin/product/images/a7i3lwkuyf8qrhxgw79x.webp",
-    totalSold: 870,
-  },
-];
-
-const TopThreeProduct = () => {
+const TopThreeProduct = ({ partnerId }: { partnerId: string }) => {
   const { openById } = useProductDetailSheet();
+
+  const {
+    data: topSelling,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["topSelling"],
+    queryFn: () => getDashboardTopSellingAPI({ partnerId }),
+    select: (res) => res.data as Product[],
+  });
   return (
     <Card className="border-none shadow-none bg-transparent w-full h-full py-0 gap-2">
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
@@ -76,7 +48,7 @@ const TopThreeProduct = () => {
       </CardHeader>
 
       <CardContent className="p-0 flex flex-1 flex-col gap-3">
-        {TOP_PRODUCTS.map((product, index) => (
+        {topSelling?.map((product, index) => (
           <div
             key={product.id}
             onClick={() => openById(product.id)}
@@ -98,7 +70,7 @@ const TopThreeProduct = () => {
               <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border bg-white shadow-sm">
                 <Image
                   src={product.imageUrl || "/images/placeholder.png"}
-                  alt={product.name}
+                  alt={product.productName}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -112,10 +84,10 @@ const TopThreeProduct = () => {
               {/* Thông tin phải */}
               <div className="flex-1 min-w-0 flex flex-col justify-center">
                 <h4 className="text-[14px] font-bold text-gray-900 line-clamp-1 leading-tight group-hover:text-blue-600 transition-colors">
-                  {product.name}
+                  {product.productName}
                 </h4>
                 <p className="text-[10px] font-mono font-medium text-slate-400 mt-0.5 uppercase">
-                  SKU: {product.SKU}
+                  SKU: {product.sku}
                 </p>
                 <div className="flex items-center gap-1.5 mt-1.5">
                   <span className="px-1.5 py-0.5 rounded bg-white border border-gray-100 text-[9px] font-bold text-gray-500 uppercase">

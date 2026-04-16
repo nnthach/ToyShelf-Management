@@ -523,6 +523,18 @@ export interface ShipmentAssign {
   respondedAt: string;
   productItems: RefillRequestProductColor[];
   shelfItems: RefillShelfItem[];
+  damageReturnItems: ShipmentDamageItem[];
+}
+
+export interface ShipmentDamageItem {
+  damageReportId: string;
+  damageCode: string;
+  damageType: string;
+  source: string;
+  quantity: number;
+  targetName: string;
+  description: string;
+  imageUrl: string;
 }
 
 export interface Shipment {

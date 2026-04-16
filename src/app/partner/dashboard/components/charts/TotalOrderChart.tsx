@@ -7,7 +7,7 @@ import { getDashboardPartnerChart } from "@/src/services/dashboard.service";
 import { ChartItem } from "@/src/types";
 import { ViewType } from "@/src/types/SubType";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   XAxis,
   YAxis,
@@ -17,55 +17,6 @@ import {
   Area,
   AreaChart,
 } from "recharts";
-
-interface OrderData {
-  label: string;
-  orders: number;
-}
-
-interface DataSources {
-  week: OrderData[];
-  month: OrderData[];
-  year: OrderData[];
-}
-
-interface RevenueParams {
-  type: ViewType;
-  month?: number;
-  year?: number;
-}
-
-const DATA_SOURCES: DataSources = {
-  week: [
-    { label: "Thứ 2", orders: 12 },
-    { label: "Thứ 3", orders: 18 },
-    { label: "Thứ 4", orders: 10 },
-    { label: "Thứ 5", orders: 25 },
-    { label: "Thứ 6", orders: 20 },
-    { label: "Thứ 7", orders: 35 },
-    { label: "CN", orders: 40 },
-  ],
-  month: [
-    { label: "T1", orders: 120 },
-    { label: "T2", orders: 98 },
-    { label: "T3", orders: 150 },
-    { label: "T4", orders: 130 },
-    { label: "T5", orders: 180 },
-    { label: "T6", orders: 170 },
-    { label: "T7", orders: 220 },
-    { label: "T8", orders: 200 },
-    { label: "T9", orders: 260 },
-    { label: "T10", orders: 240 },
-    { label: "T11", orders: 300 },
-    { label: "T12", orders: 350 },
-  ],
-  year: [
-    { label: "2021", orders: 1200 },
-    { label: "2022", orders: 1800 },
-    { label: "2023", orders: 2400 },
-    { label: "2024", orders: 900 },
-  ],
-};
 
 const TotalOrderChart = () => {
   const { partner } = useAuth();

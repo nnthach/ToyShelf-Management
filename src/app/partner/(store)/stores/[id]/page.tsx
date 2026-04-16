@@ -70,7 +70,7 @@ export default function PartnerStoreDetailPage() {
           <TotalOrderChart storeId={id} />
         </div>
         <div className="bg-background p-4 rounded-lg shadow-sm border border-gray-100">
-          <TopThreeProduct />
+          <TopThreeProduct storeId={id} />
         </div>
       </div>
     </div>

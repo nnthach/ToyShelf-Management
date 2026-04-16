@@ -2,7 +2,10 @@
 
 import ChartFilter from "@/src/components/ChartFilter";
 import { useDebounce } from "@/src/hooks/useDebounce";
+import { getDashboardPartnerChart } from "@/src/services/dashboard.service";
+import { ChartItem } from "@/src/types";
 import { ViewType } from "@/src/types/SubType";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import {
   Area,
@@ -63,9 +66,7 @@ const DATA_SOURCES: DataSources = {
   ],
 };
 
-const TotalRevenueChart = ({ isAnimationActive = true }) => {
-  const [timeFrame, setTimeFrame] = useState<keyof DataSources>("month");
-
+const TotalRevenueChart = ({ partnerId }: { partnerId: string }) => {
   const [filters, setFilters] = useState({
     viewType: "month" as ViewType,
     month: new Date().getMonth() + 1,
@@ -74,29 +75,25 @@ const TotalRevenueChart = ({ isAnimationActive = true }) => {
 
   const debouncedFilters = useDebounce(filters, 1000);
 
-  const totalAmount = DATA_SOURCES[timeFrame].reduce(
-    (acc, curr) => acc + curr.revenue,
+  const queryParams = {
+    viewType: debouncedFilters.viewType,
+    year: debouncedFilters.year,
+    ...(debouncedFilters.viewType === "month" && {
+      month: debouncedFilters.month,
+    }),
+  };
+
+  const { data: revenueChart = [], isLoading } = useQuery({
+    queryKey: ["revenueChart", queryParams],
+    queryFn: () => getDashboardPartnerChart(queryParams, partnerId),
+    select: (res) => res.data,
+    enabled: !!partnerId,
+  });
+
+  const totalAmount = revenueChart.reduce(
+    (acc: number, curr: { totalRevenue: number }) => acc + curr.totalRevenue,
     0,
   );
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { viewType, month, year } = debouncedFilters;
-
-      // Build params động
-      const params: RevenueParams = { type: viewType };
-      if (viewType === "month") {
-        params.month = month;
-        params.year = year;
-      } else if (viewType === "year") {
-        params.year = year;
-      }
-
-      console.log("API Call:", params);
-    };
-
-    fetchData();
-  }, [debouncedFilters]);
   return (
     <div className="flex flex-col h-full w-full bg-white">
       {/* HEADER: Tên bên trái - Filter bên phải */}
@@ -104,11 +101,11 @@ const TotalRevenueChart = ({ isAnimationActive = true }) => {
         <div>
           <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">
             Tổng doanh thu theo{" "}
-            {timeFrame === "week"
+            {filters.viewType === "week"
               ? "tuần này"
-              : timeFrame === "month"
-                ? "Tháng"
-                : "năm"}
+              : filters.viewType === "month"
+                ? "tháng này"
+                : "năm nay"}
           </h3>
           <p className="text-3xl font-bold text-gray-900 mt-1">
             {totalAmount.toLocaleString()}
@@ -123,18 +120,16 @@ const TotalRevenueChart = ({ isAnimationActive = true }) => {
       <div className="flex-1 min-h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={DATA_SOURCES[timeFrame]}
+            data={revenueChart}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
             <defs>
-              {/* Gradient xanh theo tone màu của ToyShelf */}
               <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#1E88E5" stopOpacity={0.3} />
                 <stop offset="95%" stopColor="#1E88E5" stopOpacity={0} />
               </linearGradient>
             </defs>
 
-            {/* Chỉ kẻ grid ngang cho thoáng mắt */}
             <CartesianGrid
               strokeDasharray="3 3"
               vertical={false}
@@ -142,18 +137,26 @@ const TotalRevenueChart = ({ isAnimationActive = true }) => {
             />
 
             <XAxis
-              dataKey="label" // ĐỔI TỪ "month" THÀNH "label" ĐỂ KHỚP VỚI DATA
+              dataKey="dateLabel"
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#9CA3AF", fontSize: 12 }}
               dy={10}
+              ticks={
+                filters.viewType === "month"
+                  ? revenueChart
+                      .filter((_: ChartItem, i: number) =>
+                        [0, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29].includes(i),
+                      )
+                      .map((d: ChartItem) => d.dateLabel)
+                  : undefined
+              }
             />
 
             <YAxis
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#9CA3AF", fontSize: 12 }}
-              // Format lại để hiển thị đơn vị tiền tệ ngắn gọn (vd: 100k, 1M)
               tickFormatter={(value) => {
                 if (value >= 1000000) return `${value / 1000000}M`;
                 if (value >= 1000) return `${value / 1000}k`;
@@ -167,7 +170,6 @@ const TotalRevenueChart = ({ isAnimationActive = true }) => {
                 border: "none",
                 boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
               }}
-              // Format lại Tooltip để hiển thị đúng số tiền bạn nhập trong DATA_SOURCES
               formatter={(value: number) => [
                 `${value.toLocaleString()}đ`,
                 "Doanh thu",
@@ -175,13 +177,15 @@ const TotalRevenueChart = ({ isAnimationActive = true }) => {
             />
 
             <Area
-              key={timeFrame} // Key giúp trigger animation khi đổi data
+              key={filters.viewType}
               type="monotone"
-              dataKey="revenue"
+              dataKey="totalRevenue"
               stroke="#1E88E5"
               strokeWidth={3}
               fill="url(#colorRevenue)"
-              isAnimationActive={isAnimationActive}
+              isAnimationActive={true}
+              dot={{ fill: "#1E88E5", r: 4, strokeWidth: 0 }}
+              activeDot={{ r: 6, fill: "#1E88E5", strokeWidth: 0 }}
             />
           </AreaChart>
         </ResponsiveContainer>

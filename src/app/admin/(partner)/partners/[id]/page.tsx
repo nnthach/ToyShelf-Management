@@ -64,17 +64,17 @@ export default function ViewPartnerDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
         {/*Chart total revenue */}
         <div className="bg-background rounded-lg col-span-1 md:col-span-2 2xl:col-span-4 min-h-[500px] p-4 border border-gray-100 shadow-sm">
-          <TotalRevenueChart />
+          <TotalRevenueChart partnerId={partnerId} />
         </div>
         <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-3 min-h-[450px] shadow-sm border border-gray-100">
-          <TotalOrderChart />
+          <TotalOrderChart partnerId={partnerId} />
         </div>
         <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-1 shadow-sm border border-gray-100">
-          <TopThreeStore />
+          <TopThreeStore partnerId={partnerId} />
         </div>
 
         <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
-          <TopThreeProduct />
+          <TopThreeProduct partnerId={partnerId} />
         </div>
 
         <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
