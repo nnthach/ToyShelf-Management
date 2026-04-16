@@ -33,6 +33,7 @@ import Link from "next/link";
 import { useAppSelector } from "@/src/redux/hooks";
 import { usePathname } from "next/navigation";
 import { cn } from "@/src/styles/lib/utils";
+import NotificationModal from "../NotificationModal";
 
 const AdminSidebar = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -77,6 +78,14 @@ const AdminSidebar = () => {
               <SidebarMenu>
                 {group.items.map((item) => {
                   const isActive = pathname === item.url;
+
+                  if (item.action === "notification") {
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <NotificationModal item={item} />
+                      </SidebarMenuItem>
+                    );
+                  }
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
@@ -94,12 +103,6 @@ const AdminSidebar = () => {
                           <span>{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
-
-                      {item.badge && (
-                        <SidebarMenuBadge className="bg-green-100 text-green-700">
-                          <Bell className="w-4 h-4" />
-                        </SidebarMenuBadge>
-                      )}
                     </SidebarMenuItem>
                   );
                 })}

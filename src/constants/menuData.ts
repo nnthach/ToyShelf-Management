@@ -29,7 +29,13 @@ export const AdminSidebarGroups = [
     label: "Ứng dụng",
     items: [
       { title: "Tổng quan", url: "/admin/dashboard", icon: LayoutDashboard },
-      { title: "Thông báo", url: "#", icon: Bell, badge: true },
+      {
+        title: "Thông báo",
+        url: "#",
+        icon: Bell,
+        badge: true,
+        action: "notification",
+      },
     ],
   },
   {
