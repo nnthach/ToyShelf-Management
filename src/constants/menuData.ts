@@ -21,9 +21,6 @@ import {
   Ticket,
   Box,
   ShoppingCart,
-  Package,
-  Archive,
-  BarChart3,
 } from "lucide-react";
 
 // Admin
@@ -151,12 +148,6 @@ export const AdminSidebarNested = [
         title: "Trả hàng",
         url: "/admin/return-request",
         icon: RotateCcw,
-      },
-
-      {
-        title: "Thu hồi tủ",
-        url: "/admin/return-shelf",
-        icon: ArchiveRestore,
       },
     ],
   },
@@ -380,12 +371,6 @@ export const StoreManagerSidebarGroups = [
         title: "Trả hàng",
         url: "/manager/return-request",
         icon: RotateCcw,
-      },
-
-      {
-        title: "Thu hồi tủ",
-        url: "/manager/return-shelf",
-        icon: ArchiveRestore,
       },
     ],
   },

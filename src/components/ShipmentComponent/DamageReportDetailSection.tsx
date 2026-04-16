@@ -1,15 +1,23 @@
-import { RefillRequest } from "@/src/types";
-import { FileText, MapPin, Notebook, Store, User } from "lucide-react";
+import { DamageReport, RefillRequest } from "@/src/types";
+import {
+  FileText,
+  Layers,
+  MapPin,
+  Notebook,
+  Store,
+  Tag,
+  User,
+} from "lucide-react";
 import ShipInfoItem from "./ShipInfoItem";
 import { memo } from "react";
 
-interface StoreOrderDetailSectionProps {
-  storeOrderDetail: RefillRequest | undefined;
+interface DamageReportDetailSectionProps {
+  damageReportDetail: DamageReport | undefined;
 }
 
-function StoreOrderDetailSection({
-  storeOrderDetail,
-}: StoreOrderDetailSectionProps) {
+function DamageReportDetailSection({
+  damageReportDetail,
+}: DamageReportDetailSectionProps) {
   return (
     <section>
       <div className="flex items-center gap-2 mb-4 text-primary font-bold uppercase text-xs tracking-wider">
@@ -18,48 +26,64 @@ function StoreOrderDetailSection({
       <div className="grid grid-cols-2 gap-4 bg-muted/20 p-4 rounded-xl border border-dashed">
         <ShipInfoItem
           label="Cửa hàng"
-          value={storeOrderDetail?.storeName}
+          value={damageReportDetail?.storeName}
           icon={<Store className="h-3 w-3" />}
         />
         <ShipInfoItem
           label="Người yêu cầu"
-          value={storeOrderDetail?.requestName}
+          value={damageReportDetail?.reportedByName}
           icon={<User className="h-3 w-3" />}
         />
+
         <div className="col-span-2">
           <ShipInfoItem
             label="Địa chỉ nhận hàng"
-            value={storeOrderDetail?.storeAddress}
+            value={damageReportDetail?.storeAddress}
             icon={<MapPin className="h-3 w-3" />}
           />
         </div>
-        {storeOrderDetail?.status === "Rejected" ? (
+        <ShipInfoItem
+          label="Loại đơn"
+          value={damageReportDetail?.isWarrantyClaim ? "Trả hàng" : "Bảo hành"}
+          icon={<Tag className="h-3 w-3" />}
+        />
+        <ShipInfoItem
+          label="Loại hàng"
+          value={
+            damageReportDetail?.type === "Product"
+              ? "Sản phẩm"
+              : damageReportDetail?.type === "Shelf"
+                ? "Kệ"
+                : "Hỗn hợp"
+          }
+          icon={<Layers className="h-3 w-3" />}
+        />
+        {damageReportDetail?.status === "Rejected" ? (
           <>
             <ShipInfoItem
               label="Quản trị viên từ chối"
-              value={storeOrderDetail?.rejectName}
+              value={damageReportDetail?.reviewedByName}
               icon={<User className="h-3 w-3" />}
             />
             <ShipInfoItem
               label="Ghi chú"
-              value={storeOrderDetail?.adminNote}
+              value={damageReportDetail?.adminNote}
               icon={<Notebook className="h-3 w-3" />}
             />
           </>
         ) : (
           <ShipInfoItem
             label="Quản trị viên chấp nhận"
-            value={storeOrderDetail?.approveName}
+            value={damageReportDetail?.reviewedByName}
             icon={<User className="h-3 w-3" />}
           />
         )}
-        {storeOrderDetail?.note && (
+        {damageReportDetail?.description && (
           <div className="col-span-2">
             <ShipInfoItem
               label="Ghi chú từ cửa hàng"
-              value={storeOrderDetail?.note}
+              value={damageReportDetail?.description}
               icon={<FileText className="h-3 w-3" />}
-              isNote
             />
           </div>
         )}
@@ -68,4 +92,4 @@ function StoreOrderDetailSection({
   );
 }
 
-export default memo(StoreOrderDetailSection);
+export default memo(DamageReportDetailSection);

@@ -106,6 +106,16 @@ function ShipmentProductListComponent({
                     </span>
                   </div>
 
+                  {/* Điều phối */}
+                  <div className="flex flex-col items-center min-w-[45px] border-l border-slate-100 pl-4">
+                    <span className="text-[8px] text-violet-400 uppercase font-bold tracking-tighter mb-0.5">
+                      Điều phối
+                    </span>
+                    <span className="text-sm font-semibold text-slate-500">
+                      {item.fulfilledQuantity || 0}
+                    </span>
+                  </div>
+
                   {/* Kho giao */}
                   <div className="flex flex-col items-center min-w-[45px] border-l border-slate-100 pl-4">
                     <span className="text-[8px] text-blue-500 uppercase font-bold tracking-tighter mb-0.5">

@@ -23,6 +23,7 @@ import {
 } from "@/src/types";
 import {
   AlertCircle,
+  FileText,
   Layers,
   MapPin,
   Package,
@@ -175,7 +176,7 @@ function ViewRefillShelfRequestModalDetail({
                       <ShipInfoItem
                         label="Ghi chú từ cửa hàng"
                         value={storeOrderShelfDetail?.note}
-                        icon={<User className="h-3 w-3" />}
+                        icon={<FileText className="h-3 w-3" />}
                         isNote
                       />
                     )}

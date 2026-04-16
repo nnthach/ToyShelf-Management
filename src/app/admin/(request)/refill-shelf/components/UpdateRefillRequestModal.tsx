@@ -145,9 +145,9 @@ function UpdateRefillShelfRequestModal({
               <div className="grid grid-cols-12 h-full">
                 <div className="col-span-6 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
                   <StoreOrderDetailSection storeOrderDetail={requestDetail} />
-                  <ShipmentAssignDetailSection
+                  {/* <ShipmentAssignDetailSection
                     shipmentAssignDetail={shipmentAssignDetail}
-                  />
+                  /> */}
                   <ShipmentDetailSection shipmentDetail={shipmentDetail} />
                 </div>
 

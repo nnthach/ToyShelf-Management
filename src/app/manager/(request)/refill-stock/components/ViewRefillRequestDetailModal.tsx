@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
-import { formatColorNameToVN } from "@/src/utils/format";
+import { formatColorNameToVN, formatDateTime } from "@/src/utils/format";
 import Image from "next/image";
 
 type ViewRefillRequestModalDetailProps = {
@@ -53,14 +53,6 @@ function ViewRefillRequestModalDetail({
     select: (res) => res.data,
     enabled: !!requestId,
   });
-
-  // const assignmentId = storeOrderDetail?.shipmentAssignmentIds?.[0];
-  // const { data: shipmentAssignDetail } = useQuery({
-  //   queryKey: ["shipmentAssignDetail", assignmentId],
-  //   queryFn: () => getShipmentAssignDetailByIdAPI(assignmentId!),
-  //   select: (res) => res.data,
-  //   enabled: !!assignmentId,
-  // });
 
   const shipmentId = storeOrderDetail?.shipmentIds?.[0];
   const { data: shipmentDetail } = useQuery({
@@ -164,6 +156,40 @@ function ViewRefillRequestModalDetail({
                         icon={<MapPin className="h-3.5 w-3.5" />}
                       />
                     </div>
+
+                    {storeOrderDetail?.status === "Rejected" ? (
+                      <>
+                        <ShipInfoItem
+                          label="Người từ chối"
+                          value={storeOrderDetail?.rejectName}
+                          icon={<User className="h-3.5 w-3.5" />}
+                        />
+                        <ShipInfoItem
+                          label="Thời gian từ chối"
+                          value={
+                            formatDateTime(storeOrderDetail?.rejectedAt).full ||
+                            ""
+                          }
+                          icon={<User className="h-3.5 w-3.5" />}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <ShipInfoItem
+                          label="Người duyệt đơn"
+                          value={storeOrderDetail?.approveName}
+                          icon={<User className="h-3.5 w-3.5" />}
+                        />
+                        <ShipInfoItem
+                          label="Thời gian duyệt"
+                          value={
+                            formatDateTime(storeOrderDetail?.approvedAt).full ||
+                            ""
+                          }
+                          icon={<User className="h-3.5 w-3.5" />}
+                        />
+                      </>
+                    )}
                   </div>
                 </section>
 

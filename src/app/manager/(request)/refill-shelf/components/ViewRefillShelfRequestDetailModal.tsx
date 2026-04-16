@@ -18,12 +18,10 @@ import {
 import { useState } from "react";
 import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
 import ConfirmReceiveModal from "./ConfirmReceiveModal";
-import {
-  RefillShelfRequestItem,
-  Shipment,
-} from "@/src/types";
+import { RefillShelfRequestItem, Shipment } from "@/src/types";
 import {
   AlertCircle,
+  FileText,
   Layers,
   MapPin,
   Package,
@@ -176,7 +174,7 @@ function ViewRefillShelfRequestModalDetail({
                       <ShipInfoItem
                         label="Ghi chú từ cửa hàng"
                         value={storeOrderShelfDetail?.note}
-                        icon={<User className="h-3 w-3" />}
+                        icon={<FileText className="h-3 w-3" />}
                         isNote
                       />
                     )}
@@ -396,12 +394,12 @@ function ViewRefillShelfRequestModalDetail({
               </Button>
 
               {/* {shipmentDetail && shipmentDetail?.status === "Delivered" && ( */}
-                <Button
-                  variant="success"
-                  onClick={() => setIsOpenConfirmReceive(true)}
-                >
-                  Xác nhận đã nhận hàng
-                </Button>
+              <Button
+                variant="success"
+                onClick={() => setIsOpenConfirmReceive(true)}
+              >
+                Xác nhận đã nhận hàng
+              </Button>
               {/* )} */}
             </DialogFooter>
           </div>

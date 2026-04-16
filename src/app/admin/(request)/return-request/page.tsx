@@ -6,20 +6,18 @@ import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
 import { DamageReport } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { getReturnRequestColumns } from "./columns";
+import { getStoreReturnRequestColumn } from "./columns";
 import { useState } from "react";
-import CreateReturnModal from "./components/CreateReturnModal";
 import { getAllDamageReportAPI } from "@/src/services/damage-report.service";
-import ViewReturnRequestModalDetail from "./components/ViewReturnRequestDetailModal";
+import UpdateReturnRequestModal from "./components/UpdateReturnRequestModal";
 
-export default function ManagerReturnRequestManage() {
+export default function AdminReturnRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
     order: "",
     search: "",
-    status: "",
   });
 
   const {
@@ -36,21 +34,18 @@ export default function ManagerReturnRequestManage() {
     setSelectedRequestId(requestId);
   };
 
-  const columns = getReturnRequestColumns(handleEdit);
+  const columns = getStoreReturnRequestColumn(handleEdit);
 
   return (
     <>
       {/*Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold dark:text-foreground">
-            Quản lý trả hàng
-          </h1>
-          <p className="text-gray-500 dark:text-gray-200">
-            Danh sách tất cả các đơn trả hàng của cửa hàng
-          </p>
-        </div>
-        <CreateReturnModal />
+      <div className="">
+        <h1 className="text-2xl font-bold dark:text-foreground">
+          Quản lý trả hàng từ cửa hàng
+        </h1>
+        <p className="text-gray-500 dark:text-gray-200">
+          Danh sách tất cả các đơn trả hàng trong hệ thống
+        </p>
       </div>
 
       {/*Table */}
@@ -80,7 +75,7 @@ export default function ManagerReturnRequestManage() {
       </div>
 
       {selectedRequestId && (
-        <ViewReturnRequestModalDetail
+        <UpdateReturnRequestModal
           requestId={selectedRequestId}
           isOpen={!!selectedRequestId}
           onClose={() => {

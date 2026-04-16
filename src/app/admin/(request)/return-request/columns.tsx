@@ -1,6 +1,6 @@
 "use client";
 
-import { DamageReport, RefillRequest } from "@/src/types";
+import { DamageReport } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
 import {
   formatStoreOrderRefillRequestStatusColor,
@@ -12,7 +12,7 @@ import { Eye } from "lucide-react";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const getReturnRequestColumns = (
+export const getStoreReturnRequestColumn = (
   onEdit: (requestId: string) => void,
 ): ColumnDef<DamageReport>[] => [
   {
@@ -22,6 +22,11 @@ export const getReturnRequestColumns = (
       <span className="font-bold text-gray-900">{row.getValue("code")}</span>
     ),
   },
+  {
+    accessorKey: "storeName",
+    header: "Cửa hàng yêu cầu",
+  },
+
   {
     accessorKey: "type",
     header: "Loại hàng",
@@ -71,33 +76,13 @@ export const getReturnRequestColumns = (
     },
   },
   {
-    accessorKey: "reviewedByName",
-    header: "Người duyệt đơn",
-    cell: ({ row }) => {
-      const name = row.getValue("reviewedByName") as string;
-
-      const isUnknown = !name || name.toLowerCase() === "unknown";
-
-      return (
-        <span>
-          {isUnknown ? (
-            <span className="text-gray-400 font-medium">Chưa có</span>
-          ) : (
-            name
-          )}
-        </span>
-      );
-    },
-  },
-  {
     accessorKey: "status",
-    header: "Trạng thái đơn",
+    header: "Trạng thái",
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
+
       return (
-        <span
-          className={`${formatStoreOrderRefillRequestStatusColor(status)} font-medium`}
-        >
+        <span className={`${formatStoreOrderRefillRequestStatusColor(status)}`}>
           {formatStoreOrderRefillRequestStatusText(status)}
         </span>
       );
@@ -108,9 +93,8 @@ export const getReturnRequestColumns = (
     header: "Ngày tạo",
     cell: ({ row }) => {
       const createdAt = row.getValue("createdAt") as string;
-      return (
-        <span className="text-gray-600">{formatDateTime(createdAt).full}</span>
-      );
+
+      return <span>{formatDateTime(createdAt).full}</span>;
     },
   },
   {
@@ -120,13 +104,13 @@ export const getReturnRequestColumns = (
       const storeRefillRequest = row.original;
       return (
         <div className="flex items-center gap-3">
-          <button
+          <span
             onClick={() => onEdit(storeRefillRequest.id)}
             title="Chi tiết"
-            className="p-1 hover:bg-gray-100 rounded-full transition-colors text-blue-500"
+            className="cursor-pointer text-blue-400"
           >
             <Eye size={20} />
-          </button>
+          </span>
         </div>
       );
     },

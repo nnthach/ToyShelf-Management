@@ -1,4 +1,4 @@
-import { optional, z } from "zod";
+import {  z } from "zod";
 
 export const productSchema = z.object({
   productCategoryId: z.string().min(1, "Danh mục sản phẩm là bắt buộc"),

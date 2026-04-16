@@ -10,8 +10,8 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Send, Warehouse, Box, Package, Pencil } from "lucide-react";
-import { memo, useState, useMemo, useEffect } from "react";
+import { Send, Warehouse, Package, Pencil } from "lucide-react";
+import { memo, useState, useMemo } from "react";
 import { createShipmentAssignWarehouseAPI } from "@/src/services/shipment-assignment.service";
 import { getStoreOrderAvailableWarehouseAPI } from "@/src/services/refill.service";
 import { RefillRequestProductColor } from "@/src/types";
@@ -88,6 +88,8 @@ function AssignWarehouseModal({
       queryClient.invalidateQueries({ queryKey: ["shipmentAssignDetail"] });
 
       toast.success("Điều phối kho thành công");
+      setSelectedWarehouseId(null);
+      setAssignQuantities({});
       onClose();
     } catch (error) {
       toast.error(getErrorMessage(error, "Điều phối kho thất bại"));
@@ -97,8 +99,17 @@ function AssignWarehouseModal({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="sm:max-w-[1000px] h-[90vh] flex flex-col p-0 overflow-hidden">
+    <Dialog
+      open={isOpen}
+      onOpenChange={(v) => {
+        if (!v) {
+          setSelectedWarehouseId(null);
+          setAssignQuantities({});
+          onClose();
+        }
+      }}
+    >
+      <DialogContent className="sm:max-w-[1200px] h-[90vh] flex flex-col p-0 overflow-hidden">
         <DialogHeader className="p-6 pb-2">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
@@ -116,9 +127,9 @@ function AssignWarehouseModal({
         </DialogHeader>
 
         {/*Main content */}
-        <div className="grid grid-cols-2 flex-1 min-h-0 overflow-hidden">
+        <div className="grid grid-cols-5 flex-1 min-h-0 overflow-hidden">
           {/*thông tin kho */}
-          <div className="flex flex-col gap-4 min-h-0 px-6 border-r border-slate-100">
+          <div className="flex flex-col col-span-2 gap-4 min-h-0 px-6 border-r border-slate-100">
             <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white shadow-md shadow-blue-200">
                 <Warehouse className="h-4 w-4" />
@@ -149,18 +160,8 @@ function AssignWarehouseModal({
                   )}
                 >
                   <div className="flex items-center gap-3">
-                    <div
-                      className={cn(
-                        "p-2 rounded-lg",
-                        selectedWarehouseId === wh.warehouseLocationId
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-100 text-gray-500",
-                      )}
-                    >
-                      <Warehouse className="h-5 w-5" />
-                    </div>
                     <div>
-                      <p className="font-bold text-gray-900">
+                      <p className="font-bold text-sm text-gray-900">
                         {wh.warehouseName}
                       </p>
                       <p className="text-xs text-gray-500 font-mono">
@@ -186,7 +187,7 @@ function AssignWarehouseModal({
           </div>
 
           {/* RIGHT PANEL */}
-          <div className="flex flex-col gap-4 overflow-y-auto h-[470px] px-6">
+          <div className="flex flex-col col-span-3 gap-4 overflow-y-auto h-[470px] px-6">
             {/* Header */}
             <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600 text-white">
@@ -212,95 +213,116 @@ function AssignWarehouseModal({
             ) : (
               <>
                 <div className="rounded-xl border border-gray-100 overflow-y-auto custom-scrollbar bg-white shadow-sm">
-                  <table className="w-full text-sm text-left">
-                    <thead className="bg-gray-50 text-gray-600 border-b">
-                      <tr>
-                        <th className="px-4 py-2 font-medium">Sản phẩm</th>
-                        <th className="px-4 py-2 font-medium text-center">
-                          Sẵn
-                        </th>
-                        <th className="px-4 py-2 font-medium text-right">
-                          SL giao
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50">
-                      {selectedWarehouse.items.map(
-                        (item: RefillRequestProductColor) => (
-                          <tr
-                            key={item.productColorId}
-                            className="hover:bg-violet-50/30 transition-colors"
-                          >
-                            <td className="px-4 py-3">
-                              <div className="flex items-center gap-3">
-                                <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  <Image
-                                    src={
-                                      item.imageUrl ||
-                                      "/placeholder-product.png"
-                                    }
-                                    alt={item.productName as string}
-                                    fill
-                                    className="object-cover"
-                                  />
-                                </div>
-                                <div>
-                                  <div className="text-sm font-semibold">
-                                    {item.productName}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left border-collapse">
+                      <thead className="bg-gray-50/80 text-gray-500 uppercase text-[11px] font-semibold tracking-wider border-b">
+                        <tr>
+                          <th className="px-4 py-3 w-1/3">Sản phẩm</th>
+                          <th className="px-2 py-3 text-center bg-gray-100/50">
+                            Kho
+                          </th>
+                          <th className="px-2 py-3 text-center">Yêu cầu</th>
+                          <th className="px-2 py-3 text-center">Đã điều</th>
+                          <th className="px-2 py-3 text-center text-orange-600">
+                            Thiếu
+                          </th>
+                          <th className="px-4 py-3 text-right bg-violet-50 text-violet-700">
+                            SL Giao
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-50">
+                        {selectedWarehouse.items.map(
+                          (item: RefillRequestProductColor) => (
+                            <tr
+                              key={item.storeOrderItemId}
+                              className="hover:bg-violet-50/30 transition-colors"
+                            >
+                              <td className="px-4 py-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="h-10 w-10 shrink-0 relative rounded-lg border border-gray-100 overflow-hidden">
+                                    <Image
+                                      src={
+                                        item.imageUrl ||
+                                        "/placeholder-product.png"
+                                      }
+                                      alt={item?.productName || ""}
+                                      fill
+                                      className="object-cover"
+                                    />
                                   </div>
-                                  <span className="text-[10px] font-bold mr-2">
-                                    {item?.sku as string}
-                                  </span>
-                                  <span className="px-2 py-0.5 rounded-full text-[10px] bg-gray-100 border font-bold">
-                                    {formatColorNameToVN(item?.color as string)}
-                                  </span>
+                                  <div className="flex flex-col min-w-0">
+                                    <span className="font-medium text-gray-900 truncate leading-none mb-1">
+                                      {item.productName}
+                                    </span>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-[10px] text-gray-400 font-mono">
+                                        {item.sku}
+                                      </span>
+                                      <span className="px-1.5 py-0.5 rounded text-[10px] bg-gray-100 text-gray-600 font-medium">
+                                        {formatColorNameToVN(item.color || "")}
+                                      </span>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 text-center">
-                              <span className="font-bold text-emerald-600">
+                              </td>
+                              <td className="px-2 py-3 text-center font-semibold text-gray-700 bg-gray-50/30">
                                 {item.availableQuantity}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3 text-right">
-                              <input
-                                type="number"
-                                min={0}
-                                max={item.availableQuantity ?? 0}
-                                value={
-                                  assignQuantities[item.productColorId!] ?? ""
-                                }
-                                onChange={(e) => {
-                                  const raw = e.target.value;
-                                  const id = item.productColorId!;
-                                  setAssignQuantities((prev) => ({
-                                    ...prev,
-                                    [id]:
-                                      raw === ""
-                                        ? ""
-                                        : Math.min(
-                                            Math.max(0, Number(raw)),
-                                            item.availableQuantity ?? 0,
-                                          ),
-                                  }));
-                                }}
-                                onBlur={() => {
-                                  const id = item.productColorId!;
-                                  if (assignQuantities[id] === "") {
+                              </td>
+                              <td className="px-2 py-3 text-center text-gray-600">
+                                {item.originalQuantity}
+                              </td>
+                              <td className="px-2 py-3 text-center text-gray-600">
+                                {item.fulfilledQuantity}
+                              </td>
+                              <td className="px-2 py-3 text-center">
+                                <span
+                                  className={`font-bold ${item?.remainingQuantity || 0 > 0 ? "text-red-500" : "text-gray-400"}`}
+                                >
+                                  {item.remainingQuantity}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-right bg-violet-50/30">
+                                <input
+                                  type="number"
+                                  min={0}
+                                  max={item.availableQuantity ?? 0}
+                                  value={
+                                    assignQuantities[item.storeOrderItemId!] ??
+                                    ""
+                                  }
+                                  onChange={(e) => {
+                                    const raw = e.target.value;
+                                    const id = item.storeOrderItemId!;
                                     setAssignQuantities((prev) => ({
                                       ...prev,
-                                      [id]: 0,
+                                      [id]:
+                                        raw === ""
+                                          ? ""
+                                          : Math.min(
+                                              Math.max(0, Number(raw)),
+                                              item.availableQuantity ?? 0,
+                                            ),
                                     }));
-                                  }
-                                }}
-                                className="w-20 text-center border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                              />
-                            </td>
-                          </tr>
-                        ),
-                      )}
-                    </tbody>
-                  </table>
+                                  }}
+                                  onBlur={() => {
+                                    const id = item.storeOrderItemId!;
+                                    if (assignQuantities[id] === "") {
+                                      setAssignQuantities((prev) => ({
+                                        ...prev,
+                                        [id]: 0,
+                                      }));
+                                    }
+                                  }}
+                                  className="w-20 text-center border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent"
+                                />
+                              </td>
+                            </tr>
+                          ),
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
 
                 {/* Summary */}
@@ -331,7 +353,11 @@ function AssignWarehouseModal({
           <div className="w-[50%] flex items-center justify-between gap-2">
             <Button
               variant="outline"
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                setSelectedWarehouseId(null);
+                setAssignQuantities({});
+              }}
               className="flex-1 rounded-lg border-gray-300"
             >
               Huỷ bỏ

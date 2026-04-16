@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  ProductBrandOption,
-  ProductMaterialOption,
-} from "@/src/constants/product-option";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { ProductCategory } from "@/src/types";

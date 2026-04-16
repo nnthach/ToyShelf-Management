@@ -1,5 +1,6 @@
 import api from "../config/axios";
 
+/*Shelf type */
 export const getAllShelfTypeAPI = async <T>(params: T) => {
   const res = await api.get("/ShelfType", { params });
   return res.data;
@@ -12,11 +13,6 @@ export const getShelfTypeDetailAPI = async (id: string) => {
 
 export const createShelfTypeAPI = async <T>(data: T) => {
   const res = await api.post("/ShelfType", data);
-  return res.data;
-};
-
-export const createShelfLocationAPI = async <T>(data: T) => {
-  const res = await api.post("/Shelf", data);
   return res.data;
 };
 
@@ -35,5 +31,16 @@ export const disableShelfTypeAPI = async (id: string) => {
 };
 export const restoreShelfTypeAPI = async (id: string) => {
   const res = await api.patch(`/ShelfType/${id}/restore`);
+  return res.data;
+};
+
+/*Shelf */
+export const createShelfLocationAPI = async <T>(data: T) => {
+  const res = await api.post("/Shelf", data);
+  return res.data;
+};
+
+export const getAllShelfAPI = async <T>(params: T) => {
+  const res = await api.get("/Shelf", { params });
   return res.data;
 };

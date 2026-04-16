@@ -158,6 +158,7 @@ export interface Warehouse {
   cityName: string;
   cityCode: string;
   isActive: boolean;
+  warehouseLocationId: string;
 }
 
 export interface ProductCategory {
@@ -283,6 +284,17 @@ export interface ShelfLevelItem {
   displayGuideline: string;
 }
 
+export interface ShelfShelf {
+  id: string;
+  inventoryLocationId: string;
+  shelfTypeId: string;
+  code: string;
+  status: string;
+  assignedAt: string;
+  unassignedAt: string;
+  shelfType: Shelf;
+}
+
 export interface Shelf {
   id: string;
   shelfTypeId: string;
@@ -301,6 +313,7 @@ export interface Shelf {
 }
 
 export interface RefillRequestProductColor {
+  storeOrderItemId?: string;
   productColorId?: string;
   productName?: string;
   itemId?: string;
@@ -316,6 +329,8 @@ export interface RefillRequestProductColor {
   displayExpected?: number;
   displayReceived?: number;
   availableQuantity?: number;
+  remainingQuantity?: number;
+  originalQuantity?: number;
 }
 
 export interface RefillShelfItem {
@@ -354,6 +369,40 @@ export interface RefillRequest {
   rejectedAt: string;
   note: string;
   items: RefillRequestProductColor[] | RefillShelfRequestItem[];
+}
+export interface DamageReportItem {
+  id: string;
+  type: string;
+  quantity: number;
+  productColorId: string;
+  productName: string;
+  sku: string;
+  colorName: string;
+  imageUrl: string;
+  shelfId: string;
+  shelfCode: string;
+  shelfName: string;
+  mediaUrls: string[];
+}
+
+export interface DamageReport {
+  id: string;
+  code: string;
+  type: string;
+  source: string;
+  status: string;
+  storeName: string;
+  storeAddress: string;
+  description: string;
+  adminNote: string;
+  isWarrantyClaim: boolean;
+  reportedByUserId: string;
+  reportedByName: string;
+  reviewedByUserId: string;
+  reviewedByName: string;
+  createdAt: string;
+  reviewedAt: string;
+  items: DamageReportItem[];
 }
 
 export interface RefillShelfRequestItem {

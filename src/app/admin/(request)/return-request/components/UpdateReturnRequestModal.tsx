@@ -8,61 +8,54 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/styles/components/ui/dialog";
-import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { CheckCircle2, Package, XCircle } from "lucide-react";
-import {
-  approveRefillRequestAPI,
-  getRefillDetailAPI,
-  rejectRefillRequestAPI,
-} from "@/src/services/refill.service";
-import { Shipment, ShipmentAssign } from "@/src/types";
+import { Shipment } from "@/src/types";
 import { useState } from "react";
-import AssignWarehouseModal from "./AssignWarehouseModal";
-import {
-  getShipmentAssignDetailByIdAPI,
-  getShipmentAssignDetailByStoreOrderIdAPI,
-} from "@/src/services/shipment-assignment.service";
+import { getShipmentAssignDetailByIdAPI } from "@/src/services/shipment-assignment.service";
 import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
 import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
 import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
-import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";
-import ShipmentProductListComponent from "@/src/components/ShipmentComponent/ShipmentProductListComponent";
-import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import ShipmentShelfListComponent from "@/src/components/ShipmentComponent/ShipmentShelfListComponent";
+import ReasonRejectRequestModal from "./ReasonRejectRequest";
+import { getDamageReportDetailAPI } from "@/src/services/damage-report.service";
+import ApproveAssignWarehouseModal from "./ApproveAssignWarehouseModal";
+import DamageReportDetailSection from "@/src/components/ShipmentComponent/DamageReportDetailSection";
+import DamageReportItemList from "@/src/components/ShipmentComponent/DamageReportItemList";
 
-type UpdateRefillRequestModalProps = {
+type UpdateReturnRequestModalProps = {
   requestId: string;
   isOpen: boolean;
   onClose: () => void;
 };
 
-function UpdateRefillRequestModal({
+function UpdateReturnRequestModal({
   requestId,
   isOpen,
   onClose,
-}: UpdateRefillRequestModalProps) {
+}: UpdateReturnRequestModalProps) {
   const queryClient = useQueryClient();
 
-  const [isOpenAssignWarehouseModal, setIsOpenAssignWarehouseModal] =
-    useState(false);
+  const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
+  const [isOpenApproveModal, setIsOpenApproveModal] = useState(false);
 
   const { data: requestDetail, isLoading } = useQuery({
-    queryKey: ["requestDetail", requestId],
-    queryFn: () => getRefillDetailAPI(requestId!),
+    queryKey: ["returnRequest", requestId],
+    queryFn: () => getDamageReportDetailAPI(requestId!),
     select: (res) => res.data,
-    enabled: !!requestId && isOpen,
+    enabled: !!requestId,
   });
 
-  // 2. Fetch toàn bộ chi tiết của các assignment cùng lúc
-  const { data: shipmentAssigns, isLoading: isLoadingAssigns } = useQuery({
-    queryKey: ["shipmentAssigns", requestId],
-    queryFn: () => getShipmentAssignDetailByStoreOrderIdAPI(requestId!),
+  const assignmentId = requestDetail?.shipmentAssignmentIds?.[0];
+  const { data: shipmentAssignDetail } = useQuery({
+    queryKey: ["shipmentAssignDetail", assignmentId],
+    queryFn: () => getShipmentAssignDetailByIdAPI(assignmentId!),
     select: (res) => res.data,
-    enabled: !!requestId && isOpen,
+    enabled: !!assignmentId,
   });
 
   const shipmentId = requestDetail?.shipmentIds?.[0];
@@ -70,46 +63,10 @@ function UpdateRefillRequestModal({
     queryKey: ["shipmentDetail", shipmentId],
     queryFn: () => getShipmentDetailByIdAPI(shipmentId!),
     select: (res) => res.data as Shipment,
-    enabled: !!shipmentId && isOpen,
+    enabled: !!shipmentId,
   });
 
-  async function handleReject() {
-    try {
-      await rejectRefillRequestAPI(requestId);
-
-      queryClient.invalidateQueries({
-        queryKey: ["refillRequests"],
-      });
-
-      toast.success("Từ chối yêu cầu thành công");
-
-      onClose();
-    } catch (error) {
-      toast.error(getErrorMessage(error, "Từ chối yêu cầu thất bại"));
-    }
-  }
-
-  async function handleApprove() {
-    try {
-      await approveRefillRequestAPI(requestId);
-
-      queryClient.invalidateQueries({
-        queryKey: ["refillRequests"],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: ["requestDetail", requestId],
-      });
-
-      toast.success("Hãy điều phối kho thực hiện");
-    } catch (error) {
-      toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
-    }
-  }
-
   const isPending = requestDetail?.status === "Pending";
-  const isRejected = requestDetail?.status === "Rejected";
-  const isApproved = requestDetail?.status === "Approved";
 
   return (
     <>
@@ -119,13 +76,13 @@ function UpdateRefillRequestModal({
           if (!value) onClose();
         }}
       >
-        <DialogContent className="sm:max-w-[1200px] h-[90vh] flex flex-col p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[1000px] h-[90vh] flex flex-col p-0 overflow-hidden">
           <div className="p-6 border-b bg-slate-50/50">
             <DialogHeader>
               <div className="flex justify-between items-start">
                 <div>
                   <DialogTitle className="text-xl">
-                    Chi tiết đơn đặt hàng
+                    Chi tiết đơn trả hàng
                   </DialogTitle>
                   <DialogDescription className="mt-1">
                     Mã đơn:{" "}
@@ -161,18 +118,18 @@ function UpdateRefillRequestModal({
             ) : (
               <div className="grid grid-cols-12 h-full">
                 <div className="col-span-6 h-full overflow-y-auto custom-scrollbar p-6 space-y-8 border-r bg-white">
-                  <StoreOrderDetailSection storeOrderDetail={requestDetail} />
-                  <ShipmentAssignDetailSection
-                    shipmentAssignments={shipmentAssigns ?? []}
+                  <DamageReportDetailSection
+                    damageReportDetail={requestDetail}
                   />
-                  <ShipmentDetailSection shipmentDetail={shipmentDetail} />
+                  {/* <ShipmentAssignDetailSection
+                    shipmentAssignDetail={shipmentAssignDetail}
+                  /> */}
+                  {/* <ShipmentDetailSection shipmentDetail={shipmentDetail} /> */}
                 </div>
 
-                {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
                 <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
-                  <ShipmentProductListComponent
-                    shipmentDetail={shipmentDetail}
-                    storeOrderDetail={requestDetail}
+                  <DamageReportItemList
+                    damageItems={requestDetail.items || []}
                   />
                 </div>
               </div>
@@ -188,51 +145,41 @@ function UpdateRefillRequestModal({
                 <>
                   <Button
                     variant="error"
-                    onClick={handleReject}
+                    onClick={() => setIsOpenRejectModal(true)}
                     className="px-8 border-2"
                   >
                     <XCircle className="h-4 w-4 mr-2" /> Từ chối
                   </Button>
                   <Button
                     variant="success"
-                    onClick={handleApprove}
+                    onClick={() => setIsOpenApproveModal(true)}
                     className="px-8 border-2"
                   >
                     <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
                   </Button>
                 </>
               )}
-              {isRejected && (
-                <Button
-                  variant="success"
-                  onClick={handleApprove}
-                  className="px-8 border-2"
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
-                </Button>
-              )}
-              {isApproved && (
-                <Button
-                  variant="success"
-                  onClick={() => setIsOpenAssignWarehouseModal(true)}
-                  className="px-8 shadow-lg shadow-green-200"
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-2" /> Điều phối kho
-                </Button>
-              )}
             </DialogFooter>
           </div>
         </DialogContent>
       </Dialog>
 
-      <AssignWarehouseModal
+      <ApproveAssignWarehouseModal
         requestId={requestId}
-        isOpen={isOpenAssignWarehouseModal}
-        onClose={() => setIsOpenAssignWarehouseModal(false)}
+        isOpen={isOpenApproveModal}
+        onClose={() => setIsOpenApproveModal(false)}
+        onSuccess={onClose}
+      />
+
+      {/* Reject reason modal */}
+      <ReasonRejectRequestModal
+        requestId={requestId}
+        isOpen={isOpenRejectModal}
+        onClose={() => setIsOpenRejectModal(false)}
         onSuccess={onClose}
       />
     </>
   );
 }
 
-export default UpdateRefillRequestModal;
+export default UpdateReturnRequestModal;
