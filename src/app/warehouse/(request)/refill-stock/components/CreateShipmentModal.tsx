@@ -13,7 +13,11 @@ import z from "zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { PackageCheck, Send, XCircle } from "lucide-react";
-import { RefillRequestProductColor } from "@/src/types";
+import {
+  RefillRequestProductColor,
+  RefillShelfRequestItem,
+  ShipmentAssign,
+} from "@/src/types";
 import { memo, useEffect } from "react";
 import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
 import { createShipmentAPI } from "@/src/services/shipment.service";
@@ -23,19 +27,15 @@ import { formatColorNameToVN } from "@/src/utils/format";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type CreateShipmentModalProps = {
-  storeOrderId: string;
-  requestId: string;
   isOpen: boolean;
-  items: RefillRequestProductColor[];
+  shipmentAssignDetail: ShipmentAssign;
   onClose: () => void;
   onSuccess: () => void;
 };
 
 function CreateShipmentModal({
-  requestId,
-  storeOrderId,
+  shipmentAssignDetail,
   isOpen,
-  items,
   onClose,
 }: CreateShipmentModalProps) {
   const queryClient = useQueryClient();
@@ -49,41 +49,73 @@ function CreateShipmentModal({
         expectedQuantity: z.coerce.number().min(1, "Số lượng phải lớn hơn 0"),
       }),
     ),
+    shelves: z.array(
+      z.object({
+        shelfOrderId: z.string(),
+        shelfTypeId: z.string(),
+        expectedQuantity: z.coerce.number().min(1, "Số lượng phải lớn hơn 0"),
+      }),
+    ),
   });
-  const form = useForm<z.input<typeof formSchema>>({
+
+  type FormValues = z.input<typeof formSchema>;
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      shipmentAssignmentId: requestId,
+      shipmentAssignmentId: shipmentAssignDetail?.id,
       products: [],
+      shelves: [],
     },
   });
 
   useEffect(() => {
-    if (isOpen && items.length > 0) {
+    if (isOpen && shipmentAssignDetail) {
+      const orderType = shipmentAssignDetail.orderType || "";
+
+      let initialProducts: FormValues["products"] = [];
+      let initialShelves: FormValues["shelves"] = [];
+
+      if (orderType.includes("STORE")) {
+        initialProducts = (shipmentAssignDetail.productItems || []).map(
+          (item: RefillRequestProductColor) => ({
+            storeOrderId: item?.storeOrderId ?? "",
+            productColorId: item?.productColorId ?? "",
+            expectedQuantity: item?.quantity || 0,
+          }),
+        );
+      }
+
+      if (orderType.includes("SHELF")) {
+        initialShelves = (shipmentAssignDetail.shelfItems || []).map(
+          (item: RefillShelfRequestItem) => ({
+            shelfOrderId: item?.shelfOrderId ?? "",
+            shelfTypeId: item?.shelfTypeId ?? "",
+            expectedQuantity: item?.quantity || 0,
+          }),
+        );
+      }
+
       form.reset({
-        shipmentAssignmentId: requestId,
-        products: items.map((item) => ({
-          storeOrderId: storeOrderId,
-          productColorId: item.productColorId,
-          expectedQuantity: item.quantity,
-        })),
+        shipmentAssignmentId: shipmentAssignDetail?.id || "",
+        products: initialProducts,
+        shelves: initialShelves,
       });
     }
-  }, [isOpen, items, requestId, form]);
+  }, [isOpen, shipmentAssignDetail, form]);
 
   async function onSubmit(data: z.input<typeof formSchema>) {
-    console.log("data", data);
     try {
       await createShipmentAPI(data);
 
       queryClient.invalidateQueries({ queryKey: ["shipmentAssigns"] });
 
       queryClient.invalidateQueries({
-        queryKey: ["shipmentAssignRequest", requestId],
+        queryKey: ["shipmentAssignRequest", shipmentAssignDetail?.id],
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["shipment", requestId],
+        queryKey: ["shipment", shipmentAssignDetail?.id],
       });
 
       form.reset();
@@ -133,61 +165,22 @@ function CreateShipmentModal({
           >
             <ScrollArea className="max-h-[60vh] px-6 py-4 overflow-y-auto custom-scrollbar">
               <div className="space-y-4">
-                {items.map((item, index) => (
-                  <div
-                    key={item.productColorId}
-                    className="grid grid-cols-12 gap-4 items-center bg-white border border-slate-200 rounded-xl p-3 transition-all hover:border-blue-200"
-                  >
-                    {/* CỘT TRÁI (8/12): Thông tin sản phẩm */}
-                    <div className="col-span-8 flex gap-3 items-start">
-                      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-slate-100 bg-slate-50">
-                        <Image
-                          src={item.imageUrl || "/placeholder-product.png"}
-                          alt={item.productName as string}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-
-                      {/* 2. Nội dung chi tiết */}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-slate-700 truncate uppercase tracking-tight">
-                          {item.productName}
-                        </p>
-
-                        {/* SKU & Color (Thay thế cho ID cũ) */}
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-[10px] font-mono text-slate-400 font-medium">
-                            {item.sku || "N/A"}
-                          </span>
-                          <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 leading-none">
-                            {formatColorNameToVN(item?.color as string)}
-                          </span>
-                        </div>
-
-                        {/* Số lượng yêu cầu */}
-                        <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
-                          Yêu cầu:{" "}
-                          <span className="text-slate-900">
-                            {item.quantity}
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* CỘT PHẢI (4/12): Input nhập số lượng */}
-                    <div className="col-span-4 border-l border-slate-100 pl-4">
-                      <FormFieldCustom
-                        name={`items.${index}.expectedQuantity`}
-                        type="number"
-                        placeholder="0"
-                        label="Số lượng"
-                        max={item.quantity}
-                        className="h-9 text-sm font-bold"
-                      />
-                    </div>
-                  </div>
-                ))}
+                {(shipmentAssignDetail?.productItems?.length ?? 0) > 0 &&
+                  shipmentAssignDetail.productItems.map((item, index) => (
+                    <ProductItem
+                      key={item.productColorId}
+                      item={item}
+                      index={index}
+                    />
+                  ))}
+                {(shipmentAssignDetail?.shelfItems?.length ?? 0) > 0 &&
+                  shipmentAssignDetail.shelfItems.map((item, index) => (
+                    <ShelfItem
+                      key={item.shelfTypeId}
+                      item={item}
+                      index={index}
+                    />
+                  ))}
               </div>
             </ScrollArea>
           </form>
@@ -220,5 +213,132 @@ function CreateShipmentModal({
     </Dialog>
   );
 }
+
+const ProductItem = ({
+  item,
+  index,
+}: {
+  item: RefillRequestProductColor;
+  index: number;
+}) => {
+  return (
+    <div
+      key={item.productColorId}
+      className="grid grid-cols-12 gap-4 items-center bg-white border border-slate-200 rounded-xl p-3 transition-all hover:border-blue-200"
+    >
+      {/* CỘT TRÁI (8/12): Thông tin sản phẩm */}
+      <div className="col-span-8 flex gap-3 items-start">
+        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-slate-100 bg-slate-50">
+          <Image
+            src={item.imageUrl || "/placeholder-product.png"}
+            alt={item.productName as string}
+            fill
+            className="object-cover"
+          />
+        </div>
+
+        {/* 2. Nội dung chi tiết */}
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-bold text-slate-700 truncate uppercase tracking-tight">
+            {item.productName}
+          </p>
+
+          {/* SKU & Color (Thay thế cho ID cũ) */}
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-[10px] font-mono text-slate-400 font-medium">
+              {item.sku || "N/A"}
+            </span>
+            <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded border border-slate-200 leading-none">
+              {formatColorNameToVN(item?.color as string)}
+            </span>
+          </div>
+
+          {/* Số lượng yêu cầu */}
+          <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+            Yêu cầu: <span className="text-slate-900">{item.quantity}</span>
+          </span>
+        </div>
+      </div>
+
+      {/* CỘT PHẢI (4/12): Input nhập số lượng */}
+      <div className="col-span-4 border-l border-slate-100 pl-4">
+        <FormFieldCustom
+          name={`items.${index}.expectedQuantity`}
+          type="number"
+          placeholder="0"
+          label="Số lượng"
+          max={item.quantity}
+          className="h-9 text-sm font-bold"
+        />
+      </div>
+    </div>
+  );
+};
+
+const ShelfItem = ({
+  item,
+  index,
+}: {
+  item: RefillShelfRequestItem;
+  index: number;
+}) => {
+  return (
+    <div
+      key={item.shelfTypeId}
+      className="grid grid-cols-12 gap-4 items-center bg-white border border-slate-200 rounded-xl p-3 transition-all hover:border-blue-200"
+    >
+      {/* CỘT TRÁI (8/12): Thông tin sản phẩm */}
+      <div className="col-span-8 flex gap-3 items-start">
+        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-slate-100 bg-slate-50">
+          <Image
+            src={item.imageUrl || "/placeholder-product.png"}
+            alt={item.shelfTypeName as string}
+            fill
+            className="object-cover"
+          />
+        </div>
+
+        {/* 2. Nội dung chi tiết */}
+        <div className="flex-1 min-w-0">
+          {/* Tên kệ: Giữ font đậm nhưng dùng slate-800 cho dịu mắt hơn black */}
+          <h5 className="text-[13px] font-bold text-slate-800 uppercase truncate tracking-tight">
+            {item.shelfTypeName}
+          </h5>
+
+          {/* Thông số: Tất cả trên 1 hàng */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[11px] font-medium text-slate-500">
+              {item.width}×{item.height}×{item.depth}
+            </span>
+
+            <span className="w-[1px] h-3 bg-slate-200"></span>
+
+            <span className="text-[11px] text-slate-500">
+              <span className="font-semibold text-indigo-600">
+                {item.totalLevels}
+              </span>{" "}
+              tầng
+            </span>
+          </div>
+          <span className="text-[12px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+            Yêu cầu: <span className=" text-slate-900">{item.quantity}</span>
+          </span>
+        </div>
+      </div>
+
+      {/* CỘT PHẢI (4/12): Input nhập số lượng */}
+      <div className="col-span-4 border-l border-slate-100 pl-4">
+        <FormFieldCustom
+          name={`items.${index}.expectedQuantity`}
+          type="number"
+          placeholder="0"
+          label="Số lượng"
+          max={item.quantity}
+          className="h-9 text-sm font-bold"
+        />
+      </div>
+    </div>
+  );
+};
 
 export default memo(CreateShipmentModal);

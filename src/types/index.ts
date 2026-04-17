@@ -332,6 +332,7 @@ export interface RefillRequestProductColor {
   availableQuantity?: number;
   remainingQuantity?: number;
   originalQuantity?: number;
+  storeOrderId?: string;
 }
 
 export interface RefillShelfItem {
@@ -408,6 +409,7 @@ export interface DamageReport {
 
 export interface RefillShelfRequestItem {
   shelfTypeId?: string;
+  shelfOrderId?: string;
   shelfTypeName?: string;
   imageUrl?: string;
   width: number;
@@ -552,6 +554,9 @@ export interface Shipment {
   deliveredAt?: string;
   receivedAt?: string;
   storeReceivedAt?: string;
+  arrivedWarehouseAt?: string;
+  returnPickedUpAt?: string;
+  warehouseReceivedAt?: string;
   productItems: RefillRequestProductColor[];
   shelfItems: RefillShelfItem[];
 }

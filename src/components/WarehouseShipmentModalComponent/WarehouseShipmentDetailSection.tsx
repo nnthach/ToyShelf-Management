@@ -2,6 +2,7 @@ import { Shipment } from "@/src/types";
 import { ArrowRight, Package, Truck, UserCheck } from "lucide-react";
 import ShipInfoItem from "../ShipmentComponent/ShipInfoItem";
 import ShipTimeNode from "../ShipmentComponent/ShipTimeNode";
+import { formatShipmentStatusText } from "@/src/utils/formatStatus";
 
 interface WarehouseShipmentDetailSectionProps {
   shipmentDetail: Shipment;
@@ -18,6 +19,14 @@ function WarehouseShipmentDetailSection({
       {shipmentDetail ? (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4 bg-green-50/30 p-4 rounded-xl border border-green-100">
+            <div className="col-span-2">
+              <ShipInfoItem
+                label="Trạng thái giao hàng"
+                value={formatShipmentStatusText(shipmentDetail.status) || "N/A"}
+                icon={<Package className="h-3 w-3" />}
+                isNote
+              />
+            </div>
             <ShipInfoItem
               label="Mã vận đơn"
               value={shipmentDetail.code || "Đang khởi tạo"}
@@ -45,6 +54,18 @@ function WarehouseShipmentDetailSection({
             <ShipTimeNode
               label="Hoàn tất"
               time={shipmentDetail.storeReceivedAt}
+            />
+            <ShipTimeNode
+              label="Lấy hàng trả"
+              time={shipmentDetail.returnPickedUpAt}
+            />
+            <ShipTimeNode
+              label="Về kho"
+              time={shipmentDetail.arrivedWarehouseAt}
+            />
+            <ShipTimeNode
+              label="Kho xác nhận"
+              time={shipmentDetail.warehouseReceivedAt}
             />
           </div>
         </div>

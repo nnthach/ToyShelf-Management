@@ -36,8 +36,12 @@ export const restoreProductAPI = async (id: string) => {
 };
 
 // product color many to many
-
 export const getAllProductColorColorAPI = async <T>(params: T) => {
+  const res = await api.get("/ProductColor", { params });
+  return res.data;
+};
+
+export const getAllProductColorColorSearchAPI = async <T>(params: T) => {
   const res = await api.get("/ProductColor", { params });
   return res.data;
 };

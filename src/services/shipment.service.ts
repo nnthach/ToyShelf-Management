@@ -45,6 +45,11 @@ export const deliveryShipmentAPI = async <T>(id: string, data: T) => {
   return res.data;
 };
 
+export const warehouseReceiveReturnShipmentAPI = async (id: string) => {
+  const res = await api.patch(`/Shipment/${id}/warehouse-receive-return`);
+  return res.data;
+};
+
 export const receiveShipmentAPI = async <T>(id: string, data: T) => {
   const res = await api.patch(`/Shipment/${id}/store-receive`, data);
   return res.data;

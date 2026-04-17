@@ -165,6 +165,12 @@ export const formatShipmentStatusText = (status: string) => {
       return "Đã hủy";
     case "Delivered":
       return "Đã giao hàng";
+    case "Completed":
+      return "Đơn hoàn thành";
+    case "ShippingReturn":
+      return "Đang lấy hàng về";
+    case "DeliveredReturn":
+      return "Đã lấy hàng về kho";
     default:
       return "N/A";
   }
@@ -173,21 +179,27 @@ export const formatShipmentStatusText = (status: string) => {
 export const formatShipmentStatusColor = (status: string) => {
   switch (status) {
     case "Draft":
-      return "bg-slate-100 text-slate-600 px-3 py-1 rounded-2xl";
-    case "Accepted":
-      return "bg-blue-100 text-blue-700 px-3 py-1 rounded-2xl";
+      return "bg-slate-100 text-slate-600 border border-slate-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "Approved":
+      return "bg-blue-100 text-blue-700 border border-blue-200 px-3 py-1 rounded-2xl shadow-sm";
     case "Rejected":
-      return "bg-orange-100 text-orange-700 px-3 py-1 rounded-2xl";
+      return "bg-orange-100 text-orange-700 border border-orange-200 px-3 py-1 rounded-2xl shadow-sm";
     case "Shipping":
-      return "bg-pink-100 text-pink-700 px-3 py-1 rounded-2xl";
+      return "bg-pink-100 text-pink-700 border border-pink-200 px-3 py-1 rounded-2xl shadow-sm";
     case "Delivered":
-      return "bg-indigo-100 text-indigo-700 px-3 py-1 rounded-2xl";
+      return "bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1 rounded-2xl shadow-sm";
     case "Received":
-      return "bg-emerald-100 text-emerald-700 px-3 py-1 rounded-2xl";
+      return "bg-emerald-100 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-2xl shadow-sm";
     case "Cancelled":
-      return "bg-red-100 text-red-700 px-3 py-1 rounded-2xl";
+      return "bg-rose-100 text-rose-700 border border-rose-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "Completed":
+      return "bg-green-100 text-green-700 border border-green-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "ShippingReturn":
+      return "bg-violet-100 text-violet-700 border border-violet-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "DeliveredReturn":
+      return "bg-zinc-200 text-zinc-800 border border-zinc-300 px-3 py-1 rounded-2xl shadow-sm";
     default:
-      return "bg-gray-100 text-gray-400 px-3 py-1 rounded-2xl";
+      return "bg-gray-100 text-gray-400 px-3 py-1 rounded-2xl border border-gray-200";
   }
 };
 
@@ -338,7 +350,7 @@ export const formatShipmentAssignTypeText = (status: string) => {
     case "DAMAGE":
       return "Thu hồi";
     default:
-      return "N/A";
+      return "Giao & Nhận";
   }
 };
 
@@ -351,6 +363,44 @@ export const formatShipmentAssignTypeColor = (status: string) => {
     case "DAMAGE":
       return "bg-rose-100 text-rose-700 font-bold border border-rose-200 px-3 py-1 rounded-2xl shadow-sm";
     default:
-      return "bg-slate-100 text-slate-600 px-3 py-1 rounded-2xl";
+      return "bg-emerald-100 text-emerald-700 font-bold border border-emerald-200 px-3 py-1 rounded-2xl shadow-sm";
+  }
+};
+
+export const formatDamageReportStatusText = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "Đang chờ duyệt";
+    case "Approved":
+      return "Đã chấp nhận";
+    case "Rejected":
+      return "Đã từ chối";
+    case "InTransit":
+      return "Đang vận chuyển";
+    case "Returned":
+      return "Đã trả hàng";
+    case "Scheduled":
+      return "Đã lên lịch";
+    default:
+      return "N/A";
+  }
+};
+
+export const formatDamageReportStatusColor = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return "bg-amber-100 text-amber-700 font-bold border border-amber-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "Approved":
+      return "bg-blue-100 text-blue-700 font-bold border border-blue-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "Rejected":
+      return "bg-rose-100 text-rose-700 font-bold border border-rose-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "Scheduled":
+      return "bg-violet-100 text-violet-700 font-bold border border-violet-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "InTransit":
+      return "bg-orange-100 text-orange-700 font-bold border border-orange-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "Returned":
+      return "bg-emerald-100 text-emerald-700 font-bold border border-emerald-200 px-3 py-1 rounded-2xl shadow-sm";
+    default:
+      return "bg-slate-100 text-slate-500 px-3 py-1 rounded-2xl border border-slate-200";
   }
 };

@@ -1,4 +1,4 @@
-import {  Shipment, ShipmentAssign } from "@/src/types";
+import { Shipment, ShipmentAssign } from "@/src/types";
 import { Box, LayoutGrid, Package, Package2 } from "lucide-react";
 import Image from "next/image";
 
@@ -12,10 +12,10 @@ function WarehouseShipmentDamageList({
   shipmentAssignDetail,
 }: WarehouseShipmentDamageListProps) {
   const damageItemList = shipmentAssignDetail.damageReturnItems;
-  const totalQuantity = damageItemList.reduce(
-    (sum, item) => sum + item.quantity,
-    0,
-  );
+  // const totalQuantity = damageItemList.reduce(
+  //   (sum, item) => sum + item.quantity,
+  //   0,
+  // );
 
   return (
     <>
@@ -23,11 +23,11 @@ function WarehouseShipmentDamageList({
       <div className="p-4 border-b bg-white flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center gap-2">
           <Package className="h-4 w-4 text-primary" />
-          <h4 className="font-bold text-sm uppercase">Sản phẩm & Số lượng</h4>
+          <h4 className="font-bold text-sm uppercase">Hàng nhận</h4>
         </div>
-        <span className="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+        {/* <span className="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
           {totalQuantity}
-        </span>
+        </span> */}
       </div>
 
       {/* Danh sách sản phẩm */}

@@ -33,6 +33,7 @@ function WarehouseShipmentStoreInfo({
                 shipmentAssignDetail.orderType,
               )}
               icon={<Tag className="h-3 w-3" />}
+              isNote
             />
           </div>
 

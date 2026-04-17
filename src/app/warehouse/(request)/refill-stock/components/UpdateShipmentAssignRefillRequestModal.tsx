@@ -20,14 +20,16 @@ import {
   getShipmentAssignDetailByIdAPI,
   rejectShipmentAssignAPI,
 } from "@/src/services/shipment-assignment.service";
-import { getShipmentDetailByAssignmentIdAPI } from "@/src/services/shipment.service";
+import {
+  getShipmentDetailByAssignmentIdAPI,
+  warehouseReceiveReturnShipmentAPI,
+} from "@/src/services/shipment.service";
 import AssignShipperModal from "./AssignShipperModal";
 import CreateShipmentModal from "./CreateShipmentModal";
 import WarehouseShipmentStoreInfo from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentStoreInfo";
 import WarehouseShipmentDetailSection from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentDetailSection";
 import WarehouseShipmentProductList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentProductList";
 import WarehouseShipmentShelfList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentShelfList";
-import CreateShipmentShelfModal from "./CreateShipmentShelfModal";
 import WarehouseShipmentDamageList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentDamageList";
 
 type UpdateShipmentAssignRefillRequestModalProps = {
@@ -64,6 +66,7 @@ function UpdateShipmentAssignRefillRequestModal({
     enabled: !!requestId,
   });
 
+  // reject
   const rejectMutation = useMutation({
     mutationFn: () => rejectShipmentAssignAPI(requestId),
     onSuccess: () => {
@@ -82,9 +85,37 @@ function UpdateShipmentAssignRefillRequestModal({
     rejectMutation.mutate();
   };
 
+  // receive return
+  const receiveReturnMutation = useMutation({
+    mutationFn: () => warehouseReceiveReturnShipmentAPI(shipmentDetail.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shipmentAssigns"] });
+      queryClient.invalidateQueries({
+        queryKey: ["shipmentAssign", requestId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["shipment", requestId],
+      });
+      toast.success("Nhận hàng trả thành công");
+    },
+    onError: (error) => {
+      console.error("Accept error:", error);
+      toast.error("Nhận hàng trả thất bại");
+    },
+  });
+  const handleReceiveReturn = async () => {
+    receiveReturnMutation.mutate();
+  };
+
   const isPending = shipmentAssignDetail?.status === "Pending";
   const isAccepted = shipmentAssignDetail?.status === "Accepted";
 
+  const hasDelivery =
+    shipmentAssignDetail?.orderType?.includes("STORE") ||
+    shipmentAssignDetail?.orderType?.includes("SHELF");
+  const hasDamage = shipmentAssignDetail?.orderType?.includes("DAMAGE");
+
+  const columnSize = hasDelivery && hasDamage ? "col-span-4" : "col-span-6";
   return (
     <>
       <Dialog
@@ -93,7 +124,7 @@ function UpdateShipmentAssignRefillRequestModal({
           if (!value) onClose();
         }}
       >
-        <DialogContent className="sm:max-w-[1000px] w-[95vw] h-[85vh] flex flex-col p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[1200px] w-[95vw] h-[85vh] flex flex-col p-0 overflow-hidden gap-0">
           <div className="p-4 border-b bg-muted/5">
             <DialogHeader>
               <div className="flex justify-between items-center">
@@ -137,7 +168,9 @@ function UpdateShipmentAssignRefillRequestModal({
             ) : (
               <div className="grid grid-cols-12 h-full">
                 {/* CỘT TRÁI: THÔNG TIN CHI TIẾT (7 columns) */}
-                <div className="col-span-6 p-6 space-y-8 border-r overflow-y-auto custom-scrollbar">
+                <div
+                  className={`${columnSize} p-6 space-y-8 border-r overflow-y-auto custom-scrollbar`}
+                >
                   <WarehouseShipmentStoreInfo
                     shipmentAssignDetail={shipmentAssignDetail}
                   />
@@ -146,25 +179,47 @@ function UpdateShipmentAssignRefillRequestModal({
                   />
                 </div>
 
-                {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}
-                <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">
-                  {shipmentAssignDetail?.orderType === "STORE" ? (
-                    <WarehouseShipmentProductList
-                      shipmentAssignDetail={shipmentAssignDetail}
-                      shipmentDetail={shipmentDetail}
-                    />
-                  ) : shipmentAssignDetail?.orderType === "SHELF" ? (
-                    <WarehouseShipmentShelfList
-                      shipmentAssignDetail={shipmentAssignDetail}
-                      shipmentDetail={shipmentDetail}
-                    />
-                  ) : (
+                {/* CỘT PHẢI: DANH SÁCH hàng giao */}
+                {hasDelivery && (
+                  <div
+                    className={`${columnSize} flex flex-col bg-slate-50/50 overflow-hidden border-r`}
+                  >
+                    <div className="p-4 border-b bg-white flex items-center justify-between sticky top-0 z-10">
+                      <div className="flex items-center gap-2">
+                        <Package className="h-4 w-4 text-primary" />
+                        <h4 className="font-bold text-sm uppercase">
+                          Hàng giao
+                        </h4>
+                      </div>
+                    </div>
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+                      {shipmentAssignDetail?.orderType?.includes("STORE") && (
+                        <WarehouseShipmentProductList
+                          shipmentAssignDetail={shipmentAssignDetail}
+                          shipmentDetail={shipmentDetail}
+                        />
+                      )}
+                      {shipmentAssignDetail?.orderType?.includes("SHELF") && (
+                        <WarehouseShipmentShelfList
+                          shipmentAssignDetail={shipmentAssignDetail}
+                          shipmentDetail={shipmentDetail}
+                        />
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/*Cột phải cuối hàng nhận */}
+                {hasDamage && (
+                  <div
+                    className={`${columnSize} flex flex-col bg-slate-50/50 overflow-hidden`}
+                  >
                     <WarehouseShipmentDamageList
                       shipmentAssignDetail={shipmentAssignDetail}
                       shipmentDetail={shipmentDetail}
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -199,7 +254,7 @@ function UpdateShipmentAssignRefillRequestModal({
                 ))}
 
               {/* BÊN PHẢI: CÁC NÚT ACTIONS (NHƯ CŨ) */}
-              <div className="flex items-center gap-3">
+              <div className="flex-1 items-center gap-3">
                 {isPending && (
                   <>
                     <Button
@@ -223,7 +278,7 @@ function UpdateShipmentAssignRefillRequestModal({
                 )}
 
                 {!isPending && isAccepted && (
-                  <>
+                  <div className="flex-1 gap-3 items-center justify-end">
                     <Button
                       variant="outline"
                       disabled={isLoading}
@@ -244,7 +299,18 @@ function UpdateShipmentAssignRefillRequestModal({
                           hàng và xuất kho
                         </Button>
                       )}
-                  </>
+                    {shipmentDetail?.status === "DeliveredReturn" && (
+                      <Button
+                        variant="success"
+                        disabled={isLoading}
+                        onClick={handleReceiveReturn}
+                        className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        <CheckCircle2 className="mr-2 h-4 w-4" /> Đã nhận hàng
+                        trả về
+                      </Button>
+                    )}
+                  </div>
                 )}
               </div>
             </DialogFooter>
@@ -259,24 +325,12 @@ function UpdateShipmentAssignRefillRequestModal({
         onSuccess={onClose}
       />
 
-      {shipmentAssignDetail?.orderType === "STORE" ? (
-        <CreateShipmentModal
-          storeOrderId={shipmentAssignDetail.storeOrders[0].id}
-          requestId={requestId}
-          items={shipmentAssignDetail?.productItems || []}
-          isOpen={isOpenCreateShipmentModal}
-          onClose={() => setIsOpenCreateShipmentModal(false)}
-          onSuccess={onClose}
-        />
-      ) : shipmentAssignDetail?.orderType === "SHELF" ? (
-        <CreateShipmentShelfModal
-          requestId={requestId}
-          items={shipmentAssignDetail?.shelfItems || []}
-          isOpen={isOpenCreateShipmentModal}
-          onClose={() => setIsOpenCreateShipmentModal(false)}
-          onSuccess={onClose}
-        />
-      ) : null}
+      <CreateShipmentModal
+        shipmentAssignDetail={shipmentAssignDetail}
+        isOpen={isOpenCreateShipmentModal}
+        onClose={() => setIsOpenCreateShipmentModal(false)}
+        onSuccess={onClose}
+      />
     </>
   );
 }

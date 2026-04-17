@@ -42,12 +42,12 @@ function AssignShipperModal({
 
   const queryClient = useQueryClient();
 
-  const { data: userList } = useQuery({
+  const { data: userList, isLoading } = useQuery({
     queryKey: ["shipper", { warehouseId: warehouseId }],
     queryFn: () =>
       getAllWarehouseStaffAPI({ warehouseId: warehouseId, role: "Shipper" }),
     select: (res) => res.data as WarehouseStaff[],
-    enabled: !!warehouseId,
+    enabled: !!warehouseId && isOpen,
   });
 
   const userOptions = userList?.map((s) => ({
@@ -114,24 +114,33 @@ function AssignShipperModal({
           </div>
         </DialogHeader>
 
-        <div className="px-6 py-2">
-          <FormProvider {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              id="form-assign-shipper"
-              className="space-y-6 py-4"
-            >
-              <FormFieldCustom
-                name="shipperId"
-                label="Nhân viên phụ trách"
-                type="select"
-                placeholder="Tìm kiếm hoặc chọn nhân viên..."
-                selectData={userOptions}
-                icon={<User size={16} />}
-              />
-            </form>
-          </FormProvider>
-        </div>
+        {isLoading ? (
+          <div className="h-full flex items-center justify-center">
+            <div className="flex flex-col items-center gap-3 text-slate-400">
+              <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-500 rounded-full animate-spin" />
+              <p className="text-sm">Đang tải dữ liệu...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="px-6 py-2">
+            <FormProvider {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                id="form-assign-shipper"
+                className="space-y-6 py-4"
+              >
+                <FormFieldCustom
+                  name="shipperId"
+                  label="Nhân viên phụ trách"
+                  type="select"
+                  placeholder="Tìm kiếm hoặc chọn nhân viên..."
+                  selectData={userOptions}
+                  icon={<User size={16} />}
+                />
+              </form>
+            </FormProvider>
+          </div>
+        )}
 
         <DialogFooter className="p-6 bg-slate-50 border-t flex gap-3">
           <Button
@@ -148,7 +157,7 @@ function AssignShipperModal({
           <Button
             type="submit"
             form="form-assign-shipper"
-            disabled={isSubmitting}
+            disabled={isSubmitting && isLoading}
             className="flex-1 h-11 font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md shadow-blue-100 transition-all active:scale-95"
           >
             {isSubmitting ? (

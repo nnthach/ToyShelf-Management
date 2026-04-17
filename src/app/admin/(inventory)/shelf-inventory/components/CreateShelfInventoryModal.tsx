@@ -1,8 +1,6 @@
 "use client";
 
 import { getAllInventoryLocationAPI } from "@/src/services/inventory-location.service";
-import { refillInventoryAPI } from "@/src/services/inventory.service";
-import { getAllProductColorColorAPI } from "@/src/services/product.service";
 import {
   createShelfLocationAPI,
   getAllShelfTypeAPI,
@@ -19,12 +17,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import { InventoryLocation, ProductColorItem, Shelf } from "@/src/types";
+import { InventoryLocation, Shelf } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Mail, MapPin, Plus, Send, Server, Sparkles, User } from "lucide-react";
+import { Mail, MapPin, Plus, Send, Server, Sparkles } from "lucide-react";
 import { memo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";

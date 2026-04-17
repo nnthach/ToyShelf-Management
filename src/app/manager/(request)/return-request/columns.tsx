@@ -3,6 +3,8 @@
 import { DamageReport, RefillRequest } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
 import {
+  formatDamageReportStatusColor,
+  formatDamageReportStatusText,
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
@@ -96,9 +98,9 @@ export const getReturnRequestColumns = (
       const status = row.getValue("status") as string;
       return (
         <span
-          className={`${formatStoreOrderRefillRequestStatusColor(status)} font-medium`}
+          className={`${formatDamageReportStatusColor(status)} font-medium`}
         >
-          {formatStoreOrderRefillRequestStatusText(status)}
+          {formatDamageReportStatusText(status)}
         </span>
       );
     },
