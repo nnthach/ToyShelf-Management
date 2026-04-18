@@ -22,9 +22,9 @@ export const formatPartnerTierTextColor = (text: string) => {
   switch (text) {
     case "Kim Cương":
       return "bg-cyan-100 text-cyan-800 px-3 py-1 rounded-2xl border border-cyan-300 shadow-sm";
-    case "Vàng":
+    case "Vàng":
       return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl border border-yellow-300 shadow-sm ";
-    case "Đồng":
+    case "Đồng":
       return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl border border-orange-300 shadow-sm";
     case "Bạc":
       return "bg-slate-100 text-slate-800 px-3 py-1 rounded-2xl border border-slate-300 shadow-sm";
