@@ -12,13 +12,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
-import { PackageCheck, Send, XCircle } from "lucide-react";
+import { Loader2, PackageCheck, Send, XCircle } from "lucide-react";
 import {
   RefillRequestProductColor,
   RefillShelfRequestItem,
   ShipmentAssign,
 } from "@/src/types";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
 import { createShipmentAPI } from "@/src/services/shipment.service";
 import { toast } from "react-toastify";
@@ -39,6 +39,7 @@ function CreateShipmentModal({
   onClose,
 }: CreateShipmentModalProps) {
   const queryClient = useQueryClient();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formSchema = z.object({
     shipmentAssignmentId: z.string(),
@@ -105,8 +106,14 @@ function CreateShipmentModal({
   }, [isOpen, shipmentAssignDetail, form]);
 
   async function onSubmit(data: z.input<typeof formSchema>) {
+    setIsSubmitting(true);
     try {
-      await createShipmentAPI(data);
+      const payload = {
+        shipmentAssignmentId: data.shipmentAssignmentId,
+        ...(data.products.length > 0 && { products: data.products }),
+        ...(data.shelves.length > 0 && { shelves: data.shelves }),
+      };
+      await createShipmentAPI(payload);
 
       queryClient.invalidateQueries({ queryKey: ["shipmentAssigns"] });
 
@@ -123,6 +130,8 @@ function CreateShipmentModal({
       onClose();
     } catch (error) {
       toast.error(getErrorMessage(error, "Tạo đơn giao thất bại"));
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -202,11 +211,18 @@ function CreateShipmentModal({
 
           <Button
             type="submit"
+            disabled={isSubmitting}
             form="form-create-shipment"
-            className="flex-[1.5] h-12 rounded-xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-100 hover:bg-blue-700 hover:shadow-blue-200 transition-all active:scale-[0.98]"
+            className="flex-[1.5] h-12 rounded-xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-100 
+             hover:bg-blue-700 hover:shadow-blue-200 transition-all active:scale-[0.98]
+             disabled:bg-gray-400 disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none"
           >
-            <Send className="mr-2 h-4 w-4" />
-            Xác nhận xuất kho
+            {isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="mr-2 h-4 w-4" />
+            )}
+            {isSubmitting ? "Đang xử lý..." : "Xác nhận xuất kho"}
           </Button>
         </div>
       </DialogContent>

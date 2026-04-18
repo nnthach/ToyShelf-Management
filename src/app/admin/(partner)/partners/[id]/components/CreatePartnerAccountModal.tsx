@@ -33,7 +33,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import z from "zod";
 
-function CreatePartnerAccountModal() {
+function CreatePartnerAccountModal({ partnerId }: { partnerId: string }) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -42,7 +42,7 @@ function CreatePartnerAccountModal() {
     email: z.string().min(1, "Email là bắt buộc"),
     fullName: z.string().min(1, "Tên đối tác là bắt buộc"),
     roleIds: z.array(z.string()).optional(),
-    partnerId: z.string().min(1, "Sở hữu là bắt buộc"),
+    partnerId: z.string().optional(),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
@@ -51,14 +51,8 @@ function CreatePartnerAccountModal() {
       email: "",
       fullName: "",
       roleIds: [],
-      partnerId: "",
+      partnerId: partnerId,
     },
-  });
-
-  const { data: partnerList = [], isLoading } = useQuery({
-    queryKey: ["partners", { isActive: undefined }],
-    queryFn: () => getAllPartnerAPI({ isActive: undefined }),
-    select: (res) => res.data as Partner[],
   });
 
   const { data: roleList = [] } = useQuery({
@@ -93,11 +87,6 @@ function CreatePartnerAccountModal() {
       toast.error(getErrorMessage(error, "Tạo đối tác thất bại"));
     }
   }
-
-  const partnerCompanyOptions = partnerList.map((s) => ({
-    value: s.id,
-    label: s.companyName,
-  }));
 
   return (
     <Dialog
@@ -148,16 +137,6 @@ function CreatePartnerAccountModal() {
                   label="Email đăng nhập"
                   icon={<Mail size={18} />}
                   placeholder="example@gmail.com"
-                  required
-                />
-
-                <FormFieldCustom
-                  name="partnerId"
-                  label="Công ty sở hữu"
-                  icon={<Building2 size={18} />}
-                  placeholder="Chọn công ty sở hữu"
-                  type="select"
-                  selectData={partnerCompanyOptions}
                   required
                 />
               </div>

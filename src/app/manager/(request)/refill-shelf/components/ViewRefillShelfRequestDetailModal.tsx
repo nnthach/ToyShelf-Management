@@ -16,11 +16,16 @@ import {
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { useState } from "react";
-import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
+import {
+  getShipmentDetailByIdAPI,
+  getShipmentDetailByShelfOrderIdAPI,
+} from "@/src/services/shipment.service";
 import ConfirmReceiveModal from "./ConfirmReceiveModal";
 import { RefillShelfRequestItem, Shipment } from "@/src/types";
 import {
   AlertCircle,
+  CheckCircle2,
+  ClipboardCheck,
   FileText,
   Layers,
   MapPin,
@@ -35,6 +40,7 @@ import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
 import Image from "next/image";
 import { getRefillShelfDetailAPI } from "@/src/services/refill-shelf.service";
+import { formatDateTime } from "@/src/utils/format";
 
 type ViewRefillShelfRequestModalDetailProps = {
   requestId: string;
@@ -47,41 +53,21 @@ function ViewRefillShelfRequestModalDetail({
   isOpen,
   onClose,
 }: ViewRefillShelfRequestModalDetailProps) {
-  const [isOpenConfirmReceive, setIsOpenConfirmReceive] = useState(false);
+  const [selectShipmentId, setSelectShipmentId] = useState<string | null>(null);
 
   const { data: storeOrderShelfDetail, isLoading } = useQuery({
     queryKey: ["storeOrderShelfDetail", requestId],
     queryFn: () => getRefillShelfDetailAPI(requestId!),
     select: (res) => res.data,
-    enabled: !!requestId,
+    enabled: !!requestId && isOpen,
   });
 
-  const shipmentId = storeOrderShelfDetail?.shipmentIds?.[0];
-  const { data: shipmentDetail } = useQuery({
-    queryKey: ["shipmentDetail", shipmentId],
-    queryFn: () => getShipmentDetailByIdAPI(shipmentId!),
-    select: (res) => res.data as Shipment,
-    enabled: !!shipmentId,
+  const { data: shipmentDetailList } = useQuery({
+    queryKey: ["shipmentDetailList", requestId],
+    queryFn: () => getShipmentDetailByShelfOrderIdAPI(requestId!),
+    select: (res) => res.data as Shipment[],
+    enabled: !!requestId && isOpen,
   });
-
-  const shipmentItemMap = new Map(
-    shipmentDetail?.shelfItems?.map((item: RefillShelfRequestItem) => [
-      item.shelfTypeId,
-      item,
-    ]) || [],
-  );
-
-  const itemsWithQuantities = storeOrderShelfDetail?.items?.map(
-    (item: RefillShelfRequestItem) => {
-      const shipmentItem = shipmentItemMap.get(item.shelfTypeId);
-
-      return {
-        ...item,
-        expectedQuantity: shipmentItem?.expectedQuantity || 0,
-        receivedQuantity: shipmentItem?.receivedQuantity || 0,
-      };
-    },
-  );
 
   return (
     <>
@@ -157,6 +143,20 @@ function ViewRefillShelfRequestModalDetail({
                         icon={<MapPin className="h-3.5 w-3.5" />}
                       />
                     </div>
+                    <ShipInfoItem
+                      label="Chủ sở hữu duyệt đơn"
+                      value={storeOrderShelfDetail?.partnerAdminName}
+                      icon={<User className="h-3.5 w-3.5" />}
+                    />
+                    <ShipInfoItem
+                      label="Thời gian duyệt"
+                      value={
+                        formatDateTime(
+                          storeOrderShelfDetail?.partnerAdminApprovedAt,
+                        ).full || ""
+                      }
+                      icon={<User className="h-3.5 w-3.5" />}
+                    />
                     {storeOrderShelfDetail?.status === "Rejected" ? (
                       <ShipInfoItem
                         label="Quản trị viên từ chối"
@@ -205,16 +205,15 @@ function ViewRefillShelfRequestModalDetail({
                       <Package className="h-4 w-4" /> 2. Chi tiết kệ & Đối soát
                     </div>
                     <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-1 rounded-md font-bold border">
-                      TỔNG LOẠI KỆ: {itemsWithQuantities?.length || 0}
+                      TỔNG LOẠI KỆ: {storeOrderShelfDetail?.items?.length || 0}
                     </span>
                   </div>
 
                   <div className="flex flex-col gap-4 divide-y bg-muted/20 p-4 rounded-xl border border-dashed gap-4 max-h-[300px] overflow-y-auto custom-scrollbar">
-                    {itemsWithQuantities?.map(
+                    {storeOrderShelfDetail?.items?.map(
                       (item: RefillShelfRequestItem, index: number) => {
                         const expected = item.quantity || 0;
                         const received = item.receivedQuantity || 0;
-                        const isShortfall = received < expected;
 
                         return (
                           <div
@@ -292,8 +291,8 @@ function ViewRefillShelfRequestModalDetail({
                     )}
                   </div>
 
-                  {(!itemsWithQuantities ||
-                    itemsWithQuantities.length === 0) && (
+                  {(!storeOrderShelfDetail?.items ||
+                    storeOrderShelfDetail?.items.length === 0) && (
                     <div className="py-20 text-center text-slate-300">
                       <Package className="h-12 w-12 mx-auto mb-2 opacity-20" />
                       <p className="text-sm italic">Không có dữ liệu kệ</p>
@@ -304,77 +303,181 @@ function ViewRefillShelfRequestModalDetail({
                 {/* SECTION 3: THÔNG TIN VẬN CHUYỂN & ĐIỀU PHỐI */}
                 <section>
                   {/* Header có Status */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2 text-primary font-bold uppercase text-sm tracking-wider">
-                      <Truck className="h-4 w-4" /> 3. Trạng thái vận chuyển
-                    </div>
-                    {/* Status Badge - Bạn có thể map màu theo status ở đây */}
-                    {shipmentDetail?.status && (
-                      <span
-                        className={`text-[12px] font-medium ${formatShipmentStatusColor(shipmentDetail?.status)}`}
-                      >
-                        {formatShipmentStatusText(shipmentDetail?.status)}
-                      </span>
-                    )}
+                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-sm tracking-wider">
+                    <Truck className="h-4 w-4" /> 3. Trạng thái vận chuyển
                   </div>
 
-                  {shipmentDetail ? (
-                    <div className="bg-green-50/30 p-4 rounded-xl border border-dashed border-green-100 space-y-4">
-                      {/* Thông tin thực thi: Kho & Shipper */}
-                      <div className="grid grid-cols-2 gap-8 pb-4 border-b border-dashed">
-                        <div className="space-y-3">
-                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">
-                            Vận hành
-                          </p>
-                          <div className="flex items-center gap-3">
-                            <div className="h-8 w-8 rounded bg-blue-50 flex items-center justify-center text-blue-600">
-                              <Warehouse className="h-4 w-4" />
-                            </div>
-                            <div>
-                              <p className="text-[11px] text-slate-500">
-                                Từ kho
-                              </p>
-                              <p className="text-sm font-bold text-slate-800">
-                                {shipmentDetail.fromLocationName}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="space-y-3">
-                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">
-                            Nhân sự
-                          </p>
-                          <div className="flex items-center gap-3">
-                            <div className="h-8 w-8 rounded bg-orange-50 flex items-center justify-center text-orange-600">
-                              <UserCheck className="h-4 w-4" />
-                            </div>
-                            <div>
-                              <p className="text-[11px] text-slate-500">
-                                Shipper
-                              </p>
-                              <p className="text-sm font-bold text-slate-800">
-                                {shipmentDetail.shipperName}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                  {shipmentDetailList && shipmentDetailList.length > 0 ? (
+                    <div className="space-y-6">
+                      {shipmentDetailList.map((shipment, index) => {
+                        const isReceived = shipment.storeReceivedAt;
 
-                      {/* Timeline đơn giản: Trái nhãn - Phải thời gian */}
-                      <div className="grid grid-cols-3 gap-2">
-                        <ShipTimeNode
-                          label="Lấy hàng"
-                          time={shipmentDetail.pickedUpAt}
-                        />
-                        <ShipTimeNode
-                          label="Giao hàng"
-                          time={shipmentDetail.deliveredAt}
-                        />
-                        <ShipTimeNode
-                          label="Hoàn tất"
-                          time={shipmentDetail.receivedAt}
-                        />
-                      </div>
+                        return (
+                          <div
+                            key={shipment.id || index}
+                            className="bg-white rounded-xl border border-emerald-100 overflow-hidden shadow-sm flex flex-col"
+                          >
+                            {/* Header */}
+                            <div className="bg-emerald-50/50 px-4 py-2 border-b border-emerald-100 flex justify-between items-center">
+                              <div className="flex items-center gap-2">
+                                <span className="bg-emerald-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">
+                                  Phiếu giao hàng #{index + 1}
+                                </span>
+                                <span className="text-[11px] font-mono font-bold text-emerald-700">
+                                  {shipment.code}
+                                </span>
+                              </div>
+                              {shipment.status && (
+                                <span
+                                  className={`text-[11px] font-bold px-2 py-0.5 rounded-full border bg-white ${formatShipmentStatusColor(shipment.status)}`}
+                                >
+                                  {formatShipmentStatusText(shipment.status)}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="p-4 space-y-4">
+                              {/* Info: Warehouse & Shipper */}
+                              <div className="grid grid-cols-2 gap-4">
+                                <div className="flex items-center gap-3">
+                                  <div className="h-9 w-9 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+                                    <Warehouse className="h-5 w-5" />
+                                  </div>
+                                  <div className="min-w-0">
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase">
+                                      Gửi từ
+                                    </p>
+                                    <p className="text-[13px] font-bold text-slate-800 truncate">
+                                      {shipment.fromLocationName}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-3 border-l pl-4 border-slate-100">
+                                  <div className="h-9 w-9 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600 shrink-0">
+                                    <UserCheck className="h-5 w-5" />
+                                  </div>
+                                  <div className="min-w-0">
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase">
+                                      Shipper
+                                    </p>
+                                    <p className="text-[13px] font-bold text-slate-800 truncate">
+                                      {shipment.shipperName || "N/A"}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Timeline */}
+                              <div className="grid grid-cols-3 gap-2 py-3 border-y border-dashed border-slate-100">
+                                <ShipTimeNode
+                                  label="Lấy hàng"
+                                  time={shipment.pickedUpAt}
+                                />
+                                <ShipTimeNode
+                                  label="Giao hàng"
+                                  time={shipment.deliveredAt}
+                                />
+                                <ShipTimeNode
+                                  label="Hoàn tất"
+                                  time={shipment.storeReceivedAt}
+                                />
+                              </div>
+
+                              {/* Danh sách sản phẩm trong shipment */}
+                              <div className="space-y-2">
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                                  <Package className="h-3 w-3" /> Chi tiết hàng
+                                  hóa
+                                </p>
+                                <div className="bg-slate-50/50 rounded-lg border border-slate-100 divide-y divide-slate-100">
+                                  {shipment.shelfItems?.map((shelf, pIdx) => (
+                                    <div
+                                      key={pIdx}
+                                      className="p-2 flex items-center justify-between gap-4"
+                                    >
+                                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                                        <div className="h-8 w-8 rounded border bg-white shrink-0 overflow-hidden relative">
+                                          <Image
+                                            src={shelf.imageUrl || ""}
+                                            alt=""
+                                            fill
+                                            className="object-cover"
+                                          />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          {/* Tên loại kệ */}
+                                          <p className="text-[13px] font-bold text-slate-800 truncate uppercase tracking-tight">
+                                            {shelf.shelfTypeName}
+                                          </p>
+
+                                          <div className="flex items-center gap-2 mt-1.5">
+                                            <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
+                                              <span className="font-medium">
+                                                {shelf.width}×{shelf.height}×
+                                                {shelf.depth}
+                                              </span>
+                                            </div>
+
+                                            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+
+                                            <div className="flex items-center gap-1 text-[12px]">
+                                              <Layers className="w-3.5 h-3.5 text-blue-500" />
+                                              <span className="font-semibold text-slate-700">
+                                                {shelf.totalLevels} tầng
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Đối soát số lượng */}
+                                      <div className="flex items-center gap-3 shrink-0">
+                                        <div className="text-center min-w-[30px]">
+                                          <p className="text-[8px] text-slate-400 uppercase font-bold">
+                                            Giao
+                                          </p>
+                                          <p className="text-xs font-bold text-slate-600">
+                                            {shelf.expectedQuantity}
+                                          </p>
+                                        </div>
+                                        <div className="h-4 w-px bg-slate-200" />
+                                        <div className="text-center min-w-[30px]">
+                                          <p className="text-[8px] text-emerald-600 uppercase font-bold">
+                                            Nhận
+                                          </p>
+                                          <p className="text-xs font-black text-emerald-600">
+                                            {shelf.receivedQuantity}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Nút xác nhận nhận hàng */}
+                            <div className="p-3 bg-slate-50 border-t border-emerald-100 flex justify-end">
+                              {isReceived ? (
+                                <div className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">
+                                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                                  Đã nhận hàng
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() =>
+                                    setSelectShipmentId(shipment.id)
+                                  }
+                                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm active:scale-95 shadow-emerald-100"
+                                >
+                                  <ClipboardCheck className="h-3.5 w-3.5" />
+                                  Xác nhận nhận hàng
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="p-12 text-center text-slate-400 italic text-sm bg-slate-100 rounded-xl">
@@ -392,25 +495,15 @@ function ViewRefillShelfRequestModalDetail({
               <Button variant="outline" onClick={onClose}>
                 Đóng cửa sổ
               </Button>
-
-              {/* {shipmentDetail && shipmentDetail?.status === "Delivered" && ( */}
-              <Button
-                variant="success"
-                onClick={() => setIsOpenConfirmReceive(true)}
-              >
-                Xác nhận đã nhận hàng
-              </Button>
-              {/* )} */}
             </DialogFooter>
           </div>
         </DialogContent>
       </Dialog>
 
       <ConfirmReceiveModal
-        shipmentId={shipmentId}
-        requestId={requestId}
-        isOpen={isOpenConfirmReceive}
-        onClose={() => setIsOpenConfirmReceive(false)}
+        shipmentId={selectShipmentId}
+        isOpen={selectShipmentId}
+        onClose={() => setSelectShipmentId(null)}
         onSuccess={onClose}
       />
     </>

@@ -230,7 +230,7 @@ function AssignWarehouseModal({
                         {selectedWarehouse.items.map(
                           (item: RefillShelfRequestItem) => (
                             <tr
-                              key={item.shelfTypeId}
+                              key={item.shelfOrderItemId}
                               className="hover:bg-blue-50/30 transition-colors"
                             >
                               <td className="px-4 py-3 font-medium text-gray-700">
@@ -275,11 +275,11 @@ function AssignWarehouseModal({
                                   min={0}
                                   max={item.availableQuantity ?? 0}
                                   value={
-                                    assignQuantities[item.shelfTypeId!] ?? ""
+                                    assignQuantities[item.shelfOrderItemId!] ?? ""
                                   }
                                   onChange={(e) => {
                                     const raw = e.target.value;
-                                    const id = item.shelfTypeId!;
+                                    const id = item.shelfOrderItemId!;
                                     setAssignQuantities((prev) => ({
                                       ...prev,
                                       [id]:
@@ -292,7 +292,7 @@ function AssignWarehouseModal({
                                     }));
                                   }}
                                   onBlur={() => {
-                                    const id = item.shelfTypeId!;
+                                    const id = item.shelfOrderItemId!;
                                     if (assignQuantities[id] === "") {
                                       setAssignQuantities((prev) => ({
                                         ...prev,

@@ -16,7 +16,7 @@ import {
 } from "@/src/utils/formatStatus";
 import { CheckCircle2, Package, XCircle } from "lucide-react";
 import {
-  approveRefillRequestAPI,
+  approveRefillRequestByAdminAPI,
   getRefillDetailAPI,
   rejectRefillRequestAPI,
 } from "@/src/services/refill.service";
@@ -87,7 +87,7 @@ function UpdateRefillRequestModal({
 
   async function handleApprove() {
     try {
-      await approveRefillRequestAPI(requestId);
+      await approveRefillRequestByAdminAPI(requestId);
 
       queryClient.invalidateQueries({
         queryKey: ["refillRequests"],
@@ -103,7 +103,7 @@ function UpdateRefillRequestModal({
     }
   }
 
-  const isPending = requestDetail?.status === "Pending";
+  const isPartnerApproved = requestDetail?.status === "PartnerApproved";
   const isRejected = requestDetail?.status === "Rejected";
   const isApproved = requestDetail?.status === "Approved";
 
@@ -179,7 +179,7 @@ function UpdateRefillRequestModal({
               <Button variant="outline" onClick={onClose} className="border-2">
                 Đóng cửa sổ
               </Button>
-              {isPending && (
+              {isPartnerApproved && (
                 <>
                   <Button
                     variant="error"

@@ -54,7 +54,7 @@ function UpdateShipmentAssignRefillRequestModal({
     queryKey: ["shipmentAssignRequest", requestId],
     queryFn: () => getShipmentAssignDetailByIdAPI(requestId!),
     select: (res) => res.data,
-    enabled: !!requestId,
+    enabled: !!requestId && isOpen,
   });
 
   const { data: shipmentDetail, isLoading: isLoadingShipment } = useQuery({
@@ -63,7 +63,7 @@ function UpdateShipmentAssignRefillRequestModal({
       return getShipmentDetailByAssignmentIdAPI(requestId);
     },
     select: (res) => res.data[0],
-    enabled: !!requestId,
+    enabled: !!requestId && isOpen,
   });
 
   // receive return
@@ -90,6 +90,7 @@ function UpdateShipmentAssignRefillRequestModal({
 
   const isPending = shipmentAssignDetail?.status === "Pending";
   const isAccepted = shipmentAssignDetail?.status === "Accepted";
+  const isAssigned = shipmentAssignDetail?.status === "Assigned";
 
   const hasDelivery =
     shipmentAssignDetail?.orderType?.includes("STORE") ||
@@ -97,6 +98,17 @@ function UpdateShipmentAssignRefillRequestModal({
   const hasDamage = shipmentAssignDetail?.orderType?.includes("DAMAGE");
 
   const columnSize = hasDelivery && hasDamage ? "col-span-4" : "col-span-6";
+
+  const getStatusMessage = () => {
+    if (isPending && !shipmentAssignDetail?.shipperName)
+      return "Hãy chọn nhân viên giao hàng";
+    if (isAssigned) return "Hãy chờ nhân viên giao hàng xác nhận"; // Trạng thái bạn vừa muốn thêm
+    if (isPending) return "Hãy chờ nhân viên giao hàng xác nhận";
+    if (isAccepted && !shipmentDetail) return "Hãy xác nhận xuất kho";
+    if (shipmentDetail) return "Đã xuất kho và tạo đơn giao hàng";
+
+    return "Xác nhận số thực tế trước khi xuất kho.";
+  };
   return (
     <>
       <Dialog
@@ -221,15 +233,7 @@ function UpdateShipmentAssignRefillRequestModal({
                         Hướng dẫn điều phối
                       </p>
                       <p className="text-[13px] text-blue-800 font-medium italic line-clamp-1">
-                        {isPending && !shipmentAssignDetail?.shipperName
-                          ? "Hãy chọn nhân viên giao hàng"
-                          : isPending
-                            ? "Hãy chờ nhân viên giao hàng xác nhận"
-                            : isAccepted && !shipmentDetail
-                              ? "Hãy xác nhận xuất kho"
-                              : shipmentDetail
-                                ? "Đã xuất kho và tạo đơn giao hàng"
-                                : "Xác nhận số thực tế trước khi xuất kho."}
+                        {getStatusMessage()}
                       </p>
                     </div>
                   </div>

@@ -2,6 +2,7 @@ import { RefillRequest } from "@/src/types";
 import { FileText, MapPin, Notebook, Store, User } from "lucide-react";
 import ShipInfoItem from "./ShipInfoItem";
 import { memo } from "react";
+import { formatDateTime } from "@/src/utils/format";
 
 interface StoreOrderDetailSectionProps {
   storeOrderDetail: RefillRequest | undefined;
@@ -33,6 +34,19 @@ function StoreOrderDetailSection({
             icon={<MapPin className="h-3 w-3" />}
           />
         </div>
+        <ShipInfoItem
+          label="Đối tác duyệt đơn"
+          value={storeOrderDetail?.partnerAdminName}
+          icon={<User className="h-3.5 w-3.5" />}
+        />
+        <ShipInfoItem
+          label="Thời gian duyệt"
+          value={
+            formatDateTime(storeOrderDetail?.partnerAdminApprovedAt || "")
+              .full || ""
+          }
+          icon={<User className="h-3.5 w-3.5" />}
+        />
         {storeOrderDetail?.status === "Rejected" ? (
           <>
             <ShipInfoItem

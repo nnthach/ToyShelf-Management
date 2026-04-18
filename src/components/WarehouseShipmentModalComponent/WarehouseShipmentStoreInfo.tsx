@@ -66,6 +66,13 @@ function WarehouseShipmentStoreInfo({
             value={formatDateTime(shipmentAssignDetail.createdAt).full}
             icon={<Calendar className="h-3 w-3" />}
           />
+          <div className="col-span-2">
+            <ShipInfoItem
+              label="Quản trị ghi chú"
+              value={shipmentAssignDetail.adminNote}
+              icon={<User className="h-3 w-3" />}
+            />
+          </div>
           <ShipInfoItem
             label="Người điều phối"
             value={shipmentAssignDetail.assignedByName}

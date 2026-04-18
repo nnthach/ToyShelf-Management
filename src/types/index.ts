@@ -369,6 +369,8 @@ export interface RefillRequest {
   createdAt: string;
   approvedAt: string;
   rejectedAt: string;
+  partnerAdminName?: string;
+  partnerAdminApprovedAt?: string;
   note: string;
   items: RefillRequestProductColor[] | RefillShelfRequestItem[];
 }
@@ -410,6 +412,7 @@ export interface DamageReport {
 export interface RefillShelfRequestItem {
   shelfTypeId?: string;
   shelfOrderId?: string;
+  shelfOrderItemId?: string;
   shelfTypeName?: string;
   imageUrl?: string;
   width: number;
@@ -442,6 +445,8 @@ export interface RefillShelfRequest {
   adminNote: string;
   approvedAt: string;
   rejectedAt: string;
+  partnerAdminName?: string;
+  partnerAdminApprovedAt?: string;
   items: RefillShelfRequestItem[];
 }
 
@@ -454,7 +459,8 @@ export interface ShipmentReceiveData {
   shipmentCode: string;
   fromLocationName: string;
   toLocationName: string;
-  productItems: ShipmentProductItem[];
+  productItems?: ShipmentProductItem[];
+  shelfItems?: ShipmentShelfItem[];
 }
 
 export interface ShipmentProductItem {
@@ -464,6 +470,14 @@ export interface ShipmentProductItem {
   colorName: string;
   imageUrl: string;
   expectedQuantity: number;
+}
+
+export interface ShipmentShelfItem {
+  shelfShipmentItemId: string;
+  shelfId: string;
+  shelfCode: string;
+  shelfTypeName: string;
+  imageUrl: string;
 }
 
 export interface CheckReceiveShelfItem {
@@ -521,6 +535,7 @@ export interface ShipmentAssign {
   assignedByName: string;
   shipmentStatus: string;
   status: string;
+  adminNote: string;
   createdAt: string;
   respondedAt: string;
   productItems: RefillRequestProductColor[];

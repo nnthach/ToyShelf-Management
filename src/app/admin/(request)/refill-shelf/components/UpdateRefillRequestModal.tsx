@@ -18,18 +18,12 @@ import { CheckCircle2, Package, XCircle } from "lucide-react";
 import { Shipment } from "@/src/types";
 import { useState } from "react";
 import AssignWarehouseModal from "./AssignWarehouseModal";
-import {
-  getShipmentAssignDetailByIdAPI,
-  getShipmentAssignDetailByShelfOrderIdAPI,
-} from "@/src/services/shipment-assignment.service";
-import {
-  getShipmentDetailByIdAPI,
-  getShipmentDetailByShelfOrderIdAPI,
-} from "@/src/services/shipment.service";
+import { getShipmentAssignDetailByShelfOrderIdAPI } from "@/src/services/shipment-assignment.service";
+import { getShipmentDetailByShelfOrderIdAPI } from "@/src/services/shipment.service";
 import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
 import StoreOrderDetailSection from "@/src/components/ShipmentComponent/StoreOrderDetailSection";
 import {
-  approveRefillShelfRequestAPI,
+  approveRefillShelfRequestByAdminAPI,
   getRefillShelfDetailAPI,
 } from "@/src/services/refill-shelf.service";
 import ShipmentShelfListComponent from "@/src/components/ShipmentComponent/ShipmentShelfListComponent";
@@ -79,7 +73,7 @@ function UpdateRefillShelfRequestModal({
 
   async function handleApprove() {
     try {
-      await approveRefillShelfRequestAPI(requestId);
+      await approveRefillShelfRequestByAdminAPI(requestId);
 
       queryClient.invalidateQueries({
         queryKey: ["refillShelfRequests"],
@@ -95,7 +89,7 @@ function UpdateRefillShelfRequestModal({
     }
   }
 
-  const isPending = requestDetail?.status === "Pending";
+  const isPartnerApproved = requestDetail?.status === "PartnerApproved";
   const isRejected = requestDetail?.status === "Rejected";
   const isApproved = requestDetail?.status === "Approved";
 
@@ -170,7 +164,7 @@ function UpdateRefillShelfRequestModal({
               <Button variant="outline" onClick={onClose} className="border-2">
                 Đóng cửa sổ
               </Button>
-              {isPending && (
+              {isPartnerApproved && (
                 <>
                   <Button
                     variant="error"

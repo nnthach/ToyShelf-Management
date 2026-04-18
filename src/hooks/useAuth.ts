@@ -69,6 +69,7 @@ export function useAuth() {
           const partnerDetail = await getMyPartnerProfileAPI({
             userId: userProfile.data.id,
           });
+          console.log("partnerdetail", partnerDetail);
           dispatch(setPartner(partnerDetail.data));
         }
 
@@ -133,6 +134,7 @@ export function useAuth() {
       const partnerDetail = await getMyPartnerProfileAPI({
         userId: fetchProfileRes.data.id,
       });
+      console.log("partnerdetail", partnerDetail);
 
       dispatch(setPartner(partnerDetail.data));
     }

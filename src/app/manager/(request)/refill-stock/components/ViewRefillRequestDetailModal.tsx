@@ -17,10 +17,7 @@ import {
 } from "@/src/utils/formatStatus";
 import { useState } from "react";
 import { getRefillDetailAPI } from "@/src/services/refill.service";
-import {
-  getShipmentDetailByIdAPI,
-  getShipmentDetailByStoreOrderIdAPI,
-} from "@/src/services/shipment.service";
+import { getShipmentDetailByStoreOrderIdAPI } from "@/src/services/shipment.service";
 import ConfirmReceiveModal from "./ConfirmReceiveModal";
 import { RefillRequestProductColor, Shipment } from "@/src/types";
 import {
@@ -141,10 +138,24 @@ function ViewRefillRequestModalDetail({
                       />
                     </div>
 
+                    <ShipInfoItem
+                      label="Chủ sở hữu duyệt đơn"
+                      value={storeOrderDetail?.partnerAdminName}
+                      icon={<User className="h-3.5 w-3.5" />}
+                    />
+                    <ShipInfoItem
+                      label="Thời gian duyệt"
+                      value={
+                        formatDateTime(storeOrderDetail?.partnerAdminApprovedAt)
+                          .full || ""
+                      }
+                      icon={<User className="h-3.5 w-3.5" />}
+                    />
+
                     {storeOrderDetail?.status === "Rejected" ? (
                       <>
                         <ShipInfoItem
-                          label="Người từ chối"
+                          label="Quản trị viên từ chối"
                           value={storeOrderDetail?.rejectName}
                           icon={<User className="h-3.5 w-3.5" />}
                         />
@@ -160,7 +171,7 @@ function ViewRefillRequestModalDetail({
                     ) : (
                       <>
                         <ShipInfoItem
-                          label="Người duyệt đơn"
+                          label="Quản trị viên duyệt đơn"
                           value={storeOrderDetail?.approveName}
                           icon={<User className="h-3.5 w-3.5" />}
                         />
@@ -275,6 +286,7 @@ function ViewRefillRequestModalDetail({
                     </div>
                   )}
                 </section>
+                
                 {/* SECTION 3: THÔNG TIN VẬN CHUYỂN & ĐIỀU PHỐI */}
                 <section className="space-y-4">
                   <div className="flex items-center gap-2 text-primary font-bold uppercase text-sm tracking-wider">
@@ -284,8 +296,6 @@ function ViewRefillRequestModalDetail({
                   {shipmentDetailList && shipmentDetailList.length > 0 ? (
                     <div className="space-y-6">
                       {shipmentDetailList.map((shipment, index) => {
-                        const isCompleted = shipment.status === "Completed";
-                        const isDelivered = shipment.status === "Delivered";
                         const isReceived = shipment.storeReceivedAt;
 
                         return (

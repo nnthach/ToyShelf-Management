@@ -35,6 +35,7 @@ import {
 
 function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
   const queryClient = useQueryClient();
+  const partnerId = partnerDetail?.id||""
 
   const disableMutation = useMutation({
     mutationFn: disablePartnerAPI,
@@ -279,7 +280,7 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
               Đối tác này chưa được cấp tài khoản truy cập. Hãy tạo tài khoản để
               theo dõi chiết khấu.
             </p>
-            <CreatePartnerAccountModal />
+            <CreatePartnerAccountModal partnerId={partnerId}/>
           </div>
         ) : (
           /* --- TRƯỜNG HỢP 2: ĐÃ CÓ TÀI KHOẢN (Hiển thị Header và List Lịch sử) --- */

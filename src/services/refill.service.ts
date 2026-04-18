@@ -15,8 +15,13 @@ export const createRefillAPI = async <T>(data: T) => {
   return res.data;
 };
 
-export const approveRefillRequestAPI = async (id: string) => {
-  const res = await api.patch(`/StoreOrder/${id}/approve`);
+export const approveRefillRequestByAdminAPI = async (id: string) => {
+  const res = await api.patch(`/StoreOrder/${id}/admin-approve`);
+  return res.data;
+};
+
+export const approveRefillRequestByPartnerAPI = async (id: string) => {
+  const res = await api.patch(`/StoreOrder/${id}/partner-approve`);
   return res.data;
 };
 
@@ -27,5 +32,10 @@ export const rejectRefillRequestAPI = async (id: string) => {
 
 export const getStoreOrderAvailableWarehouseAPI = async (id: string) => {
   const res = await api.get(`/StoreOrder/${id}/available-warehouses`);
+  return res.data;
+};
+
+export const getStoreOrderForPartnerAPI = async <T>(id: string, params: T) => {
+  const res = await api.get(`/StoreOrder/by-partner/${id}`, { params });
   return res.data;
 };

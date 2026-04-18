@@ -1,5 +1,16 @@
-import { Shipment } from "@/src/types";
-import { Truck, Package, ArrowRight, Calendar, MapPin } from "lucide-react";
+import {
+  RefillRequestProductColor,
+  RefillShelfRequestItem,
+  Shipment,
+} from "@/src/types";
+import {
+  Truck,
+  Package,
+  ArrowRight,
+  Calendar,
+  MapPin,
+  Layers,
+} from "lucide-react";
 import ShipInfoItem from "./ShipInfoItem";
 import ShipTimeNode from "./ShipTimeNode";
 import EmptySection from "./EmptySection";
@@ -96,61 +107,15 @@ function ShipmentDetailSection({ shipmentDetail }: ShipmentDetailSectionProps) {
                     <Package className="h-3 w-3" /> Chi tiết hàng hóa
                   </p>
                   <div className="bg-slate-50/50 rounded-lg border border-slate-100 divide-y divide-slate-100">
-                    {shipment.productItems?.map((product, pIdx) => (
-                      <div
-                        key={pIdx}
-                        className="p-2 flex items-center justify-between gap-4"
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                          <div className="h-8 w-8 rounded border bg-white shrink-0 overflow-hidden relative">
-                            <Image
-                              src={product.imageUrl || ""}
-                              alt=""
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-[13px] font-bold text-slate-800 truncate mb-0.5">
-                              {product.productName}
-                            </p>
+                    {shipment?.productItems?.length > 0 &&
+                      shipment.productItems?.map((product, pIdx) => (
+                        <ProductItem product={product} key={pIdx} />
+                      ))}
 
-                            <div className="flex items-center gap-2">
-                              <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 font-mono rounded border border-slate-200/50">
-                                {product.sku}
-                              </span>
-                              <span className="text-slate-300 text-[10px]">
-                                |
-                              </span>
-                              <p className="text-[11px] text-slate-500 font-medium">
-                                {formatColorNameToVN(product?.color || "")}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Đối soát số lượng */}
-                        <div className="flex items-center gap-3 shrink-0">
-                          <div className="text-center min-w-[30px]">
-                            <p className="text-[8px] text-slate-400 uppercase font-bold">
-                              Giao
-                            </p>
-                            <p className="text-xs font-bold text-slate-600">
-                              {product.expectedQuantity}
-                            </p>
-                          </div>
-                          <div className="h-4 w-px bg-slate-200" />
-                          <div className="text-center min-w-[30px]">
-                            <p className="text-[8px] text-emerald-600 uppercase font-bold">
-                              Nhận
-                            </p>
-                            <p className="text-xs font-black text-emerald-600">
-                              {product.receivedQuantity}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                    {shipment?.shelfItems?.length > 0 &&
+                      shipment.shelfItems?.map((shelf, pIdx) => (
+                        <ShelfItem shelf={shelf} key={pIdx} />
+                      ))}
                   </div>
                 </div>
               </div>
@@ -163,5 +128,119 @@ function ShipmentDetailSection({ shipmentDetail }: ShipmentDetailSectionProps) {
     </section>
   );
 }
+
+const ProductItem = ({ product }: { product: RefillRequestProductColor }) => {
+  return (
+    <div
+      key={product.productColorId}
+      className="p-2 flex items-center justify-between gap-4"
+    >
+      <div className="flex items-center gap-2.5 min-w-0 flex-1">
+        <div className="h-8 w-8 rounded border bg-white shrink-0 overflow-hidden relative">
+          <Image
+            src={product.imageUrl || ""}
+            alt=""
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[13px] font-bold text-slate-800 truncate mb-0.5">
+            {product.productName}
+          </p>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 font-mono rounded border border-slate-200/50">
+              {product.sku}
+            </span>
+            <span className="text-slate-300 text-[10px]">|</span>
+            <p className="text-[11px] text-slate-500 font-medium">
+              {formatColorNameToVN(product?.color || "")}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Đối soát số lượng */}
+      <div className="flex items-center gap-3 shrink-0">
+        <div className="text-center min-w-[30px]">
+          <p className="text-[8px] text-slate-400 uppercase font-bold">Giao</p>
+          <p className="text-xs font-bold text-slate-600">
+            {product.expectedQuantity}
+          </p>
+        </div>
+        <div className="h-4 w-px bg-slate-200" />
+        <div className="text-center min-w-[30px]">
+          <p className="text-[8px] text-emerald-600 uppercase font-bold">
+            Nhận
+          </p>
+          <p className="text-xs font-black text-emerald-600">
+            {product.receivedQuantity}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ShelfItem = ({ shelf }: { shelf: RefillShelfRequestItem }) => {
+  return (
+    <div
+      key={shelf.shelfTypeId}
+      className="p-2 flex items-center justify-between gap-4"
+    >
+      <div className="flex items-center gap-2.5 min-w-0 flex-1">
+        <div className="h-8 w-8 rounded border bg-white shrink-0 overflow-hidden relative">
+          <Image
+            src={shelf.imageUrl || ""}
+            alt=""
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[13px] font-bold text-slate-800 truncate mb-0.5">
+            {shelf.shelfTypeName}
+          </p>
+          <div className="flex items-center gap-2 mt-1.5">
+            <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
+              <span className="font-medium">
+                {shelf.width}×{shelf.height}×{shelf.depth}
+              </span>
+            </div>
+
+            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+
+            <div className="flex items-center gap-1 text-[12px]">
+              <Layers className="w-3.5 h-3.5 text-blue-500" />
+              <span className="font-semibold text-slate-700">
+                {shelf.totalLevels} tầng
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Đối soát số lượng */}
+      <div className="flex items-center gap-3 shrink-0">
+        <div className="text-center min-w-[30px]">
+          <p className="text-[8px] text-slate-400 uppercase font-bold">Giao</p>
+          <p className="text-xs font-bold text-slate-600">
+            {shelf.expectedQuantity}
+          </p>
+        </div>
+        <div className="h-4 w-px bg-slate-200" />
+        <div className="text-center min-w-[30px]">
+          <p className="text-[8px] text-emerald-600 uppercase font-bold">
+            Nhận
+          </p>
+          <p className="text-xs font-black text-emerald-600">
+            {shelf.receivedQuantity}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default memo(ShipmentDetailSection);

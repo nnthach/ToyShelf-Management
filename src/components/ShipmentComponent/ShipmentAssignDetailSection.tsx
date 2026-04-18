@@ -1,7 +1,12 @@
-import { ShipmentAssign } from "@/src/types";
+import {
+  RefillRequestProductColor,
+  RefillShelfRequestItem,
+  ShipmentAssign,
+} from "@/src/types";
 import {
   Calendar,
   ClipboardList,
+  Layers,
   Package,
   UserCheck,
   Warehouse,
@@ -92,51 +97,14 @@ function ShipmentAssignDetailSection({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {assignment.productItems?.map((product, pIndex) => (
-                        <tr
-                          key={product.productColorId || pIndex}
-                          className="hover:bg-slate-100/30 transition-colors border-b border-slate-50 last:border-0"
-                        >
-                          <td className="px-3 py-2 flex items-center gap-3">
-                            {/* Thumbnail sản phẩm */}
-                            <div className="h-10 w-10 rounded-md border bg-white flex-shrink-0 overflow-hidden relative shadow-sm">
-                              {product?.imageUrl ? (
-                                <Image
-                                  src={product.imageUrl}
-                                  alt={product.productName || ""}
-                                  fill
-                                  className="object-cover"
-                                  sizes="40px"
-                                />
-                              ) : (
-                                <div className="flex items-center justify-center h-full w-full bg-slate-50">
-                                  <Package className="h-4 w-4 text-slate-300" />
-                                </div>
-                              )}
-                            </div>
-                            {/* Thông tin Text */}
-                            <div className="flex flex-col min-w-0">
-                              <span className="font-semibold text-slate-700 text-[11px] truncate leading-tight">
-                                {product.productName}
-                              </span>
-                              <div className="flex items-center gap-1.5 mt-0.5">
-                                <span className="text-[9px] font-mono text-slate-400 bg-slate-100 px-1 rounded">
-                                  {product.sku}
-                                </span>
-                                <span className="text-[10px] text-slate-500">
-                                  {formatColorNameToVN(product?.color || "")}
-                                </span>
-                              </div>
-                            </div>
-                          </td>
-
-                          <td className="px-3 py-2 text-right">
-                            <span className="inline-flex items-center justify-center bg-violet-100 text-violet-700 font-bold px-2 py-0.5 rounded text-[11px] min-w-[28px]">
-                              {product.quantity}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
+                      {assignment?.productItems?.length > 0 &&
+                        assignment?.productItems?.map((product, index) => (
+                          <ProductItem product={product} key={index} />
+                        ))}
+                      {assignment?.shelfItems?.length > 0 &&
+                        assignment?.shelfItems?.map((shelf, index) => (
+                          <ShelfItem shelf={shelf} key={index} />
+                        ))}
                     </tbody>
                   </table>
                 </div>
@@ -150,5 +118,109 @@ function ShipmentAssignDetailSection({
     </section>
   );
 }
+
+const ProductItem = ({ product }: { product: RefillRequestProductColor }) => {
+  return (
+    <tr
+      key={product.productColorId}
+      className="hover:bg-slate-100/30 transition-colors border-b border-slate-50 last:border-0"
+    >
+      <td className="px-3 py-2 flex items-center gap-3">
+        {/* Thumbnail sản phẩm */}
+        <div className="h-10 w-10 rounded-md border bg-white flex-shrink-0 overflow-hidden relative shadow-sm">
+          {product?.imageUrl ? (
+            <Image
+              src={product.imageUrl}
+              alt={product.productName || ""}
+              fill
+              className="object-cover"
+              sizes="40px"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full w-full bg-slate-50">
+              <Package className="h-4 w-4 text-slate-300" />
+            </div>
+          )}
+        </div>
+        {/* Thông tin Text */}
+        <div className="flex flex-col min-w-0">
+          <span className="font-semibold text-slate-700 text-[11px] truncate leading-tight">
+            {product.productName}
+          </span>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span className="text-[9px] font-mono text-slate-400 bg-slate-100 px-1 rounded">
+              {product.sku}
+            </span>
+            <span className="text-[10px] text-slate-500">
+              {formatColorNameToVN(product?.color || "")}
+            </span>
+          </div>
+        </div>
+      </td>
+
+      <td className="px-3 py-2 text-right">
+        <span className="inline-flex items-center justify-center bg-violet-100 text-violet-700 font-bold px-2 py-0.5 rounded text-[11px] min-w-[28px]">
+          {product.quantity}
+        </span>
+      </td>
+    </tr>
+  );
+};
+
+const ShelfItem = ({ shelf }: { shelf: RefillShelfRequestItem }) => {
+  return (
+    <tr
+      key={shelf.shelfTypeId}
+      className="hover:bg-slate-100/30 transition-colors border-b border-slate-50 last:border-0"
+    >
+      <td className="px-3 py-2 flex items-center gap-3">
+        {/* Thumbnail sản phẩm */}
+        <div className="h-10 w-10 rounded-md border bg-white flex-shrink-0 overflow-hidden relative shadow-sm">
+          {shelf?.imageUrl ? (
+            <Image
+              src={shelf?.imageUrl || ""}
+              alt={shelf?.shelfTypeName || ""}
+              fill
+              className="object-cover"
+              sizes="40px"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full w-full bg-slate-50">
+              <Package className="h-4 w-4 text-slate-300" />
+            </div>
+          )}
+        </div>
+        {/* Thông tin Text */}
+        <div className="flex flex-col min-w-0">
+          <span className="font-semibold text-slate-700 text-[11px] truncate leading-tight">
+            {shelf?.shelfTypeName || "N/A"}
+          </span>
+          <div className="flex items-center gap-2 mt-1.5">
+            <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
+              <span className="font-medium">
+                {shelf?.width || 0}×{shelf?.height || 0}×{shelf?.depth || 0}
+              </span>
+            </div>
+
+            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+
+            <div className="flex items-center gap-1 text-[12px]">
+              <Layers className="w-3.5 h-3.5 text-blue-500" />
+              <span className="font-semibold text-slate-700">
+                {shelf?.totalLevels || 0} tầng
+              </span>
+            </div>
+          </div>
+        </div>
+      </td>
+
+      <td className="px-3 py-2 text-right">
+        <span className="inline-flex items-center justify-center bg-violet-100 text-violet-700 font-bold px-2 py-0.5 rounded text-[11px] min-w-[28px]">
+          {shelf?.quantity || 0}
+        </span>
+      </td>
+    </tr>
+  );
+};
 
 export default memo(ShipmentAssignDetailSection);

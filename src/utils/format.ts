@@ -1,4 +1,11 @@
 export const formatDateTime = (data: string) => {
+  if (!data) {
+    return {
+      date: "",
+      time: "",
+      full: "",
+    };
+  }
   const date = new Date(data);
 
   const formattedDate = date.toLocaleDateString("vi-VN", {

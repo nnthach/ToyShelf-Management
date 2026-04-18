@@ -69,7 +69,7 @@ function EditProductInfoLeft() {
           <FormFieldCustom
             name="name"
             label="Tên sản phẩm"
-            placeholder="Ví dụ: Giày Sneaker Nam A1"
+            placeholder="Ví dụ: Labubu"
             icon={<Package size={18} />}
             required
           />

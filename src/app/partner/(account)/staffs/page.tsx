@@ -121,7 +121,7 @@ export default function PartnerManageStaff() {
         >
           <div className="p-4 border-b flex justify-between items-center">
             {/*Filter search */}
-            <FilterrSearch
+            <FilterSearch
               query={query}
               loading={isLoading}
               resultCount={staffList.length}

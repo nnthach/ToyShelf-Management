@@ -207,8 +207,10 @@ export const formatStoreOrderRefillRequestStatusText = (status: string) => {
   switch (status) {
     case "Pending":
       return "Đang chờ duyệt";
+    case "PartnerApproved":
+      return "Đối tác chấp nhận";
     case "Approved":
-      return "Đã chấp nhận";
+      return "Quản trị viên chấp nhận";
     case "Rejected":
       return "Đã từ chối";
     case "PartiallyFulfilled":
@@ -226,6 +228,8 @@ export const formatStoreOrderRefillRequestStatusColor = (status: string) => {
   switch (status) {
     case "Pending":
       return "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-2xl";
+    case "PartnerApproved":
+      return "bg-indigo-100 text-indigo-800 px-3 py-1 rounded-2xl";
     case "Approved":
       return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
     case "Rejected":

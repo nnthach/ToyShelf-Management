@@ -15,8 +15,13 @@ export const createRefillShelfAPI = async <T>(data: T) => {
   return res.data;
 };
 
-export const approveRefillShelfRequestAPI = async (id: string) => {
-  const res = await api.patch(`/ShelfOrder/${id}/approve`);
+export const approveRefillShelfRequestByAdminAPI = async (id: string) => {
+  const res = await api.patch(`/ShelfOrder/${id}/admin-approve`);
+  return res.data;
+};
+
+export const approveRefillShelfRequestByPartnerAPI = async (id: string) => {
+  const res = await api.patch(`/ShelfOrder/${id}/partner-approve`);
   return res.data;
 };
 
@@ -30,5 +35,10 @@ export const rejectRefillShelfRequestAPI = async (
 
 export const getShelfOrderAvailableWarehouseAPI = async (id: string) => {
   const res = await api.get(`/ShelfOrder/${id}/available-warehouses`);
+  return res.data;
+};
+
+export const getShelfOrderForPartnerAPI = async <T>(id: string, params: T) => {
+  const res = await api.get(`/ShelfOrder/by-partner/${id}`, { params });
   return res.data;
 };

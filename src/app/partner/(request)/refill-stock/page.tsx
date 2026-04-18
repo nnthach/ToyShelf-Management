@@ -1,21 +1,24 @@
 "use client";
 
-import { Plus } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
-import { Button } from "@/src/styles/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
 import { RefillRequest, Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillRequestColumns } from "./columns";
 import { useState } from "react";
-import { getAllRefillAPI } from "@/src/services/refill.service";
+import {
+  getStoreOrderForPartnerAPI,
+} from "@/src/services/refill.service";
 import ViewRefillRequestModalDetail from "./components/ViewRefillRequestDetailModal";
 import FilterSearch from "./components/FilterSearch";
 import { getAllStoreAPI } from "@/src/services/store.service";
+import { useAuth } from "@/src/hooks/useAuth";
 
 export default function PartnerRefillRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
+  const { partner } = useAuth();
+  const partnerId = partner?.partnerId || "";
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
@@ -29,8 +32,9 @@ export default function PartnerRefillRequestManage() {
     refetch,
   } = useQuery({
     queryKey: ["refillRequests", query],
-    queryFn: () => getAllRefillAPI(query),
+    queryFn: () => getStoreOrderForPartnerAPI(partnerId, query),
     select: (res) => res.data as RefillRequest[],
+    enabled: !!partnerId,
   });
 
   const { data: storeList } = useQuery({

@@ -10,10 +10,13 @@ import { useState } from "react";
 import FilterSearch from "./components/FilterSearch";
 import { getAllStoreAPI } from "@/src/services/store.service";
 import ViewRefillShelfRequestModalDetail from "./components/ViewRefillShelfRequestDetailModal";
-import { getAllRefillShelfAPI } from "@/src/services/refill-shelf.service";
+import { getShelfOrderForPartnerAPI } from "@/src/services/refill-shelf.service";
+import { useAuth } from "@/src/hooks/useAuth";
 
 export default function PartnerRefillShelfRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
+  const { partner } = useAuth();
+  const partnerId = partner?.partnerId || "";
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
@@ -27,8 +30,9 @@ export default function PartnerRefillShelfRequestManage() {
     refetch,
   } = useQuery({
     queryKey: ["refillShelfRequests", query],
-    queryFn: () => getAllRefillShelfAPI(query),
+    queryFn: () => getShelfOrderForPartnerAPI(partnerId, query),
     select: (res) => res.data as RefillRequest[],
+    enabled: !!partnerId,
   });
 
   const { data: storeList } = useQuery({
