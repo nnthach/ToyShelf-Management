@@ -236,12 +236,17 @@ export const PartnerAdminSidebarNested = [
       {
         title: "Đặt hàng",
         url: "/partner/refill-stock",
-        icon: Store,
+        icon: PackagePlus,
       },
       {
         title: "Đặt kệ",
         url: "/partner/refill-shelf",
-        icon: Store,
+        icon: LayoutGrid,
+      },
+      {
+        title: "Trả hàng",
+        url: "/partner/return-request",
+        icon: RotateCcw,
       },
     ],
   },

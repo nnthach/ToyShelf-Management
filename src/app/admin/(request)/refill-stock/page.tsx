@@ -19,8 +19,7 @@ export default function AdminRefillRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
+    status: "",
   });
 
   const {

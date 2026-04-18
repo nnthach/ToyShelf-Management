@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Plus, Upload } from "lucide-react";
+import { Plus } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
@@ -10,7 +10,6 @@ import { RefillRequest } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillShelfRequestColumns } from "./columns";
 import { useState } from "react";
-import { getAllRefillAPI } from "@/src/services/refill.service";
 import ViewRefillRequestModalDetail from "./components/ViewRefillShelfRequestDetailModal";
 import { useRouter } from "next/navigation";
 import { getAllRefillShelfAPI } from "@/src/services/refill-shelf.service";
@@ -21,9 +20,6 @@ export default function ManagerRefillShelfRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
     status: "",
   });
 
@@ -76,7 +72,6 @@ export default function ManagerRefillShelfRequestManage() {
               query={query}
               loading={isLoading}
               resultCount={refillShelfRequestList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

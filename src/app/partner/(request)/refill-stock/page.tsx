@@ -22,7 +22,6 @@ export default function PartnerRefillRequestManage() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
-    order: "",
     storeId: "",
   });
 

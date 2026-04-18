@@ -1,28 +1,20 @@
 "use client";
-
-import { Download, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
-import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
 import { RefillRequest } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillShelfRequestColumns } from "./columns";
 import { useState } from "react";
-import { getAllRefillAPI } from "@/src/services/refill.service";
 import UpdateRefillShelfRequestModal from "./components/UpdateRefillRequestModal";
 import { getAllRefillShelfAPI } from "@/src/services/refill-shelf.service";
 
 export default function AdminRefillShelfRequestManage() {
-  const queryClient = useQueryClient();
-
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
+    status: "",
   });
 
   const {
@@ -66,7 +58,6 @@ export default function AdminRefillShelfRequestManage() {
               query={query}
               loading={isLoading}
               resultCount={refillShelfRequestList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

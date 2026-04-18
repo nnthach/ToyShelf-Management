@@ -20,9 +20,7 @@ export default function ManagerRefillRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
+    status: "",
   });
 
   const {
@@ -82,7 +80,6 @@ export default function ManagerRefillRequestManage() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
           </div>
         </DataTable>
       </div>

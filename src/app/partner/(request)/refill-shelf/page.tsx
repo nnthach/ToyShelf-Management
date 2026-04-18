@@ -20,7 +20,6 @@ export default function PartnerRefillShelfRequestManage() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
-    order: "",
     storeId: "",
   });
 

@@ -9,6 +9,7 @@ import {
 } from "@/src/styles/components/ui/popover";
 import { Store } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
+import { StoreOrderStatusOptions } from "@/src/utils/format";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Filter, RotateCcw, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -18,11 +19,7 @@ type FilterBarProps = {
   loading: boolean;
   resultCount?: number;
   storeList?: Store[];
-  onApplyFilter: (val: {
-    status?: string;
-    order?: string;
-    storeId?: string;
-  }) => void;
+  onApplyFilter: (val: { status?: string; storeId?: string }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
@@ -46,19 +43,15 @@ export default function FilterSearch({
 
   const [tempFilter, setTempFilter] = useState<{
     status: string;
-    order: string;
   }>({
     status: String(query.status ?? ""),
-    order: query.order ?? "",
   });
 
-  const isFiltered =
-    query.order !== "" || query.status !== "" || query.storeId !== "";
+  const isFiltered = query.status !== "" || query.storeId !== "";
 
   const handleApply = () => {
     onApplyFilter({
       status: tempFilter.status || undefined,
-      order: tempFilter.order || undefined,
     });
   };
 
@@ -66,7 +59,6 @@ export default function FilterSearch({
     setStoreValue("");
     setTempFilter({
       status: "",
-      order: "",
     });
     onReset();
   };
@@ -84,25 +76,6 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
-            {/* Order */}
-            <div className="grid gap-2">
-              <Label>Sắp xếp</Label>
-              <select
-                className="border rounded-md h-9 px-2"
-                value={tempFilter.order}
-                onChange={(e) =>
-                  setTempFilter((p) => ({
-                    ...p,
-                    order: e.target.value,
-                  }))
-                }
-              >
-                <option value="">Tất cả</option>
-                <option value="asc">A → Z</option>
-                <option value="desc">Z → A</option>
-              </select>
-            </div>
-
             {/* Status */}
             <div className="grid gap-2">
               <Label>Trạng thái</Label>
@@ -117,9 +90,11 @@ export default function FilterSearch({
                 }
               >
                 <option value="">Tất cả</option>
-                <option value="Pending">Đang chờ duyệt</option>
-                <option value="Approved">Đã chấp nhận</option>
-                <option value="Rejected">Đã từ chối</option>
+                {StoreOrderStatusOptions.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
               </select>
             </div>
 

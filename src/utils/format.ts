@@ -144,3 +144,34 @@ export const formatSourceDamageReport = (text: string): string => {
       return text || "Không xác định";
   }
 };
+
+export const StoreOrderStatusOptions = [
+  {
+    value: "Pending",
+    label: "Đang chờ duyệt",
+  },
+  {
+    value: "PartnerApproved",
+    label: "Đối tác chấp nhận",
+  },
+  {
+    value: "Approved",
+    label: "Quản trị viên chấp nhận",
+  },
+  {
+    value: "Processing",
+    label: "Đang giao hàng",
+  },
+  {
+    value: "PartiallyFulfilled",
+    label: "Đã giao một phần",
+  },
+  {
+    value: "Fulfilled",
+    label: "Đã giao đủ",
+  },
+  {
+    value: "Rejected",
+    label: "Đã từ chối",
+  },
+];
