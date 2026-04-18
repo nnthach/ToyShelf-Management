@@ -178,7 +178,7 @@ export function FormFieldCustom({
                 {required && <span className="text-red-500 ml-0.5">*</span>}
               </div>
               {labelNote && (
-                <span className="text-xs font-normal text-muted-foreground ml-auto italic">
+                <span className="text-xs text-right font-normal text-muted-foreground ml-auto italic">
                   ({labelNote})
                 </span>
               )}
