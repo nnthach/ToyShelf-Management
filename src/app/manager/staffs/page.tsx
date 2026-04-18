@@ -1,34 +1,22 @@
 "use client";
-
-import { Download, Upload } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { QueryParams } from "@/src/types/SubType";
-import { getAllPartnerAPI } from "@/src/services/partner.service";
 import { getStaffColumns } from "./columns";
 import CreateStaffModal from "./components/CreateStaffModal";
 import FilterSearch from "./components/FilterSearch";
 import { useAuth } from "@/src/hooks/useAuth";
 import { getAllPartnerStaffAPI } from "@/src/services/user.service";
-import { getAllStoreAPI } from "@/src/services/store.service";
-import { Store } from "@/src/types";
 import useQueryParams from "@/src/hooks/useQueryParams";
-import { Button } from "@/src/styles/components/ui/button";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 
 export default function ManagerManageStaff() {
-  const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
+  const { myStore } = useAuth();
 
-  const { partner } = useAuth();
-
-  const partnerId = partner?.partnerId;
+  const storeId = myStore?.storeId;
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    partnerId: partnerId || "",
-    storeId: "",
+    storeId: storeId,
     storeRole: "",
-    isActive: undefined,
-    order: "",
   });
 
   const {
@@ -41,22 +29,7 @@ export default function ManagerManageStaff() {
     select: (res) => res.data,
   });
 
-  const { data: storeList = [] } = useQuery({
-    queryKey: ["stores"],
-    queryFn: () => getAllStoreAPI({}),
-    select: (res) => res.data as Store[],
-  });
-
-  const storeOptions = storeList.map((s) => ({
-    label: s.name,
-    value: s.id,
-  }));
-
-  const handleViewDetail = (partnerId: string) => {
-    setSelectedStaffId(partnerId);
-  };
-
-  const columns = getStaffColumns(handleViewDetail);
+  const columns = getStaffColumns();
 
   return (
     <>
@@ -85,8 +58,6 @@ export default function ManagerManageStaff() {
               query={query}
               loading={isLoading}
               resultCount={staffList.length}
-              storeOptions={storeOptions}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

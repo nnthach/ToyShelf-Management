@@ -66,25 +66,6 @@ function UpdateShipmentAssignRefillRequestModal({
     enabled: !!requestId,
   });
 
-  // reject
-  const rejectMutation = useMutation({
-    mutationFn: () => rejectShipmentAssignAPI(requestId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["shipmentAssigns"] });
-      queryClient.invalidateQueries({
-        queryKey: ["shipmentAssign", requestId],
-      });
-      toast.success("Từ chối yêu cầu thành công");
-    },
-    onError: (error) => {
-      console.error("Accept error:", error);
-      toast.error("Từ chối yêu cầu thất bại");
-    },
-  });
-  const handleReject = async () => {
-    rejectMutation.mutate();
-  };
-
   // receive return
   const receiveReturnMutation = useMutation({
     mutationFn: () => warehouseReceiveReturnShipmentAPI(shipmentDetail.id),
@@ -226,19 +207,20 @@ function UpdateShipmentAssignRefillRequestModal({
 
           {/* FOOTER ACTIONS */}
           <div className="p-4 border-t bg-white">
-            <DialogFooter className="flex flex-row items-center justify-between sm:justify-between">
-              {/* BÊN TRÁI: THẺ GHI CHÚ (NOTES) */}
-              {(shipmentDetail && shipmentDetail?.status !== "Shipping") ||
-                (shipmentDetail?.status !== "Delivered" && (
-                  <div className="hidden md:flex items-center gap-3 bg-blue-50/80 px-4 py-2.5 rounded-2xl border border-blue-100/50 shadow-sm">
-                    <div className="bg-blue-600 p-1.5 rounded-lg shadow-sm shadow-blue-200">
+            <DialogFooter className="flex flex-row items-center justify-between w-full sm:justify-between gap-4">
+              {/* BÊN TRÁI: THẺ GHI CHÚ (NOTES) - Chỉ chiếm không gian cần thiết */}
+              <div className="flex-1">
+                {((shipmentDetail && shipmentDetail?.status !== "Shipping") ||
+                  shipmentDetail?.status !== "Delivered") && (
+                  <div className="hidden md:flex items-center gap-3 bg-blue-50/80 px-4 py-2.5 rounded-2xl border border-blue-100/50 shadow-sm w-fit">
+                    <div className="bg-blue-600 p-1.5 rounded-lg shadow-sm shadow-blue-200 shrink-0">
                       <Info size={14} className="text-white animate-pulse" />
                     </div>
                     <div className="flex flex-col">
                       <p className="text-[10px] font-black text-blue-600 uppercase tracking-wider leading-none mb-1">
                         Hướng dẫn điều phối
                       </p>
-                      <p className="text-[14px] text-blue-800 font-medium italic">
+                      <p className="text-[13px] text-blue-800 font-medium italic line-clamp-1">
                         {isPending && !shipmentAssignDetail?.shipperName
                           ? "Hãy chọn nhân viên giao hàng"
                           : isPending
@@ -246,65 +228,58 @@ function UpdateShipmentAssignRefillRequestModal({
                             : isAccepted && !shipmentDetail
                               ? "Hãy xác nhận xuất kho"
                               : shipmentDetail
-                                ? "Đã xuất kho và tạo đơn giao hàng, chờ giao hàng"
-                                : "Xác nhận số lượng thực tế trước khi xuất kho cho Shipper."}
+                                ? "Đã xuất kho và tạo đơn giao hàng"
+                                : "Xác nhận số thực tế trước khi xuất kho."}
                       </p>
                     </div>
                   </div>
-                ))}
+                )}
+              </div>
 
-              {/* BÊN PHẢI: CÁC NÚT ACTIONS (NHƯ CŨ) */}
-              <div className="flex-1 items-center gap-3">
+              {/* BÊN PHẢI: CÁC NÚT ACTIONS - Gom cụm lại bên phải */}
+              <div className="flex items-center gap-3 shrink-0">
                 {isPending && (
-                  <>
-                    <Button
-                      variant="error"
-                      disabled={isLoading}
-                      onClick={handleReject}
-                      className="px-6 h-11 rounded-xl font-bold shadow-sm"
-                    >
-                      <XCircle className="mr-2 h-4 w-4" /> Từ chối
-                    </Button>
-                    <Button
-                      variant="success"
-                      disabled={isLoading}
-                      onClick={() => setIsOpenAssignShipperModal(true)}
-                      className="px-6 h-11 rounded-xl font-bold shadow-lg shadow-green-100 transition-all hover:scale-[1.02]"
-                    >
-                      <CheckCircle2 className="mr-2 h-4 w-4" /> Chọn nhân viên
-                      giao hàng
-                    </Button>
-                  </>
+                  <Button
+                    variant="success"
+                    disabled={isLoading}
+                    onClick={() => setIsOpenAssignShipperModal(true)}
+                    className="px-6 h-11 rounded-xl font-bold shadow-lg shadow-green-100 transition-all hover:scale-[1.02]"
+                  >
+                    <CheckCircle2 className="mr-2 h-4 w-4" /> Chọn nhân viên
+                    giao hàng
+                  </Button>
                 )}
 
                 {!isPending && isAccepted && (
-                  <div className="flex-1 gap-3 items-center justify-end">
+                  <div className="flex items-center gap-3">
                     <Button
                       variant="outline"
                       disabled={isLoading}
                       onClick={onClose}
-                      className="px-6 h-11 rounded-xl border-slate-200 font-bold text-slate-600 hover:bg-white"
+                      className="px-6 h-11 rounded-xl border-slate-200 font-bold text-slate-600 hover:bg-slate-50"
                     >
                       Đóng
                     </Button>
+
                     {!shipmentDetail &&
                       shipmentAssignDetail.orderType !== "DAMAGE" && (
                         <Button
                           variant="success"
                           disabled={isLoading}
                           onClick={() => setIsOpenCreateShipmentModal(true)}
-                          className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02] active:scale-[0.98]"
+                          className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02]"
                         >
                           <CheckCircle2 className="mr-2 h-4 w-4" /> Tạo đơn giao
-                          hàng và xuất kho
+                          hàng
                         </Button>
                       )}
+
                     {shipmentDetail?.status === "DeliveredReturn" && (
                       <Button
                         variant="success"
                         disabled={isLoading}
                         onClick={handleReceiveReturn}
-                        className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02] active:scale-[0.98]"
+                        className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02]"
                       >
                         <CheckCircle2 className="mr-2 h-4 w-4" /> Đã nhận hàng
                         trả về

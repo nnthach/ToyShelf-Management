@@ -30,8 +30,6 @@ export default function PartnerManageStaff() {
     partnerId: partnerId || "",
     storeId: "",
     storeRole: "",
-    isActive: undefined,
-    order: "",
   });
 
   const {
@@ -123,12 +121,11 @@ export default function PartnerManageStaff() {
         >
           <div className="p-4 border-b flex justify-between items-center">
             {/*Filter search */}
-            <FilterSearch
+            <FilterrSearch
               query={query}
               loading={isLoading}
               resultCount={staffList.length}
               storeOptions={storeOptions}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

@@ -34,12 +34,12 @@ function DamageReportDetailSection({
           <ShipInfoItem
             label="Cửa hàng"
             value={damageReportDetail?.storeName}
-            icon={<Store className="h-3.5 w-3.5 text-blue-500" />}
+            icon={<Store className="h-3.5 w-3.5" />}
           />
           <ShipInfoItem
             label="Người yêu cầu"
             value={damageReportDetail?.reportedByName}
-            icon={<User className="h-3.5 w-3.5 text-indigo-500" />}
+            icon={<User className="h-3.5 w-3.5" />}
           />
           <div className="col-span-2">
             <ShipInfoItem
@@ -58,7 +58,7 @@ function DamageReportDetailSection({
               <span
                 className={`font-bold ${damageReportDetail?.isWarrantyClaim ? "text-orange-600" : "text-blue-600"}`}
               >
-                {damageReportDetail?.isWarrantyClaim ? "Trả hàng" : "Bảo hành"}
+                {!damageReportDetail?.isWarrantyClaim ? "Trả hàng" : "Bảo hành"}
               </span>
             }
             icon={<Tag className="h-3.5 w-3.5 text-slate-400" />}
@@ -85,7 +85,7 @@ function DamageReportDetailSection({
                   {formatSourceDamageReport(damageReportDetail?.source || "")}
                 </div>
               }
-              icon={<AlertCircle className="h-3.5 w-3.5 text-orange-500" />}
+              icon={<AlertCircle className="h-3.5 w-3.5" />}
             />
           </div>
 
@@ -113,11 +113,7 @@ function DamageReportDetailSection({
                 : "Quản trị viên chấp nhận"
             }
             value={damageReportDetail?.reviewedByName || "Chưa xem xét"}
-            icon={
-              <UserCheck
-                className={`h-3.5 w-3.5 ${damageReportDetail?.status === "Rejected" ? "text-red-500" : "text-emerald-500"}`}
-              />
-            }
+            icon={<UserCheck className={`h-3.5 w-3.5`} />}
           />
           {damageReportDetail?.status === "Rejected" && (
             <ShipInfoItem

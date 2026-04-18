@@ -14,12 +14,9 @@ import { useState } from "react";
 import UpdateStoreCreateRequestModal from "./components/UpdateStoreCreationRequestModal";
 
 export default function AdminStoreCreationRequestManage() {
-
   const [selectedRequestId, setSelectedRequestId] = useState("");
-
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
+    status: "",
   });
 
   const {

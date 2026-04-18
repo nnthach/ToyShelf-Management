@@ -18,6 +18,12 @@ export const getShipmentAssignDetailByShelfOrderIdAPI = async (id: string) => {
   const res = await api.get(`/ShipmentAssignment/shelf-order/${id}`);
   return res.data;
 };
+export const getShipmentAssignDetailByDamageReportIdAPI = async (
+  id: string,
+) => {
+  const res = await api.get(`/ShipmentAssignment/damage-report/${id}`);
+  return res.data;
+};
 
 export const getShipmentAssignDetailByIdAPI = async (id: string) => {
   const res = await api.get(`/ShipmentAssignment/${id}`);

@@ -12,8 +12,6 @@ import { useQuery } from "@tanstack/react-query";
 export default function AdminUserManage() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: "",
-    search: "",
   });
 
   const {
@@ -55,7 +53,6 @@ export default function AdminUserManage() {
               query={query}
               loading={isLoading}
               resultCount={staffList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

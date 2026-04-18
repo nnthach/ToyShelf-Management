@@ -3,8 +3,8 @@
 import { DamageReport } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
 import {
-  formatStoreOrderRefillRequestStatusColor,
-  formatStoreOrderRefillRequestStatusText,
+  formatDamageReportStatusColor,
+  formatDamageReportStatusText,
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
@@ -82,8 +82,8 @@ export const getStoreReturnRequestColumn = (
       const status = row.getValue("status") as string;
 
       return (
-        <span className={`${formatStoreOrderRefillRequestStatusColor(status)}`}>
-          {formatStoreOrderRefillRequestStatusText(status)}
+        <span className={`${formatDamageReportStatusColor(status)}`}>
+          {formatDamageReportStatusText(status)}
         </span>
       );
     },

@@ -10,14 +10,22 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  formatDamageReportStatusColor,
+  formatDamageReportStatusText,
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { CheckCircle2, Package, XCircle } from "lucide-react";
 import { Shipment } from "@/src/types";
 import { useState } from "react";
-import { getShipmentAssignDetailByIdAPI } from "@/src/services/shipment-assignment.service";
-import { getShipmentDetailByIdAPI } from "@/src/services/shipment.service";
+import {
+  getShipmentAssignDetailByDamageReportIdAPI,
+  getShipmentAssignDetailByIdAPI,
+} from "@/src/services/shipment-assignment.service";
+import {
+  getShipmentDetailByDamageReportIdAPI,
+  getShipmentDetailByIdAPI,
+} from "@/src/services/shipment.service";
 import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
 import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
 import ShipmentShelfListComponent from "@/src/components/ShipmentComponent/ShipmentShelfListComponent";
@@ -26,6 +34,8 @@ import { getDamageReportDetailAPI } from "@/src/services/damage-report.service";
 import ApproveAssignWarehouseModal from "./ApproveAssignWarehouseModal";
 import DamageReportDetailSection from "@/src/components/ShipmentComponent/DamageReportDetailSection";
 import DamageReportItemList from "@/src/components/ShipmentComponent/DamageReportItemList";
+import ShipmentAssignDetailDamageSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailDamageSection";
+import ShipmentDetailDamageSection from "@/src/components/ShipmentComponent/ShipmentDetailDamageSection";
 
 type UpdateReturnRequestModalProps = {
   requestId: string;
@@ -50,20 +60,18 @@ function UpdateReturnRequestModal({
     enabled: !!requestId,
   });
 
-  const assignmentId = requestDetail?.shipmentAssignmentIds?.[0];
-  const { data: shipmentAssignDetail } = useQuery({
-    queryKey: ["shipmentAssignDetail", assignmentId],
-    queryFn: () => getShipmentAssignDetailByIdAPI(assignmentId!),
+  const { data: shipmentAssigns, isLoading: isLoadingAssigns } = useQuery({
+    queryKey: ["shipmentAssigns", requestId],
+    queryFn: () => getShipmentAssignDetailByDamageReportIdAPI(requestId!),
     select: (res) => res.data,
-    enabled: !!assignmentId,
+    enabled: !!requestId && isOpen,
   });
 
-  const shipmentId = requestDetail?.shipmentIds?.[0];
   const { data: shipmentDetail } = useQuery({
-    queryKey: ["shipmentDetail", shipmentId],
-    queryFn: () => getShipmentDetailByIdAPI(shipmentId!),
-    select: (res) => res.data as Shipment,
-    enabled: !!shipmentId,
+    queryKey: ["shipmentDetail", requestId],
+    queryFn: () => getShipmentDetailByDamageReportIdAPI(requestId!),
+    select: (res) => res.data as Shipment[],
+    enabled: !!requestId && isOpen,
   });
 
   const isPending = requestDetail?.status === "Pending";
@@ -92,11 +100,9 @@ function UpdateReturnRequestModal({
                   </DialogDescription>
                 </div>
                 <div
-                  className={`px-4 py-1.5 mr-4 rounded-full text-sm font-bold shadow-sm ${formatStoreOrderRefillRequestStatusColor(requestDetail?.status)}`}
+                  className={`px-4 py-1.5 mr-4 rounded-full text-sm font-bold shadow-sm ${formatDamageReportStatusColor(requestDetail?.status)}`}
                 >
-                  {formatStoreOrderRefillRequestStatusText(
-                    requestDetail?.status,
-                  )}
+                  {formatDamageReportStatusText(requestDetail?.status)}
                 </div>
               </div>
             </DialogHeader>
@@ -121,10 +127,12 @@ function UpdateReturnRequestModal({
                   <DamageReportDetailSection
                     damageReportDetail={requestDetail}
                   />
-                  {/* <ShipmentAssignDetailSection
-                    shipmentAssignDetail={shipmentAssignDetail}
-                  /> */}
-                  {/* <ShipmentDetailSection shipmentDetail={shipmentDetail} /> */}
+                  <ShipmentAssignDetailDamageSection
+                    shipmentAssignments={shipmentAssigns ?? []}
+                  />
+                  <ShipmentDetailDamageSection
+                    shipmentDetail={shipmentDetail}
+                  />
                 </div>
 
                 <div className="col-span-6 flex flex-col bg-slate-50/50 overflow-hidden">

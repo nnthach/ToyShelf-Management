@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { Button } from "@/src/styles/components/ui/button";
-import { Download, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 import useQueryParams from "../../../../hooks/useQueryParams";
 import { getPartnerColumns } from "./columns";
 import CreatePartnerModal from "./components/CreatePartnerModal";
@@ -14,8 +14,6 @@ import { getAllPartnerAPI } from "@/src/services/partner.service";
 export default function AdminPartnerManage() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: "",
-    search: "",
   });
 
   const {
@@ -57,7 +55,6 @@ export default function AdminPartnerManage() {
               query={query}
               loading={isLoading}
               resultCount={partnerList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

@@ -20,8 +20,6 @@ export default function AdminWarehouseManagement() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: "",
-    search: "",
   });
 
   const {
@@ -63,7 +61,6 @@ export default function AdminWarehouseManagement() {
               query={query}
               loading={isLoading}
               resultCount={warehouseList.length}
-              onSearch={(val) => updateQuery({ search: val || undefined })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

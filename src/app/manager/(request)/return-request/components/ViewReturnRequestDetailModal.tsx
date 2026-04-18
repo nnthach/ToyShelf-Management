@@ -10,26 +10,36 @@ import {
 } from "@/src/styles/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import {
+  formatDamageReportStatusColor,
+  formatDamageReportStatusText,
+  formatShipmentStatusColor,
+  formatShipmentStatusText,
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { useState } from "react";
-import { DamageReportItem } from "@/src/types";
+import { DamageReportItem, Shipment } from "@/src/types";
 import {
   AlertCircle,
+  Building2,
   FileText,
   Layers,
   MapPin,
   Package,
   Store,
   Tag,
+  Truck,
   User,
+  UserCheck,
+  Warehouse,
 } from "lucide-react";
 import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import Image from "next/image";
 import { getDamageReportDetailAPI } from "@/src/services/damage-report.service";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { ImageView } from "@/src/components/ImageView";
+import { getShipmentDetailByDamageReportIdAPI } from "@/src/services/shipment.service";
+import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
 
 type ViewReturnRequestModalDetailProps = {
   requestId: string;
@@ -51,32 +61,12 @@ function ViewReturnRequestModalDetail({
     enabled: !!requestId,
   });
 
-  // const shipmentId = storeOrderShelfDetail?.shipmentIds?.[0];
-  // const { data: shipmentDetail } = useQuery({
-  //   queryKey: ["shipmentDetail", shipmentId],
-  //   queryFn: () => getShipmentDetailByIdAPI(shipmentId!),
-  //   select: (res) => res.data as Shipment,
-  //   enabled: !!shipmentId,
-  // });
-
-  // const shipmentItemMap = new Map(
-  //   shipmentDetail?.shelfItems?.map((item: RefillShelfRequestItem) => [
-  //     item.shelfTypeId,
-  //     item,
-  //   ]) || [],
-  // );
-
-  // const itemsWithQuantities = storeOrderShelfDetail?.items?.map(
-  //   (item: RefillShelfRequestItem) => {
-  //     const shipmentItem = shipmentItemMap.get(item.shelfTypeId);
-
-  //     return {
-  //       ...item,
-  //       expectedQuantity: shipmentItem?.expectedQuantity || 0,
-  //       receivedQuantity: shipmentItem?.receivedQuantity || 0,
-  //     };
-  //   },
-  // );
+  const { data: shipmentDetail } = useQuery({
+    queryKey: ["shipmentDetail", requestId],
+    queryFn: () => getShipmentDetailByDamageReportIdAPI(requestId!),
+    select: (res) => res.data[0] as Shipment,
+    enabled: !!requestId && isOpen,
+  });
 
   return (
     <>
@@ -102,11 +92,9 @@ function ViewReturnRequestModalDetail({
                   </DialogDescription>
                 </div>
                 <div
-                  className={`px-4 py-1.5 mr-4 rounded-full text-sm font-bold shadow-sm ${formatStoreOrderRefillRequestStatusColor(damageRequestDetail?.status)}`}
+                  className={`px-4 py-1.5 mr-4 rounded-full text-sm font-bold shadow-sm ${formatDamageReportStatusColor(damageRequestDetail?.status)}`}
                 >
-                  {formatStoreOrderRefillRequestStatusText(
-                    damageRequestDetail?.status,
-                  )}
+                  {formatDamageReportStatusText(damageRequestDetail?.status)}
                 </div>
               </div>
             </DialogHeader>
@@ -155,7 +143,7 @@ function ViewReturnRequestModalDetail({
                     <ShipInfoItem
                       label="Loại đơn"
                       value={
-                        damageRequestDetail?.isWarrantyClaim
+                        !damageRequestDetail?.isWarrantyClaim
                           ? "Trả hàng"
                           : "Bảo hành"
                       }
@@ -232,7 +220,7 @@ function ViewReturnRequestModalDetail({
                 </section>
 
                 {/* SECTION 3: THÔNG TIN VẬN CHUYỂN & ĐIỀU PHỐI */}
-                {/* <section>
+                <section>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2 text-primary font-bold uppercase text-sm tracking-wider">
                       <Truck className="h-4 w-4" /> 3. Trạng thái vận chuyển
@@ -255,14 +243,14 @@ function ViewReturnRequestModalDetail({
                           </p>
                           <div className="flex items-center gap-3">
                             <div className="h-8 w-8 rounded bg-blue-50 flex items-center justify-center text-blue-600">
-                              <Warehouse className="h-4 w-4" />
+                              <Building2 className="h-4 w-4" />
                             </div>
                             <div>
                               <p className="text-[11px] text-slate-500">
-                                Từ kho
+                                Từ cửa hàng
                               </p>
                               <p className="text-sm font-bold text-slate-800">
-                                {shipmentDetail.fromLocationName}
+                                {shipmentDetail.toLocationName}
                               </p>
                             </div>
                           </div>
@@ -277,7 +265,7 @@ function ViewReturnRequestModalDetail({
                             </div>
                             <div>
                               <p className="text-[11px] text-slate-500">
-                                Shipper
+                                Nhân viên giao hàng
                               </p>
                               <p className="text-sm font-bold text-slate-800">
                                 {shipmentDetail.shipperName}
@@ -290,15 +278,15 @@ function ViewReturnRequestModalDetail({
                       <div className="grid grid-cols-3 gap-2">
                         <ShipTimeNode
                           label="Lấy hàng"
-                          time={shipmentDetail.pickedUpAt}
+                          time={shipmentDetail.returnPickedUpAt}
                         />
                         <ShipTimeNode
-                          label="Giao hàng"
-                          time={shipmentDetail.deliveredAt}
+                          label="Đến kho"
+                          time={shipmentDetail.arrivedWarehouseAt}
                         />
                         <ShipTimeNode
                           label="Hoàn tất"
-                          time={shipmentDetail.receivedAt}
+                          time={shipmentDetail.warehouseReceivedAt}
                         />
                       </div>
                     </div>
@@ -307,7 +295,7 @@ function ViewReturnRequestModalDetail({
                       Chưa có thông tin vận chuyển
                     </div>
                   )}
-                </section> */}
+                </section>
               </div>
             )}
           </div>
@@ -318,15 +306,6 @@ function ViewReturnRequestModalDetail({
               <Button variant="outline" onClick={onClose}>
                 Đóng cửa sổ
               </Button>
-
-              {/* {shipmentDetail && shipmentDetail?.status === "Delivered" && ( */}
-              <Button
-                variant="success"
-                onClick={() => setIsOpenConfirmReceive(true)}
-              >
-                Xác nhận đã nhận hàng
-              </Button>
-              {/* )} */}
             </DialogFooter>
           </div>
         </DialogContent>

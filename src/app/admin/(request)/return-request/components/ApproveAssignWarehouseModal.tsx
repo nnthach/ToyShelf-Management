@@ -67,6 +67,7 @@ function ApproveAssignWarehouseModal({
       await approveDamageReportRequestAPI(requestId, data);
 
       queryClient.invalidateQueries({ queryKey: ["returnRequest", requestId] });
+      queryClient.invalidateQueries({ queryKey: ["returnRequests"] });
 
       toast.success("Xác nhận thành công");
       onClose();
@@ -79,7 +80,7 @@ function ApproveAssignWarehouseModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-[400px] max-h-[90vh] flex flex-col p-0 overflow-hidden">
         <DialogHeader className="p-6 pb-2">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
