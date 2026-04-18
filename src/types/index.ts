@@ -88,6 +88,8 @@ export interface ProductColorItem {
   productColorId: string;
   sku: string;
   productColorSku: string;
+  productName: string;
+  productSku: string;
   priceSegmentId: string;
   colorId: string;
   price: number;
@@ -105,6 +107,7 @@ export interface ProductColorItem {
   damaged: number;
   sold: number;
   name: string;
+  variantSku: string;
 }
 
 export interface Product {
@@ -220,6 +223,18 @@ export interface CommissionTableApply {
   endDate: string;
   isActive: boolean;
   name: string;
+}
+
+export interface CommissionHistory {
+  id: string;
+  orderItemId: string;
+  appliedRate: number;
+  commissionAmount: number;
+  createdAt: string;
+  quantity: number;
+  orderCode: number;
+  paymentMethod: string;
+  orderDate: string;
 }
 
 export interface Report {

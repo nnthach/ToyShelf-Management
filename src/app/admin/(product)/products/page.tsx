@@ -15,6 +15,7 @@ import ViewDetailSheet from "./components/ViewDetailSheet";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllProductAPI } from "@/src/services/product.service";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import FileUploadModal from "./components/FileUploadModal";
 
 export default function AdminProductManage() {
   const router = useRouter();
@@ -71,6 +72,7 @@ export default function AdminProductManage() {
             <Plus />
             Thêm sản phẩm
           </Button>
+          <FileUploadModal />
           <div className="flex items-center gap-1 rounded-lg border">
             {/* Grid view */}
             <Button

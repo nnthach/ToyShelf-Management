@@ -2,13 +2,8 @@
 
 import React, { useState } from "react";
 import CreateProductColorModal from "./components/CreateProductColorModal";
-import useQueryParams from "@/src/hooks/useQueryParams";
 import { getProductColorColumns } from "./columns";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import FilterSearch from "./components/FilterSearch";
-import { Button } from "@/src/styles/components/ui/button";
-import { Upload } from "lucide-react";
-import { QueryParams } from "@/src/types/SubType";
 import {
   deleteProductColorDetailAPI,
   getAllProductColorAPI,
@@ -21,18 +16,9 @@ export default function AdminProductColor() {
   const [selectedColorId, setSelectedColorId] = useState("");
   const queryClient = useQueryClient();
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    order: "",
-    search: "",
-  });
-
-  const {
-    data: productColorList = [],
-    isLoading: loading,
-    refetch,
-  } = useQuery({
-    queryKey: ["colors", query],
-    queryFn: () => getAllProductColorAPI(query),
+  const { data: productColorList = [], isLoading: loading } = useQuery({
+    queryKey: ["colors"],
+    queryFn: () => getAllProductColorAPI({}),
     select: (res) => res.data,
   });
 

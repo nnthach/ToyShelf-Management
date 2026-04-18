@@ -21,6 +21,7 @@ import {
   Ticket,
   Box,
   ShoppingCart,
+  History,
 } from "lucide-react";
 
 // Admin
@@ -88,6 +89,11 @@ export const AdminSidebarNested = [
         title: "Áp dụng bảng hoa hồng",
         url: "/admin/commission-table-apply",
         icon: Table,
+      },
+      {
+        title: "Lịch sử hoa hồng",
+        url: "/admin/commission-history",
+        icon: History,
       },
     ],
   },
