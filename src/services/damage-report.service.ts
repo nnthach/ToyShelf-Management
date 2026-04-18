@@ -15,8 +15,23 @@ export const createDamageReportAPI = async <T>(data: T) => {
   return res.data;
 };
 
-export const approveDamageReportRequestAPI = async <T>(id: string, data: T) => {
-  const res = await api.patch(`/DamageReport/${id}/approve`, data);
+export const createDamageAssignWarehouseAPI = async <T>(
+  id: string,
+  params: T,
+) => {
+  const res = await api.post(`/DamageReport/${id}/create-assignment`, null, {
+    params,
+  });
+  return res.data;
+};
+
+export const adminApproveDamageReportRequestAPI = async (id: string) => {
+  const res = await api.patch(`/DamageReport/${id}/admin-approve`);
+  return res.data;
+};
+
+export const partnerApproveDamageReportRequestAPI = async <T>(id: string) => {
+  const res = await api.patch(`/DamageReport/${id}/partner-approve`);
   return res.data;
 };
 

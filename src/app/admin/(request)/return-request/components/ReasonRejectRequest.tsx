@@ -13,7 +13,6 @@ import { toast } from "react-toastify";
 import { AlertCircle, Send, XCircle } from "lucide-react";
 import { rejectRefillShelfRequestAPI } from "@/src/services/refill-shelf.service";
 import { useState } from "react";
-import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type ReasonRejectRequestModalProps = {

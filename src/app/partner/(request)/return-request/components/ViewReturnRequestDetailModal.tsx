@@ -8,20 +8,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/styles/components/ui/dialog";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   formatDamageReportStatusColor,
   formatDamageReportStatusText,
   formatShipmentStatusColor,
   formatShipmentStatusText,
-  formatStoreOrderRefillRequestStatusColor,
-  formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { useState } from "react";
 import { DamageReportItem, Shipment } from "@/src/types";
 import {
   AlertCircle,
   Building2,
+  CheckCircle2,
   FileText,
   Layers,
   MapPin,
@@ -31,11 +30,13 @@ import {
   Truck,
   User,
   UserCheck,
-  Warehouse,
 } from "lucide-react";
 import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import Image from "next/image";
-import { getDamageReportDetailAPI } from "@/src/services/damage-report.service";
+import {
+  getDamageReportDetailAPI,
+  partnerApproveDamageReportRequestAPI,
+} from "@/src/services/damage-report.service";
 import {
   formatColorNameToVN,
   formatDateTime,
@@ -44,6 +45,8 @@ import {
 import { ImageView } from "@/src/components/ImageView";
 import { getShipmentDetailByDamageReportIdAPI } from "@/src/services/shipment.service";
 import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
+import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type ViewReturnRequestModalDetailProps = {
   requestId: string;
@@ -56,6 +59,8 @@ function ViewReturnRequestModalDetail({
   isOpen,
   onClose,
 }: ViewReturnRequestModalDetailProps) {
+  const queryClient = useQueryClient();
+
   const { data: damageRequestDetail, isLoading } = useQuery({
     queryKey: ["damageRequestDetail", requestId],
     queryFn: () => getDamageReportDetailAPI(requestId!),
@@ -69,6 +74,24 @@ function ViewReturnRequestModalDetail({
     select: (res) => res.data[0] as Shipment,
     enabled: !!requestId && isOpen,
   });
+
+  async function handleApprove() {
+    try {
+      await partnerApproveDamageReportRequestAPI(requestId);
+
+      queryClient.invalidateQueries({
+        queryKey: ["returnRequests"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["damageRequestDetail", requestId],
+      });
+
+      toast.success("Chấp nhận yêu cầu thành công");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
+    }
+  }
 
   return (
     <>
@@ -358,6 +381,15 @@ function ViewReturnRequestModalDetail({
               <Button variant="outline" onClick={onClose}>
                 Đóng cửa sổ
               </Button>
+              {damageRequestDetail?.status === "Pending" && (
+                <Button
+                  variant="success"
+                  onClick={handleApprove}
+                  className="px-8 border-2"
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
+                </Button>
+              )}
             </DialogFooter>
           </div>
         </DialogContent>

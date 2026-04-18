@@ -21,6 +21,7 @@ import {
   rejectShipmentAssignAPI,
 } from "@/src/services/shipment-assignment.service";
 import {
+  createShipmentAPI,
   getShipmentDetailByAssignmentIdAPI,
   warehouseReceiveReturnShipmentAPI,
 } from "@/src/services/shipment.service";
@@ -88,6 +89,24 @@ function UpdateShipmentAssignRefillRequestModal({
     receiveReturnMutation.mutate();
   };
 
+  // tạo đơn thu hồi ordertype = damage
+  const handleCreateDamageShipment = async () => {
+    try {
+      await createShipmentAPI({ shipmentAssignmentId: requestId });
+      queryClient.invalidateQueries({ queryKey: ["shipmentAssignRequests"] });
+      queryClient.invalidateQueries({
+        queryKey: ["shipmentAssignRequest", requestId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["shipment", requestId],
+      });
+      toast.success("Tạo đơn thành công");
+    } catch (error) {
+      console.log("error", error);
+      toast.error("Tạo đơn thất bại");
+    }
+  };
+
   const isPending = shipmentAssignDetail?.status === "Pending";
   const isAccepted = shipmentAssignDetail?.status === "Accepted";
   const isAssigned = shipmentAssignDetail?.status === "Assigned";
@@ -102,9 +121,11 @@ function UpdateShipmentAssignRefillRequestModal({
   const getStatusMessage = () => {
     if (isPending && !shipmentAssignDetail?.shipperName)
       return "Hãy chọn nhân viên giao hàng";
-    if (isAssigned) return "Hãy chờ nhân viên giao hàng xác nhận"; // Trạng thái bạn vừa muốn thêm
+    if (isAssigned) return "Hãy chờ nhân viên giao hàng xác nhận";
     if (isPending) return "Hãy chờ nhân viên giao hàng xác nhận";
-    if (isAccepted && !shipmentDetail) return "Hãy xác nhận xuất kho";
+    if (shipmentAssignDetail?.orderType === "DAMAGE" && !shipmentDetail)
+      return "Hãy tạo đơn để nhân viên thu hồi";
+    if (isAccepted && !shipmentDetail) return "Hãy t";
     if (shipmentDetail) return "Đã xuất kho và tạo đơn giao hàng";
 
     return "Xác nhận số thực tế trước khi xuất kho.";
@@ -289,6 +310,19 @@ function UpdateShipmentAssignRefillRequestModal({
                         trả về
                       </Button>
                     )}
+
+                    {!shipmentDetail &&
+                      shipmentAssignDetail.orderType === "DAMAGE" && (
+                        <Button
+                          variant="success"
+                          disabled={isLoading}
+                          onClick={handleCreateDamageShipment}
+                          className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02]"
+                        >
+                          <CheckCircle2 className="mr-2 h-4 w-4" /> Tạo đơn bắt
+                          đầu thu hồi
+                        </Button>
+                      )}
                   </div>
                 )}
               </div>

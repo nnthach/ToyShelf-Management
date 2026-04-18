@@ -1,6 +1,7 @@
 import { DamageReport, RefillRequest } from "@/src/types";
 import {
   AlertCircle,
+  Clock,
   FileText,
   Layers,
   MapPin,
@@ -12,7 +13,7 @@ import {
 } from "lucide-react";
 import ShipInfoItem from "./ShipInfoItem";
 import { memo } from "react";
-import { formatSourceDamageReport } from "@/src/utils/format";
+import { formatDateTime, formatSourceDamageReport } from "@/src/utils/format";
 
 interface DamageReportDetailSectionProps {
   damageReportDetail: DamageReport | undefined;
@@ -102,6 +103,20 @@ function DamageReportDetailSection({
               />
             </div>
           )}
+
+          <ShipInfoItem
+            label="Đối tác chấp nhận"
+            value={damageReportDetail?.partnerAdminName}
+            icon={<User className="h-3 w-3" />}
+          />
+          <ShipInfoItem
+            label="Thời gian duyệt"
+            value={
+              formatDateTime(damageReportDetail?.partnerAdminApprovedAt || "")
+                .full || ""
+            }
+            icon={<Clock className="h-3.5 w-3.5" />}
+          />
         </div>
 
         {/* Nhóm 3: Admin Review */}
@@ -114,6 +129,13 @@ function DamageReportDetailSection({
             }
             value={damageReportDetail?.reviewedByName || "Chưa xem xét"}
             icon={<UserCheck className={`h-3.5 w-3.5`} />}
+          />
+          <ShipInfoItem
+            label="Thời gian duyệt"
+            value={
+              formatDateTime(damageReportDetail?.reviewedAt || "").full || ""
+            }
+            icon={<Clock className="h-3.5 w-3.5" />}
           />
           {damageReportDetail?.status === "Rejected" && (
             <ShipInfoItem

@@ -407,6 +407,8 @@ export interface DamageReport {
   createdAt: string;
   reviewedAt: string;
   items: DamageReportItem[];
+  partnerAdminName?: string;
+  partnerAdminApprovedAt?: string;
 }
 
 export interface RefillShelfRequestItem {

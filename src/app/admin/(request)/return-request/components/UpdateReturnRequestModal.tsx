@@ -12,30 +12,24 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   formatDamageReportStatusColor,
   formatDamageReportStatusText,
-  formatStoreOrderRefillRequestStatusColor,
-  formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
 import { CheckCircle2, Package, XCircle } from "lucide-react";
 import { Shipment } from "@/src/types";
 import { useState } from "react";
-import {
-  getShipmentAssignDetailByDamageReportIdAPI,
-  getShipmentAssignDetailByIdAPI,
-} from "@/src/services/shipment-assignment.service";
-import {
-  getShipmentDetailByDamageReportIdAPI,
-  getShipmentDetailByIdAPI,
-} from "@/src/services/shipment.service";
-import ShipmentDetailSection from "@/src/components/ShipmentComponent/ShipmentDetailSection";
-import ShipmentAssignDetailSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailSection";
-import ShipmentShelfListComponent from "@/src/components/ShipmentComponent/ShipmentShelfListComponent";
+import { getShipmentAssignDetailByDamageReportIdAPI } from "@/src/services/shipment-assignment.service";
+import { getShipmentDetailByDamageReportIdAPI } from "@/src/services/shipment.service";
 import ReasonRejectRequestModal from "./ReasonRejectRequest";
-import { getDamageReportDetailAPI } from "@/src/services/damage-report.service";
-import ApproveAssignWarehouseModal from "./ApproveAssignWarehouseModal";
+import {
+  adminApproveDamageReportRequestAPI,
+  getDamageReportDetailAPI,
+} from "@/src/services/damage-report.service";
 import DamageReportDetailSection from "@/src/components/ShipmentComponent/DamageReportDetailSection";
 import DamageReportItemList from "@/src/components/ShipmentComponent/DamageReportItemList";
 import ShipmentAssignDetailDamageSection from "@/src/components/ShipmentComponent/ShipmentAssignDetailDamageSection";
 import ShipmentDetailDamageSection from "@/src/components/ShipmentComponent/ShipmentDetailDamageSection";
+import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import AssignWarehouseModal from "./AssignWarehouseModal";
 
 type UpdateReturnRequestModalProps = {
   requestId: string;
@@ -51,7 +45,8 @@ function UpdateReturnRequestModal({
   const queryClient = useQueryClient();
 
   const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
-  const [isOpenApproveModal, setIsOpenApproveModal] = useState(false);
+  const [isOpenAssignWarehouseModal, setIsOpenAssignWarehouseModal] =
+    useState(false);
 
   const { data: requestDetail, isLoading } = useQuery({
     queryKey: ["returnRequest", requestId],
@@ -74,7 +69,26 @@ function UpdateReturnRequestModal({
     enabled: !!requestId && isOpen,
   });
 
-  const isPending = requestDetail?.status === "Pending";
+  async function handleApprove() {
+    try {
+      await adminApproveDamageReportRequestAPI(requestId);
+
+      queryClient.invalidateQueries({
+        queryKey: ["returnRequest"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["shipmentAssigns", requestId],
+      });
+
+      toast.success("Hãy điều phối kho thực hiện");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
+    }
+  }
+
+  const isPartnerApproved = requestDetail?.status === "PartnerApproved";
+  const isApproved = requestDetail?.status === "Approved";
 
   return (
     <>
@@ -149,7 +163,7 @@ function UpdateReturnRequestModal({
               <Button variant="outline" onClick={onClose} className="border-2">
                 Đóng cửa sổ
               </Button>
-              {isPending && (
+              {isPartnerApproved && (
                 <>
                   <Button
                     variant="error"
@@ -160,22 +174,32 @@ function UpdateReturnRequestModal({
                   </Button>
                   <Button
                     variant="success"
-                    onClick={() => setIsOpenApproveModal(true)}
+                    onClick={handleApprove}
                     className="px-8 border-2"
                   >
                     <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
                   </Button>
                 </>
               )}
+
+              {isApproved && (
+                <Button
+                  variant="success"
+                  onClick={() => setIsOpenAssignWarehouseModal(true)}
+                  className="px-8 shadow-lg shadow-green-200"
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-2" /> Điều phối kho
+                </Button>
+              )}
             </DialogFooter>
           </div>
         </DialogContent>
       </Dialog>
 
-      <ApproveAssignWarehouseModal
+      <AssignWarehouseModal
         requestId={requestId}
-        isOpen={isOpenApproveModal}
-        onClose={() => setIsOpenApproveModal(false)}
+        isOpen={isOpenAssignWarehouseModal}
+        onClose={() => setIsOpenAssignWarehouseModal(false)}
         onSuccess={onClose}
       />
 

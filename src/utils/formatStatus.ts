@@ -375,8 +375,10 @@ export const formatDamageReportStatusText = (status: string) => {
   switch (status) {
     case "Pending":
       return "Đang chờ duyệt";
+    case "PartnerApproved":
+      return "Đối tác chấp nhận";
     case "Approved":
-      return "Đã chấp nhận";
+      return "Quản trị viên chấp nhận";
     case "Rejected":
       return "Đã từ chối";
     case "InTransit":
@@ -394,6 +396,8 @@ export const formatDamageReportStatusColor = (status: string) => {
   switch (status) {
     case "Pending":
       return "bg-amber-100 text-amber-700 font-bold border border-amber-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "PartnerApproved":
+      return "bg-indigo-100 text-indigo-700 font-bold border border-indigo-200 px-3 py-1 rounded-2xl shadow-sm";
     case "Approved":
       return "bg-blue-100 text-blue-700 font-bold border border-blue-200 px-3 py-1 rounded-2xl shadow-sm";
     case "Rejected":

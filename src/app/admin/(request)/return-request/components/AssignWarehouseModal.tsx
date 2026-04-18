@@ -19,34 +19,32 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Warehouse } from "@/src/types";
-import { approveDamageReportRequestAPI } from "@/src/services/damage-report.service";
+import { createDamageAssignWarehouseAPI } from "@/src/services/damage-report.service";
 
-type ApproveAssignWarehouseModalProps = {
+type AssignWarehouseModalProps = {
   requestId: string;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 };
 
-function ApproveAssignWarehouseModal({
+function AssignWarehouseModal({
   requestId,
   isOpen,
   onClose,
-}: ApproveAssignWarehouseModalProps) {
+}: AssignWarehouseModalProps) {
   const queryClient = useQueryClient();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const formSchema = z.object({
     warehouseLocationId: z.string().min(1, "Kho là bắt buộc"),
-    adminNote: z.string().optional(),
   });
 
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       warehouseLocationId: "",
-      adminNote: "",
     },
   });
 
@@ -54,6 +52,7 @@ function ApproveAssignWarehouseModal({
     queryKey: ["warehouses"],
     queryFn: () => getAllWarehouseAPI({}),
     select: (res) => res.data as Warehouse[],
+    enabled: isOpen,
   });
 
   const warehouseOptions = availableWarehouseList?.map((s) => ({
@@ -63,23 +62,36 @@ function ApproveAssignWarehouseModal({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);
+    const params = {
+      warehouseLocationId: data.warehouseLocationId,
+    };
     try {
-      await approveDamageReportRequestAPI(requestId, data);
+      await createDamageAssignWarehouseAPI(requestId, params);
 
       queryClient.invalidateQueries({ queryKey: ["returnRequest", requestId] });
       queryClient.invalidateQueries({ queryKey: ["returnRequests"] });
 
-      toast.success("Xác nhận thành công");
+      toast.success("Điều phối kho thành công");
+      form.reset();
       onClose();
     } catch (error) {
-      toast.error(getErrorMessage(error, "Xác nhận thất bại"));
+      toast.error(getErrorMessage(error, "Điều phối kho thất bại"));
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(v) => {
+        if (!v) {
+          form.reset();
+          onClose();
+        }
+      }}
+    >
+      {" "}
       <DialogContent className="sm:max-w-[400px] max-h-[90vh] flex flex-col p-0 overflow-hidden">
         <DialogHeader className="p-6 pb-2">
           <div className="flex items-center gap-3">
@@ -112,12 +124,6 @@ function ApproveAssignWarehouseModal({
                   placeholder="Chọn kho thực hiện"
                   type="select"
                   selectData={warehouseOptions}
-                  required
-                />
-                <FormFieldCustom
-                  name="adminNote"
-                  label="Ghi chú"
-                  icon={<Pen size={18} />}
                   required
                 />
               </div>
@@ -153,4 +159,4 @@ function ApproveAssignWarehouseModal({
   );
 }
 
-export default memo(ApproveAssignWarehouseModal);
+export default memo(AssignWarehouseModal);
