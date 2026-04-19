@@ -1,25 +1,24 @@
 "use client";
-
-import { Download, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
-import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
-import { RefillRequest } from "@/src/types";
+import { Partner, RefillRequest, Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillRequestColumns } from "./columns";
 import { useState } from "react";
 import { getAllRefillAPI } from "@/src/services/refill.service";
 import UpdateRefillRequestModal from "./components/UpdateRefillRequestModal";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
+import { getAllStoreAPI } from "@/src/services/store.service";
 
 export default function AdminRefillRequestManage() {
-  const queryClient = useQueryClient();
-
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
+    storeId: "",
+    partnerId: "",
   });
 
   const {
@@ -30,6 +29,18 @@ export default function AdminRefillRequestManage() {
     queryKey: ["refillRequests", query],
     queryFn: () => getAllRefillAPI(query),
     select: (res) => res.data as RefillRequest[],
+  });
+
+  const { data: partnerList = [] } = useQuery({
+    queryKey: ["partners"],
+    queryFn: () => getAllPartnerAPI({}),
+    select: (res) => res.data as Partner[],
+  });
+
+  const { data: storeList = [] } = useQuery({
+    queryKey: ["stores"],
+    queryFn: () => getAllStoreAPI({}),
+    select: (res) => res.data as Store[],
   });
 
   const handleEdit = (requestId: string) => {
@@ -62,6 +73,8 @@ export default function AdminRefillRequestManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
+              storeList={storeList}
+              partnerList={partnerList}
               resultCount={refillRequestList.length}
               onApplyFilter={(filter) =>
                 updateQuery({

@@ -7,23 +7,28 @@ import { RefillRequest, Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillRequestColumns } from "./columns";
 import { useState } from "react";
-import {
-  getStoreOrderForPartnerAPI,
-} from "@/src/services/refill.service";
+import { getAllRefillAPI } from "@/src/services/refill.service";
 import ViewRefillRequestModalDetail from "./components/ViewRefillRequestDetailModal";
 import FilterSearch from "./components/FilterSearch";
 import { getAllStoreAPI } from "@/src/services/store.service";
 import { useAuth } from "@/src/hooks/useAuth";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function PartnerRefillRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
   const { partner } = useAuth();
   const partnerId = partner?.partnerId || "";
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-    storeId: "",
-  });
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      status: "",
+      storeId: "",
+      partnerId: partnerId,
+    },
+    {
+      excludeResetKeys: ["partnerId"],
+    },
+  );
 
   const {
     data: refillRequestList = [],
@@ -31,15 +36,16 @@ export default function PartnerRefillRequestManage() {
     refetch,
   } = useQuery({
     queryKey: ["refillRequests", query],
-    queryFn: () => getStoreOrderForPartnerAPI(partnerId, query),
+    queryFn: () => getAllRefillAPI(query),
     select: (res) => res.data as RefillRequest[],
     enabled: !!partnerId,
   });
 
   const { data: storeList } = useQuery({
     queryKey: ["stores"],
-    queryFn: () => getAllStoreAPI({}),
+    queryFn: () => getAllStoreAPI({ companyid: partnerId }),
     select: (res) => res.data as Store[],
+    enabled: !!partnerId,
   });
 
   const handleEdit = (requestId: string) => {
@@ -48,6 +54,9 @@ export default function PartnerRefillRequestManage() {
 
   const columns = getStoreRefillRequestColumns(handleEdit);
 
+  if (!partnerId) {
+    return <LoadingPageComponent />;
+  }
   return (
     <>
       {/*Header */}

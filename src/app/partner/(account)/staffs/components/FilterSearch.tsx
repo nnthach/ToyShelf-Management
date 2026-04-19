@@ -17,7 +17,11 @@ type FilterBarProps = {
   loading: boolean;
   resultCount?: number;
   storeOptions?: { label: string; value: string }[];
-  onApplyFilter: (val: { storeId?: string; storeRole?: string }) => void;
+  onApplyFilter: (val: {
+    storeId?: string;
+    storeRole?: string;
+    isActive?: boolean;
+  }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
@@ -32,16 +36,22 @@ export default function FilterSearch({
 }: FilterBarProps) {
   const [tempFilter, setTempFilter] = useState<{
     storeId: string;
+    isActive?: boolean;
     storeRole: string;
   }>({
+    isActive: undefined,
     storeId: query.storeId ?? "",
     storeRole: query.storeRole ?? "",
   });
 
-  const isFiltered = query.storeId !== "" || query.storeRole !== "";
+  const isFiltered =
+    query.storeId !== "" ||
+    query.storeRole !== "" ||
+    query.isActive !== undefined;
 
   const handleApply = () => {
     onApplyFilter({
+      isActive: tempFilter.isActive,
       storeId: tempFilter.storeId || undefined,
       storeRole: tempFilter.storeRole || undefined,
     });
@@ -49,6 +59,7 @@ export default function FilterSearch({
 
   const handleResetAll = () => {
     setTempFilter({
+      isActive: undefined,
       storeId: "",
       storeRole: "",
     });
@@ -106,6 +117,32 @@ export default function FilterSearch({
                 <option value="">Tất cả</option>
                 <option value="Manager">Quản lý cửa hàng</option>
                 <option value="Staff">Nhân viên cửa hàng</option>
+              </select>
+            </div>
+
+            {/*isactive */}
+            <div className="grid gap-2">
+              <Label>Trạng thái</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={
+                  tempFilter.isActive === undefined
+                    ? "all"
+                    : String(tempFilter.isActive)
+                }
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    isActive:
+                      e.target.value === "all"
+                        ? undefined
+                        : e.target.value === "true",
+                  }))
+                }
+              >
+                <option value="all">Tất cả</option>
+                <option value="true">Hoạt động</option>
+                <option value="false">Không hoạt động</option>
               </select>
             </div>
 

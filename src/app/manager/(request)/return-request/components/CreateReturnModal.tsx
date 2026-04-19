@@ -14,7 +14,7 @@ import {
 import { ShelfShelf } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, Plus, Sparkles } from "lucide-react";
+import { Box, CheckCircle2, Loader2, Plus, Sparkles } from "lucide-react";
 import { memo, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import ReturnItem from "./ReturnItem";
@@ -54,6 +54,8 @@ function CreateReturnModal() {
     control: form.control,
     name: "items",
   });
+
+  const isSubmitting = form.formState.isSubmitting;
 
   // shelf list
   const {
@@ -278,7 +280,13 @@ function CreateReturnModal() {
             type="submit"
             form="form-create-return"
             className="px-8 font-bold"
+            disabled={isSubmitting}
           >
+            {isSubmitting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <CheckCircle2 className="h-4 w-4 mr-2" />
+            )}
             Xác nhận trả hàng
           </Button>
         </DialogFooter>

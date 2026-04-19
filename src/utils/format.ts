@@ -111,7 +111,7 @@ export const formatStoreRoleToVN = (text: string) => {
     case "staff":
       return "Nhân viên cửa hàng";
     default:
-      return "N/A";
+      return "Đối tác";
   }
 };
 
@@ -174,4 +174,14 @@ export const StoreOrderStatusOptions = [
     value: "Rejected",
     label: "Đã từ chối",
   },
+];
+
+export const DamageReportStatusOptions = [
+  { value: "Pending", label: "Đang chờ duyệt" },
+  { value: "PartnerApproved", label: "Đối tác chấp nhận" },
+  { value: "Approved", label: "Quản trị viên chấp nhận" },
+  { value: "Rejected", label: "Đã từ chối" },
+  { value: "InTransit", label: "Đang vận chuyển" },
+  { value: "Returned", label: "Đã trả hàng" },
+  { value: "Scheduled", label: "Đã lên lịch" },
 ];

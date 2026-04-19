@@ -20,6 +20,7 @@ import {
 import { getAllStoreAPI } from "@/src/services/store.service";
 import { Store } from "@/src/types";
 import { toast } from "react-toastify";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function PartnerManageStaff() {
   const { partner } = useAuth();
@@ -27,9 +28,10 @@ export default function PartnerManageStaff() {
   const partnerId = partner?.partnerId;
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    partnerId: partnerId || "",
+    partnerId: partnerId,
     storeId: "",
     storeRole: "",
+    isActive: undefined,
   });
 
   const {
@@ -46,6 +48,7 @@ export default function PartnerManageStaff() {
     queryKey: ["stores"],
     queryFn: () => getAllStoreAPI({ companyid: partnerId }),
     select: (res) => res.data as Store[],
+    enabled: !!partnerId,
   });
 
   const storeOptions = storeList.map((s) => ({
@@ -98,6 +101,9 @@ export default function PartnerManageStaff() {
 
   const columns = getStaffColumns(handleDisable, handleRestore);
 
+  if (!partnerId) {
+    return <LoadingPageComponent />;
+  }
   return (
     <>
       {/*Header */}

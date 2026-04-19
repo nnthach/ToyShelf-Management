@@ -15,16 +15,14 @@ import {
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
-import {
-  getShipmentDetailByIdAPI,
-  getShipmentDetailByShelfOrderIdAPI,
-} from "@/src/services/shipment.service";
+import { getShipmentDetailByShelfOrderIdAPI } from "@/src/services/shipment.service";
 import { RefillShelfRequestItem, Shipment } from "@/src/types";
 import {
   AlertCircle,
   CheckCircle2,
   FileText,
   Layers,
+  Loader2,
   MapPin,
   Package,
   Store,
@@ -43,6 +41,7 @@ import {
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { toast } from "react-toastify";
 import { formatDateTime } from "@/src/utils/format";
+import { useState } from "react";
 
 type ViewRefillShelfRequestModalDetailProps = {
   requestId: string;
@@ -56,6 +55,7 @@ function ViewRefillShelfRequestModalDetail({
   onClose,
 }: ViewRefillShelfRequestModalDetailProps) {
   const queryClient = useQueryClient();
+  const [isApproving, setIsApproving] = useState(false);
 
   const { data: storeOrderShelfDetail, isLoading } = useQuery({
     queryKey: ["storeOrderShelfDetail", requestId],
@@ -72,6 +72,7 @@ function ViewRefillShelfRequestModalDetail({
   });
 
   async function handleApprove() {
+    setIsApproving(true);
     try {
       await approveRefillShelfRequestByPartnerAPI(requestId);
 
@@ -86,6 +87,8 @@ function ViewRefillShelfRequestModalDetail({
       toast.success("Chấp nhận yêu cầu thành công");
     } catch (error) {
       toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
+    } finally {
+      setIsApproving(false);
     }
   }
 
@@ -502,16 +505,19 @@ function ViewRefillShelfRequestModalDetail({
           {/*footer*/}
           <div className="p-4 border-t bg-white">
             <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={onClose}>
-                Đóng cửa sổ
-              </Button>
               {storeOrderShelfDetail?.status === "Pending" && (
                 <Button
                   variant="success"
                   onClick={handleApprove}
+                  disabled={isApproving}
                   className="px-8 border-2"
                 >
-                  <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
+                  {isApproving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <CheckCircle2 className="h-4 w-4 mr-2" />
+                  )}
+                  Chấp nhận
                 </Button>
               )}
             </DialogFooter>

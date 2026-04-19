@@ -14,7 +14,7 @@ type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
-  onApplyFilter: (val: { storeRole?: string }) => void;
+  onApplyFilter: (val: { storeRole?: string; isActive?: boolean }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
@@ -27,21 +27,25 @@ export default function FilterSearch({
   onRefresh,
 }: FilterBarProps) {
   const [tempFilter, setTempFilter] = useState<{
+    isActive?: boolean;
     storeRole: string;
   }>({
     storeRole: query.storeRole ?? "",
+    isActive: undefined,
   });
 
-  const isFiltered = query.storeRole !== "";
+  const isFiltered = query.storeRole !== "" || query.isActive !== undefined;
 
   const handleApply = () => {
     onApplyFilter({
       storeRole: tempFilter.storeRole || undefined,
+      isActive: tempFilter.isActive,
     });
   };
 
   const handleResetAll = () => {
     setTempFilter({
+      isActive: undefined,
       storeRole: "",
     });
     onReset();
@@ -75,6 +79,32 @@ export default function FilterSearch({
               >
                 <option value="">Tất cả</option>
                 <option value="Manager">Quản lý</option>
+              </select>
+            </div>
+
+            {/*isactive */}
+            <div className="grid gap-2">
+              <Label>Trạng thái</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={
+                  tempFilter.isActive === undefined
+                    ? "all"
+                    : String(tempFilter.isActive)
+                }
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    isActive:
+                      e.target.value === "all"
+                        ? undefined
+                        : e.target.value === "true",
+                  }))
+                }
+              >
+                <option value="all">Tất cả</option>
+                <option value="true">Hoạt động</option>
+                <option value="false">Không hoạt động</option>
               </select>
             </div>
 

@@ -51,19 +51,6 @@ export const getStoreCreateRequestColumns = (
     accessorKey: "cityName",
     header: "Thành phố",
   },
-  {
-    accessorKey: "storeAddress",
-    header: "Địa chỉ",
-    cell: ({ row }) => {
-      const storeAddress = row.getValue("storeAddress") as string;
-
-      return (
-        <div className="w-[200px]">
-          <p className="text-sm text-gray-700 line-clamp-2">{storeAddress}</p>
-        </div>
-      );
-    },
-  },
 
   {
     accessorKey: "status",

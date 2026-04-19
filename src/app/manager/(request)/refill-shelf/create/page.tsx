@@ -17,6 +17,7 @@ import { getAllShelfTypeAPI } from "@/src/services/shelf.service";
 import ShelfCardOrder from "./components/ShelfCardOrder";
 import { createRefillShelfAPI } from "@/src/services/refill-shelf.service";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export interface CartItem {
   shelfTypeId: string;
@@ -35,6 +36,7 @@ export default function CreateStoreOrderRefillShelf() {
   const queryClient = useQueryClient();
 
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
@@ -90,6 +92,7 @@ export default function CreateStoreOrderRefillShelf() {
   };
 
   const onSubmit = async (note: string) => {
+    setIsLoadingSubmit(true);
     const payload = {
       note,
       items: cart.map((item) => ({
@@ -109,8 +112,14 @@ export default function CreateStoreOrderRefillShelf() {
       router.back();
     } catch (error) {
       toast.error(getErrorMessage(error, "Tạo đơn thất bại"));
+    } finally {
+      setIsLoadingSubmit(false);
     }
   };
+
+  if (isLoadingSubmit) {
+    return <LoadingPageComponent />;
+  }
   return (
     <>
       {/*Header */}

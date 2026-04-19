@@ -15,11 +15,8 @@ import {
   formatShipmentAssignStatusText,
 } from "@/src/utils/formatStatus";
 import { memo, useState } from "react";
-import { CheckCircle2, XCircle, Truck, Info, Package } from "lucide-react";
-import {
-  getShipmentAssignDetailByIdAPI,
-  rejectShipmentAssignAPI,
-} from "@/src/services/shipment-assignment.service";
+import { CheckCircle2, Truck, Info, Package, Loader2 } from "lucide-react";
+import { getShipmentAssignDetailByIdAPI } from "@/src/services/shipment-assignment.service";
 import {
   createShipmentAPI,
   getShipmentDetailByAssignmentIdAPI,
@@ -50,6 +47,7 @@ function UpdateShipmentAssignRefillRequestModal({
     useState(false);
   const [isOpenCreateShipmentModal, setIsOpenCreateShipmentModal] =
     useState(false);
+  const [isDamaging, setIsDamaging] = useState(false);
 
   const { data: shipmentAssignDetail, isLoading } = useQuery({
     queryKey: ["shipmentAssignRequest", requestId],
@@ -91,6 +89,7 @@ function UpdateShipmentAssignRefillRequestModal({
 
   // tạo đơn thu hồi ordertype = damage
   const handleCreateDamageShipment = async () => {
+    setIsDamaging(true);
     try {
       await createShipmentAPI({ shipmentAssignmentId: requestId });
       queryClient.invalidateQueries({ queryKey: ["shipmentAssignRequests"] });
@@ -104,6 +103,8 @@ function UpdateShipmentAssignRefillRequestModal({
     } catch (error) {
       console.log("error", error);
       toast.error("Tạo đơn thất bại");
+    } finally {
+      setIsDamaging(false);
     }
   };
 
@@ -315,12 +316,16 @@ function UpdateShipmentAssignRefillRequestModal({
                       shipmentAssignDetail.orderType === "DAMAGE" && (
                         <Button
                           variant="success"
-                          disabled={isLoading}
+                          disabled={isDamaging}
                           onClick={handleCreateDamageShipment}
                           className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02]"
                         >
-                          <CheckCircle2 className="mr-2 h-4 w-4" /> Tạo đơn bắt
-                          đầu thu hồi
+                          {isDamaging ? (
+                            <Loader2 className="mr-2 h-4 w-4" />
+                          ) : (
+                            <CheckCircle2 className="mr-2 h-4 w-4" />
+                          )}
+                          Tạo đơn bắt đầu thu hồi
                         </Button>
                       )}
                   </div>

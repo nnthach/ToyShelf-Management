@@ -14,7 +14,7 @@ import {
   formatStoreOrderRefillRequestStatusColor,
   formatStoreOrderRefillRequestStatusText,
 } from "@/src/utils/formatStatus";
-import { CheckCircle2, Package, XCircle } from "lucide-react";
+import { CheckCircle2, Loader2, Package, XCircle } from "lucide-react";
 import {
   approveRefillRequestByAdminAPI,
   getRefillDetailAPI,
@@ -46,6 +46,8 @@ function UpdateRefillRequestModal({
 
   const [isOpenAssignWarehouseModal, setIsOpenAssignWarehouseModal] =
     useState(false);
+
+  const [isReviewing, setIsReviewing] = useState(false);
 
   const { data: requestDetail, isLoading } = useQuery({
     queryKey: ["requestDetail", requestId],
@@ -86,6 +88,7 @@ function UpdateRefillRequestModal({
   }
 
   async function handleApprove() {
+    setIsReviewing(true);
     try {
       await approveRefillRequestByAdminAPI(requestId);
 
@@ -100,6 +103,8 @@ function UpdateRefillRequestModal({
       toast.success("Hãy điều phối kho thực hiện");
     } catch (error) {
       toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
+    } finally {
+      setIsReviewing(false);
     }
   }
 
@@ -176,35 +181,35 @@ function UpdateRefillRequestModal({
 
           <div className="p-4 border-t bg-white">
             <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={onClose} className="border-2">
-                Đóng cửa sổ
-              </Button>
               {isPartnerApproved && (
                 <>
                   <Button
                     variant="error"
                     onClick={handleReject}
+                    disabled={isReviewing}
                     className="px-8 border-2"
                   >
-                    <XCircle className="h-4 w-4 mr-2" /> Từ chối
+                    {isReviewing ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <XCircle className="h-4 w-4 mr-2" />
+                    )}
+                    Từ chối
                   </Button>
                   <Button
                     variant="success"
                     onClick={handleApprove}
+                    disabled={isReviewing}
                     className="px-8 border-2"
                   >
-                    <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
+                    {isReviewing ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                    )}
+                    Chấp nhận
                   </Button>
                 </>
-              )}
-              {isRejected && (
-                <Button
-                  variant="success"
-                  onClick={handleApprove}
-                  className="px-8 border-2"
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
-                </Button>
               )}
               {isApproved && (
                 <Button

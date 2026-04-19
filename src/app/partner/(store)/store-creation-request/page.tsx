@@ -1,8 +1,6 @@
 "use client";
 
-import { Download, Upload } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
-import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
@@ -15,18 +13,27 @@ import {
   getAllStoreCreationRequestAPI,
 } from "@/src/services/store-create-request.service";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ViewStoreCreateRequestModal from "./components/ViewStoreCreationRequestModal";
+import { useAuth } from "@/src/hooks/useAuth";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function PartnerStoreCreationRequestManage() {
   const queryClient = useQueryClient();
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
-  });
+  const { partner } = useAuth();
+  const partnerId = partner?.partnerId || "";
+
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      status: "",
+      partnerId: "",
+    },
+    {
+      excludeResetKeys: ["partnerId"],
+    },
+  );
 
   const {
     data: storeCreateRequestList = [],
@@ -37,6 +44,14 @@ export default function PartnerStoreCreationRequestManage() {
     queryFn: () => getAllStoreCreationRequestAPI(query),
     select: (res) => res.data as Store[],
   });
+
+  useEffect(() => {
+    if (partnerId && !query.partnerId) {
+      updateQuery({
+        partnerId: partnerId,
+      });
+    }
+  }, [partnerId]);
 
   const handleViewDetail = (requestId: string) => {
     setSelectedRequestId(requestId);
@@ -69,6 +84,9 @@ export default function PartnerStoreCreationRequestManage() {
 
   const columns = getStoreCreateRequestColumns(handleDelete, handleViewDetail);
 
+  if (!partnerId) {
+    return <LoadingPageComponent />;
+  }
   return (
     <>
       {/*Header */}
@@ -97,7 +115,6 @@ export default function PartnerStoreCreationRequestManage() {
               query={query}
               loading={isLoading}
               resultCount={storeCreateRequestList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

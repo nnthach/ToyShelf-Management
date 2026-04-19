@@ -8,6 +8,7 @@ import { useAuth } from "@/src/hooks/useAuth";
 import { getAllPartnerStaffAPI } from "@/src/services/user.service";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { DataTable } from "@/src/styles/components/ui/data-table";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function ManagerManageStaff() {
   const { myStore } = useAuth();
@@ -17,6 +18,7 @@ export default function ManagerManageStaff() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     storeId: storeId,
     storeRole: "",
+    isActive: undefined,
   });
 
   const {
@@ -27,9 +29,14 @@ export default function ManagerManageStaff() {
     queryKey: ["staffs", query],
     queryFn: () => getAllPartnerStaffAPI(query),
     select: (res) => res.data,
+    enabled: !!storeId,
   });
 
   const columns = getStaffColumns();
+
+  if (!storeId) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <>

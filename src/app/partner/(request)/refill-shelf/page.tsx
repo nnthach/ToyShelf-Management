@@ -6,22 +6,29 @@ import { QueryParams } from "@/src/types/SubType";
 import { RefillRequest, Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillRequestColumns } from "./columns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterSearch from "./components/FilterSearch";
 import { getAllStoreAPI } from "@/src/services/store.service";
 import ViewRefillShelfRequestModalDetail from "./components/ViewRefillShelfRequestDetailModal";
-import { getShelfOrderForPartnerAPI } from "@/src/services/refill-shelf.service";
+import { getAllRefillShelfAPI } from "@/src/services/refill-shelf.service";
 import { useAuth } from "@/src/hooks/useAuth";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function PartnerRefillShelfRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
   const { partner } = useAuth();
-  const partnerId = partner?.partnerId || "";
+  const partnerId = partner?.partnerId;
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-    storeId: "",
-  });
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      status: "",
+      storeId: "",
+      partnerId: partnerId,
+    },
+    {
+      excludeResetKeys: ["partnerId"],
+    },
+  );
 
   const {
     data: refillShelfRequestList = [],
@@ -29,15 +36,16 @@ export default function PartnerRefillShelfRequestManage() {
     refetch,
   } = useQuery({
     queryKey: ["refillShelfRequests", query],
-    queryFn: () => getShelfOrderForPartnerAPI(partnerId, query),
+    queryFn: () => getAllRefillShelfAPI(query),
     select: (res) => res.data as RefillRequest[],
     enabled: !!partnerId,
   });
 
   const { data: storeList } = useQuery({
     queryKey: ["stores"],
-    queryFn: () => getAllStoreAPI({}),
+    queryFn: () => getAllStoreAPI({ companyid: partnerId }),
     select: (res) => res.data as Store[],
+    enabled: !!partnerId,
   });
 
   const handleEdit = (requestId: string) => {
@@ -46,6 +54,9 @@ export default function PartnerRefillShelfRequestManage() {
 
   const columns = getStoreRefillRequestColumns(handleEdit);
 
+  if (!query.partnerId) {
+    return <LoadingPageComponent />;
+  }
   return (
     <>
       {/*Header */}

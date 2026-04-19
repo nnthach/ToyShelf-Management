@@ -23,6 +23,7 @@ import { getShipmentDetailByStoreOrderIdAPI } from "@/src/services/shipment.serv
 import { RefillRequestProductColor, Shipment } from "@/src/types";
 import {
   CheckCircle2,
+  Loader2,
   MapPin,
   Package,
   Store,
@@ -37,6 +38,7 @@ import { formatColorNameToVN, formatDateTime } from "@/src/utils/format";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import { useState } from "react";
 
 type ViewRefillRequestModalDetailProps = {
   requestId: string;
@@ -50,6 +52,8 @@ function ViewRefillRequestModalDetail({
   onClose,
 }: ViewRefillRequestModalDetailProps) {
   const queryClient = useQueryClient();
+
+  const [isApproving, setIsApproving] = useState(false);
 
   const { data: storeOrderDetail, isLoading } = useQuery({
     queryKey: ["storeOrderDetail", requestId],
@@ -66,6 +70,7 @@ function ViewRefillRequestModalDetail({
   });
 
   async function handleApprove() {
+    setIsApproving(true);
     try {
       await approveRefillRequestByPartnerAPI(requestId);
 
@@ -80,6 +85,8 @@ function ViewRefillRequestModalDetail({
       toast.success("Chấp nhận yêu cầu thành công");
     } catch (error) {
       toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
+    } finally {
+      setIsApproving(false);
     }
   }
 
@@ -484,17 +491,19 @@ function ViewRefillRequestModalDetail({
           {/*footer*/}
           <div className="p-4 border-t bg-white">
             <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={onClose}>
-                Đóng cửa sổ
-              </Button>
-
               {storeOrderDetail?.status === "Pending" && (
                 <Button
                   variant="success"
                   onClick={handleApprove}
+                  disabled={isApproving}
                   className="px-8 border-2"
                 >
-                  <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
+                  {isApproving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <CheckCircle2 className="h-4 w-4 mr-2" />
+                  )}
+                  Chấp nhận
                 </Button>
               )}
             </DialogFooter>

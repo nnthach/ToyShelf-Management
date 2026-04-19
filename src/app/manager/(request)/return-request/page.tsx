@@ -7,20 +7,28 @@ import { QueryParams } from "@/src/types/SubType";
 import { DamageReport } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getReturnRequestColumns } from "./columns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateReturnModal from "./components/CreateReturnModal";
 import { getAllDamageReportAPI } from "@/src/services/damage-report.service";
 import ViewReturnRequestModalDetail from "./components/ViewReturnRequestDetailModal";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
+import { useAuth } from "@/src/hooks/useAuth";
 
 export default function ManagerReturnRequestManage() {
+  const { myStore } = useAuth();
+  const storeId = myStore?.storeId;
+
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
-    status: "",
-  });
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      status: "",
+      storeId: storeId,
+    },
+    {
+      excludeResetKeys: ["storeId"],
+    },
+  );
 
   const {
     data: returnRequestList = [],
@@ -30,6 +38,7 @@ export default function ManagerReturnRequestManage() {
     queryKey: ["returnRequests", query],
     queryFn: () => getAllDamageReportAPI(query),
     select: (res) => res.data as DamageReport[],
+    enabled: !!storeId,
   });
 
   const handleEdit = (requestId: string) => {
@@ -38,6 +47,9 @@ export default function ManagerReturnRequestManage() {
 
   const columns = getReturnRequestColumns(handleEdit);
 
+  if (!query.storeId) {
+    return <LoadingPageComponent />;
+  }
   return (
     <>
       {/*Header */}
@@ -66,7 +78,6 @@ export default function ManagerReturnRequestManage() {
               query={query}
               loading={isLoading}
               resultCount={returnRequestList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

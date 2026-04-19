@@ -23,6 +23,7 @@ import {
   CheckCircle2,
   FileText,
   Layers,
+  Loader2,
   MapPin,
   Package,
   Store,
@@ -61,6 +62,8 @@ function ViewReturnRequestModalDetail({
 }: ViewReturnRequestModalDetailProps) {
   const queryClient = useQueryClient();
 
+  const [isApproving, setIsApproving] = useState(false);
+
   const { data: damageRequestDetail, isLoading } = useQuery({
     queryKey: ["damageRequestDetail", requestId],
     queryFn: () => getDamageReportDetailAPI(requestId!),
@@ -76,6 +79,8 @@ function ViewReturnRequestModalDetail({
   });
 
   async function handleApprove() {
+    setIsApproving(true);
+
     try {
       await partnerApproveDamageReportRequestAPI(requestId);
 
@@ -90,6 +95,8 @@ function ViewReturnRequestModalDetail({
       toast.success("Chấp nhận yêu cầu thành công");
     } catch (error) {
       toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
+    } finally {
+      setIsApproving(false);
     }
   }
 
@@ -378,16 +385,19 @@ function ViewReturnRequestModalDetail({
           {/*footer*/}
           <div className="p-4 border-t bg-white">
             <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={onClose}>
-                Đóng cửa sổ
-              </Button>
               {damageRequestDetail?.status === "Pending" && (
                 <Button
                   variant="success"
                   onClick={handleApprove}
+                  disabled={isApproving}
                   className="px-8 border-2"
                 >
-                  <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
+                  {isApproving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <CheckCircle2 className="h-4 w-4 mr-2" />
+                  )}
+                  Chấp nhận
                 </Button>
               )}
             </DialogFooter>

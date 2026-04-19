@@ -16,11 +16,8 @@ import {
 } from "@/src/styles/components/ui/dropdown-menu";
 import { useSidebar } from "@/src/styles/components/ui/sidebar";
 import {
-  Bell,
-  ChevronLeft,
   Lock,
   LogOut,
-  Menu,
   Moon,
   Sun,
   User,

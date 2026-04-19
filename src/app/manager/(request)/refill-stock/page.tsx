@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Plus, Upload } from "lucide-react";
+import { Plus } from "lucide-react";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { Button } from "@/src/styles/components/ui/button";
 import FilterSearch from "./components/FilterSearch";
@@ -9,19 +9,29 @@ import { QueryParams } from "@/src/types/SubType";
 import { RefillRequest } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillRequestColumns } from "./columns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAllRefillAPI } from "@/src/services/refill.service";
 import ViewRefillRequestModalDetail from "./components/ViewRefillRequestDetailModal";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/src/hooks/useAuth";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function ManagerRefillRequestManage() {
   const router = useRouter();
+  const { myStore } = useAuth();
+  const storeId = myStore?.storeId;
 
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-  });
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      status: "",
+      storeId: storeId,
+    },
+    {
+      excludeResetKeys: ["storeId"],
+    },
+  );
 
   const {
     data: refillRequestList = [],
@@ -31,6 +41,7 @@ export default function ManagerRefillRequestManage() {
     queryKey: ["refillRequests", query],
     queryFn: () => getAllRefillAPI(query),
     select: (res) => res.data as RefillRequest[],
+    enabled: !!storeId,
   });
 
   const handleEdit = (requestId: string) => {
@@ -38,6 +49,10 @@ export default function ManagerRefillRequestManage() {
   };
 
   const columns = getStoreRefillRequestColumns(handleEdit);
+
+  if (!query.storeId) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <>

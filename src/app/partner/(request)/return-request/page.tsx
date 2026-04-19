@@ -4,22 +4,31 @@ import useQueryParams from "@/src/hooks/useQueryParams";
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
-import { DamageReport } from "@/src/types";
+import { DamageReport, Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getReturnRequestColumns } from "./columns";
 import { useState } from "react";
 import { getAllDamageReportAPI } from "@/src/services/damage-report.service";
 import ViewReturnRequestModalDetail from "./components/ViewReturnRequestDetailModal";
+import { useAuth } from "@/src/hooks/useAuth";
+import { getAllStoreAPI } from "@/src/services/store.service";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function ManagerReturnRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
+  const { partner } = useAuth();
+  const partnerId = partner?.partnerId;
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
-    status: "",
-  });
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      status: "",
+      storeId: "",
+      partnerId: partnerId,
+    },
+    {
+      excludeResetKeys: ["partnerId"],
+    },
+  );
 
   const {
     data: returnRequestList = [],
@@ -29,6 +38,14 @@ export default function ManagerReturnRequestManage() {
     queryKey: ["returnRequests", query],
     queryFn: () => getAllDamageReportAPI(query),
     select: (res) => res.data as DamageReport[],
+    enabled: !!partnerId,
+  });
+
+  const { data: storeList } = useQuery({
+    queryKey: ["stores"],
+    queryFn: () => getAllStoreAPI({ companyid: partnerId }),
+    select: (res) => res.data as Store[],
+    enabled: !!partnerId,
   });
 
   const handleEdit = (requestId: string) => {
@@ -37,6 +54,9 @@ export default function ManagerReturnRequestManage() {
 
   const columns = getReturnRequestColumns(handleEdit);
 
+  if (!query.partnerId) {
+    return <LoadingPageComponent />;
+  }
   return (
     <>
       {/*Header */}
@@ -64,7 +84,7 @@ export default function ManagerReturnRequestManage() {
               query={query}
               loading={isLoading}
               resultCount={returnRequestList.length}
-              onSearch={(val) => updateQuery({ search: val })}
+              storeList={storeList}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

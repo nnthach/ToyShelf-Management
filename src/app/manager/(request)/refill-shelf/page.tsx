@@ -9,19 +9,29 @@ import { QueryParams } from "@/src/types/SubType";
 import { RefillRequest } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreRefillShelfRequestColumns } from "./columns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ViewRefillRequestModalDetail from "./components/ViewRefillShelfRequestDetailModal";
 import { useRouter } from "next/navigation";
 import { getAllRefillShelfAPI } from "@/src/services/refill-shelf.service";
+import { useAuth } from "@/src/hooks/useAuth";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function ManagerRefillShelfRequestManage() {
   const router = useRouter();
+  const { myStore } = useAuth();
+  const storeId = myStore?.storeId;
 
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-  });
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      status: "",
+      storeId: storeId,
+    },
+    {
+      excludeResetKeys: ["storeId"],
+    },
+  );
 
   const {
     data: refillShelfRequestList = [],
@@ -31,6 +41,7 @@ export default function ManagerRefillShelfRequestManage() {
     queryKey: ["refillShelfRequests", query],
     queryFn: () => getAllRefillShelfAPI(query),
     select: (res) => res.data as RefillRequest[],
+    enabled: !!storeId,
   });
 
   const handleEdit = (requestId: string) => {
@@ -38,6 +49,10 @@ export default function ManagerRefillShelfRequestManage() {
   };
 
   const columns = getStoreRefillShelfRequestColumns(handleEdit);
+
+  if (!query.storeId) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <>

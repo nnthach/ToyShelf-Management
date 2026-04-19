@@ -2,21 +2,21 @@
 
 import useQueryParams from "@/src/hooks/useQueryParams";
 import FilterSearch from "./components/FilterSearch";
-import {  useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
-import { Store } from "@/src/types";
+import { Partner, Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreCreateRequestColumns } from "./columns";
-import {
-  getAllStoreCreationRequestAPI,
-} from "@/src/services/store-create-request.service";
+import { getAllStoreCreationRequestAPI } from "@/src/services/store-create-request.service";
 import { useState } from "react";
 import UpdateStoreCreateRequestModal from "./components/UpdateStoreCreationRequestModal";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
 
 export default function AdminStoreCreationRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
+    partnerId: "",
   });
 
   const {
@@ -29,11 +29,17 @@ export default function AdminStoreCreationRequestManage() {
     select: (res) => res.data as Store[],
   });
 
+  const { data: partnerList = [] } = useQuery({
+    queryKey: ["partners", query],
+    queryFn: () => getAllPartnerAPI(query),
+    select: (res) => res.data as Partner[],
+  });
+
   const handleEdit = (cityId: string) => {
     setSelectedRequestId(cityId);
   };
 
-  const columns = getStoreCreateRequestColumns( handleEdit);
+  const columns = getStoreCreateRequestColumns(handleEdit);
 
   return (
     <>
@@ -61,6 +67,7 @@ export default function AdminStoreCreationRequestManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
+              partnerList={partnerList}
               resultCount={storeCreateRequestList.length}
               onApplyFilter={(filter) =>
                 updateQuery({

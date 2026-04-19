@@ -252,11 +252,11 @@ function AssignWarehouseModal({
                                     />
                                   </div>
                                   <div className="flex flex-col min-w-0">
-                                    <span className="font-medium text-gray-900 truncate leading-none mb-1">
+                                    <span className="font-medium text-gray-900 w-[200px] line-clamp-2 leading-none mb-1">
                                       {item.productName}
                                     </span>
                                     <div className="flex items-center gap-2">
-                                      <span className="text-[10px] text-gray-400 font-mono">
+                                      <span className="text-[11px] text-gray-600 font-mono">
                                         {item.sku}
                                       </span>
                                       <span className="px-1.5 py-0.5 rounded text-[10px] bg-gray-100 text-gray-600 font-medium">

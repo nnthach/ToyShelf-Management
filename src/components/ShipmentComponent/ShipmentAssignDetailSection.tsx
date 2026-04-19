@@ -144,21 +144,21 @@ const ProductItem = ({ product }: { product: RefillRequestProductColor }) => {
         </div>
         {/* Thông tin Text */}
         <div className="flex flex-col min-w-0">
-          <span className="font-semibold text-slate-700 text-[11px] truncate leading-tight">
+          <span className="font-semibold text-slate-700 text-[11px] line-clamp-2 leading-tight">
             {product.productName}
           </span>
           <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="text-[9px] font-mono text-slate-400 bg-slate-100 px-1 rounded">
+            <span className="text-[11px] font-mono text-slate-600 bg-slate-100 px-1 rounded">
               {product.sku}
             </span>
-            <span className="text-[10px] text-slate-500">
+            <span className="text-[11px] text-slate-600">
               {formatColorNameToVN(product?.color || "")}
             </span>
           </div>
         </div>
       </td>
 
-      <td className="px-3 py-2 text-right">
+      <td className="px-3 py-2 text-right w-[100px]">
         <span className="inline-flex items-center justify-center bg-violet-100 text-violet-700 font-bold px-2 py-0.5 rounded text-[11px] min-w-[28px]">
           {product.quantity}
         </span>
@@ -192,7 +192,7 @@ const ShelfItem = ({ shelf }: { shelf: RefillShelfRequestItem }) => {
         </div>
         {/* Thông tin Text */}
         <div className="flex flex-col min-w-0">
-          <span className="font-semibold text-slate-700 text-[11px] truncate leading-tight">
+          <span className="font-semibold text-slate-700 text-[11px] line-clamp-2 leading-tight">
             {shelf?.shelfTypeName || "N/A"}
           </span>
           <div className="flex items-center gap-2 mt-1.5">
@@ -214,7 +214,7 @@ const ShelfItem = ({ shelf }: { shelf: RefillShelfRequestItem }) => {
         </div>
       </td>
 
-      <td className="px-3 py-2 text-right">
+      <td className="px-3 py-2 text-right w-[100px]">
         <span className="inline-flex items-center justify-center bg-violet-100 text-violet-700 font-bold px-2 py-0.5 rounded text-[11px] min-w-[28px]">
           {shelf?.quantity || 0}
         </span>

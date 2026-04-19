@@ -182,7 +182,7 @@ function UpdateReturnRequestModal({
                 </>
               )}
 
-              {isApproved && (
+              {isApproved && !shipmentAssigns && (
                 <Button
                   variant="success"
                   onClick={() => setIsOpenAssignWarehouseModal(true)}

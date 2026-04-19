@@ -4,20 +4,22 @@ import useQueryParams from "@/src/hooks/useQueryParams";
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
 import { QueryParams } from "@/src/types/SubType";
-import { DamageReport } from "@/src/types";
+import { DamageReport, Partner, Store } from "@/src/types";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getStoreReturnRequestColumn } from "./columns";
 import { useState } from "react";
 import { getAllDamageReportAPI } from "@/src/services/damage-report.service";
 import UpdateReturnRequestModal from "./components/UpdateReturnRequestModal";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
+import { getAllStoreAPI } from "@/src/services/store.service";
 
 export default function AdminReturnRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
+    status: "",
+    storeId: "",
+    partnerId: "",
   });
 
   const {
@@ -28,6 +30,18 @@ export default function AdminReturnRequestManage() {
     queryKey: ["returnRequests", query],
     queryFn: () => getAllDamageReportAPI(query),
     select: (res) => res.data as DamageReport[],
+  });
+
+  const { data: partnerList = [] } = useQuery({
+    queryKey: ["partners"],
+    queryFn: () => getAllPartnerAPI({}),
+    select: (res) => res.data as Partner[],
+  });
+
+  const { data: storeList = [] } = useQuery({
+    queryKey: ["stores"],
+    queryFn: () => getAllStoreAPI({}),
+    select: (res) => res.data as Store[],
   });
 
   const handleEdit = (requestId: string) => {
@@ -60,8 +74,9 @@ export default function AdminReturnRequestManage() {
             <FilterSearch
               query={query}
               loading={isLoading}
+              storeList={storeList}
+              partnerList={partnerList}
               resultCount={returnRequestList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

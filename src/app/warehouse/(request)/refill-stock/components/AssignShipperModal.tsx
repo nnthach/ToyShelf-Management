@@ -17,10 +17,9 @@ import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom"
 import { Send, XCircle, Truck, User } from "lucide-react";
 import { assignShipperShipmentAssignAPI } from "@/src/services/shipment-assignment.service";
 import {
-  getAllUserAPI,
   getAllWarehouseStaffAPI,
 } from "@/src/services/user.service";
-import { User as UserType, WarehouseStaff } from "@/src/types";
+import { WarehouseStaff } from "@/src/types";
 import { memo } from "react";
 import { useAuth } from "@/src/hooks/useAuth";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";

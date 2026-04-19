@@ -5,6 +5,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
+import { Partner, Store } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { StoreOrderStatusOptions } from "@/src/utils/format";
 import { PopoverClose } from "@radix-ui/react-popover";
@@ -15,13 +16,21 @@ type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
-  onApplyFilter: (val: { status?: string }) => void;
+  partnerList?: Partner[];
+  storeList?: Store[];
+  onApplyFilter: (val: {
+    status?: string;
+    storeId?: string;
+    partnerId?: string;
+  }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
 
 export default function FilterSearch({
   query,
+  storeList,
+  partnerList,
   loading,
   onApplyFilter,
   onReset,
@@ -29,21 +38,30 @@ export default function FilterSearch({
 }: FilterBarProps) {
   const [tempFilter, setTempFilter] = useState<{
     status: string;
+    partnerId: string;
+    storeId: string;
   }>({
     status: String(query.status) ?? "",
+    partnerId: String(query.partnerId) ?? "",
+    storeId: String(query.storeId) ?? "",
   });
 
-  const isFiltered = query.status !== "";
+  const isFiltered =
+    query.status !== "" || query.storeId !== "" || query.partnerId !== "";
 
   const handleApply = () => {
     onApplyFilter({
       status: tempFilter.status || undefined,
+      storeId: tempFilter.storeId || undefined,
+      partnerId: tempFilter.partnerId || undefined,
     });
   };
 
   const handleResetAll = () => {
     setTempFilter({
       status: "",
+      storeId: "",
+      partnerId: "",
     });
     onReset();
   };
@@ -59,11 +77,56 @@ export default function FilterSearch({
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent align="start" className="w-64">
+        <PopoverContent align="start">
           <div className="grid gap-4">
+            {/* Partner */}
+            <div className="grid gap-2">
+              <Label>Đối tác</Label>
+              <select
+                className="border rounded-md h-9 px-2 w-full max-w-full truncate"
+                value={tempFilter.partnerId}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    partnerId: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {partnerList?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.companyName.length > 30
+                      ? item.companyName.slice(0, 30) + "…"
+                      : item.companyName}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* Store */}
+            <div className="grid gap-2">
+              <Label>Cửa hàng</Label>
+              <select
+                className="border rounded-md h-9 px-2 w-full max-w-full truncate"
+                value={tempFilter.storeId}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    storeId: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {storeList?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Status */}
             <div className="grid gap-2">
-              <Label>Trạng thái</Label>
+              <Label>Trạng thái đơn</Label>
               <select
                 className="border rounded-md h-9 px-2"
                 value={tempFilter.status}
