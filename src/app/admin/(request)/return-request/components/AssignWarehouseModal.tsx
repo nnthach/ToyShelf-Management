@@ -70,6 +70,9 @@ function AssignWarehouseModal({
 
       queryClient.invalidateQueries({ queryKey: ["returnRequest", requestId] });
       queryClient.invalidateQueries({ queryKey: ["returnRequests"] });
+      queryClient.invalidateQueries({
+        queryKey: ["shipmentAssigns", requestId],
+      });
 
       toast.success("Điều phối kho thành công");
       form.reset();

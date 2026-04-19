@@ -303,12 +303,16 @@ function UpdateShipmentAssignRefillRequestModal({
                     {shipmentDetail?.status === "DeliveredReturn" && (
                       <Button
                         variant="success"
-                        disabled={isLoading}
+                        disabled={receiveReturnMutation.isPending}
                         onClick={handleReceiveReturn}
                         className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02]"
                       >
-                        <CheckCircle2 className="mr-2 h-4 w-4" /> Đã nhận hàng
-                        trả về
+                        {receiveReturnMutation.isPending ? (
+                          <Loader2 className="mr-2 h-4 w-4" />
+                        ) : (
+                          <CheckCircle2 className="mr-2 h-4 w-4" />
+                        )}
+                        Đã nhận hàng trả về
                       </Button>
                     )}
 

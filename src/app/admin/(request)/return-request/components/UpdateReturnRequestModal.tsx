@@ -182,15 +182,16 @@ function UpdateReturnRequestModal({
                 </>
               )}
 
-              {isApproved && !shipmentAssigns && (
-                <Button
-                  variant="success"
-                  onClick={() => setIsOpenAssignWarehouseModal(true)}
-                  className="px-8 shadow-lg shadow-green-200"
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-2" /> Điều phối kho
-                </Button>
-              )}
+              {isApproved &&
+                requestDetail.shipmentAssignmentIds.length === 0 && (
+                  <Button
+                    variant="success"
+                    onClick={() => setIsOpenAssignWarehouseModal(true)}
+                    className="px-8 shadow-lg shadow-green-200"
+                  >
+                    <CheckCircle2 className="h-4 w-4 mr-2" /> Điều phối kho
+                  </Button>
+                )}
             </DialogFooter>
           </div>
         </DialogContent>
