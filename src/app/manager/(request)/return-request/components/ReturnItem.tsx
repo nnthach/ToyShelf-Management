@@ -1,16 +1,23 @@
+"use client";
+
 import { useWatch, UseFormReturn } from "react-hook-form";
 import {
-  Box,
   Hash,
   ImagePlus,
   Layers,
   Package,
   Server,
   Trash2,
+  X,
 } from "lucide-react";
 import { ReturnFormValues } from "@/src/schemas/return.schema";
 import { SelectOption } from "@/src/types/SubType";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
+import { getAllProductColorColorAPI } from "@/src/services/product.service";
+import { ProductColorItem } from "@/src/types";
+import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "@/src/hooks/useDebounce";
+import { useState } from "react";
 
 interface ReturnItemProps {
   index: number;
@@ -18,7 +25,6 @@ interface ReturnItemProps {
   remove: (index: number) => void;
   fieldsLength: number;
   shelfOptions: SelectOption[];
-  productOptions: SelectOption[];
 }
 
 function ReturnItem({
@@ -27,8 +33,19 @@ function ReturnItem({
   remove,
   fieldsLength,
   shelfOptions,
-  productOptions,
 }: ReturnItemProps) {
+  const [searchProduct, setSearchProduct] = useState("");
+  const debounceSearch = useDebounce(searchProduct, 500);
+  const [openDropdown, setOpenDropdown] = useState(false);
+
+  // product color
+  const { data: productColorIdList = [] } = useQuery({
+    queryKey: ["productColors", debounceSearch],
+    queryFn: () => getAllProductColorColorAPI({ keyword: debounceSearch }),
+    select: (res) => res.data as ProductColorItem[],
+    enabled: !!debounceSearch,
+  });
+
   const type = useWatch({
     control: form.control,
     name: `items.${index}.type`,
@@ -149,19 +166,78 @@ function ReturnItem({
           />
 
           {/* Hàng 2: Sản phẩm (Chiếm full ngang nếu cần hoặc chia đôi) */}
-          <div className="sm:col-span-1">
+          <div className="sm:col-span-2">
             {type === "Product" && (
-              <FormFieldCustom
-                name={`items.${index}.productColorId`}
-                label="Sản phẩm"
-                placeholder="Chọn sản phẩm"
-                type="select"
-                selectData={productOptions}
-                icon={<Package size={16} />}
-                required
-              />
+              <div className="sm:col-span-1 relative">
+                <div className="flex items-center gap-1 text-[14px] mb-1 font-semibold text-slate-700">
+                  <Package size={16} className="text-primary/80" />
+
+                  <label>
+                    Mã sản phẩm <span className="text-red-500">*</span>
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 h-9 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 bg-white">
+                  <input
+                    className="flex-1 text-sm outline-none bg-transparent placeholder:text-slate-400"
+                    placeholder="Nhập mã sản phẩm..."
+                    value={searchProduct}
+                    onChange={(e) => {
+                      setSearchProduct(e.target.value);
+                      setOpenDropdown(true);
+                      form.setValue(`items.${index}.productColorId`, undefined);
+                    }}
+                    onFocus={() => setOpenDropdown(true)}
+                    onBlur={() => setTimeout(() => setOpenDropdown(false), 150)}
+                  />
+                  {searchProduct && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchProduct("");
+                        form.setValue(
+                          `items.${index}.productColorId`,
+                          undefined,
+                        );
+                      }}
+                    >
+                      <X
+                        size={14}
+                        className="text-slate-400 hover:text-slate-600"
+                      />
+                    </button>
+                  )}
+                </div>
+                {openDropdown && (
+                  <div className="absolute z-20 top-full mt-1 left-0 right-0 bg-white border border-slate-200 rounded-lg shadow-md overflow-y-auto">
+                    {productColorIdList.length === 0 ? (
+                      <p className="text-xs text-slate-400 px-3 py-2">
+                        Không tìm thấy
+                      </p>
+                    ) : (
+                      productColorIdList.map((p) => (
+                        <div
+                          key={p.variantSku}
+                          className="flex items-center gap-2 px-3 py-2 hover:bg-slate-50 cursor-pointer text-sm"
+                          onMouseDown={() => {
+                            form.setValue(
+                              `items.${index}.productColorId`,
+                              p.productColorId,
+                            );
+                            setSearchProduct(p.variantSku);
+                            setOpenDropdown(false);
+                          }}
+                        >
+                          <span className="font-medium">{p.variantSku}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
             )}
 
+            {/*shelf */}
             {type === "Shelf" && (
               <FormFieldCustom
                 name={`items.${index}.shelfId`}

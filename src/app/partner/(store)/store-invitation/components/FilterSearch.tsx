@@ -1,29 +1,21 @@
-import { useDebounce } from "@/src/hooks/useDebounce";
 import { Button } from "@/src/styles/components/ui/button";
-import { Input } from "@/src/styles/components/ui/input";
 import { Label } from "@/src/styles/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
-import { Store } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { Value } from "@radix-ui/react-select";
-import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Filter, RotateCcw, XCircle } from "lucide-react";
+import { useState } from "react";
 
 type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
   storeOptions?: { label: string; value: string }[];
-  onApplyFilter: (val: {
-    status?: string;
-    order?: string;
-    storeId?: string;
-  }) => void;
+  onApplyFilter: (val: { status?: string; storeId?: string }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
@@ -31,7 +23,6 @@ type FilterBarProps = {
 export default function FilterSearch({
   query,
   loading,
-
   storeOptions,
   onApplyFilter,
   onReset,
@@ -40,20 +31,16 @@ export default function FilterSearch({
   const [tempFilter, setTempFilter] = useState<{
     status: string;
     storeId: string;
-    order: string;
   }>({
     status: String(query.status) ?? "",
-    order: query.order ?? "",
     storeId: query.storeId ?? "",
   });
 
-  const isFiltered =
-    query.order !== "" || query.status !== "" || query.storeId !== "";
+  const isFiltered = query.status !== "" || query.storeId !== "";
 
   const handleApply = () => {
     onApplyFilter({
       status: tempFilter.status || undefined,
-      order: tempFilter.order || undefined,
       storeId: tempFilter.storeId || undefined,
     });
   };
@@ -62,7 +49,6 @@ export default function FilterSearch({
     setTempFilter({
       status: "",
       storeId: "",
-      order: "",
     });
     onReset();
   };
@@ -80,25 +66,6 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
-            {/* Order */}
-            <div className="grid gap-2">
-              <Label>Sắp xếp</Label>
-              <select
-                className="border rounded-md h-9 px-2"
-                value={tempFilter.order}
-                onChange={(e) =>
-                  setTempFilter((p) => ({
-                    ...p,
-                    order: e.target.value,
-                  }))
-                }
-              >
-                <option value="">Tất cả</option>
-                <option value="asc">A → Z</option>
-                <option value="desc">Z → A</option>
-              </select>
-            </div>
-
             {/* Status */}
             <div className="grid gap-2">
               <Label>Trạng thái</Label>

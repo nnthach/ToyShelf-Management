@@ -1,14 +1,11 @@
 import React from "react";
 import { PieChartExample } from "./components/charts/PieChart";
-import { Box, ClipboardList, Star } from "lucide-react";
-import StatCard from "@/src/components/StatCard";
 import TotalRevenueChart from "./components/charts/TotalRevenueChart";
 import TotalOrderChart from "./components/charts/TotalOrderChart";
 import TopThreeStore from "./components/TopThreeStore";
 import TopThreeProduct from "./components/TopThreeProduct";
 import TopThreePartner from "./components/TopThreePartner";
 import WarehouseMap from "./components/WarehouseMap";
-import StatCardWithButton from "@/src/components/StatCardWithButton";
 import AdminStatCard from "./components/AdminStatCard";
 
 export default function AdminDashboard() {
@@ -46,18 +43,7 @@ export default function AdminDashboard() {
         <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
           <TopThreePartner />
         </div>
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
-          <PieChartExample />
-        </div>
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
-          <PieChartExample />
-        </div>
-
-        {/* HÀNG 4: Tổng 1 + 3 = 4 */}
-        <div className="bg-background rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 h-[50vh] w-full shadow-sm flex items-center justify-center border border-gray-100">
-          <h1 className="text-xl font-bold">Dashboard</h1>
-        </div>
-        <div className="bg-background rounded-lg col-span-1 md:col-span-1 2xl:col-span-3 p-2 h-[50vh] w-full border border-gray-100 shadow-sm">
+        <div className="bg-background rounded-lg col-span-1 lg:col-span-2 2xl:col-span-2 p-2 h-[50vh] w-full border border-gray-100 shadow-sm">
           <WarehouseMap />
         </div>
       </div>

@@ -96,17 +96,19 @@ function ProductCardOrder({
           </div>
         </div>
       </div>
+
       {/*info */}
-      <div className="flex flex-col gap-0.5">
+      <div className="flex flex-col gap-0.5 flex-1">
         {/* Name */}
         <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
           {product.name}
         </h3>
-        <div className="flex justify-between items-start">
+        <div className="flex mt-auto justify-between items-start">
           {/* Base price nếu cần */}
           <p className="text-sm text-gray-600 mb-2">
             {selectedColor?.price.toLocaleString()}đ
           </p>
+
           <div className="flex items-center gap-2">
             {/* Hiển thị 3 màu đầu tiên */}
             {visibleColors.map((color, index) => (

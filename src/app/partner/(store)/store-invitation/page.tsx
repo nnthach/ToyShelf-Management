@@ -25,7 +25,6 @@ export default function PartnerManageStoreInvites() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
-    order: "",
     storeId: "",
     partnerId: partner?.partnerId,
   });

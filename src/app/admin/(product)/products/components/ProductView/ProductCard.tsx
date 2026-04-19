@@ -1,6 +1,4 @@
-import { Button } from "@/src/styles/components/ui/button";
 import { Product } from "@/src/types";
-import { Badge, Eye } from "lucide-react";
 import Image from "next/image";
 import { memo, useState } from "react";
 
@@ -25,10 +23,10 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
   return (
     <div
       onClick={() => handleViewDetail(product.id)}
-      className="group rounded-xl cursor-pointer border border-gray-100 bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300"
+      className="group rounded-xl cursor-pointer border border-gray-100 bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 flex flex-col"
     >
       {/* Image */}
-      <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+      <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3 shrink-0">
         {image && (
           <Image
             src={image}
@@ -51,7 +49,6 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
             </span>
           </span>
         </div>
-
         {/* Hover info */}
         <div
           className="absolute inset-x-0 bottom-0 z-10
@@ -87,19 +84,19 @@ function ProductCard({ product, handleViewDetail }: ProductCardProps) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col">
-        {/* Name */}
-        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1">
-          {product.name}
-        </h3>
 
+      {/*info color */}
+      <div className="flex flex-col flex-1 justify-between">
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1 min-h-[2.5rem] leading-5">
+            {product.name}
+          </h3>
+        </div>
         {/* Color selector */}
-        <div className="flex  items-center justify-between gap-0.5">
-          {/* Base price nếu cần */}
+        <div className="flex items-center justify-between gap-0.5 mt-auto">
           <p className="text-sm text-gray-600">
             {selectedColor?.price.toLocaleString()}đ
           </p>
-
           <div className="flex items-center gap-2">
             {/* Hiển thị 3 màu đầu tiên */}
             {visibleColors.map((color, index) => (

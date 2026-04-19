@@ -2,20 +2,19 @@
 
 import Pagination from "@/src/components/Pagination";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
-import ProductCardWithQuantity from "@/src/components/ProductCardWithQuantity";
-import { Product, Store } from "@/src/types";
+import { Shelf, Store } from "@/src/types";
 import React, { useEffect } from "react";
 import FilterSearch from "./components/FilterSearch";
 import { useQuery } from "@tanstack/react-query";
-import { getInventoryByLocationIdAPI } from "@/src/services/inventory.service";
-import { getAllStoreAPI } from "@/src/services/store.service";
-import { useAuth } from "@/src/hooks/useAuth";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { QueryParams } from "@/src/types/SubType";
+import { getInventoryShelfByLocationIdAPI } from "@/src/services/inventory-shelf.service";
+import ShelfCardWithQuantity from "@/src/components/ShelfCardWithQuantity";
+import { useAuth } from "@/src/hooks/useAuth";
+import { getAllStoreAPI } from "@/src/services/store.service";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
-import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 
-export default function PartnerManageInventory() {
+export default function PartnerViewAllInventoryShelf() {
   const { partner } = useAuth();
 
   const { data: partnerStoreList, isLoading: isPartnerStoreLoading } = useQuery(
@@ -29,13 +28,7 @@ export default function PartnerManageInventory() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
-      isActive: undefined,
       locationId: "",
-      categoryId: "",
-      pageNumber: 1,
-      pageSize: 10,
-      order: "",
-      searchItem: "",
     },
     {
       excludeResetKeys: ["locationId"],
@@ -56,31 +49,24 @@ export default function PartnerManageInventory() {
     refetch,
   } = useQuery({
     queryKey: ["inventories", query],
-    queryFn: () => getInventoryByLocationIdAPI(query.locationId!, query),
+    queryFn: () => getInventoryShelfByLocationIdAPI(query.locationId!, query),
     select: (res) => res.data,
     enabled: !!query.locationId,
-  });
-
-  const { data: categoryList } = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => getAllProductCategoryAPI({}),
-    select: (res) => res.data,
   });
 
   if (isPartnerStoreLoading || !query.locationId) {
     return <LoadingPageComponent />;
   }
-
   return (
     <>
       {/*Header */}
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Giám xác hàng tồn kho tại {inventoryList?.locationName}
+            Giám xác kệ tồn kho tại {inventoryList?.locationName}
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
-            Danh sách sản phẩm tồn kho tại cửa hàng và kho
+            Danh sách kệ tồn kho tại cửa hàng và kho
           </p>
         </div>
       </div>
@@ -93,13 +79,10 @@ export default function PartnerManageInventory() {
               query={query}
               loading={isLoading}
               partnerStoreList={partnerStoreList}
-              categoryList={categoryList}
               resultCount={inventoryList?.totalCount}
-              onSearch={(val) => updateQuery({ searchItem: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,
-                  pageNumber: 1,
                 })
               }
               onReset={() => resetQuery()}
@@ -114,12 +97,12 @@ export default function PartnerManageInventory() {
                   <ProductCardSkeleton key={i} />
                 ))}
               </div>
-            ) : inventoryList?.products?.length > 0 ? (
+            ) : inventoryList?.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
-                {inventoryList?.products?.map((product: Product) => (
-                  <ProductCardWithQuantity
-                    key={product.productId}
-                    product={product}
+                {inventoryList?.map((shelf: Shelf) => (
+                  <ShelfCardWithQuantity
+                    key={shelf.shelfTypeId}
+                    shelf={shelf}
                   />
                 ))}
               </div>

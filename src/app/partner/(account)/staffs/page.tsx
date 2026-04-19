@@ -44,7 +44,7 @@ export default function PartnerManageStaff() {
 
   const { data: storeList = [] } = useQuery({
     queryKey: ["stores"],
-    queryFn: () => getAllStoreAPI({}),
+    queryFn: () => getAllStoreAPI({ companyid: partnerId }),
     select: (res) => res.data as Store[],
   });
 

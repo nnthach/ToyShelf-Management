@@ -38,7 +38,7 @@ const TotalOrderChart = () => {
     }),
   };
 
-  const { data: orderChart = [], isLoading } = useQuery({
+  const { data: orderChart = [] } = useQuery({
     queryKey: ["orderChart", queryParams],
     queryFn: () => getDashboardAdminRevenueChart(queryParams),
     select: (res) => res.data,
@@ -74,16 +74,6 @@ const TotalOrderChart = () => {
 
       {/* CHART */}
       <div className="flex-1 min-h-[300px]">
-        {isLoading && (
-          <div className="absolute inset-0 bg-white/60 flex items-center justify-center z-10 rounded-xl">
-            <div className="flex gap-1">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:0ms]" />
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:150ms]" />
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:300ms]" />
-            </div>
-          </div>
-        )}
-
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={orderChart}

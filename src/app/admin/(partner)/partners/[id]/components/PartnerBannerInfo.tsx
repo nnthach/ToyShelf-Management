@@ -35,7 +35,7 @@ import {
 
 function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
   const queryClient = useQueryClient();
-  const partnerId = partnerDetail?.id||""
+  const partnerId = partnerDetail?.id || "";
 
   const disableMutation = useMutation({
     mutationFn: disablePartnerAPI,
@@ -120,7 +120,7 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
               </div>
 
               {/* DÒNG 2: TÊN CÔNG TY */}
-              <h2 className="text-4xl font-black tracking-tighter italic drop-shadow-md leading-tight text-white uppercase">
+              <h2 className="text-3xl font-black tracking-tighter italic drop-shadow-md leading-tight text-white uppercase">
                 {partnerDetail?.companyName}
               </h2>
 
@@ -280,7 +280,7 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
               Đối tác này chưa được cấp tài khoản truy cập. Hãy tạo tài khoản để
               theo dõi chiết khấu.
             </p>
-            <CreatePartnerAccountModal partnerId={partnerId}/>
+            <CreatePartnerAccountModal partnerId={partnerId} />
           </div>
         ) : (
           /* --- TRƯỜNG HỢP 2: ĐÃ CÓ TÀI KHOẢN (Hiển thị Header và List Lịch sử) --- */

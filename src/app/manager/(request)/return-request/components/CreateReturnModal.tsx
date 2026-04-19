@@ -1,6 +1,5 @@
 import { useAuth } from "@/src/hooks/useAuth";
 import { ReturnFormValues, returnSchema } from "@/src/schemas/return.schema";
-import { getAllProductColorColorAPI } from "@/src/services/product.service";
 import { getAllShelfAPI } from "@/src/services/shelf.service";
 import { Button } from "@/src/styles/components/ui/button";
 import {
@@ -12,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import { ProductColorItem, Shelf, ShelfShelf } from "@/src/types";
+import { ShelfShelf } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Box, Plus, Sparkles } from "lucide-react";
@@ -51,8 +50,6 @@ function CreateReturnModal() {
     },
   });
 
-  console.log("error", form.formState.errors);
-
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "items",
@@ -76,18 +73,6 @@ function CreateReturnModal() {
       label: s.code,
     };
   });
-
-  // product color
-  const { data: productColorIdList = [] } = useQuery({
-    queryKey: ["productColors"],
-    queryFn: () => getAllProductColorColorAPI({}),
-    select: (res) => res.data as ProductColorItem[],
-  });
-
-  const productColorOptions = productColorIdList.map((c) => ({
-    value: c.id,
-    label: c.sku,
-  }));
 
   async function onSubmit(data: ReturnFormValues) {
     console.log("data", data);
@@ -258,7 +243,6 @@ function CreateReturnModal() {
                         remove={remove}
                         fieldsLength={fields.length}
                         shelfOptions={shelfOptions}
-                        productOptions={productColorOptions}
                       />
                     ))}
 

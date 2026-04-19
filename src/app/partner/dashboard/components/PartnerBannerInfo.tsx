@@ -62,7 +62,7 @@ function PartnerBannerInfo() {
               </div>
 
               {/* DÒNG 2: TÊN CÔNG TY */}
-              <h2 className="text-4xl font-black tracking-tighter italic drop-shadow-md leading-tight text-white uppercase">
+              <h2 className="text-3xl font-black tracking-tighter italic drop-shadow-md leading-tight text-white uppercase">
                 {partnerDetail?.companyName}
               </h2>
 

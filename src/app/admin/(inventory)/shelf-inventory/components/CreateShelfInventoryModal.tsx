@@ -75,7 +75,7 @@ function CreateShelfInventoryModal() {
 
   const { data: inventoryLocationList = [] } = useQuery({
     queryKey: ["inventoryLocations"],
-    queryFn: () => getAllInventoryLocationAPI({}),
+    queryFn: () => getAllInventoryLocationAPI({ locationType: "Warehouse" }),
     select: (res) => res.data as InventoryLocation[],
   });
 

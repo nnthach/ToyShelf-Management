@@ -14,21 +14,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDateTime } from "../utils/format";
 import { Notification } from "../types";
 import { useSidebar } from "../styles/components/ui/sidebar";
+import { Button } from "../styles/components/ui/button";
 
-type SidebarItem = {
-  title: string;
-  icon: React.ElementType;
-  badge?: boolean;
-  action?: string;
-};
-
-function NotificationModal({ item }: { item: SidebarItem }) {
+function NotificationModal() {
   const { user } = useAuth();
   const userId = user?.id || "";
   const queryClient = useQueryClient();
-
-  const { state } = useSidebar();
-  const isCollapsed = state === "collapsed";
 
   const { data: notificationList = [] } = useQuery({
     queryKey: ["notifications", userId],
@@ -40,8 +31,6 @@ function NotificationModal({ item }: { item: SidebarItem }) {
   const unreadCount = notificationList.filter(
     (n: Notification) => !n.isRead,
   ).length;
-
-  const Icon = item.icon;
 
   const handleRead = async (notiId: string) => {
     try {
@@ -57,43 +46,17 @@ function NotificationModal({ item }: { item: SidebarItem }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="relative flex items-center transition-colors cursor-pointer text-muted-foreground hover:bg-accent rounded-md group">
-          <div
-            className={`flex items-center w-full px-2 py-2 ${!isCollapsed ? "justify-between" : "justify-center"}`}
-          >
-            <div className="flex items-center gap-2">
-              <Icon className="w-4 h-4 shrink-0" />
-              {!isCollapsed && <span className="truncate">{item.title}</span>}
-            </div>
-
-            <div
-              className={`relative flex items-center justify-center rounded-full transition-colors 
-              ${!isCollapsed ? "bg-green-100 text-green-700 w-7 h-7" : "w-4 h-4 text-muted-foreground group-hover:text-primary"}`}
-            >
-              {!isCollapsed ? <Bell className="w-4 h-4" /> : null}
-
-              {unreadCount > 0 && (
-                <span
-                  className={`absolute flex items-center justify-center rounded-full bg-red-500 font-bold text-white ring-2 ring-white
-                  ${
-                    !isCollapsed
-                      ? "-top-1 -right-1 h-4 min-w-[16px] text-[10px] px-1"
-                      : "-top-2 -right-2 h-4 min-w-[16px] text-[9px] px-0.5"
-                  }`}
-                >
-                  {unreadCount > 9 ? "9+" : unreadCount}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
+        <Button variant="outline" size="icon">
+          <Bell className="h-[1.2rem] w-[1.2rem]" />
+          <span className="sr-only">Notification</span>
+        </Button>
       </PopoverTrigger>
 
       <PopoverContent
-        side="right"
-        align="start"
+        side="bottom"
+        align="end"
         className="w-80 p-0 shadow-2xl border-slate-200 overflow-hidden rounded-2xl bg-white"
-        sideOffset={14}
+        sideOffset={10}
       >
         {/* Header */}
         <div className="p-4 border-b bg-white flex items-center justify-between">

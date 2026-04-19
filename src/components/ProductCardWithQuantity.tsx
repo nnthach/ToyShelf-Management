@@ -1,6 +1,4 @@
-import { Button } from "@/src/styles/components/ui/button";
 import { Product } from "@/src/types";
-import { Eye } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { useProductDetailSheet } from "../context/ProductDetailSheetContext";
@@ -27,7 +25,7 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
   return (
     <div
       onClick={() => openByData(product)}
-      className="group rounded-xl cursor-pointer border border-gray-100 bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300"
+      className="group rounded-xl flex flex-col cursor-pointer border border-gray-100 bg-white p-4 shadow-[0_3px_10px_rgb(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300"
     >
       {/* Image */}
       <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
@@ -93,13 +91,14 @@ function ProductCardWithQuantity({ product }: ProductCardWithQuantityProps) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col">
+
+      <div className="flex flex-col flex-1">
         {/* Name */}
         <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1 ">
           {product.productName}
         </h3>
 
-        <div className="flex  items-center justify-between gap-0.5">
+        <div className="flex mt-auto  items-center justify-between gap-0.5">
           {/* Base price nếu cần */}
           <p className="text-sm text-gray-600">
             {selectedColor?.productColorPrice?.toLocaleString()}đ

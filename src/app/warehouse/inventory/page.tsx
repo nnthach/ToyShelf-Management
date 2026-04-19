@@ -4,7 +4,6 @@ import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
-import CreateInventoryModal from "./components/CreateInventoryModal";
 import { getInventoryOfWarehouseByIdAPI } from "@/src/services/inventory.service";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import ProductCardWithQuantity from "@/src/components/ProductCardWithQuantity";
@@ -55,7 +54,6 @@ export default function WarehouseInventoryManage() {
             Danh sách tất cả các sản phẩm trong kho
           </p>
         </div>
-        <CreateInventoryModal />
       </div>
       {/*main content */}
       <div className="container mx-auto py-10">

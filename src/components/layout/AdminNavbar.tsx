@@ -15,10 +15,20 @@ import {
   DropdownMenuTrigger,
 } from "@/src/styles/components/ui/dropdown-menu";
 import { useSidebar } from "@/src/styles/components/ui/sidebar";
-import { ChevronLeft, Lock, LogOut, Menu, Moon, Sun, User } from "lucide-react";
+import {
+  Bell,
+  ChevronLeft,
+  Lock,
+  LogOut,
+  Menu,
+  Moon,
+  Sun,
+  User,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import { useAccountAdminModal } from "@/src/context/AccountAdminModalContext";
 import { useAuth } from "@/src/hooks/useAuth";
+import NotificationModal from "../NotificationModal";
 
 const AdminNavbar = () => {
   const { theme, setTheme } = useTheme();
@@ -27,12 +37,12 @@ const AdminNavbar = () => {
   const { openProfile, openChangePassword } = useAccountAdminModal();
 
   return (
-    <nav className="sticky top-0 z-10 w-full h-16.5 shadow-xs bg-white dark:bg-sidebar p-4 flex justify-between items-center">
+    <nav className="sticky top-0 z-20 w-full h-16.5 shadow-xs bg-white dark:bg-sidebar p-4 flex justify-between items-center">
       {/*left */}
       <div className="flex items-center gap-3">
-        <Button variant="outline" size={"sm"} onClick={toggleSidebar}>
+        {/* <Button variant="outline" size={"sm"} onClick={toggleSidebar}>
           {open ? <ChevronLeft /> : <Menu />}
-        </Button>
+        </Button> */}
 
         <h5 className="font-semibold text-lg">
           Hệ thống dành cho quản trị viên
@@ -40,6 +50,10 @@ const AdminNavbar = () => {
       </div>
       {/*right */}
       <div className="flex items-center gap-4">
+        {/*noti */}
+        <NotificationModal />
+
+        {/*theme */}
         <Button
           variant="outline"
           size="icon"

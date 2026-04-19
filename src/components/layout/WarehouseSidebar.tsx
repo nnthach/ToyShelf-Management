@@ -1,8 +1,4 @@
 import {
-  Collapsible,
-  CollapsibleContent,
-} from "@/src/styles/components/ui/collapsible";
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -14,18 +10,13 @@ import {
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
+  SidebarRail,
   SidebarSeparator,
   useSidebar,
 } from "@/src/styles/components/ui/sidebar";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-import { CollapsibleTrigger } from "@radix-ui/react-collapsible";
-import {
-  WarehouseManagerSidebarGroups,
-  WarehouseManagerSidebarNested,
-} from "../../constants/menuData";
-import { Bell, ChevronDown } from "lucide-react";
+import { WarehouseManagerSidebarGroups } from "../../constants/menuData";
+import { Bell } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/src/hooks/useAuth";
@@ -92,12 +83,6 @@ const WarehouseSidebar = () => {
                           <span>{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
-
-                      {item.badge && (
-                        <SidebarMenuBadge className="bg-green-100 text-green-700">
-                          <Bell className="w-4 h-4" />
-                        </SidebarMenuBadge>
-                      )}
                     </SidebarMenuItem>
                   );
                 })}
@@ -140,6 +125,8 @@ const WarehouseSidebar = () => {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+
+      <SidebarRail />
     </Sidebar>
   );
 };

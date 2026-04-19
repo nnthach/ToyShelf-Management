@@ -11,11 +11,11 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  SidebarRail,
   SidebarSeparator,
   useSidebar,
 } from "@/src/styles/components/ui/sidebar";
@@ -25,13 +25,12 @@ import {
   PartnerAdminSidebarGroups,
   PartnerAdminSidebarNested,
 } from "../../constants/menuData";
-import { Bell, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/src/hooks/useAuth";
 import { usePathname } from "next/navigation";
 import { cn } from "@/src/styles/lib/utils";
-import NotificationModal from "../NotificationModal";
 
 const PartnerAdminSidebar = () => {
   const { user } = useAuth();
@@ -76,14 +75,6 @@ const PartnerAdminSidebar = () => {
               <SidebarMenu>
                 {group.items.map((item) => {
                   const isActive = pathname === item.url;
-
-                  if (item.action === "notification") {
-                    return (
-                      <SidebarMenuItem key={item.title}>
-                        <NotificationModal item={item} />
-                      </SidebarMenuItem>
-                    );
-                  }
 
                   return (
                     <SidebarMenuItem key={item.title}>
@@ -209,6 +200,8 @@ const PartnerAdminSidebar = () => {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+
+      <SidebarRail />
     </Sidebar>
   );
 };

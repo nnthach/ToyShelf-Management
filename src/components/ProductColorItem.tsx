@@ -74,7 +74,7 @@ function ProductColorItem({
           <div className="grid grid-cols-2 gap-3">
             {/* ================= 3D UPLOAD ================= */}
             <div className="flex flex-col gap-2">
-              <span className="text-sm font-medium">File mô hình 3D</span>
+              <span className="text-sm font-medium">Tệp mô hình 3D</span>
 
               <input
                 id={`model3d-${index}`}

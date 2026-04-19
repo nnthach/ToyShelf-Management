@@ -85,10 +85,12 @@ function ConfirmPopup({
                 <div className="grid grid-cols-3 gap-4">
                   <div className="p-3 rounded-lg bg-secondary/30 border space-y-1">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium uppercase">
-                      <DollarSign className="w-3 h-3" /> Gía nhập
+                      <DollarSign className="w-3 h-3" /> Gía gốc
                     </div>
                     <p className="font-semibold text-sm">
-                      {Number(previewData?.basePrice) || 0}
+                      {Number(previewData?.basePrice ?? 0).toLocaleString() ||
+                        0}
+                      <small className="text-[10px]">VNĐ</small>
                     </p>
                   </div>
                   <div className="p-3 rounded-lg bg-secondary/30 border space-y-1">
@@ -226,8 +228,8 @@ function ConfirmPopup({
                       </div>
 
                       <div className="px-3 pb-3 flex justify-between items-baseline">
-                        <span className="text-xs text-muted-foreground italic font-mono">
-                          Gía theo màu
+                        <span className="text-sm font-medium">
+                          Gía bán theo màu
                         </span>
                         <span className="text-base font-black text-primary">
                           {Number(color.price).toLocaleString()}{" "}

@@ -15,7 +15,6 @@ import {
   PackagePlus,
   LayoutGrid,
   RotateCcw,
-  ArchiveRestore,
   MapPin,
   ShieldCheck,
   Ticket,
@@ -30,13 +29,13 @@ export const AdminSidebarGroups = [
     label: "Ứng dụng",
     items: [
       { title: "Tổng quan", url: "/admin/dashboard", icon: LayoutDashboard },
-      {
-        title: "Thông báo",
-        url: "#",
-        icon: Bell,
-        badge: true,
-        action: "notification",
-      },
+      // {
+      //   title: "Thông báo",
+      //   url: "#",
+      //   icon: Bell,
+      //   badge: true,
+      //   action: "notification",
+      // },
     ],
   },
   {
@@ -187,18 +186,18 @@ export const PartnerAdminSidebarGroups = [
     label: "Ứng dụng",
     items: [
       { title: "Tổng quan", url: "/partner/dashboard", icon: LayoutDashboard },
-      {
-        title: "Thông báo",
-        url: "#",
-        icon: Bell,
-        badge: true,
-        action: "notification",
-      },
+      // {
+      //   title: "Thông báo",
+      //   url: "#",
+      //   icon: Bell,
+      //   badge: true,
+      //   action: "notification",
+      // },
     ],
   },
   {
     label: "Đơn hàng",
-    items: [{ title: "Đơn hàng", url: "/partner/orders", icon: ClipboardList }],
+    items: [{ title: "Đơn hàng", url: "/partner/orders", icon: ShoppingCart }],
   },
 
   {
@@ -213,7 +212,12 @@ export const PartnerAdminSidebarGroups = [
       {
         title: "Danh sách hàng tồn kho",
         url: "/partner/inventories",
-        icon: ClipboardList,
+        icon: Box,
+      },
+      {
+        title: "Danh sách kệ tồn kho",
+        url: "/partner/shelf-inventories",
+        icon: Server,
       },
     ],
   },
@@ -268,7 +272,7 @@ export const WarehouseManagerSidebarGroups = [
         url: "/warehouse/dashboard",
         icon: LayoutDashboard,
       },
-      { title: "Thông báo", url: "#", icon: Bell, badge: true },
+      // { title: "Thông báo", url: "#", icon: Bell, badge: true },
     ],
   },
 
@@ -290,6 +294,11 @@ export const WarehouseManagerSidebarGroups = [
         title: "Quản lý hàng tồn kho",
         url: "/warehouse/inventory",
         icon: Box,
+      },
+      {
+        title: "Quản lý kệ tồn kho",
+        url: "/warehouse/shelf-inventory",
+        icon: Server,
       },
     ],
   },
@@ -329,7 +338,7 @@ export const StoreManagerSidebarGroups = [
         url: "/manager/dashboard",
         icon: LayoutDashboard,
       },
-      { title: "Thông báo", url: "#", icon: Bell, badge: true },
+      // { title: "Thông báo", url: "#", icon: Bell, badge: true },
     ],
   },
 
@@ -337,9 +346,14 @@ export const StoreManagerSidebarGroups = [
     label: "Hàng tồn kho",
     items: [
       {
-        title: "Quản lý hàng tồn kho",
+        title: "Giám sát hàng tồn kho",
         url: "/manager/inventory",
-        icon: UserStar,
+        icon: Box,
+      },
+      {
+        title: "Giám sát kệ tồn kho",
+        url: "/manager/shelf-inventory",
+        icon: Server,
       },
     ],
   },
@@ -353,7 +367,11 @@ export const StoreManagerSidebarGroups = [
   {
     label: "Đơn hàng",
     items: [
-      { title: "Danh sách đơn hàng", url: "/manager/orders", icon: UserStar },
+      {
+        title: "Danh sách đơn hàng",
+        url: "/manager/orders",
+        icon: ShoppingCart,
+      },
     ],
   },
 
@@ -392,40 +410,4 @@ export const StoreManagerSidebarNested = [
   //     },
   //   ],
   // },
-];
-
-export const StoreStaffSidebarGroups = [
-  {
-    label: "Ứng dụng",
-    items: [
-      {
-        title: "Tổng quan",
-        url: "/manager/dashboard",
-        icon: LayoutDashboard,
-      },
-      { title: "Thông báo", url: "#", icon: Bell, badge: true },
-    ],
-  },
-
-  {
-    label: "Hàng tồn kho",
-    items: [
-      {
-        title: "Quản lý hàng tồn kho",
-        url: "/staff/inventory",
-        icon: UserStar,
-      },
-    ],
-  },
-
-  {
-    label: "Đơn hàng",
-    items: [
-      {
-        title: "Danh sách đơn hàng",
-        url: "/staff/order",
-        icon: UserStar,
-      },
-    ],
-  },
 ];

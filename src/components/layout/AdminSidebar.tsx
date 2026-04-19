@@ -13,11 +13,11 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  SidebarRail,
   SidebarSeparator,
   useSidebar,
 } from "@/src/styles/components/ui/sidebar";
@@ -27,19 +27,18 @@ import {
   AdminSidebarGroups,
   AdminSidebarNested,
 } from "../../constants/menuData";
-import { Bell, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAppSelector } from "@/src/redux/hooks";
 import { usePathname } from "next/navigation";
 import { cn } from "@/src/styles/lib/utils";
-import NotificationModal from "../NotificationModal";
 
 const AdminSidebar = () => {
   const { user } = useAppSelector((state) => state.auth);
   const pathname = usePathname();
 
-  const { state } = useSidebar();
+  const { state, open, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
 
   return (
@@ -78,26 +77,18 @@ const AdminSidebar = () => {
               <SidebarMenu>
                 {group.items.map((item) => {
                   const isActive = pathname === item.url;
-
-                  if (item.action === "notification") {
-                    return (
-                      <SidebarMenuItem key={item.title}>
-                        <NotificationModal item={item} />
-                      </SidebarMenuItem>
-                    );
-                  }
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
                         <Link
                           href={item.url}
                           className={`flex items-center gap-2 px-2 py-1 rounded-md transition-colors
-            ${
-              isActive
-                ? "bg-blue-50 text-blue-600 border-l-4 border-blue-500 font-medium"
-                : "text-muted-foreground hover:bg-accent"
-            }
-          `}
+              ${
+                isActive
+                  ? "bg-blue-50 text-blue-600 border-l-4 border-blue-500 font-medium"
+                  : "text-muted-foreground hover:bg-accent"
+              }
+            `}
                         >
                           <item.icon />
                           <span>{item.title}</span>
@@ -110,7 +101,9 @@ const AdminSidebar = () => {
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
-
+        {/* <Button variant="outline" size={"sm"} onClick={toggleSidebar}>
+            {open ? <ChevronLeft /> : <ChevronRight />}
+          </Button> */}
         {/* --- Nested collapsible sub groups --- */}
         {AdminSidebarNested.map((group) => {
           const isGroupActive = group.sub.some(
@@ -128,8 +121,8 @@ const AdminSidebar = () => {
                 <SidebarGroupLabel asChild className="cursor-pointer">
                   <CollapsibleTrigger
                     className={`flex items-center w-full
-              ${isGroupActive ? "text-blue-600 font-medium" : ""}
-            `}
+                ${isGroupActive ? "text-blue-600 font-medium" : ""}
+              `}
                   >
                     {group.label}
                     <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -151,12 +144,12 @@ const AdminSidebar = () => {
                                   <Link
                                     href={item.url}
                                     className={`flex items-center gap-2 px-2 py-2 rounded-lg transition-all
-                              ${
-                                isActive
-                                  ? "bg-blue-50 text-blue-600 border-l-4 border-blue-500 font-medium"
-                                  : "text-muted-foreground hover:bg-accent"
-                              }
-                            `}
+                                ${
+                                  isActive
+                                    ? "bg-blue-50 text-blue-600 border-l-4 border-blue-500 font-medium"
+                                    : "text-muted-foreground hover:bg-accent"
+                                }
+                              `}
                                   >
                                     <item.icon
                                       className={
@@ -214,6 +207,8 @@ const AdminSidebar = () => {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+
+      <SidebarRail />
     </Sidebar>
   );
 };

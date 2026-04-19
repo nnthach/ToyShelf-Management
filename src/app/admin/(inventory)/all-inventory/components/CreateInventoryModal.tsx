@@ -1,5 +1,6 @@
 "use client";
 
+import { useDebounce } from "@/src/hooks/useDebounce";
 import { getAllInventoryLocationAPI } from "@/src/services/inventory-location.service";
 import { refillInventoryAPI } from "@/src/services/inventory.service";
 import { getAllProductColorColorAPI } from "@/src/services/product.service";
@@ -20,7 +21,16 @@ import { SelectOption } from "@/src/types/SubType";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Mail, MapPin, Plus, Send, Sparkles, User } from "lucide-react";
+import {
+  Mail,
+  MapPin,
+  Package,
+  Plus,
+  Send,
+  Sparkles,
+  User,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -29,6 +39,10 @@ import z from "zod";
 function CreateInventoryModal() {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+
+  const [searchProduct, setSearchProduct] = useState("");
+  const debounceSearch = useDebounce(searchProduct, 500);
+  const [openDropdown, setOpenDropdown] = useState(false);
 
   const formSchema = z.object({
     inventoryLocationId: z.string().min(1, "Vị trí kho hàng bắt buộc nhập"),
@@ -46,7 +60,6 @@ function CreateInventoryModal() {
   });
 
   async function onSubmit(data: z.input<typeof formSchema>) {
-    // Do something with the form values.
     try {
       await refillInventoryAPI(data);
       queryClient.invalidateQueries({
@@ -61,26 +74,23 @@ function CreateInventoryModal() {
   }
 
   const { data: productColorIdList = [] } = useQuery({
-    queryKey: ["productColors"],
-    queryFn: () => getAllProductColorColorAPI({}),
+    queryKey: ["productColors", debounceSearch],
+    queryFn: () => getAllProductColorColorAPI({ keyword: debounceSearch }),
     select: (res) => res.data as ProductColorItem[],
+    enabled: !!debounceSearch,
   });
-
-  const productColorOptions = productColorIdList.map((c) => ({
-    value: c.id,
-    label: c.sku,
-  }));
 
   const { data: inventoryLocationList = [] } = useQuery({
     queryKey: ["inventoryLocations"],
-    queryFn: () => getAllInventoryLocationAPI({}),
+    queryFn: () => getAllInventoryLocationAPI({ locationType: "Warehouse" }),
     select: (res) => res.data as InventoryLocation[],
+    enabled: !!open,
   });
 
   const inventoryLocationOption: SelectOption[] = inventoryLocationList.map(
     (c) => ({
       value: c.id,
-      label: `${c.name} (${c.type})`,
+      label: c.name,
     }),
   );
 
@@ -90,6 +100,7 @@ function CreateInventoryModal() {
       onOpenChange={(value) => {
         setOpen(value);
         if (!value) {
+          setSearchProduct("");
           form.reset();
         }
       }}
@@ -122,18 +133,76 @@ function CreateInventoryModal() {
               className="space-y-5"
               id="form-create-inventory"
             >
-              <FormFieldCustom
-                name="productColorId"
-                label="Sản phẩm"
-                icon={<Mail size={18} />}
-                selectData={productColorOptions}
-                type="select"
-              />
+              {/*input search product color id */}
+              <div className="sm:col-span-1 relative">
+                <div className="flex items-center gap-1 text-[14px] mb-1 font-semibold text-slate-700">
+                  <Package size={18} className="text-primary/80" />
+
+                  <label>
+                    Mã sản phẩm <span className="text-red-500">*</span>
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 h-9 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 bg-white">
+                  <input
+                    className="flex-1 text-sm outline-none bg-transparent placeholder:text-slate-400"
+                    placeholder="Nhập mã sản phẩm..."
+                    value={searchProduct}
+                    onChange={(e) => {
+                      setSearchProduct(e.target.value);
+                      setOpenDropdown(true);
+                      form.setValue(`productColorId`, "");
+                    }}
+                    onFocus={() => setOpenDropdown(true)}
+                    onBlur={() => setTimeout(() => setOpenDropdown(false), 150)}
+                  />
+                  {searchProduct && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchProduct("");
+                        form.setValue(`productColorId`, "");
+                      }}
+                    >
+                      <X
+                        size={14}
+                        className="text-slate-400 hover:text-slate-600"
+                      />
+                    </button>
+                  )}
+                </div>
+                {openDropdown && (
+                  <div className="absolute z-20 top-full mt-1 left-0 right-0 bg-white border border-slate-200 rounded-lg shadow-md overflow-y-auto">
+                    {productColorIdList.length === 0 ? (
+                      <p className="text-xs text-slate-400 px-3 py-2">
+                        Không tìm thấy
+                      </p>
+                    ) : (
+                      productColorIdList.map((p) => (
+                        <div
+                          key={p.variantSku}
+                          className="flex items-center gap-2 px-3 py-2 hover:bg-slate-50 cursor-pointer text-sm"
+                          onMouseDown={() => {
+                            form.setValue(`productColorId`, p.productColorId);
+                            setSearchProduct(p.variantSku);
+                            setOpenDropdown(false);
+                          }}
+                        >
+                          <span className="font-medium">{p.variantSku}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+              {/*end input search */}
+
               <FormFieldCustom
                 name="quantity"
                 label="Số lượng"
                 icon={<Mail size={18} />}
                 type="number"
+                required
               />
               <FormFieldCustom
                 name="inventoryLocationId"
@@ -142,6 +211,7 @@ function CreateInventoryModal() {
                 type="select"
                 selectData={inventoryLocationOption}
                 icon={<MapPin size={18} />}
+                required
               />
             </form>
           </FormProvider>
