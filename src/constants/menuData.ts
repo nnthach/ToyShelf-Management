@@ -49,9 +49,7 @@ export const AdminSidebarGroups = [
 
   {
     label: "Quản lý nhân viên",
-    items: [
-      { title: "Tài khoản", url: "/admin/accounts", icon: UserStar },
-    ],
+    items: [{ title: "Tài khoản", url: "/admin/accounts", icon: UserStar }],
   },
 
   {
@@ -179,18 +177,22 @@ export const PartnerAdminSidebarGroups = [
     label: "Ứng dụng",
     items: [
       { title: "Tổng quan", url: "/partner/dashboard", icon: LayoutDashboard },
-      // {
-      //   title: "Thông báo",
-      //   url: "#",
-      //   icon: Bell,
-      //   badge: true,
-      //   action: "notification",
-      // },
     ],
   },
   {
     label: "Đơn hàng",
     items: [{ title: "Đơn hàng", url: "/partner/orders", icon: ShoppingCart }],
+  },
+
+  {
+    label: "Đổi soát hoa hồng",
+    items: [
+      {
+        title: "Danh sách đổi soát",
+        url: "/partner/monthly-settlement",
+        icon: ClipboardList,
+      },
+    ],
   },
 
   {

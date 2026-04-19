@@ -97,7 +97,7 @@ export default function FilterSearch({
             <div className="grid gap-2">
               <Label>Đối tác</Label>
               <select
-                className="border rounded-md h-9 px-2"
+                className="border rounded-md h-9 px-2 w-full max-w-full truncate"
                 value={tempFilter.companyid}
                 onChange={(e) =>
                   setTempFilter((p) => ({
@@ -107,9 +107,11 @@ export default function FilterSearch({
                 }
               >
                 <option value="">Tất cả</option>
-                {partnerList?.map((partner) => (
-                  <option key={partner.id} value={partner.id}>
-                    {partner.companyName}
+                {partnerList?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.companyName.length > 30
+                      ? item.companyName.slice(0, 30) + "…"
+                      : item.companyName}
                   </option>
                 ))}
               </select>

@@ -23,6 +23,11 @@ export const updateMonthlySettlementBankedAPI = async (id: string) => {
   return res.data;
 };
 
+export const receiveMonthlySettlementAPI = async (id: string) => {
+  const res = await api.put(`/MonthlySettlement/${id}/confirm-receipt`);
+  return res.data;
+};
+
 export const updateMonthlySettlementAdditionalFeeAPI = async <T>(
   data: T,
   id: string,

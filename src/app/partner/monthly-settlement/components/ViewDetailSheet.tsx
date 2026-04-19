@@ -1,10 +1,8 @@
 "use client";
 
-import { Card, CardHeader } from "@/src/styles/components/ui/card";
 import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -16,16 +14,15 @@ import {
   CheckCircle2,
   DollarSign,
   Eye,
-  Hash,
   MinusCircle,
   Package,
-  Percent,
   ShoppingCart,
 } from "lucide-react";
 import { Button } from "@/src/styles/components/ui/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getMonthlySettlementDetailAPI,
+  receiveMonthlySettlementAPI,
   updateMonthlySettlementBankedAPI,
 } from "@/src/services/monthly-settlement.service";
 import { useState } from "react";
@@ -35,7 +32,6 @@ import {
   formatMonthlySettlementStatusColor,
   formatMonthlySettlementStatusText,
 } from "@/src/utils/formatStatus";
-import DeductionModal from "./DeductionModal";
 import { toast } from "react-toastify";
 
 function ViewDetailSheet({
@@ -55,10 +51,10 @@ function ViewDetailSheet({
     enabled: !!monthlySettlementId && open,
   });
 
-  const paidMutation = useMutation({
-    mutationFn: updateMonthlySettlementBankedAPI,
+  const receiveMutation = useMutation({
+    mutationFn: receiveMonthlySettlementAPI,
     onSuccess: () => {
-      toast.success("Xác nhận chuyển tiền thành công");
+      toast.success("Xác nhận đã nhận tiền thành công");
 
       // reload danh sách
       queryClient.invalidateQueries({
@@ -70,16 +66,16 @@ function ViewDetailSheet({
       });
     },
     onError: () => {
-      toast.error("Xác nhận chuyển tiền thất bại");
+      toast.error("Xác nhận đã nhận tiền thất bại");
     },
   });
 
-  const handlePaid = (monthlySettlementId: string) => {
-    const confirmPaid = window.confirm("Bạn có chắc đã chuyển tiền không?");
+  const handleReceive = (monthlySettlementId: string) => {
+    const confirmPaid = window.confirm("Bạn có chắc đã nhận tiền không?");
 
     if (!confirmPaid) return;
 
-    paidMutation.mutate(monthlySettlementId);
+    receiveMutation.mutate(monthlySettlementId);
   };
 
   return (
@@ -351,39 +347,22 @@ function ViewDetailSheet({
                   )}
                 </div>
               </div>
-              {detail && detail?.status === "PENDING" && (
+              {detail && detail?.status === "PAID" && (
                 <SheetFooter className="px-8 py-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-transparent flex-none">
-                  <div className="flex items-center gap-3 w-full">
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsOpenDeduction(true)}
-                      className="flex-1 h-11 font-bold rounded-xl "
-                    >
-                      <MinusCircle size={18} strokeWidth={2.5} />
-                      Khấu trừ
-                    </Button>
-
-                    <Button
-                      variant="success"
-                      disabled={paidMutation.isPending}
-                      onClick={() => handlePaid(detail.id)}
-                      className="flex-[1.5] h-11 font-bold rounded-xl"
-                    >
-                      <CheckCircle2 size={18} strokeWidth={2.5} />
-                      Xác nhận đã chuyển tiền
-                    </Button>
-                  </div>
+                  <Button
+                    variant="success"
+                    disabled={receiveMutation.isPending}
+                    onClick={() => handleReceive(detail.id)}
+                    className="flex-[1.5] h-11 font-bold rounded-xl"
+                  >
+                    <CheckCircle2 size={18} strokeWidth={2.5} />
+                    Xác nhận đã nhận tiền
+                  </Button>
                 </SheetFooter>
               )}
             </div>
           </div>
         )}
-
-        <DeductionModal
-          monthlySettlementId={monthlySettlementId}
-          isOpen={isOpenDeduction}
-          onClose={() => setIsOpenDeduction(false)}
-        />
       </SheetContent>
     </Sheet>
   );

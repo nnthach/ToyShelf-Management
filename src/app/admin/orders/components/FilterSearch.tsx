@@ -87,21 +87,21 @@ export default function FilterSearch({
             <div className="grid gap-2">
               <Label>Đối tác</Label>
               <select
-                className="border rounded-md h-9 px-2"
+                className="border rounded-md h-9 px-2 w-full max-w-full truncate"
                 value={tempFilter.partnerId}
-                onChange={(e) => {
+                onChange={(e) =>
                   setTempFilter((p) => ({
                     ...p,
                     partnerId: e.target.value,
-                    storeId: "",
-                  }));
-                  onPartnerChange?.(e.target.value);
-                }}
+                  }))
+                }
               >
                 <option value="">Tất cả</option>
-                {partnerList?.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.companyName}
+                {partnerList?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.companyName.length > 30
+                      ? item.companyName.slice(0, 30) + "…"
+                      : item.companyName}
                   </option>
                 ))}
               </select>

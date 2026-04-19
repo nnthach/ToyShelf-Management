@@ -9,13 +9,17 @@ import { QueryParams } from "@/src/types/SubType";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
 import { getAllMonthlySettlementAPI } from "@/src/services/monthly-settlement.service";
+import { useAuth } from "@/src/hooks/useAuth";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
-export default function AdminMonthlySettlementManage() {
+export default function PartnerMonthlySettlementManage() {
+  const { partner } = useAuth();
+  const partnerId = partner?.partnerId;
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
     // year: 0,
     // month: 0,
-    partnerId: "",
+    partnerId: partnerId,
   });
 
   const {
@@ -26,9 +30,14 @@ export default function AdminMonthlySettlementManage() {
     queryKey: ["monthlySettlements", query],
     queryFn: () => getAllMonthlySettlementAPI(query),
     select: (res) => res.data,
+    enabled: !!partnerId,
   });
 
   const columns = getMonthlySettlementColumns();
+
+  if (!query.partnerId) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <div>
@@ -67,12 +76,6 @@ export default function AdminMonthlySettlementManage() {
               onReset={() => resetQuery()}
               onRefresh={() => refetch()}
             />
-
-            <div className="space-x-3">
-              <Button>
-                <Upload /> Xuất dữ liệu
-              </Button>
-            </div>
           </div>
         </DataTable>
       </div>
