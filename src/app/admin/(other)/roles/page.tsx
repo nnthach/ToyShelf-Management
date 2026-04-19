@@ -4,9 +4,6 @@ import useQueryParams from "@/src/hooks/useQueryParams";
 
 import { useState } from "react";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { Button } from "@/src/styles/components/ui/button";
-import { Upload } from "lucide-react";
-import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";

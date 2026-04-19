@@ -24,6 +24,7 @@ import { Separator } from "@/src/styles/components/ui/separator";
 import { uploadFileToCloudinary } from "@/src/config/cloundinary";
 import { createDamageReportAPI } from "@/src/services/damage-report.service";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function CreateReturnModal() {
   const { myStore } = useAuth();
@@ -126,6 +127,7 @@ function CreateReturnModal() {
       setOpen(false);
     } catch (error) {
       console.log("error", error);
+      toast.error(getErrorMessage(error, "Tạo đơn trả thất bại"));
     }
   }
 

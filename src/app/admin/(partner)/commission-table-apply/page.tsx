@@ -20,8 +20,7 @@ export default function AdminCommissionTableApply() {
   const queryClient = useQueryClient();
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    order: "",
-    search: "",
+    isActive: undefined,
   });
 
   const {
@@ -105,7 +104,6 @@ export default function AdminCommissionTableApply() {
               query={query}
               loading={loading}
               resultCount={commissionTableApplyList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

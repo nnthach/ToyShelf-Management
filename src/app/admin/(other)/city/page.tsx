@@ -1,12 +1,5 @@
 "use client";
-
-import useQueryParams from "@/src/hooks/useQueryParams";
-
 import { useState } from "react";
-import { Button } from "@/src/styles/components/ui/button";
-import { Upload } from "lucide-react";
-import FilterSearch from "./components/FilterSearch";
-import { QueryParams } from "@/src/types/SubType";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { City } from "@/src/types";
@@ -20,18 +13,13 @@ export default function AdminManageCity() {
   const [selectedCityId, setSelectedCityId] = useState("");
   const queryClient = useQueryClient();
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    order: "",
-    search: "",
-  });
-
   const {
     data: cityList = [],
     isLoading: loading,
     refetch,
   } = useQuery({
-    queryKey: ["cities", query],
-    queryFn: () => getAllCityAPI(query),
+    queryKey: ["cities"],
+    queryFn: () => getAllCityAPI({}),
     select: (res) => res.data as City[],
   });
 
@@ -82,28 +70,11 @@ export default function AdminManageCity() {
       </div>
       {/*Table */}
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={cityList ?? []} isLoading={loading}>
-          <div className="p-4 border-b flex justify-between items-center">
-            {/*Filter search */}
-            <FilterSearch
-              query={query}
-              loading={loading}
-              resultCount={cityList.length}
-              onSearch={(val) => updateQuery({ search: val })}
-              onApplyFilter={(filter) =>
-                updateQuery({
-                  ...filter,
-                })
-              }
-              onReset={() => resetQuery()}
-              onRefresh={() => refetch()}
-            />
-
-            <Button variant={"outline"}>
-              <Upload /> Xuất dữ liệu
-            </Button>
-          </div>
-        </DataTable>
+        <DataTable
+          columns={columns}
+          data={cityList ?? []}
+          isLoading={loading}
+        />
       </div>
 
       {selectedCityId && (

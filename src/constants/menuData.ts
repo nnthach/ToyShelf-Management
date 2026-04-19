@@ -29,13 +29,6 @@ export const AdminSidebarGroups = [
     label: "Ứng dụng",
     items: [
       { title: "Tổng quan", url: "/admin/dashboard", icon: LayoutDashboard },
-      // {
-      //   title: "Thông báo",
-      //   url: "#",
-      //   icon: Bell,
-      //   badge: true,
-      //   action: "notification",
-      // },
     ],
   },
   {
@@ -57,7 +50,7 @@ export const AdminSidebarGroups = [
   {
     label: "Quản lý nhân viên",
     items: [
-      { title: "Tài khoản nhân viên", url: "/admin/staffs", icon: UserStar },
+      { title: "Tài khoản", url: "/admin/accounts", icon: UserStar },
     ],
   },
 

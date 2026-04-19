@@ -1,4 +1,7 @@
+// import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { useDebounce } from "@/src/hooks/useDebounce";
 import { Button } from "@/src/styles/components/ui/button";
+import { Input } from "@/src/styles/components/ui/input";
 import { Label } from "@/src/styles/components/ui/label";
 import {
   Popover,
@@ -6,22 +9,15 @@ import {
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
 import { QueryParams } from "@/src/types/SubType";
-
 import { PopoverClose } from "@radix-ui/react-popover";
-import { Filter, RotateCcw, XCircle } from "lucide-react";
-import { useState } from "react";
+import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
-  showStatus?: boolean;
-  showOrder?: boolean;
-  onApplyFilter: (val: {
-    status?: boolean;
-    order?: string;
-    limit?: number;
-  }) => void;
+  onApplyFilter: (val: { isActive?: boolean }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
@@ -29,43 +25,27 @@ type FilterBarProps = {
 export default function FilterSearch({
   query,
   loading,
-  showStatus = true,
-  showOrder = true,
   onApplyFilter,
   onReset,
   onRefresh,
 }: FilterBarProps) {
-
-
   const [tempFilter, setTempFilter] = useState<{
-    status: "" | "true" | "false";
-    order: string;
-    limit: number;
+    isActive?: boolean;
   }>({
-    status:
-      query.status === true ? "true" : query.status === false ? "false" : "",
-    order: query.order ?? "",
-    limit: query.limit ?? 10,
+    isActive: undefined,
   });
 
-  const isFiltered =
-    (showOrder && query.order !== "") ||
-    (showStatus && typeof query.status === "boolean");
+  const isFiltered = query.isActive !== undefined;
 
   const handleApply = () => {
     onApplyFilter({
-      status:
-        tempFilter.status === "" ? undefined : tempFilter.status === "true",
-      order: tempFilter.order || undefined,
-      limit: tempFilter.limit,
+      isActive: tempFilter.isActive || undefined,
     });
   };
 
   const handleResetAll = () => {
     setTempFilter({
-      status: "",
-      order: "",
-      limit: 10,
+      isActive: undefined,
     });
     onReset();
   };
@@ -83,47 +63,31 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
-            {/* Order */}
-            {showOrder && (
-              <div className="grid gap-2">
-                <Label>Sắp xếp</Label>
-                <select
-                  className="border rounded-md h-9 px-2"
-                  value={tempFilter.order}
-                  onChange={(e) =>
-                    setTempFilter((p) => ({
-                      ...p,
-                      order: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Tất cả</option>
-                  <option value="asc">A → Z</option>
-                  <option value="desc">Z → A</option>
-                </select>
-              </div>
-            )}
-
             {/* Status */}
-            {showStatus && (
-              <div className="grid gap-2">
-                <Label>Trạng thái</Label>
-                <select
-                  className="border rounded-md h-9 px-2"
-                  value={tempFilter.status}
-                  onChange={(e) =>
-                    setTempFilter((p) => ({
-                      ...p,
-                      status: e.target.value as "" | "true" | "false",
-                    }))
-                  }
-                >
-                  <option value="">Tất cả</option>
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
-                </select>
-              </div>
-            )}
+            <div className="grid gap-2">
+              <Label>Trạng thái</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={
+                  tempFilter.isActive === undefined
+                    ? "all"
+                    : String(tempFilter.isActive)
+                }
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    isActive:
+                      e.target.value === "all"
+                        ? undefined
+                        : e.target.value === "true",
+                  }))
+                }
+              >
+                <option value="all">Tất cả</option>
+                <option value="true">Hoạt động</option>
+                <option value="false">Không hoạt động</option>
+              </select>
+            </div>
 
             <PopoverClose asChild>
               <Button onClick={handleApply}>Áp dụng</Button>

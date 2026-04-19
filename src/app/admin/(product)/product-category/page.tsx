@@ -27,8 +27,6 @@ export default function AdminProductType() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
-    order: "",
-    search: "",
   });
 
   const {
@@ -142,7 +140,6 @@ export default function AdminProductType() {
               query={query}
               loading={isLoading}
               resultCount={categoryList.length}
-              onSearch={(val) => updateQuery({ search: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

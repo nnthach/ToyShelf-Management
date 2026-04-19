@@ -85,7 +85,7 @@ export default function AdminCommissionTable() {
   const queryClient = useQueryClient();
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    order: "",
+    isActive: undefined,
   });
 
   const {

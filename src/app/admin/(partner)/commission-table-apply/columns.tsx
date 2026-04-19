@@ -28,6 +28,11 @@ export const getCommissionTableApplyColumns = (
   {
     accessorKey: "name",
     header: "Ghi chú",
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+
+      return <span className="max-w-[200px]">{name}</span>;
+    },
   },
 
   {
