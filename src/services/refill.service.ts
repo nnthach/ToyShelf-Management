@@ -31,7 +31,7 @@ export const rejectRefillRequestAPI = async (id: string) => {
 };
 
 export const getStoreOrderAvailableWarehouseAPI = async (id: string) => {
-  const res = await api.get(`/StoreOrder/${id}/available-warehouses`);
+  const res = await api.get(`/StoreOrder/${id}/available-warehouses-v2`);
   return res.data;
 };
 
