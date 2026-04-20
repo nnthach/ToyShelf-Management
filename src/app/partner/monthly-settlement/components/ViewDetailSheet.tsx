@@ -33,6 +33,7 @@ import {
   formatMonthlySettlementStatusText,
 } from "@/src/utils/formatStatus";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function ViewDetailSheet({
   monthlySettlementId,
@@ -65,8 +66,8 @@ function ViewDetailSheet({
         queryKey: ["monthlySettlements"],
       });
     },
-    onError: () => {
-      toast.error("Xác nhận đã nhận tiền thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xác nhận đã nhận tiền thất bại"));
     },
   });
 

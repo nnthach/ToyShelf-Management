@@ -29,6 +29,7 @@ import WarehouseShipmentDetailSection from "@/src/components/WarehouseShipmentMo
 import WarehouseShipmentProductList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentProductList";
 import WarehouseShipmentShelfList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentShelfList";
 import WarehouseShipmentDamageList from "@/src/components/WarehouseShipmentModalComponent/WarehouseShipmentDamageList";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 type UpdateShipmentAssignRefillRequestModalProps = {
   requestId: string;
@@ -79,8 +80,7 @@ function UpdateShipmentAssignRefillRequestModal({
       toast.success("Nhận hàng trả thành công");
     },
     onError: (error) => {
-      console.error("Accept error:", error);
-      toast.error("Nhận hàng trả thất bại");
+      toast.error(getErrorMessage(error, "Nhận hàng trả thất bại"));
     },
   });
   const handleReceiveReturn = async () => {
@@ -101,8 +101,7 @@ function UpdateShipmentAssignRefillRequestModal({
       });
       toast.success("Tạo đơn thành công");
     } catch (error) {
-      console.log("error", error);
-      toast.error("Tạo đơn thất bại");
+      toast.error(getErrorMessage(error, "Tạo đơn thất bại"));
     } finally {
       setIsDamaging(false);
     }

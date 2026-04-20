@@ -8,6 +8,7 @@ import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getCityColumns } from "./columns";
 import CreateCityModal from "./components/CreateCityModal";
 import EditCityModal from "./components/EditCityModal";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function AdminManageCity() {
   const [selectedCityId, setSelectedCityId] = useState("");
@@ -37,8 +38,8 @@ export default function AdminManageCity() {
         queryKey: ["cities"],
       });
     },
-    onError: () => {
-      toast.error("Xóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xóa thất bại"));
     },
   });
 

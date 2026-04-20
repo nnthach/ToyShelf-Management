@@ -37,6 +37,7 @@ import {
   TableRow,
 } from "@/src/styles/components/ui/table";
 import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 const getTypeConfig = (type: string) => {
   switch (type) {
@@ -111,8 +112,8 @@ export default function AdminCommissionTable() {
         queryKey: ["commissionTables"],
       });
     },
-    onError: () => {
-      toast.error("Xóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xóa thất bại"));
     },
   });
 
@@ -135,8 +136,8 @@ export default function AdminCommissionTable() {
         queryKey: ["commissionTables"],
       });
     },
-    onError: () => {
-      toast.error("Vô hiệu hóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Vô hiệu hóa thất bại"));
     },
   });
 
@@ -159,8 +160,8 @@ export default function AdminCommissionTable() {
         queryKey: ["commissionTables"],
       });
     },
-    onError: () => {
-      toast.error("Kích hoạt thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Kích hoạt thất bại"));
     },
   });
 

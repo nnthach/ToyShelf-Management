@@ -17,6 +17,7 @@ import { getStoreInvitesAPI } from "@/src/services/store-invite.service";
 import { useAuth } from "@/src/hooks/useAuth";
 import { getAllStoreAPI } from "@/src/services/store.service";
 import { Store } from "@/src/types";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function PartnerManageStoreInvites() {
   const queryClient = useQueryClient();
@@ -60,8 +61,8 @@ export default function PartnerManageStoreInvites() {
         queryKey: ["storeInvites"],
       });
     },
-    onError: () => {
-      toast.error("Xóa lời mời thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xóa lời mời thất bại"));
     },
   });
 

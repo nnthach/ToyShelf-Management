@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import ViewStoreCreateRequestModal from "./components/ViewStoreCreationRequestModal";
 import { useAuth } from "@/src/hooks/useAuth";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function PartnerStoreCreationRequestManage() {
   const queryClient = useQueryClient();
@@ -67,8 +68,8 @@ export default function PartnerStoreCreationRequestManage() {
         queryKey: ["storeRequests"],
       });
     },
-    onError: () => {
-      toast.error("Xóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xóa thất bại"));
     },
   });
 

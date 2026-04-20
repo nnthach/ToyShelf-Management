@@ -16,6 +16,7 @@ import {
 import CreateRoleModal from "./components/CreateRoleModal";
 import EditRoleModal from "./components/EditRoleModal";
 import { getRoleColumns } from "./columns";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function AdminManageRole() {
   const [selectedRoleId, setSelectedRoleId] = useState("");
@@ -51,8 +52,8 @@ export default function AdminManageRole() {
         queryKey: ["roles"],
       });
     },
-    onError: () => {
-      toast.error("Xóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xóa thất bại"));
     },
   });
 
@@ -76,8 +77,8 @@ export default function AdminManageRole() {
         queryKey: ["roles"],
       });
     },
-    onError: () => {
-      toast.error("Vô hiệu hóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Vô hiệu hóa thất bại"));
     },
   });
 
@@ -100,8 +101,8 @@ export default function AdminManageRole() {
         queryKey: ["roles"],
       });
     },
-    onError: () => {
-      toast.error("Kích hoạt thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Kích hoạt thất bại"));
     },
   });
 
@@ -109,7 +110,12 @@ export default function AdminManageRole() {
     restoreMutation.mutate(roleId);
   };
 
-  const columns = getRoleColumns(handleEdit, handleDelete,handleDisable, handleRestore);
+  const columns = getRoleColumns(
+    handleEdit,
+    handleDelete,
+    handleDisable,
+    handleRestore,
+  );
 
   return (
     <div>

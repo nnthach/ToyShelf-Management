@@ -37,6 +37,7 @@ import {
 } from "@/src/utils/formatStatus";
 import DeductionModal from "./DeductionModal";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function ViewDetailSheet({
   monthlySettlementId,
@@ -69,8 +70,8 @@ function ViewDetailSheet({
         queryKey: ["monthlySettlements"],
       });
     },
-    onError: () => {
-      toast.error("Xác nhận chuyển tiền thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xác nhận chuyển tiền thất bại"));
     },
   });
 

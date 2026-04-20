@@ -32,6 +32,7 @@ import {
   disablePartnerAPI,
   restorePartnerAPI,
 } from "@/src/services/partner.service";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
   const queryClient = useQueryClient();
@@ -46,8 +47,8 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
         queryKey: ["partner", partnerDetail.id],
       });
     },
-    onError: () => {
-      toast.error("Vô hiệu hóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Vô hiệu hóa thất bại"));
     },
   });
 
@@ -70,8 +71,8 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
         queryKey: ["partner", partnerDetail.id],
       });
     },
-    onError: () => {
-      toast.error("Kích hoạt thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Kích hoạt thất bại"));
     },
   });
 

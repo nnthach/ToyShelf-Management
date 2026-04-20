@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import { getPartnerTierColumns } from "./columns";
 import CreatePartnerTierModal from "./components/CreatePartnerLevelModal";
 import EditPartnerTierModal from "./components/EditPartnerTierModal";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function AdminPartnerLevel() {
   const [selectedPartnerTierId, setSelectedPartnerTierId] = useState("");
@@ -51,8 +52,8 @@ export default function AdminPartnerLevel() {
         queryKey: ["partnerTiers"],
       });
     },
-    onError: () => {
-      toast.error("Xóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xóa thất bại"));
     },
   });
 

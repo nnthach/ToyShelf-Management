@@ -17,6 +17,7 @@ import {
 } from "@/src/services/product-category.service";
 import EditCategoryModal from "./components/EditCategoryModal";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function AdminProductType() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
@@ -53,8 +54,8 @@ export default function AdminProductType() {
         queryKey: ["categories"],
       });
     },
-    onError: () => {
-      toast.error("Xóa danh mục thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xóa danh mục thất bại"));
     },
   });
 
@@ -78,8 +79,8 @@ export default function AdminProductType() {
         queryKey: ["categories"],
       });
     },
-    onError: () => {
-      toast.error("Vô hiệu hóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Vô hiệu hóa thất bại"));
     },
   });
 
@@ -102,8 +103,8 @@ export default function AdminProductType() {
         queryKey: ["categories"],
       });
     },
-    onError: () => {
-      toast.error("Kích hoạt thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Kích hoạt thất bại"));
     },
   });
 
@@ -111,7 +112,12 @@ export default function AdminProductType() {
     restoreMutation.mutate(categoryId);
   };
 
-  const columns = getProductCategoryColumns(handleEdit, handleDelete,handleDisable, handleRestore);
+  const columns = getProductCategoryColumns(
+    handleEdit,
+    handleDelete,
+    handleDisable,
+    handleRestore,
+  );
 
   return (
     <>

@@ -15,6 +15,7 @@ import {
   restoreCommissionTableApplyAPI,
 } from "@/src/services/commission-table-apply.service";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function AdminCommissionTableApply() {
   const queryClient = useQueryClient();
@@ -42,8 +43,8 @@ export default function AdminCommissionTableApply() {
         queryKey: ["commissionTableApplies"],
       });
     },
-    onError: () => {
-      toast.error("Vô hiệu hóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Vô hiệu hóa thất bại"));
     },
   });
 
@@ -66,8 +67,8 @@ export default function AdminCommissionTableApply() {
         queryKey: ["commissionTableApplies"],
       });
     },
-    onError: () => {
-      toast.error("Kích hoạt thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Kích hoạt thất bại"));
     },
   });
 

@@ -21,6 +21,7 @@ import { getAllStoreAPI } from "@/src/services/store.service";
 import { Store } from "@/src/types";
 import { toast } from "react-toastify";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 export default function PartnerManageStaff() {
   const { partner } = useAuth();
@@ -66,8 +67,8 @@ export default function PartnerManageStaff() {
         queryKey: ["staffs"],
       });
     },
-    onError: () => {
-      toast.error("Vô hiệu hóa thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Vô hiệu hóa thất bại"));
     },
   });
 
@@ -90,8 +91,8 @@ export default function PartnerManageStaff() {
         queryKey: ["staffs"],
       });
     },
-    onError: () => {
-      toast.error("Kích hoạt thất bại");
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Kích hoạt thất bại"));
     },
   });
 
