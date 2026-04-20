@@ -14,7 +14,6 @@ import {
   CheckCircle2,
   DollarSign,
   Eye,
-  MinusCircle,
   Package,
   ShoppingCart,
 } from "lucide-react";
@@ -23,7 +22,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getMonthlySettlementDetailAPI,
   receiveMonthlySettlementAPI,
-  updateMonthlySettlementBankedAPI,
 } from "@/src/services/monthly-settlement.service";
 import { useState } from "react";
 import { formatDateTime } from "@/src/utils/format";
@@ -43,7 +41,6 @@ function ViewDetailSheet({
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
-  const [isOpenDeduction, setIsOpenDeduction] = useState(false);
 
   const { data: detail, isLoading } = useQuery({
     queryKey: ["monthlySettlement", monthlySettlementId],

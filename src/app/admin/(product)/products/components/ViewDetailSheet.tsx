@@ -34,10 +34,7 @@ import {
   Trash2,
   RotateCcw,
 } from "lucide-react";
-import {
-  formatBooleanIsActiveStatusColor,
-  formatBooleanIsActiveStatusText,
-} from "@/src/utils/formatStatus";
+import { formatBooleanIsActiveStatusColor } from "@/src/utils/formatStatus";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -57,10 +54,8 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
     queryKey: ["product", productId],
     queryFn: () => getProductDetailAPI(productId!),
     select: (res) => res.data as Product,
-    enabled: !!productId,
+    enabled: !!productId && isOpen,
   });
-
-  console.log("product", productDetail);
 
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [viewMode, setViewMode] = useState<"image" | "3d">("image");
@@ -212,9 +207,7 @@ function ViewDetailSheet({ productId, isOpen, onClose }: ViewDetailSheetProps) {
           ${formatBooleanIsActiveStatusColor(selectedColor?.isActive)}
         `}
                   >
-                    {selectedColor?.isActive
-                      ? "Hoạt động"
-                      : "Ngưng hoạt động"}
+                    {selectedColor?.isActive ? "Hoạt động" : "Ngưng hoạt động"}
                   </span>
                 )}
               </div>

@@ -6,7 +6,6 @@ import {
   formatStoreStatusText,
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
-
 import { Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 

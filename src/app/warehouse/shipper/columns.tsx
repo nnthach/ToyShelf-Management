@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import ViewDetailSheet from "./components/ViewDetailSheet";
 import { WarehouseStaff } from "@/src/types";
 import { formatDateTime, formatWarehouseRoleToVN } from "@/src/utils/format";
 import {
@@ -60,15 +59,6 @@ export const getShipperColumns = (): ColumnDef<WarehouseStaff>[] => [
     cell: ({ row }) => {
       const value = row.getValue("userCreatedAt") as string;
       return <span>{formatDateTime(value).full}</span>;
-    },
-  },
-
-  {
-    accessorKey: "action",
-    header: "Hành động",
-    cell: ({ row }) => {
-      const user = row.original;
-      return <ViewDetailSheet userId={user.userId} />;
     },
   },
 ];

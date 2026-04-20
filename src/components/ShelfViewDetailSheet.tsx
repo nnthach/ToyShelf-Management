@@ -27,7 +27,7 @@ function ShelfViewDetailSheet({
     queryKey: ["shelf", shelfId],
     queryFn: () => getShelfTypeDetailAPI(shelfId!),
     select: (res) => res.data as Shelf,
-    enabled: !!shelfId,
+    enabled: !!shelfId && isOpen,
   });
 
   return (

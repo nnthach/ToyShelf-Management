@@ -25,19 +25,22 @@ import {
   formatOrderStatusText,
 } from "@/src/utils/formatStatus";
 import { RefillRequestProductColor } from "@/src/types";
+import { useState } from "react";
 
 function ViewDetailSheet({ orderCode }: { orderCode: number }) {
+  const [open, setOpen] = useState(false);
+
   const { data: orderDetail, isLoading } = useQuery({
     queryKey: ["order", orderCode],
     queryFn: () => getOrderDetailAPI(orderCode),
     select: (res) => res.data,
-    enabled: !!orderCode,
+    enabled: !!orderCode && open,
   });
 
   if (!orderDetail) return null;
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <button
           title="Detail"
@@ -46,7 +49,6 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
           <Eye size={20} />
         </button>
       </SheetTrigger>
-
       <SheetContent className="w-full !max-w-[550px] flex flex-col h-full p-0">
         <SheetHeader className="p-6 border-b bg-slate-50/50">
           <div className="flex justify-between items-center">

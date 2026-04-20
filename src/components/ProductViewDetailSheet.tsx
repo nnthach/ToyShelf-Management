@@ -47,7 +47,7 @@ function ProductViewDetailSheet({
     queryKey: ["product", productId],
     queryFn: () => getProductDetailAPI(productId!),
     select: (res) => res.data as Product,
-    enabled: !!productId,
+    enabled: !!productId && isOpen,
   });
 
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);

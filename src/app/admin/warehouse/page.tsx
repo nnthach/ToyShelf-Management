@@ -4,11 +4,8 @@ import useQueryParams from "@/src/hooks/useQueryParams";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { useState } from "react";
 import FilterSearch from "./components/FilterSearch";
-import { Button } from "@/src/styles/components/ui/button";
-import { Download, Upload } from "lucide-react";
 import { getWarehouseColumns } from "./columns";
 import { useQuery } from "@tanstack/react-query";
-import ViewDetailSheet from "./components/ViewDetailSheet";
 import CreateWarehouseModal from "./components/CreateWarehouseModal";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllWarehouseAPI } from "@/src/services/warehouse.service";
@@ -72,12 +69,6 @@ export default function AdminWarehouseManagement() {
           </div>
         </DataTable>
       </div>
-
-      <ViewDetailSheet
-        warehouseId={selectedWarehouseId}
-        isOpen={!!selectedWarehouseId}
-        onClose={() => setSelectedWarehouseId(null)}
-      />
     </>
   );
 }

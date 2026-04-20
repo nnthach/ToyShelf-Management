@@ -4,9 +4,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CommissionHistory } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
 export const getCommissionHistoryColumns =
   (): ColumnDef<CommissionHistory>[] => [
     {
@@ -18,7 +15,9 @@ export const getCommissionHistoryColumns =
       header: "Phần trăm áp dụng",
       cell: ({ row }) => {
         const commissionHistory = row.original;
-        return <span>{commissionHistory.appliedRate * 100}%</span>;
+        return (
+          <span>{Number(commissionHistory?.appliedRate || 0) * 100}%</span>
+        );
       },
     },
 
