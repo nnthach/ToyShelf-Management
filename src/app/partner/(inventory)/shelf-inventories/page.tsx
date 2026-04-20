@@ -63,7 +63,7 @@ export default function PartnerViewAllInventoryShelf() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Giám xác kệ tồn kho tại {inventoryList?.locationName}
+            Giám sát kệ tồn kho tại {inventoryList?.locationName}
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
             Danh sách kệ tồn kho tại cửa hàng và kho

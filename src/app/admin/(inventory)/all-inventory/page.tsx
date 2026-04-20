@@ -86,7 +86,7 @@ export default function AdminViewAllInventory() {
           )}
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold dark:text-foreground">
-              Giám xác hàng tồn kho tại {inventoryList?.locationName}
+              Giám sát hàng tồn kho tại {inventoryList?.locationName}
             </h1>
             <p className="text-gray-500 dark:text-gray-200">
               Danh sách sản phẩm tồn kho tại cửa hàng và kho

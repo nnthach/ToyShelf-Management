@@ -109,6 +109,7 @@ function UpdateShipmentAssignRefillRequestModal({
 
   const isPending = shipmentAssignDetail?.status === "Pending";
   const isAccepted = shipmentAssignDetail?.status === "Accepted";
+  const isRejected = shipmentAssignDetail?.status === "Rejected";
   const isAssigned = shipmentAssignDetail?.status === "Assigned";
 
   const hasDelivery =
@@ -263,7 +264,7 @@ function UpdateShipmentAssignRefillRequestModal({
 
               {/* BÊN PHẢI: CÁC NÚT ACTIONS - Gom cụm lại bên phải */}
               <div className="flex items-center gap-3 shrink-0">
-                {isPending && (
+                {(isPending || isRejected) && (
                   <Button
                     variant="success"
                     disabled={isLoading}

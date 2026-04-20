@@ -16,6 +16,10 @@ export const getCommissionHistoryColumns =
     {
       accessorKey: "appliedRate",
       header: "Phần trăm áp dụng",
+      cell: ({ row }) => {
+        const commissionHistory = row.original;
+        return <span>{commissionHistory.appliedRate * 100}%</span>;
+      },
     },
 
     {
