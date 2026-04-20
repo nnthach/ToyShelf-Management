@@ -36,7 +36,7 @@ function ProductCardOrder({
 
   const [inputValue, setInputValue] = useState<string | null>(null);
 
-  const image = selectedColor.imageUrl;
+  const image = selectedColor?.imageUrl;
 
   if (!selectedColor) return null;
 
