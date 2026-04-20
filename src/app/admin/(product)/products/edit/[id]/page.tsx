@@ -24,6 +24,7 @@ import ConfirmPopup from "../../create/ConfirmPopup";
 import { uploadFileToCloudinary } from "@/src/config/cloundinary";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import { uploadFileModelSupabase } from "@/src/config/supabase";
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -144,11 +145,14 @@ export default function EditProductPage() {
           }
 
           if (color.model3DFile instanceof File) {
-            model3DUrl = await uploadFileToCloudinary(
-              color.model3DFile,
-              "product",
-            );
+            model3DUrl = await uploadFileModelSupabase(color.model3DFile);
           }
+          // if (color.model3DFile instanceof File) {
+          //   model3DUrl = await uploadFileToCloudinary(
+          //     color.model3DFile,
+          //     "product",
+          //   );
+          // }
 
           return {
             ...color,
@@ -177,7 +181,7 @@ export default function EditProductPage() {
       setOpenVerifyCreateForm(false);
       router.back();
     } catch (error) {
-      toast.error(getErrorMessage(error,"Cập nhật sản phẩm thất bại"));
+      toast.error(getErrorMessage(error, "Cập nhật sản phẩm thất bại"));
     } finally {
       setIsLoading(false);
     }

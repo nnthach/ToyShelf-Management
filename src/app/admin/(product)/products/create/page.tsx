@@ -21,6 +21,7 @@ import { formatColorNameToVN } from "@/src/utils/format";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import { SelectOption } from "@/src/types/SubType";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import { uploadFileModelSupabase } from "@/src/config/supabase";
 
 export default function CreateProductPage() {
   const router = useRouter();
@@ -127,11 +128,14 @@ export default function CreateProductPage() {
             imageUrl = await uploadFileToCloudinary(color.imageFile, "product");
           }
 
+          // if (color.model3DFile instanceof File) {
+          //   model3DUrl = await uploadFileToCloudinary(
+          //     color.model3DFile,
+          //     "product",
+          //   );
+          // }
           if (color.model3DFile instanceof File) {
-            model3DUrl = await uploadFileToCloudinary(
-              color.model3DFile,
-              "product",
-            );
+            model3DUrl = await uploadFileModelSupabase(color.model3DFile);
           }
 
           return {
@@ -148,6 +152,8 @@ export default function CreateProductPage() {
         ...previewData,
         colors: uploadedColors,
       };
+
+      console.log("finalpayload", finalPayload);
 
       delete finalPayload.productCategoryName;
 
