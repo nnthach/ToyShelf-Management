@@ -7,11 +7,19 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/src/styles/components/ui/sheet";
-import { Box, ShoppingCart, Plus, Minus, Edit } from "lucide-react";
+import {
+  Box,
+  ShoppingCart,
+  Plus,
+  Minus,
+  Edit,
+  CheckCircle2,
+} from "lucide-react";
 import { Button } from "@/src/styles/components/ui/button";
 import Image from "next/image";
 import { CartItem } from "../page";
 import React from "react";
+import { formatColorNameToVN } from "@/src/utils/format";
 
 type CartDetailSheetProps = {
   cart: CartItem[];
@@ -90,7 +98,7 @@ function CartDetailSheet({
                       style={{ backgroundColor: item.hexcode }}
                     />
                     <span className="text-[11px] text-gray-600 font-medium">
-                      {item.colorName}
+                      {formatColorNameToVN(item?.colorName || "")}
                     </span>
                     <span className="text-[11px] text-gray-400">|</span>
                     <span className="text-[11px] text-gray-600 uppercase">
@@ -139,7 +147,7 @@ function CartDetailSheet({
             disabled={cart.length === 0}
             className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-black text-white font-bold hover:bg-zinc-800 transition-all disabled:opacity-50"
           >
-            <Edit size={18} />
+            <CheckCircle2 size={18} />
             Tạo đơn đặt hàng
           </button>
         </div>

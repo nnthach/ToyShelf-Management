@@ -17,22 +17,16 @@ import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 export default function WarehouseManagerViewAllInventoryShelf() {
   const { warehouse } = useAuth();
 
+  const warehouseLocationId = warehouse?.warehouseLocationIds[0];
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
-      locationId: "",
+      locationId: warehouseLocationId,
     },
     {
       excludeResetKeys: ["locationId"],
     },
   );
-
-  useEffect(() => {
-    if (warehouse?.warehouseLocationIds[0] && !query.locationId) {
-      updateQuery({
-        locationId: warehouse.warehouseLocationIds[0],
-      });
-    }
-  }, [warehouse?.warehouseLocationIds]);
 
   const {
     data: inventoryList,
@@ -88,9 +82,9 @@ export default function WarehouseManagerViewAllInventoryShelf() {
                   <ProductCardSkeleton key={i} />
                 ))}
               </div>
-            ) : inventoryList?.length > 0 ? (
+            ) : inventoryList?.shelves.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
-                {inventoryList?.map((shelf: Shelf) => (
+                {inventoryList?.shelves.map((shelf: Shelf) => (
                   <ShelfCardWithQuantity
                     key={shelf.shelfTypeId}
                     shelf={shelf}

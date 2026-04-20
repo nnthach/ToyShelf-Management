@@ -20,27 +20,20 @@ function WarehouseStatCard({ warehouseId }: { warehouseId: string }) {
       <StatCardWithButton
         title="Đơn giao hàng"
         value={warehouseStatCard?.totalOrders}
-        change="+10"
-        changePercent="+12%"
         icon={PackageCheck}
         color="bg-green-100 text-green-900"
       />
       <StatCardWithButton
         title="Hàng Tồn kho"
         value={warehouseStatCard?.totalInventory}
-        change="+20"
-        changePercent="+18%"
         icon={Box}
         color="bg-blue-100 text-blue-900"
-        action={() => router.push(`/admin/warehouse/${warehouseId}/inventory`)}
       />
       <StatCardWithButton
         title="Kệ Tồn Kho"
         value={warehouseStatCard?.totalShelves}
-        change="+2"
-        changePercent="+18%"
         icon={Server}
-        color="bg-pink-100 text-pink-900"
+        color="bg-purple-100 text-purple-900"
       />
     </>
   );

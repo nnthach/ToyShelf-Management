@@ -31,6 +31,9 @@ const StoreManagerNavbar = () => {
     <nav className="sticky top-0 z-20 w-full h-16.5 shadow-xs bg-white dark:bg-sidebar p-4 flex justify-between items-center">
       {/*left */}
       <div className="flex items-center gap-3">
+        <Button variant="outline" size={"sm"} onClick={toggleSidebar}>
+          {open ? <ChevronLeft /> : <Menu />}
+        </Button>
         <h5 className="font-semibold text-lg">
           Hệ thống dành cho nhân viên đối tác
         </h5>

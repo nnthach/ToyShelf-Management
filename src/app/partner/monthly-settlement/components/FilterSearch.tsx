@@ -79,19 +79,6 @@ export default function FilterSearch({
     onReset();
   };
 
-  const { data: partnerList } = useQuery({
-    queryKey: ["partners", {}],
-    queryFn: () => getAllPartnerAPI({}),
-    select: (res) => res.data as Partner[],
-  });
-
-  const partnerOptions = partnerList?.map((item) => {
-    return {
-      value: item.id,
-      label: item.companyName,
-    };
-  });
-
   return (
     <div className="inline-flex items-center gap-3">
       {/* FILTER */}
@@ -147,30 +134,6 @@ export default function FilterSearch({
                 </select>
               </div>
             )}
-
-            {/* Partner */}
-            <div className="grid gap-2">
-              <Label>Đối tác</Label>
-              <select
-                className="border rounded-md h-9 px-2 w-full max-w-full truncate"
-                value={tempFilter.partnerId}
-                onChange={(e) =>
-                  setTempFilter((p) => ({
-                    ...p,
-                    partnerId: e.target.value,
-                  }))
-                }
-              >
-                <option value="">Tất cả</option>
-                {partnerList?.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.companyName.length > 30
-                      ? item.companyName.slice(0, 30) + "…"
-                      : item.companyName}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             {/* Status */}
             {showStatus && (

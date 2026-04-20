@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Box, Server, User } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { Button } from "@/src/styles/components/ui/button";
@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getWarehouseDetailAPI } from "@/src/services/warehouse.service";
 import TotalShipOrderBarChart from "./components/charts/TotalShipOrderBarChart";
 import WarehouseBannerInfo from "./components/WarehouseBannerInfo";
-import StatCardWithButton from "@/src/components/StatCardWithButton";
 import WarehouseStatCard from "./components/WarehouseStatCard";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 

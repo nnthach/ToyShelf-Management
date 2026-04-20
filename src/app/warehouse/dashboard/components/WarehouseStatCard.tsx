@@ -24,8 +24,6 @@ function WarehouseStatCard() {
       <StatCardWithButton
         title="Đơn hàng"
         value={warehouseStatCard?.totalOrders}
-        change="+10"
-        changePercent="+12%"
         icon={ShoppingCart}
         color="bg-green-100 text-green-900"
         action={() => router.push(`/warehouse/refill-stocks`)}
@@ -33,8 +31,6 @@ function WarehouseStatCard() {
       <StatCardWithButton
         title="Hàng Tồn kho"
         value={warehouseStatCard?.totalInventory}
-        change="+20"
-        changePercent="+18%"
         icon={Box}
         color="bg-blue-100 text-blue-900"
         action={() => router.push(`/warehouse/inventory`)}
@@ -42,10 +38,8 @@ function WarehouseStatCard() {
       <StatCardWithButton
         title="Kệ Tồn Kho"
         value={warehouseStatCard?.totalShelves}
-        change="+2"
-        changePercent="+18%"
         icon={Server}
-        color="bg-pink-100 text-pink-900"
+        color="bg-purple-100 text-purple-900"
         action={() => router.push(`/warehouse/shelf-inventory`)}
       />
     </>

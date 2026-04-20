@@ -88,9 +88,9 @@ export default function StoreManagerViewAllInventoryShelf() {
                   <ProductCardSkeleton key={i} />
                 ))}
               </div>
-            ) : inventoryList?.length > 0 ? (
+            ) : inventoryList?.shelves.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
-                {inventoryList?.map((shelf: Shelf) => (
+                {inventoryList?.shelves.map((shelf: Shelf) => (
                   <ShelfCardWithQuantity
                     key={shelf.shelfTypeId}
                     shelf={shelf}

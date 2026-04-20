@@ -80,7 +80,9 @@ export function useAuth() {
           });
           dispatch(setWarehouse(warehouseDetail.data[0]));
           if (warehouseDetail?.data[0]?.warehouseRole === "Manager") {
-            router.replace("/warehouse/dashboard");
+            if (isAtAuthPage()) {
+              router.replace("/warehouse/dashboard");
+            }
           } else {
             toast.error("Bạn không có quyền truy cập vào hệ thống!");
             logoutUser();

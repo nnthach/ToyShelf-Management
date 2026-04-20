@@ -24,8 +24,6 @@ function AdminStatCard() {
       <StatCardWithButton
         title="Doanh thu"
         value={`${(adminStatCard?.totalRevenue ?? 0).toLocaleString() || 0} VND`}
-        change="+30,215 VND"
-        changePercent="+12%"
         icon={DollarSign}
         color="bg-green-100 text-green-900"
       />
@@ -33,17 +31,13 @@ function AdminStatCard() {
       <StatCardWithButton
         title="Đơn hàng"
         value={`${adminStatCard?.totalOrders || 0}`}
-        change="+25"
-        changePercent="+15%"
         icon={ShoppingCart}
-        color="bg-yellow-100 text-yellow-900"
+        color="bg-orange-100 text-orange-900"
         action={() => router.push(`/admin/orders`)}
       />
       <StatCardWithButton
         title="Đối tác"
         value={`${adminStatCard?.totalPartners || 0}`}
-        change="+2"
-        changePercent="+18%"
         icon={Users}
         color="bg-blue-100 text-blue-900"
         action={() => router.push(`/admin/partners`)}
@@ -51,10 +45,8 @@ function AdminStatCard() {
       <StatCardWithButton
         title="Cửa hàng"
         value={`${adminStatCard?.totalStores || 0}`}
-        change="+2,815"
-        changePercent="+18%"
         icon={Store}
-        color="bg-pink-100 text-pink-900"
+        color="bg-purple-100 text-purple-900"
         action={() => router.push(`/admin/stores`)}
       />
     </>

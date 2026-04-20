@@ -13,15 +13,17 @@ import { DataTable } from "@/src/styles/components/ui/data-table";
 import FilterSearch from "./components/FilterSearch";
 import { Button } from "@/src/styles/components/ui/button";
 import { Upload } from "lucide-react";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function PartnerManageOrders() {
-  const searchParams = new URLSearchParams(window.location.search);
   const { partner } = useAuth();
+
+  const partnerId = partner?.partnerId;
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
       storeId: "",
-      partnerId: "",
+      partnerId: partnerId,
       phone: "",
     },
     {
@@ -40,14 +42,6 @@ export default function PartnerManageOrders() {
     enabled: !!query.partnerId,
   });
 
-  useEffect(() => {
-    if (partner?.partnerId && !searchParams.get("partnerId")) {
-      updateQuery({
-        partnerId: partner.partnerId,
-      });
-    }
-  }, [partner?.partnerId]);
-
   const { data: storeList = [] } = useQuery({
     queryKey: ["stores", query.partnerId],
     queryFn: () =>
@@ -57,6 +51,10 @@ export default function PartnerManageOrders() {
   });
 
   const columns = getOrderColumns();
+
+  if (!query.partnerId) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <>

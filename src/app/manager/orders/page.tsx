@@ -13,14 +13,15 @@ import { DataTable } from "@/src/styles/components/ui/data-table";
 import FilterSearch from "./components/FilterSearch";
 import { Button } from "@/src/styles/components/ui/button";
 import { Upload } from "lucide-react";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function StoreManageOrders() {
-  const searchParams = new URLSearchParams(window.location.search);
   const { myStore } = useAuth();
+  const storeId = myStore?.storeId;
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
-      storeId: "",
+      storeId: storeId,
       phone: "",
     },
     {
@@ -39,16 +40,11 @@ export default function StoreManageOrders() {
     enabled: !!query.storeId,
   });
 
-  useEffect(() => {
-    if (myStore?.storeId && !searchParams.get("storeId")) {
-      updateQuery({
-        storeId: myStore.storeId,
-      });
-    }
-  }, [myStore?.storeId]);
-
   const columns = getOrderColumns();
 
+  if (!query.storeId) {
+    return <LoadingPageComponent />;
+  }
   return (
     <>
       {/*Header */}

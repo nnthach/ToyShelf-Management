@@ -322,6 +322,11 @@ export interface Shelf {
   depth: number;
   totalLevels: number;
   suitableProductCategoryTypes: string[];
+  available: number;
+  reserved: number;
+  inTransit: number;
+  inUse: number;
+  recalled: number;
   displayGuideline: string;
   isActive: boolean;
   levels: ShelfLevelItem[];

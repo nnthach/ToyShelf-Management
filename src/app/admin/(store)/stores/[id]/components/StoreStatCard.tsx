@@ -26,8 +26,6 @@ function StoreStatCard({
       <StatCardWithButton
         title="Doanh thu cửa hàng"
         value={`${(storeStatCard?.totalRevenue ?? 0).toLocaleString()} VND`}
-        change="+$30,215"
-        changePercent="+12%"
         icon={DollarSign}
         color="bg-green-100 text-green-900"
       />
@@ -35,16 +33,12 @@ function StoreStatCard({
       <StatCardWithButton
         title="Đơn hàng"
         value={`${storeStatCard?.totalOrders}`}
-        change="+1,647"
-        changePercent="+15%"
         icon={ShoppingCart}
-        color="bg-yellow-100 text-yellow-900"
-        action={() =>
-          router.push(`/admin/orders?storeId=${storeId}&from=store`)
-        }
+        color="bg-orange-100 text-orange-900"
+        action={() => router.push(`/admin/orders?storeId=${storeId}`)}
       />
 
-      <StatCardWithButton
+      {/* <StatCardWithButton
         title="Tồn kho"
         value="15"
         change="+2,815"
@@ -61,13 +55,13 @@ function StoreStatCard({
         change="+2,815"
         changePercent="+18%"
         icon={Box}
-        color="bg-pink-100 text-pink-900"
+        color="bg-purple-100 text-purple-900"
         action={() =>
           router.push(
             `/admin/stores/${storeId}/inventory?inventoryLocationId=${inventoryLocationId}`,
           )
         }
-      />
+      /> */}
     </>
   );
 }

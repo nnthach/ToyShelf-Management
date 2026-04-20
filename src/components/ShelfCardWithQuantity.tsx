@@ -26,9 +26,37 @@ function ShelfCardWithQuantity({ shelf }: ShelfCardWithQuantityProps) {
 
         {/* Badge số tầng ở góc trái trên */}
         <div className="absolute top-2 inset-x-2 flex justify-between items-start z-10">
-          <span className="bg-emerald-50/90 backdrop-blur-sm text-[11px] font-bold px-2 py-1 rounded-md shadow-sm text-emerald-700 border border-emerald-200/50 w-fit">
-            Kho: {shelf?.quantity || 0}
-          </span>
+          <div className="flex flex-col gap-1">
+            <span className="bg-emerald-50/90 backdrop-blur-sm text-[11px] font-bold px-2 py-1 rounded-md shadow-sm text-emerald-700 border border-emerald-200/50 w-fit">
+              Kho: {shelf?.available || 0}
+            </span>
+
+            <div className="flex flex-col gap-1 transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0">
+              {shelf?.inUse >= 0 && (
+                <span className="bg-blue-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-blue-700 border border-blue-200/50 w-fit">
+                  Sử dụng: {shelf.inUse}
+                </span>
+              )}
+
+              {shelf?.reserved >= 0 && (
+                <span className="bg-purple-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-purple-700 border border-purple-200/50 w-fit">
+                  Đã đặt: {shelf.reserved}
+                </span>
+              )}
+
+              {shelf?.inTransit >= 0 && (
+                <span className="bg-yellow-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-yellow-700 border border-yellow-200/50 w-fit">
+                  Đang về: {shelf.inTransit}
+                </span>
+              )}
+
+              {shelf?.recalled >= 0 && (
+                <span className="bg-red-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-red-700 border border-red-200/50 w-fit">
+                  Thu hồi: {shelf.recalled}
+                </span>
+              )}
+            </div>
+          </div>
           <Badge className="h-6 min-w-[60px] justify-center bg-white/90 text-gray-900 border-none shadow-sm backdrop-blur-sm px-2">
             {shelf?.totalLevels} tầng
           </Badge>
