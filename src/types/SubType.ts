@@ -23,6 +23,9 @@ export interface QueryParams {
   phone?: string;
   searchName?: string;
   categoryType?: string;
+  roleBusiness?: string;
+  fromDate?: string;
+  toDate?: string;
 }
 
 export interface LoginRes {

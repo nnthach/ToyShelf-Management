@@ -8,10 +8,15 @@ import { QueryParams } from "@/src/types/SubType";
 import { getAllUserAPI } from "@/src/services/user.service";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import ViewUserModal from "./components/ViewUserModal";
 
 export default function AdminUserManage() {
+  const [selectedId, setSelectedId] = useState("");
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
+    roleBusiness: "",
   });
 
   const {
@@ -24,7 +29,11 @@ export default function AdminUserManage() {
     select: (res) => res.data,
   });
 
-  const columns = getStaffColumns();
+  const handleViewDetail = (userId: string) => {
+    setSelectedId(userId);
+  };
+
+  const columns = getStaffColumns(handleViewDetail);
 
   return (
     <div>
@@ -64,6 +73,16 @@ export default function AdminUserManage() {
           </div>
         </DataTable>
       </div>
+
+      {selectedId && (
+        <ViewUserModal
+          userId={selectedId}
+          isOpen={!!selectedId}
+          onClose={() => {
+            setSelectedId("");
+          }}
+        />
+      )}
     </div>
   );
 }

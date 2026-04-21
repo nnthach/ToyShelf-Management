@@ -20,20 +20,18 @@ export default function PartnerAdminDashboard() {
       </div>
 
       {/*Statistic card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <PartnerStatCard />
-      </div>
+      <PartnerStatCard />
 
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
         {/*Chart total revenue */}
         <div className="bg-background rounded-lg col-span-1 md:col-span-2 2xl:col-span-4 min-h-[500px] p-4 border border-gray-100 shadow-sm">
           <TotalRevenueChart />
         </div>
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-3 min-h-[450px] shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-4 min-h-[500px] shadow-sm border border-gray-100">
           <TotalOrderChart />
         </div>
 
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-1 shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
           <TopThreeStore />
         </div>
 
@@ -41,7 +39,7 @@ export default function PartnerAdminDashboard() {
           <TopThreeProduct />
         </div>
 
-        <div className="bg-background rounded-lg col-span-3 md:col-span-3 2xl:col-span-3 p-2 min-h-[50vh] w-full border border-gray-100 shadow-sm">
+        <div className="bg-background rounded-lg col-span-2 md:col-span-2 2xl:col-span-2 p-2 min-h-[50vh] w-full border border-gray-100 shadow-sm">
           <StoreMap />
         </div>
       </div>

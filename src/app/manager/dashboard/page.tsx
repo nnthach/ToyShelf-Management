@@ -24,12 +24,7 @@ export default function StoreManagerDashboard() {
       <BannerInfo />
 
       {/*Statistic card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StoreStatCard
-          storeId={myStore?.storeId || ""}
-          inventoryLocationId={myStore?.storeLocationId || ""}
-        />
-      </div>
+      <StoreStatCard storeId={myStore?.storeId || ""} />
       <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4 mb-4">
         <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">
           <TotalRevenueChart />

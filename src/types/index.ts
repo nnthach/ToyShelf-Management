@@ -394,18 +394,28 @@ export interface RefillRequest {
   note: string;
   items: RefillRequestProductColor[] | RefillShelfRequestItem[];
 }
-export interface DamageReportItem {
-  id: string;
-  type: string;
-  quantity: number;
+
+export interface DamageReportProductItem {
   productColorId: string;
   productName: string;
   sku: string;
   colorName: string;
   imageUrl: string;
+}
+
+export interface DamageReportShelfItem {
   shelfId: string;
   shelfCode: string;
   shelfName: string;
+  imageUrl: string;
+}
+
+export interface DamageReportItem {
+  id: string;
+  type: string;
+  quantity: number;
+  product: DamageReportProductItem;
+  shelf: DamageReportShelfItem;
   mediaUrls: string[];
 }
 

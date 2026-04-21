@@ -51,10 +51,6 @@ const useQueryParams = <T extends object>(
     [router, searchParams],
   );
 
-  // reset
-  // const resetQuery = useCallback(() => {
-  //   router.replace("?");
-  // }, [router]);
   const resetQuery = useCallback(() => {
     const search = new URLSearchParams(searchParams.toString());
 

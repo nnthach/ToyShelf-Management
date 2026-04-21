@@ -1,4 +1,4 @@
-import { DamageReportItem } from "@/src/types";
+import { DamageReportItem, DamageReportProductItem } from "@/src/types";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { Box, LayoutGrid, Package, Package2, Warehouse } from "lucide-react";
 import Image from "next/image";
@@ -106,9 +106,9 @@ const ProductDamageItem = ({ item }: { item: DamageReportItem }) => {
       <div className="flex items-start gap-3 flex-1 min-w-0">
         {/* Image Thumbnail */}
         <div className="h-12 w-12 rounded-lg border border-slate-200 bg-slate-100 flex-shrink-0 overflow-hidden relative shadow-sm">
-          {item?.imageUrl ? (
+          {item?.product?.imageUrl ? (
             <Image
-              src={item.imageUrl}
+              src={item?.product?.imageUrl}
               alt=""
               fill
               className="object-cover"
@@ -124,23 +124,23 @@ const ProductDamageItem = ({ item }: { item: DamageReportItem }) => {
         {/* Content */}
         <div className="min-w-0 flex-1 flex flex-col gap-1.5">
           <h5 className="font-bold text-[13px] text-slate-800 leading-snug truncate">
-            {item.productName || "N/A"}
+            {item?.product?.productName || "N/A"}
           </h5>
 
           <div className="flex flex-wrap items-center gap-1.5">
             <TypeBadge type={item.type} />
             <span className="text-[11px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
-              {item.sku}
+              {item?.product?.sku}
             </span>
             <span className="text-[11px] font-medium text-violet-600 bg-violet-50 px-1.5 py-0.5 rounded border border-violet-100">
-              {formatColorNameToVN(item.colorName)}
+              {formatColorNameToVN(item?.product?.colorName)}
             </span>
           </div>
 
           <div className="mt-1">
             <ImageView
               mediaUrls={item.mediaUrls}
-              productName={item.productName}
+              productName={item?.product?.productName}
             />
           </div>
         </div>
@@ -162,20 +162,20 @@ const ShelfDamageItem = ({ item }: { item: DamageReportItem }) => {
 
         <div className="min-w-0 flex-1 flex flex-col gap-1.5">
           <h5 className="font-bold text-[13px] text-slate-800 leading-snug truncate">
-            Kệ: {item.shelfName || "N/A"}
+            Kệ: {item?.shelf?.shelfName || "N/A"}
           </h5>
 
           <div className="flex flex-wrap items-center gap-1.5">
             <TypeBadge type={item.type} />
             <span className="text-[11px] font-mono font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded border border-orange-100">
-              {item.shelfCode}
+              {item?.shelf?.shelfCode}
             </span>
           </div>
 
           <div className="mt-1">
             <ImageView
               mediaUrls={item.mediaUrls}
-              productName={item.shelfCode}
+              productName={item?.shelf?.shelfCode}
             />
           </div>
         </div>

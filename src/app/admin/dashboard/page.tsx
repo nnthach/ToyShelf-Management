@@ -17,9 +17,7 @@ export default function AdminDashboard() {
       </div>
 
       {/*Statistic card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <AdminStatCard />
-      </div>
 
       {/* Sử dụng hệ 4 cột làm chuẩn */}
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
@@ -29,10 +27,10 @@ export default function AdminDashboard() {
         </div>
 
         {/* HÀNG 2: Tổng 3 + 1 = 4 */}
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-3 min-h-[450px] shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-3 h-[500px] shadow-sm border border-gray-100">
           <TotalOrderChart />
         </div>
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-1 shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-1  h-[500px] shadow-sm border border-gray-100">
           <TopThreeStore />
         </div>
 
@@ -43,7 +41,7 @@ export default function AdminDashboard() {
         <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
           <TopThreePartner />
         </div>
-        <div className="bg-background rounded-lg col-span-1 lg:col-span-2 2xl:col-span-2 p-2 h-[50vh] w-full border border-gray-100 shadow-sm">
+        <div className="bg-background rounded-lg col-span-1 lg:col-span-2 2xl:col-span-2 p-2 w-full border border-gray-100 shadow-sm">
           <WarehouseMap />
         </div>
       </div>

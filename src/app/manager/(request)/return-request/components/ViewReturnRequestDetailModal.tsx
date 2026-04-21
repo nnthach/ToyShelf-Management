@@ -374,10 +374,10 @@ const ProductDamageItem = ({ item }: { item: DamageReportItem }) => {
     >
       <div className="flex items-center gap-4 flex-1 min-w-0">
         <div className="h-14 w-14 rounded-lg border bg-slate-50 flex-shrink-0 overflow-hidden relative shadow-sm">
-          {item?.imageUrl ? (
+          {item?.product?.imageUrl ? (
             <Image
-              src={item.imageUrl}
-              alt={item.productName || ""}
+              src={item?.product?.imageUrl}
+              alt={item?.product?.productName || ""}
               fill
               className="object-cover"
               sizes="56px"
@@ -391,25 +391,25 @@ const ProductDamageItem = ({ item }: { item: DamageReportItem }) => {
 
         <div className="min-w-0">
           <h5 className="font-bold text-[14px] text-slate-900 leading-tight truncate">
-            {item.productName || "N/A"}
+            {item?.product?.productName || "N/A"}
           </h5>
 
           <div className="flex items-center gap-2 mt-1.5">
             <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
-              {item.sku}
+              {item?.product?.sku}
             </div>
 
             <span className="w-1 h-1 rounded-full bg-slate-300"></span>
 
             <div className="flex items-center gap-1 text-[12px]">
               <span className="font-semibold text-slate-700">
-                {formatColorNameToVN(item.colorName)}
+                {formatColorNameToVN(item?.product?.colorName)}
               </span>
             </div>
           </div>
           <ImageView
-            mediaUrls={item.mediaUrls}
-            productName={item.productName}
+            mediaUrls={item?.mediaUrls}
+            productName={item?.product?.productName}
           />
         </div>
       </div>
@@ -436,10 +436,10 @@ const ShelfDamageItem = ({ item }: { item: DamageReportItem }) => {
     >
       <div className="flex items-center gap-4 flex-1 min-w-0">
         <div className="h-14 w-14 rounded-lg border bg-slate-50 flex-shrink-0 overflow-hidden relative shadow-sm">
-          {item?.imageUrl ? (
+          {item?.shelf?.imageUrl ? (
             <Image
-              src={item.imageUrl}
-              alt={item.shelfCode || ""}
+              src={item?.shelf.imageUrl}
+              alt={item?.shelf.shelfCode || ""}
               fill
               className="object-cover"
               sizes="56px"
@@ -453,15 +453,18 @@ const ShelfDamageItem = ({ item }: { item: DamageReportItem }) => {
 
         <div className="min-w-0">
           <h5 className="font-bold text-[14px] text-slate-900 leading-tight truncate">
-            {item.shelfName || "N/A"}
+            {item?.shelf.shelfName || "N/A"}
           </h5>
 
           <div className="flex items-center gap-2 mt-1.5">
             <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
-              {item.shelfCode}
+              {item?.shelf.shelfCode}
             </div>
           </div>
-          <ImageView mediaUrls={item.mediaUrls} productName={item.shelfName} />
+          <ImageView
+            mediaUrls={item.mediaUrls}
+            productName={item?.shelf.shelfName}
+          />
         </div>
       </div>
 

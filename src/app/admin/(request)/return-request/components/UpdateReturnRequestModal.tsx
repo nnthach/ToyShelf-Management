@@ -113,11 +113,11 @@ function UpdateReturnRequestModal({
                     </span>
                   </DialogDescription>
                 </div>
-                <div
+                <p
                   className={`px-4 py-1.5 mr-4 rounded-full text-sm font-bold shadow-sm ${formatDamageReportStatusColor(requestDetail?.status)}`}
                 >
                   {formatDamageReportStatusText(requestDetail?.status)}
-                </div>
+                </p>
               </div>
             </DialogHeader>
           </div>

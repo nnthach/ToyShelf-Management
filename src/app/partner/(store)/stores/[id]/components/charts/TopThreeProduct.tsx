@@ -42,7 +42,7 @@ const TopThreeProduct = ({ storeId }: { storeId: string }) => {
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
         <CardTitle className="text-base font-bold flex items-center gap-2 uppercase tracking-tight">
           <Box className="w-5 h-5 text-blue-500" />
-          Sản phẩm bán chạy nhất
+          Xếp hạng sản phẩm
         </CardTitle>
       </CardHeader>
 

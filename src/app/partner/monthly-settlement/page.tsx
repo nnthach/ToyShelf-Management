@@ -45,10 +45,10 @@ export default function PartnerMonthlySettlementManage() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Danh sách đối soát hoa hồng hàng tháng
+            Danh sách đối soát hoa hồng
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
-            Danh sách đối soát hoa hồng hàng tháng cho đối tác trong hệ thống
+            Danh sách đối soát hoa hồng hàng tháng
           </p>
         </div>
       </div>

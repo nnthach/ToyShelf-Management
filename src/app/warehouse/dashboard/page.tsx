@@ -36,9 +36,7 @@ export default function WarehouseDashboard() {
       <WarehouseBannerInfo warehouseDetail={warehouseDetail} />
 
       {/*Statistic card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <WarehouseStatCard />
-      </div>
+      <WarehouseStatCard />
 
       <div className="grid grid-cols-1">
         <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">

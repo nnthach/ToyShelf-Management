@@ -1,69 +1,50 @@
+import FilterStatCard from "@/src/components/FilterStatCard";
 import StatCardWithButton from "@/src/components/StatCardWithButton";
-import { useAuth } from "@/src/hooks/useAuth";
+import { useFilterStatCard } from "@/src/hooks/useFilterStatCard";
 import { getDashboardStoreStatCard } from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
-import { Box, DollarSign, ShoppingCart, Store } from "lucide-react";
+import { DollarSign, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-function StoreStatCard({
-  storeId,
-  inventoryLocationId,
-}: {
-  storeId: string;
-  inventoryLocationId: string;
-}) {
+function StoreStatCard({ storeId }: { storeId: string }) {
   const router = useRouter();
-  const { partner } = useAuth();
+  const { query, updateQuery, isFiltered, resetDates, apiFormattedDates } =
+    useFilterStatCard();
 
   const { data: storeStatCard } = useQuery({
-    queryKey: ["storeStatCard", storeId],
-    queryFn: () => getDashboardStoreStatCard({}, storeId),
+    queryKey: ["storeStatCard", storeId, apiFormattedDates], 
+    queryFn: () => getDashboardStoreStatCard(apiFormattedDates, storeId),
     select: (res) => res.data,
     enabled: !!storeId,
   });
 
   return (
-    <>
-      <StatCardWithButton
-        title="Doanh thu cửa hàng"
-        value={`${(storeStatCard?.totalRevenue ?? 0).toLocaleString()} VND`}
-        icon={DollarSign}
-        color="bg-green-100 text-green-900"
+    <div>
+      <FilterStatCard
+        query={query}
+        updateQuery={updateQuery}
+        isFiltered={isFiltered}
+        resetDates={resetDates}
       />
 
-      <StatCardWithButton
-        title="Đơn hàng"
-        value={`${storeStatCard?.totalOrders}`}
-        icon={ShoppingCart}
-        color="bg-orange-100 text-orange-900"
-        action={() => router.push(`/partner/orders?storeId=${storeId}`)}
-      />
+      {/* Danh sách Card */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <StatCardWithButton
+          title="Doanh thu cửa hàng"
+          value={`${(storeStatCard?.totalRevenue ?? 0).toLocaleString()} VND`}
+          icon={DollarSign}
+          color="bg-green-100 text-green-900"
+        />
 
-      {/* <StatCardWithButton
-        title="Tồn kho"
-        value="15"
-        change="+2,815"
-        changePercent="+18%"
-        icon={Box}
-        color="bg-blue-100 text-blue-900"
-        action={() =>
-          router.push(`/partner/inventories?locationId=${inventoryLocationId}`)
-        }
-      />
-      <StatCardWithButton
-        title="Kệ"
-        value="15"
-        change="+2,815"
-        changePercent="+18%"
-        icon={Box}
-        color="bg-purple-100 text-purple-900"
-        action={() =>
-          router.push(
-            `/admin/stores/${storeId}/inventory?inventoryLocationId=${inventoryLocationId}`,
-          )
-        }
-      /> */}
-    </>
+        <StatCardWithButton
+          title="Đơn hàng"
+          value={`${storeStatCard?.totalOrders}`}
+          icon={ShoppingCart}
+          color="bg-orange-100 text-orange-900"
+          action={() => router.push(`/partner/orders?storeId=${storeId}`)}
+        />
+      </div>
+    </div>
   );
 }
 

@@ -54,9 +54,7 @@ export default function ViewWarehouseDetailPage() {
       <WarehouseBannerInfo warehouseDetail={warehouseDetail} />
 
       {/*Statistic card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <WarehouseStatCard warehouseId={warehouseId} />
-      </div>
+      <WarehouseStatCard warehouseId={warehouseId} />
 
       {/*Content */}
       <div className="grid grid-cols-1 mb-4">

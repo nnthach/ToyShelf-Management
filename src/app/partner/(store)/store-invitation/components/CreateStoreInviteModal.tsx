@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import {  Store } from "@/src/types";
+import { Store } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
@@ -42,7 +42,7 @@ function CreateStoreInviteModal() {
     defaultValues: {
       email: "",
       storeId: "",
-      storeRole: "",
+      storeRole: "Manager",
     },
   });
 
@@ -56,14 +56,6 @@ function CreateStoreInviteModal() {
     value: store.id,
     label: store.name,
   }));
-
-  const roleOptions = [
-    { value: "Staff", label: "Nhân viên cửa hàng" },
-    {
-      value: "Manager",
-      label: "Quản lý cửa hàng",
-    },
-  ];
 
   async function onSubmit(data: z.input<typeof formSchema>) {
     try {
@@ -105,7 +97,7 @@ function CreateStoreInviteModal() {
           </DialogTitle>
           <DialogDescription className="text-slate-500 flex items-center gap-1.5 mt-1">
             <Sparkles size={14} className="text-emerald-500" />
-            Gửi email mời nhân viên tham gia quản lý cửa hàng.
+            Gửi lời mời nhân viên tham gia quản lý cửa hàng.
           </DialogDescription>
         </DialogHeader>
 
@@ -120,7 +112,7 @@ function CreateStoreInviteModal() {
               {/* CHỌN CỬA HÀNG */}
               <FormFieldCustom
                 name="storeId"
-                label="Cửa hàng mục tiêu"
+                label="Cửa hàng"
                 placeholder="Chọn cửa hàng cần quản lý"
                 type="select"
                 selectData={storeOptions}
@@ -136,23 +128,6 @@ function CreateStoreInviteModal() {
                 icon={<Mail size={18} />}
                 required
               />
-
-              <FormFieldCustom
-                name="storeRole"
-                label="Chức vụ"
-                placeholder="Chọn chức vụ"
-                type="select"
-                selectData={roleOptions}
-                icon={<StoreIcon size={18} />}
-                required
-              />
-
-              <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
-                <p className="text-[12px] text-emerald-700 leading-relaxed">
-                  <strong>Lưu ý:</strong> Một hệ thống email tự động sẽ được gửi
-                  đến địa chỉ trên kèm theo hướng dẫn đăng ký tài khoản.
-                </p>
-              </div>
             </form>
           </FormProvider>
         </div>

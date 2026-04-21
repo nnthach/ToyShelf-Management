@@ -1,4 +1,4 @@
-import {  z } from "zod";
+import { z } from "zod";
 
 export const productSchema = z.object({
   productCategoryId: z.string().min(1, "Danh mục sản phẩm là bắt buộc"),
@@ -24,16 +24,16 @@ export const productSchema = z.object({
         .instanceof(File)
         .optional()
         .or(z.undefined())
-        .refine((file) => !file || file.size <= 10 * 1024 * 1024, {
-          message: "File 3D phải nhỏ hơn 10MB",
+        .refine((file) => !file || file.size <= 50 * 1024 * 1024, {
+          message: "File 3D phải nhỏ hơn 50MB",
         }),
       imageUrl: z.string(),
       imageFile: z
         .instanceof(File)
         .optional()
         .or(z.undefined())
-        .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
-          message: "Ảnh phải nhỏ hơn 5MB",
+        .refine((file) => !file || file.size <= 10 * 1024 * 1024, {
+          message: "Ảnh phải nhỏ hơn 10MB",
         }),
       colorName: z.string().optional(),
       colorHex: z.string().optional(),
@@ -67,16 +67,16 @@ export const productUpdateSchema = z.object({
         .instanceof(File)
         .optional()
         .or(z.undefined())
-        .refine((file) => !file || file.size <= 10 * 1024 * 1024, {
-          message: "File 3D phải nhỏ hơn 10MB",
+        .refine((file) => !file || file.size <= 50 * 1024 * 1024, {
+          message: "File 3D phải nhỏ hơn 50MB",
         }),
       imageUrl: z.string(),
       imageFile: z
         .instanceof(File)
         .optional()
         .or(z.undefined())
-        .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
-          message: "Ảnh phải nhỏ hơn 5MB",
+        .refine((file) => !file || file.size <= 10 * 1024 * 1024, {
+          message: "Ảnh phải nhỏ hơn 10MB",
         }),
       colorName: z.string().optional(),
       colorHex: z.string().optional(),

@@ -43,11 +43,11 @@ const TopThreeProduct = ({ storeId }: { storeId: string }) => {
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
         <CardTitle className="text-base font-bold flex items-center gap-2 uppercase tracking-tight">
           <Box className="w-5 h-5 text-blue-500" />
-          Sản phẩm bán chạy nhất
+          Xếp hạng sản phẩm
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="p-0 flex flex-1 flex-col gap-3">
+      <CardContent className="p-0 flex flex-1 flex-col overflow-y-auto custom-scrollbar gap-3">
         {topSelling?.map((product, index) => (
           <div
             key={product.id}

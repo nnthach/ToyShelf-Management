@@ -59,7 +59,8 @@ export const formatToInitials = (data: string) => {
 };
 
 export const formatColorNameToVN = (data: string) => {
-  const color = data.toLowerCase();
+  if (!data) return "N/A";
+  const color = data?.toLowerCase();
 
   switch (color) {
     case "orange":

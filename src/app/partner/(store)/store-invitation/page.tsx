@@ -18,11 +18,14 @@ import { useAuth } from "@/src/hooks/useAuth";
 import { getAllStoreAPI } from "@/src/services/store.service";
 import { Store } from "@/src/types";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function PartnerManageStoreInvites() {
   const queryClient = useQueryClient();
 
   const { partner } = useAuth();
+
+  const partnerId = partner?.id;
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
@@ -42,7 +45,7 @@ export default function PartnerManageStoreInvites() {
 
   const { data: storeList = [] } = useQuery({
     queryKey: ["stores"],
-    queryFn: () => getAllStoreAPI({}),
+    queryFn: () => getAllStoreAPI({ companyid: partnerId }),
     select: (res) => res.data as Store[],
   });
 
@@ -77,6 +80,10 @@ export default function PartnerManageStoreInvites() {
   };
 
   const columns = getStoreInviteColumns(handleDelete);
+
+  if (!query.partnerId) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <>

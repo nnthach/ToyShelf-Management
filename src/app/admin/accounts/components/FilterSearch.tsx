@@ -14,7 +14,7 @@ type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
-  onApplyFilter: (val: { isActive?: boolean }) => void;
+  onApplyFilter: (val: { isActive?: boolean; roleBusiness?: string }) => void;
   onReset: () => void;
   onRefresh?: () => void;
 };
@@ -28,24 +28,37 @@ export default function FilterSearch({
 }: FilterBarProps) {
   const [tempFilter, setTempFilter] = useState<{
     isActive?: boolean;
+    roleBusiness?: string;
   }>({
     isActive: undefined,
+    roleBusiness: query.roleBusiness ?? "",
   });
 
-  const isFiltered = query.isActive !== undefined;
+  const isFiltered = query.isActive !== undefined || query.roleBusiness !== "";
 
   const handleApply = () => {
     onApplyFilter({
       isActive: tempFilter.isActive,
+      roleBusiness: tempFilter.roleBusiness || undefined,
     });
   };
 
   const handleResetAll = () => {
     setTempFilter({
       isActive: undefined,
+      roleBusiness: "",
     });
     onReset();
   };
+
+  const systemBusinessRoles = [
+    { value: "warehouse_shipper", label: "Nhân viên giao hàng" },
+    { value: "warehouse_manager", label: "Quản lý kho" },
+    { value: "partner_staff", label: "Nhân viên cửa hàng" },
+    { value: "partner_manager", label: "Quản lý cửa hàng" },
+    { value: "partner_admin", label: "Đối tác" },
+    { value: "customer", label: "Quản trị viên" },
+  ];
 
   return (
     <div className="inline-flex items-center gap-3">
@@ -60,6 +73,28 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
+            {/* Role */}
+            <div className="grid gap-2">
+              <Label>Chức vụ</Label>
+              <select
+                className="border rounded-md h-9 px-2 w-full max-w-full truncate"
+                value={tempFilter.roleBusiness}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    roleBusiness: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {systemBusinessRoles?.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Status */}
             <div className="grid gap-2">
               <Label>Trạng thái</Label>

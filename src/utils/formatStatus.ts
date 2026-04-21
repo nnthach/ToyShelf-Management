@@ -311,7 +311,7 @@ export const formatSystemBusinessRoleText = (status: string) => {
       return "Quản lý cửa hàng";
     case "partner_admin":
       return "Đối tác";
-    case "customer":
+    case "admin":
       return "Quản trị viên";
     default:
       return "N/A";
@@ -330,7 +330,7 @@ export const formatSystemBusinessRoleColor = (role: string) => {
       return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl font-medium";
     case "partner_admin":
       return "bg-cyan-100 text-cyan-800 px-3 py-1 rounded-2xl font-medium";
-    case "customer":
+    case "admin":
       return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl font-medium";
     default:
       return "bg-gray-100 text-gray-800 px-3 py-1 rounded-2xl font-medium";

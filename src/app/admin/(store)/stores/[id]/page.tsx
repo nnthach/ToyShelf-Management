@@ -52,12 +52,9 @@ export default function PartnerStoreDetailPage() {
       <StoreBannerInfo storeDetail={storeDetail} />
 
       {/*Statistic card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StoreStatCard
           storeId={id}
-          inventoryLocationId={storeDetail?.inventoryLocationId}
         />
-      </div>
 
       {/*Content */}
       <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4">

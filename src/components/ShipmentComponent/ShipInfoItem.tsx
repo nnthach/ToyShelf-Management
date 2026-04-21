@@ -19,7 +19,7 @@ function ShipInfoItem({
       <p className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
         {icon} {label}
       </p>
-      <p
+      <div
         className={cn(
           "text-sm font-bold px-2.5 py-1 rounded-lg w-fit transition-all",
           isStatus &&
@@ -34,7 +34,7 @@ function ShipInfoItem({
         )}
       >
         {value || "---"}
-      </p>
+      </div>
     </div>
   );
 }

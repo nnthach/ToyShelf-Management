@@ -2,22 +2,19 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import ViewDetailSheet from "./components/ViewDetailSheet";
 import { User } from "@/src/types";
 import {
   formatSystemBusinessRoleColor,
   formatSystemBusinessRoleText,
-  formatSystemRoleColor,
-  formatSystemRoleText,
   formatUserStatusColor,
   formatUserStatusText,
 } from "@/src/utils/formatStatus";
 import { formatDateTime } from "@/src/utils/format";
+import { Eye } from "lucide-react";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
-export const getStaffColumns = (): ColumnDef<User>[] => [
+export const getStaffColumns = (
+  onView: (userId: string) => void,
+): ColumnDef<User>[] => [
   {
     accessorKey: "fullName",
     header: "Tên đầy đủ",
@@ -68,7 +65,21 @@ export const getStaffColumns = (): ColumnDef<User>[] => [
     header: "Hành động",
     cell: ({ row }) => {
       const user = row.original;
-      return <ViewDetailSheet user={user} />;
+
+      if (
+        user.businessRole === "warehouse_manager" ||
+        user.businessRole === "warehouse_shipper"
+      ) {
+        return (
+          <span
+            onClick={() => onView(user.id)}
+            title="Chi tiết"
+            className="cursor-pointer text-blue-400"
+          >
+            <Eye size={20} />
+          </span>
+        );
+      }
     },
   },
 ];

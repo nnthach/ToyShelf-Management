@@ -6,16 +6,8 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/src/styles/components/ui/card";
-import {
-  ShoppingCart,
-  DollarSign,
-  MapPin,
-  User,
-  Badge,
-  Trophy,
-} from "lucide-react";
+import { ShoppingCart, DollarSign, MapPin, Trophy } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getDashboardTopStoreAPI } from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
@@ -32,11 +24,7 @@ interface Store {
 const TopThreeStore = () => {
   const router = useRouter();
 
-  const {
-    data: topStores,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: topStores } = useQuery({
     queryKey: ["topStores"],
     queryFn: () => getDashboardTopStoreAPI({}),
     select: (res) => res.data as Store[],
@@ -47,11 +35,11 @@ const TopThreeStore = () => {
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
         <CardTitle className="text-base font-bold flex items-center gap-2 uppercase tracking-tight">
           <Trophy className="w-4 h-4 text-yellow-500" />
-          Cửa hàng có doanh thu cao nhất
+          Xếp hạng cửa hàng
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="p-0 flex flex-1 flex-col justify-between gap-3">
+      <CardContent className="p-0 flex flex-1 flex-col overflow-y-auto custom-scrollbar gap-3">
         {topStores?.map((store, index) => (
           <div
             key={store.storeId}

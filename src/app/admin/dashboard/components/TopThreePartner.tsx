@@ -53,17 +53,17 @@ const TopThreePartner = () => {
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
         <CardTitle className="text-base font-bold flex items-center gap-2 uppercase tracking-tight">
           <Award className="w-5 h-5 text-emerald-500" />
-          Đối tác doanh thu cao nhất
+          Xếp hạng đối tác
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="p-0 flex flex-1 flex-col justify-between gap-3">
+      <CardContent className="p-0 flex flex-1 flex-col gap-3">
         {topPartners?.map((partner, index) => (
           <div
             key={partner.partnerId}
             onClick={() => router.push(`/admin/partners/${partner.partnerId}`)}
             className={`
-              group cursor-pointer relative p-2 flex gap-4 rounded-2xl border border-transparent transition-all hover:border-blue-100 hover:shadow-md
+              group cursor-pointer relative p-3 flex gap-4 rounded-2xl border border-transparent transition-all hover:border-blue-100 hover:shadow-md
               ${
                 index === 0
                   ? "bg-yellow-100 border-yellow-100"

@@ -66,7 +66,7 @@ export default function PartnerViewAllInventoryShelf() {
             Giám sát kệ tồn kho tại {inventoryList?.locationName}
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
-            Danh sách kệ tồn kho tại cửa hàng và kho
+            Danh sách kệ tồn kho tại cửa hàng
           </p>
         </div>
       </div>

@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 
 interface Store {
   id: string;
-  name: string;
+  storeName: string;
   partnerName: string;
   city: string;
   totalOrders: number;
@@ -35,11 +35,11 @@ const TopThreeStore = ({ partnerId }: { partnerId: string }) => {
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
         <CardTitle className="text-base font-bold flex items-center gap-2 uppercase tracking-tight">
           <Trophy className="w-4 h-4 text-yellow-500" />
-          Cửa hàng có doanh thu cao nhất
+          Xếp hạng cửa hàng
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="p-0 flex flex-1 flex-col justify-between gap-3">
+      <CardContent className="p-0 flex flex-1 flex-col overflow-y-auto custom-scrollbar gap-3">
         {topStores?.map((store, index) => (
           <div
             key={store.id}
@@ -48,12 +48,12 @@ const TopThreeStore = ({ partnerId }: { partnerId: string }) => {
   group py-3 flex flex-col gap-4 border-b last:border-none border-gray-100 rounded-lg px-3 transition-colors
   ${
     index === 0
-      ? "bg-yellow-50"
+      ? "bg-yellow-100"
       : index === 1
-        ? "bg-gray-50"
+        ? "bg-gray-100"
         : index === 2
-          ? "bg-orange-50"
-          : "hover:bg-gray-50/50"
+          ? "bg-orange-100"
+          : "hover:bg-gray-100/100"
   }
 `}
           >
@@ -77,7 +77,7 @@ const TopThreeStore = ({ partnerId }: { partnerId: string }) => {
                   Top {index + 1}
                 </div>
                 <span className="text-[15px] font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                  {store.name}
+                  {store.storeName}
                 </span>
               </div>
               <div className="flex items-center gap-1 text-[12px] text-gray-700 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">

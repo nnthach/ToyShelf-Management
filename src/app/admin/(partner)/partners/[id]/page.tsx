@@ -56,9 +56,7 @@ export default function ViewPartnerDetailPage() {
       </div>
 
       {/*Statistic card */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <PartnerStatCard partnerId={partnerId} />
-      </div>
+      <PartnerStatCard partnerId={partnerId} />
 
       {/*Content */}
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
@@ -66,10 +64,10 @@ export default function ViewPartnerDetailPage() {
         <div className="bg-background rounded-lg col-span-1 md:col-span-2 2xl:col-span-4 min-h-[500px] p-4 border border-gray-100 shadow-sm">
           <TotalRevenueChart partnerId={partnerId} />
         </div>
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-3 min-h-[450px] shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-4 h-[500px] shadow-sm border border-gray-100">
           <TotalOrderChart partnerId={partnerId} />
         </div>
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-1 shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-1 h-[500px] shadow-sm border border-gray-100">
           <TopThreeStore partnerId={partnerId} />
         </div>
 
@@ -77,9 +75,6 @@ export default function ViewPartnerDetailPage() {
           <TopThreeProduct partnerId={partnerId} />
         </div>
 
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
-          <h1>Dashboard</h1>
-        </div>
         <div className="bg-background rounded-lg col-span-1 md:col-span-2 2xl:col-span-2 p-2 min-h-[50vh] w-full border border-gray-100 shadow-sm">
           <StoreMap partnerId={partnerId} />
         </div>
