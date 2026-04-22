@@ -21,7 +21,7 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
     accessorKey: "customer",
     header: "Khách hàng",
     cell: ({ row }) => {
-      const { customerName ,customerEmail} = row.original;
+      const { customerName, customerEmail } = row.original;
       return (
         <div>
           <p className="font-semibold">{customerName}</p>
@@ -33,6 +33,10 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "totalAmount",
     header: "Tổng tiền",
+    cell: ({ row }) => {
+      const value = row.getValue("totalAmount") as number;
+      return <span>{value?.toLocaleString("vi-VN")}đ</span>;
+    },
   },
   {
     accessorKey: "paymentMethod",

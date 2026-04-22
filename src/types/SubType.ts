@@ -27,6 +27,7 @@ export interface QueryParams {
   fromDate?: string;
   toDate?: string;
   type?: string;
+  email?: string;
 }
 
 export interface LoginRes {

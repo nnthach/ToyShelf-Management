@@ -20,7 +20,7 @@ export default function AdminOrderManagement() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     storeId: "",
     partnerId: "",
-    phone: "",
+    email: "",
   });
 
   const {
@@ -73,7 +73,7 @@ export default function AdminOrderManagement() {
               partnerList={partnerList}
               storeList={storeList}
               resultCount={orderList.length}
-              onSearch={(val) => updateQuery({ phone: val })}
+              onSearch={(val) => updateQuery({ email: val })}
               onPartnerChange={setTempPartnerId}
               onApplyFilter={(filter) =>
                 updateQuery({

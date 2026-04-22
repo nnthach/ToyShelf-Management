@@ -5,6 +5,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
+import { City } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Filter, RotateCcw, XCircle } from "lucide-react";
@@ -14,7 +15,8 @@ type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
-  onApplyFilter: (val: { isActive?: boolean }) => void;
+  cityList: City[];
+  onApplyFilter: (val: { cityId?: string }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
@@ -23,26 +25,27 @@ export default function FilterSearch({
   query,
   loading,
   onApplyFilter,
+  cityList,
   onReset,
   onRefresh,
 }: FilterBarProps) {
   const [tempFilter, setTempFilter] = useState<{
-    isActive?: boolean;
+    cityId: string;
   }>({
-    isActive: undefined,
+    cityId: query.cityId ?? "",
   });
 
-  const isFiltered = query.isActive !== undefined;
+  const isFiltered = query.cityId !== "";
 
   const handleApply = () => {
     onApplyFilter({
-      isActive: tempFilter.isActive,
+      cityId: tempFilter.cityId || undefined,
     });
   };
 
   const handleResetAll = () => {
     setTempFilter({
-      isActive: undefined,
+      cityId: "",
     });
     onReset();
   };
@@ -60,30 +63,25 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
-            {/* Status */}
-
+            {/* City ID */}
             <div className="grid gap-2">
-              <Label>Trạng thái</Label>
+              <Label>Thành phố</Label>
               <select
                 className="border rounded-md h-9 px-2"
-                value={
-                  tempFilter.isActive === undefined
-                    ? "all"
-                    : String(tempFilter.isActive)
-                }
+                value={tempFilter.cityId}
                 onChange={(e) =>
                   setTempFilter((p) => ({
                     ...p,
-                    isActive:
-                      e.target.value === "all"
-                        ? undefined
-                        : e.target.value === "true",
+                    cityId: e.target.value,
                   }))
                 }
               >
-                <option value="all">Tất cả</option>
-                <option value="true">Hoạt động</option>
-                <option value="false">Không hoạt động</option>
+                <option value="">Tất cả</option>
+                {cityList?.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
               </select>
             </div>
 

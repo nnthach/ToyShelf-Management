@@ -38,9 +38,8 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
     accessorKey: "totalAmount",
     header: "Tổng tiền",
     cell: ({ row }) => {
-      const totalAmount = row.getValue("totalAmount") as string;
-
-      return <span>{totalAmount.toLocaleString()}đ</span>;
+      const value = row.getValue("totalAmount") as number;
+      return <span>{value?.toLocaleString("vi-VN")}đ</span>;
     },
   },
   {

@@ -20,12 +20,14 @@ export const getCommissionHistoryColumns =
         );
       },
     },
-
     {
       accessorKey: "commissionAmount",
       header: "Hoa hồng",
+      cell: ({ row }) => {
+        const value = Number(row.getValue("commissionAmount") || 0);
+        return <span>{value.toLocaleString("vi-VN")}đ</span>;
+      },
     },
-
     {
       accessorKey: "quantity",
       header: "Số lượng",

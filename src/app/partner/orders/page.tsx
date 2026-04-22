@@ -24,7 +24,7 @@ export default function PartnerManageOrders() {
     {
       storeId: "",
       partnerId: partnerId,
-      phone: "",
+      email: "",
     },
     {
       excludeResetKeys: ["partnerId"],
@@ -82,7 +82,7 @@ export default function PartnerManageOrders() {
               loading={isLoading}
               storeList={storeList}
               resultCount={orderList.length}
-              onSearch={(val) => updateQuery({ phone: val })}
+              onSearch={(val) => updateQuery({ email: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

@@ -31,7 +31,7 @@ export default function FilterSearch({
   onReset,
   onRefresh,
 }: FilterBarProps) {
-  const [searchInput, setSearchInput] = useState(query.search ?? "");
+  const [searchInput, setSearchInput] = useState(query.email ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function FilterSearch({
     storeId: query.storeId ?? "",
   });
 
-  const isFiltered = query.search;
+  const isFiltered = query.email;
 
   const handleApply = () => {
     onApplyFilter({

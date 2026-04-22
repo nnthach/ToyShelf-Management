@@ -2,21 +2,17 @@
 
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { DataTable } from "@/src/styles/components/ui/data-table";
-import { useState } from "react";
 import FilterSearch from "./components/FilterSearch";
 import { getWarehouseColumns } from "./columns";
 import { useQuery } from "@tanstack/react-query";
 import CreateWarehouseModal from "./components/CreateWarehouseModal";
 import { QueryParams } from "@/src/types/SubType";
 import { getAllWarehouseAPI } from "@/src/services/warehouse.service";
+import { getAllCityAPI } from "@/src/services/city.service";
 
 export default function AdminWarehouseManagement() {
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<string | null>(
-    null,
-  );
-
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
+    cityId: "",
   });
 
   const {
@@ -28,7 +24,11 @@ export default function AdminWarehouseManagement() {
     queryFn: () => getAllWarehouseAPI(query),
     select: (res) => res.data,
   });
-
+  const { data: cityList = [] } = useQuery({
+    queryKey: ["cities"],
+    queryFn: () => getAllCityAPI({}),
+    select: (res) => res.data,
+  });
   const columns = getWarehouseColumns();
 
   return (
@@ -57,6 +57,7 @@ export default function AdminWarehouseManagement() {
             <FilterSearch
               query={query}
               loading={isLoading}
+              cityList={cityList}
               resultCount={warehouseList.length}
               onApplyFilter={(filter) =>
                 updateQuery({

@@ -55,8 +55,6 @@ export default function AdminStoreManage() {
             Danh sách tất cả các cửa hàng trong hệ thống
           </p>
         </div>
-
-        {/* <CreateStoreModal /> */}
       </div>
 
       {/*Table */}

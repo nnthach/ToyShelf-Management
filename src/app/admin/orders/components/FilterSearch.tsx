@@ -37,7 +37,7 @@ export default function FilterSearch({
   onRefresh,
   onPartnerChange,
 }: FilterBarProps) {
-  const [searchInput, setSearchInput] = useState(query.search ?? "");
+  const [searchInput, setSearchInput] = useState(query.email ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function FilterSearch({
   });
 
   const isFiltered =
-    query.search || query.storeId !== "" || query.partnerId !== "";
+    query.email || query.storeId !== "" || query.partnerId !== "";
 
   const handleApply = () => {
     onApplyFilter({
@@ -139,7 +139,7 @@ export default function FilterSearch({
       <div className="relative w-[250px]">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <Input
-          placeholder="Tìm kiếm"
+          placeholder="Nhập email khác hàng"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           disabled={loading}
