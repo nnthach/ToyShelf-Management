@@ -192,6 +192,11 @@ export const PartnerAdminSidebarGroups = [
         url: "/partner/monthly-settlement",
         icon: ClipboardList,
       },
+      {
+        title: "Lịch sử hoa hồng",
+        url: "/partner/commission-history",
+        icon: History,
+      },
     ],
   },
 

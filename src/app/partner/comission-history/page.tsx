@@ -7,20 +7,16 @@ import { QueryParams } from "@/src/types/SubType";
 import { useQuery } from "@tanstack/react-query";
 import { getCommissionHistoryColumns } from "./columns";
 import { getAllCommissionHistoryAPI } from "@/src/services/commission-history.service";
-import { getAllPartnerAPI } from "@/src/services/partner.service";
-import { Partner } from "@/src/types";
-import { useEffect } from "react";
+import { useAuth } from "@/src/hooks/useAuth";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
-export default function AdminCommissionHistory() {
-  const { data: partnerList } = useQuery({
-    queryKey: ["partners"],
-    queryFn: () => getAllPartnerAPI({}),
-    select: (res) => res.data as Partner[],
-  });
+export default function PartnerViewCommissionHistory() {
+  const { partner } = useAuth();
+  const partnerId = partner?.partnerId;
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
-      partnerId: "",
+      partnerId: partnerId,
       pageNumber: 1,
       pageSize: 10,
       keyword: "",
@@ -29,14 +25,6 @@ export default function AdminCommissionHistory() {
       excludeResetKeys: ["partnerId"],
     },
   );
-
-  useEffect(() => {
-    if (partnerList?.length && !query.partnerId) {
-      updateQuery({
-        partnerId: partnerList[0].id,
-      });
-    }
-  }, [partnerList]);
 
   const {
     data: commissionHistoryList = [],
@@ -50,6 +38,10 @@ export default function AdminCommissionHistory() {
   });
 
   const columns = getCommissionHistoryColumns();
+
+  if (!query?.partnerId) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <div>
@@ -78,7 +70,6 @@ export default function AdminCommissionHistory() {
             <FilterSearch
               query={query}
               loading={loading}
-              partnerList={partnerList || []}
               resultCount={commissionHistoryList.length}
               onSearch={(val) => updateQuery({ keyword: val })}
               onApplyFilter={(filter) =>

@@ -69,7 +69,7 @@ export default function AdminMonthlySettlementManage() {
             />
 
             <div className="space-x-3">
-              <Button>
+              <Button variant={"outline"}>
                 <Upload /> Xuất dữ liệu
               </Button>
             </div>

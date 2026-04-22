@@ -78,6 +78,7 @@ export default function FilterSearch({
                 }
               >
                 <option value="">Tất cả</option>
+                <option value="Staff">Nhân viên</option>
                 <option value="Manager">Quản lý</option>
               </select>
             </div>

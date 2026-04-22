@@ -52,24 +52,7 @@ export default function WarehouseShipperManage() {
           columns={columns}
           data={shipperList ?? []}
           isLoading={isLoading}
-        >
-          <div className="p-4 border-b flex justify-between items-center">
-            {/*Filter search */}
-            <FilterSearch
-              query={query}
-              loading={isLoading}
-              resultCount={shipperList?.length || 0}
-              onSearch={(val) => updateQuery({ search: val })}
-              onApplyFilter={(filter) =>
-                updateQuery({
-                  ...filter,
-                })
-              }
-              onReset={() => resetQuery()}
-              onRefresh={() => refetch()}
-            />
-          </div>
-        </DataTable>
+        />
       </div>
     </div>
   );
