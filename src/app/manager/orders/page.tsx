@@ -3,11 +3,9 @@
 import { useAuth } from "@/src/hooks/useAuth";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { getAllOrdersAPI } from "@/src/services/order.service";
-import { getAllStoreAPI } from "@/src/services/store.service";
-import { Store } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React from "react";
 import { getOrderColumns } from "./columns";
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import FilterSearch from "./components/FilterSearch";

@@ -7,8 +7,7 @@ import {
 } from "@/src/utils/formatStatus";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const getStaffColumns = (
-): ColumnDef<User>[] => [
+export const getStaffColumns = (): ColumnDef<User>[] => [
   {
     accessorKey: "fullName",
     header: "Tên đầy đủ",
@@ -27,6 +26,10 @@ export const getStaffColumns = (
   {
     accessorKey: "storeRole",
     header: "Chức vụ",
+    cell: ({ row }) => {
+      const role = row.getValue("storeRole");
+      return role === "Staff" ? "Nhân viên cửa hàng" : "Quản lý cửa hàng";
+    },
   },
 
   {

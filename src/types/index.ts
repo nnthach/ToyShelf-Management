@@ -145,8 +145,7 @@ export interface Order {
   paymentMethod: string;
   customerName: string;
   createdAt: string;
-  customerPhone: string;
-
+  customerEmail: string;
   items: RefillRequestProductColor[];
 }
 

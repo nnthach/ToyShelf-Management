@@ -4,6 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Order } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
 import ViewDetailSheet from "./components/ViewDetailSheet";
+import {
+  formatOrderStatusColor,
+  formatOrderStatusText,
+} from "@/src/utils/formatStatus";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -17,11 +21,11 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
     accessorKey: "customer",
     header: "Khách hàng",
     cell: ({ row }) => {
-      const { customerName, customerPhone } = row.original;
+      const { customerName ,customerEmail} = row.original;
       return (
         <div>
           <p className="font-semibold">{customerName}</p>
-          <p className="text-xs text-muted-foreground">{customerPhone}</p>
+          <p className="text-xs text-muted-foreground">{customerEmail}</p>
         </div>
       );
     },
@@ -37,6 +41,15 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "status",
     header: "Trạng thái",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+
+      return (
+        <span className={`${formatOrderStatusColor(status)}`}>
+          {formatOrderStatusText(status)}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "createdAt",
@@ -46,7 +59,6 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
       return <span>{formatDateTime(value).full}</span>;
     },
   },
-
   {
     accessorKey: "action",
     header: "Hành động",

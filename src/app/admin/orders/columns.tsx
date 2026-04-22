@@ -25,11 +25,11 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
     accessorKey: "customer",
     header: "Khách hàng",
     cell: ({ row }) => {
-      const { customerName, customerPhone } = row.original;
+      const { customerName, customerEmail } = row.original;
       return (
         <div>
           <p className="font-semibold">{customerName}</p>
-          <p className="text-xs text-muted-foreground">{customerPhone}</p>
+          <p className="text-xs text-muted-foreground">{customerEmail}</p>
         </div>
       );
     },
