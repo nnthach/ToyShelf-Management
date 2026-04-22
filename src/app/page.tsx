@@ -29,7 +29,7 @@ import { useAuth } from "../hooks/useAuth";
 import { getErrorMessage } from "../utils/getErrorMessage";
 
 const formSchema = z.object({
-  email: z.string("Not correct email format."),
+  email: z.email({ message: "Email không đúng định dạng" }),
   password: z
     .string()
     .min(6, "Mật khẩu phải tối thiểu 6 ký tự.")

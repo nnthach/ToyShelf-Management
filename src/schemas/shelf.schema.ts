@@ -11,7 +11,7 @@ export const createShelfSchema = z.object({
   width: z.coerce.number().min(1, "Chiều rộng phải lớn hơn 0"),
   height: z.coerce.number().min(1, "Chiều cao phải lớn hơn 0"),
   depth: z.coerce.number().min(1, "Chiều sâu phải lớn hơn 0"),
-  totalLevels: z.coerce.number().min(1, "Số tầng phải lớn hơn 1"),
+  totalLevels: z.coerce.number().min(1, "Số tầng phải lớn hơn 0"),
   suitableProductCategoryTypes: z
     .array(z.string())
     .min(1, "Chọn ít nhất 1 loại danh mục chung"),
@@ -46,7 +46,7 @@ export const updateShelfSchema = z
     width: z.coerce.number().min(1, "Chiều rộng phải lớn hơn 0"),
     height: z.coerce.number().min(1, "Chiều cao phải lớn hơn 0"),
     depth: z.coerce.number().min(1, "Chiều sâu phải lớn hơn 0"),
-    totalLevels: z.coerce.number().min(1, "Số tầng phải lớn hơn 1"),
+    totalLevels: z.coerce.number().min(1, "Số tầng phải lớn hơn 0"),
     suitableProductCategoryTypes: z
       .array(z.string())
       .min(1, "Chọn ít nhất 1 loại danh mục chung"),

@@ -26,6 +26,7 @@ export interface QueryParams {
   roleBusiness?: string;
   fromDate?: string;
   toDate?: string;
+  type?: string;
 }
 
 export interface LoginRes {

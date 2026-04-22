@@ -17,9 +17,8 @@ export default function WarehouseRefillRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    search: "",
+    type: "",
+    status: "",
   });
 
   const {

@@ -133,7 +133,7 @@ function CreateShelfTypeModal() {
 
       setOpen(false);
     } catch (error) {
-      toast.error(getErrorMessage(error, "Có lỗi xảy ra!"));
+      toast.error(getErrorMessage(error, "Tạo loại kệ thất bại!"));
     } finally {
       setIsLoading(false);
     }

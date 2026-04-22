@@ -20,14 +20,14 @@ export const getShipmentAssignColumnColumns = (
   onEdit: (shipmentAssignId: string) => void,
 ): ColumnDef<ShipmentAssign>[] => [
   {
-    accessorKey: "orderType",
+    accessorKey: "type",
     header: "Loại đơn",
     cell: ({ row }) => {
-      const orderType = row.getValue("orderType") as string;
+      const type = row.getValue("type") as string;
 
       return (
-        <span className={`${formatShipmentAssignTypeColor(orderType)}`}>
-          {formatShipmentAssignTypeText(orderType)}
+        <span className={`${formatShipmentAssignTypeColor(type)}`}>
+          {formatShipmentAssignTypeText(type)}
         </span>
       );
     },

@@ -24,6 +24,7 @@ export function useSignalR({
   const connectionRef = useRef<signalR.HubConnection | null>(null);
 
   useEffect(() => {
+    // tạo connect
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(url)
       .withAutomaticReconnect()
@@ -32,18 +33,22 @@ export function useSignalR({
 
     connectionRef.current = connection;
 
+    // disconnect
     connection.onclose(() => {
       setStatus("disconnected");
       onDisconnected?.();
     });
 
+    // try reconnect
     connection.onreconnecting(() => setStatus("connecting"));
 
+    // connected
     connection.onreconnected(() => {
       setStatus("connected");
       onConnected?.();
     });
 
+    // connected
     connection
       .start()
       .then(() => {

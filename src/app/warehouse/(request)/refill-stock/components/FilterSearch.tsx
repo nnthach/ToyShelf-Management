@@ -15,7 +15,7 @@ type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
-  onApplyFilter: (val: { isActive?: boolean; order?: string }) => void;
+  onApplyFilter: (val: { status?: string; type?: string }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
@@ -28,26 +28,26 @@ export default function FilterSearch({
   onRefresh,
 }: FilterBarProps) {
   const [tempFilter, setTempFilter] = useState<{
-    isActive?: boolean;
-    order: string;
+    status?: string;
+    type?: string;
   }>({
-    isActive: undefined,
-    order: query.order ?? "",
+    status: String(query.status) ?? "",
+    type: query.type ?? "",
   });
 
-  const isFiltered = query.order !== "" || query.isActive !== undefined;
+  const isFiltered = query.type !== "" || query.status !== "";
 
   const handleApply = () => {
     onApplyFilter({
-      isActive: tempFilter.isActive,
-      order: tempFilter.order || undefined,
+      status: tempFilter.status || undefined,
+      type: tempFilter.type || undefined,
     });
   };
 
   const handleResetAll = () => {
     setTempFilter({
-      isActive: undefined,
-      order: "",
+      status: "",
+      type: "",
     });
     onReset();
   };
@@ -65,22 +65,23 @@ export default function FilterSearch({
 
         <PopoverContent align="start" className="w-64">
           <div className="grid gap-4">
-            {/* Order */}
+            {/* Type */}
             <div className="grid gap-2">
-              <Label>Sắp xếp</Label>
+              <Label>Loại đơn</Label>
               <select
                 className="border rounded-md h-9 px-2"
-                value={tempFilter.order}
+                value={tempFilter.type}
                 onChange={(e) =>
                   setTempFilter((p) => ({
                     ...p,
-                    order: e.target.value,
+                    type: e.target.value,
                   }))
                 }
               >
                 <option value="">Tất cả</option>
-                <option value="asc">A → Z</option>
-                <option value="desc">Z → A</option>
+                <option value="Delivery">Giao hàng</option>
+                <option value="Return">Trả hàng</option>
+                <option value="Combined">Hỗn hợp</option>
               </select>
             </div>
 
@@ -89,24 +90,20 @@ export default function FilterSearch({
               <Label>Trạng thái</Label>
               <select
                 className="border rounded-md h-9 px-2"
-                value={
-                  tempFilter.isActive === undefined
-                    ? "all"
-                    : String(tempFilter.isActive)
-                }
+                value={tempFilter.status}
                 onChange={(e) =>
                   setTempFilter((p) => ({
                     ...p,
-                    isActive:
-                      e.target.value === "all"
-                        ? undefined
-                        : e.target.value === "true",
+                    status: e.target.value,
                   }))
                 }
               >
-                <option value="all">Tất cả</option>
-                <option value="true">Hoạt động</option>
-                <option value="false">Không hoạt động</option>
+                <option value="">Tất cả</option>
+                <option value="Pending">Đang chờ</option>
+                <option value="Assigned">Đã điều phối giao hàng</option>
+                <option value="Accepted">Nhân viên giao hàng chấp nhận</option>
+                <option value="Rejected">Đã từ chối</option>
+                <option value="InProgress">Đang giao hàng</option>
               </select>
             </div>
 

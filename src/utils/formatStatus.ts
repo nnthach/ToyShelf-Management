@@ -131,6 +131,8 @@ export const formatShipmentAssignStatusText = (status: string) => {
       return "Nhân viên giao hàng chấp nhận";
     case "Rejected":
       return "Đã từ chối";
+    case "InProgress":
+      return "Đang giao hàng";
     default:
       return "N/A";
   }
@@ -377,6 +379,12 @@ export const formatShipmentAssignTypeText = (status: string) => {
       return "Giao kệ";
     case "DAMAGE":
       return "Thu hồi";
+    case "Delivery":
+      return "Giao hàng";
+    case "Return":
+      return "Trả hàng";
+    case "Combined":
+      return "Giao & Trả";
     default:
       return "Giao & Nhận";
   }
@@ -390,6 +398,12 @@ export const formatShipmentAssignTypeColor = (status: string) => {
       return "bg-orange-100 text-orange-700 font-bold border border-orange-200 px-3 py-1 rounded-2xl shadow-sm";
     case "DAMAGE":
       return "bg-rose-100 text-rose-700 font-bold border border-rose-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "Delivery":
+      return "bg-blue-100 text-blue-700 font-bold border border-blue-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "Return":
+      return "bg-amber-100 text-amber-700 font-bold border border-amber-200 px-3 py-1 rounded-2xl shadow-sm";
+    case "Combined":
+      return "bg-violet-100 text-violet-700 font-bold border border-violet-200 px-3 py-1 rounded-2xl shadow-sm";
     default:
       return "bg-emerald-100 text-emerald-700 font-bold border border-emerald-200 px-3 py-1 rounded-2xl shadow-sm";
   }

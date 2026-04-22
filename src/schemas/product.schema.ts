@@ -4,7 +4,7 @@ export const productSchema = z.object({
   productCategoryId: z.string().min(1, "Danh mục sản phẩm là bắt buộc"),
   productCategoryName: z.string().optional(),
   name: z.string().min(1, "Tên sản phẩm là bắt buộc"),
-  basePrice: z.coerce.number().min(1, "Giá là bắt buộc"),
+  basePrice: z.coerce.number().min(1, "Giá nhập là bắt buộc"),
   description: z.string().optional(),
   brand: z.string().min(1, "Thương hiệu là bắt buộc"),
   material: z.string().min(1, "Chất liệu là bắt buộc"),
