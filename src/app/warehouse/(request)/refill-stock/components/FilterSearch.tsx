@@ -63,7 +63,7 @@ export default function FilterSearch({
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent align="start" className="w-64">
+        <PopoverContent align="start" className="w-72">
           <div className="grid gap-4">
             {/* Type */}
             <div className="grid gap-2">
