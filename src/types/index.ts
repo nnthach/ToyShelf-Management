@@ -251,6 +251,7 @@ export interface City {
 
 export interface StoreInvite {
   id: string;
+  storeName: string;
   storeId: string;
   userId: string;
   email: string;

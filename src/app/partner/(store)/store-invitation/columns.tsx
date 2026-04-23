@@ -19,7 +19,7 @@ export const getStoreInviteColumns = (
   onDelete: (inviteId: string) => void,
 ): ColumnDef<StoreInvite>[] => [
   {
-    accessorKey: "storeId",
+    accessorKey: "storeName",
     header: "Tên cửa hàng",
   },
 
