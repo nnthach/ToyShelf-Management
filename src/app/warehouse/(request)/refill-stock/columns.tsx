@@ -54,19 +54,19 @@ export const getShipmentAssignColumnColumns = (
     },
   },
 
-  {
-    accessorKey: "shipmentStatus",
-    header: "Trạng thái giao hàng",
-    cell: ({ row }) => {
-      const shipmentStatus = row.getValue("shipmentStatus") as string;
+  // {
+  //   accessorKey: "shipmentStatus",
+  //   header: "Trạng thái giao hàng",
+  //   cell: ({ row }) => {
+  //     const shipmentStatus = row.getValue("shipmentStatus") as string;
 
-      return (
-        <span className={`${formatShipmentStatusColor(shipmentStatus)}`}>
-          {formatShipmentStatusText(shipmentStatus)}
-        </span>
-      );
-    },
-  },
+  //     return (
+  //       <span className={`${formatShipmentStatusColor(shipmentStatus)}`}>
+  //         {formatShipmentStatusText(shipmentStatus)}
+  //       </span>
+  //     );
+  //   },
+  // },
   {
     accessorKey: "createdAt",
     header: "Ngày tạo",
