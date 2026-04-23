@@ -15,6 +15,7 @@ import { ArrowLeft } from "lucide-react";
 import CreateInventoryModal from "./components/CreateShelfInventoryModal";
 import { getInventoryShelfByLocationIdAPI } from "@/src/services/inventory-shelf.service";
 import ShelfCardWithQuantity from "@/src/components/ShelfCardWithQuantity";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
 
 export default function AdminViewAllInventoryShelf() {
   const searchParams = useSearchParams();
@@ -22,14 +23,9 @@ export default function AdminViewAllInventoryShelf() {
   const storeId = searchParams.get("storeId");
   const router = useRouter();
 
-  const { data: locationList } = useQuery({
-    queryKey: ["locations"],
-    queryFn: () => getAllInventoryLocationAPI({}),
-    select: (res) => res.data as InventoryLocation[],
-  });
-
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
+      partnerId: "",
       locationId: "",
     },
     {
@@ -37,13 +33,29 @@ export default function AdminViewAllInventoryShelf() {
     },
   );
 
+  const { data: partnerList } = useQuery({
+    queryKey: ["partners"],
+    queryFn: () => getAllPartnerAPI({}),
+    select: (res) => res.data,
+  });
+
+  const { data: locationList } = useQuery({
+    queryKey: ["locations", query.partnerId],
+    queryFn: () => getAllInventoryLocationAPI({ partnerId: query.partnerId }),
+    select: (res) => res.data as InventoryLocation[],
+  });
+
   useEffect(() => {
-    if (locationList?.length && !query.locationId) {
+    if (!locationList?.length) return;
+
+    const isValid = locationList.some((l) => l.id === query.locationId);
+
+    if (!isValid) {
       updateQuery({
         locationId: locationList[0].id,
       });
     }
-  }, [locationList]);
+  }, [locationList, query.locationId]);
 
   const {
     data: inventoryList,
@@ -73,10 +85,10 @@ export default function AdminViewAllInventoryShelf() {
           )}
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold dark:text-foreground">
-              Giám sát kệ tồn kho tại {inventoryList?.locationName}
+              Giám sát kệ trưng bày tại {inventoryList?.locationName}
             </h1>
             <p className="text-gray-500 dark:text-gray-200">
-              Danh sách kệ tồn kho tại cửa hàng và kho
+              Danh sách kệ trưng bày tại cửa hàng và kho
             </p>
           </div>
         </div>
@@ -91,6 +103,7 @@ export default function AdminViewAllInventoryShelf() {
               query={query}
               loading={isLoading}
               locationList={locationList}
+              partnerList={partnerList}
               resultCount={inventoryList?.totalCount}
               onApplyFilter={(filter) =>
                 updateQuery({
@@ -113,6 +126,7 @@ export default function AdminViewAllInventoryShelf() {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
                 {inventoryList?.shelves.map((shelf: Shelf) => (
                   <ShelfCardWithQuantity
+                    inventoryList={inventoryList}
                     key={shelf.shelfTypeId}
                     shelf={shelf}
                   />

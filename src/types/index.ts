@@ -310,6 +310,13 @@ export interface ShelfShelf {
   shelfType: Shelf;
 }
 
+export interface InventoryShelf {
+  locationId: string;
+  locationName: string;
+  type: string;
+  shelves: Shelf[];
+}
+
 export interface Shelf {
   id: string;
   shelfTypeId: string;
@@ -510,6 +517,10 @@ export interface ShipmentShelfItem {
   shelfCode: string;
   shelfTypeName: string;
   imageUrl: string;
+  width: string;
+  height: string;
+  depth: string;
+  totalLevels: string;
 }
 
 export interface CheckReceiveShelfItem {

@@ -12,13 +12,19 @@ import { getShipmentAssignColumnColumns } from "./columns";
 import { useState } from "react";
 import { getAllShipmentAssignAPI } from "@/src/services/shipment-assignment.service";
 import UpdateShipmentAssignRefillRequestModal from "./components/UpdateShipmentAssignRefillRequestModal";
+import { useAuth } from "@/src/hooks/useAuth";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
 export default function WarehouseRefillRequestManage() {
   const [selectedRequestId, setSelectedRequestId] = useState("");
+  const { warehouse } = useAuth();
+
+  const warehouseLocationId = warehouse?.warehouseLocationIds[0];
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     type: "",
     status: "",
+    warehouseLocationId: warehouseLocationId,
   });
 
   const {
@@ -36,6 +42,10 @@ export default function WarehouseRefillRequestManage() {
   };
 
   const columns = getShipmentAssignColumnColumns(handleEdit);
+
+  if (!query.warehouseLocationId) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <>

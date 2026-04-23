@@ -16,18 +16,13 @@ import { Button } from "@/src/styles/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
 import CreateInventoryModal from "./components/CreateInventoryModal";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
 
 export default function AdminViewAllInventory() {
   const searchParams = useSearchParams();
   const from = searchParams.get("from");
   const storeId = searchParams.get("storeId");
   const router = useRouter();
-
-  const { data: locationList } = useQuery({
-    queryKey: ["locations"],
-    queryFn: () => getAllInventoryLocationAPI({}),
-    select: (res) => res.data as InventoryLocation[],
-  });
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
@@ -38,19 +33,36 @@ export default function AdminViewAllInventory() {
       pageNumber: 1,
       pageSize: 10,
       searchItem: "",
+      partnerId: "",
     },
     {
       excludeResetKeys: ["locationId"],
     },
   );
 
+  const { data: partnerList } = useQuery({
+    queryKey: ["partners"],
+    queryFn: () => getAllPartnerAPI({}),
+    select: (res) => res.data,
+  });
+
+  const { data: locationList } = useQuery({
+    queryKey: ["locations", query.partnerId],
+    queryFn: () => getAllInventoryLocationAPI({ partnerId: query.partnerId }),
+    select: (res) => res.data as InventoryLocation[],
+  });
+
   useEffect(() => {
-    if (locationList?.length && !query.locationId) {
+    if (!locationList?.length) return;
+
+    const isValid = locationList.some((l) => l.id === query.locationId);
+
+    if (!isValid) {
       updateQuery({
         locationId: locationList[0].id,
       });
     }
-  }, [locationList]);
+  }, [locationList, query.locationId]);
 
   const {
     data: inventoryList,
@@ -104,6 +116,7 @@ export default function AdminViewAllInventory() {
               query={query}
               loading={isLoading}
               locationList={locationList}
+              partnerList={partnerList}
               categoryList={categoryList}
               resultCount={inventoryList?.totalCount}
               onSearch={(val) => updateQuery({ searchItem: val })}

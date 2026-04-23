@@ -1,4 +1,4 @@
-import { MyStore, Partner, User, Warehouse, WarehouseStaff } from "@/src/types";
+import { MyStore, Partner, User,WarehouseStaff } from "@/src/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthSlice {

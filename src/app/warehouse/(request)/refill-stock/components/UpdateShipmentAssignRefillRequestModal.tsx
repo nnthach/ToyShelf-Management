@@ -66,6 +66,7 @@ function UpdateShipmentAssignRefillRequestModal({
     enabled: !!requestId && isOpen,
   });
 
+  console.log("shipmentDetail test", shipmentDetail);
   // receive return
   const receiveReturnMutation = useMutation({
     mutationFn: () => warehouseReceiveReturnShipmentAPI(shipmentDetail.id),
@@ -300,22 +301,6 @@ function UpdateShipmentAssignRefillRequestModal({
                         </Button>
                       )}
 
-                    {shipmentDetail?.status === "DeliveredReturn" && (
-                      <Button
-                        variant="success"
-                        disabled={receiveReturnMutation.isPending}
-                        onClick={handleReceiveReturn}
-                        className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02]"
-                      >
-                        {receiveReturnMutation.isPending ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <CheckCircle2 className="h-4 w-4" />
-                        )}
-                        Đã nhận hàng trả về
-                      </Button>
-                    )}
-
                     {!shipmentDetail &&
                       shipmentAssignDetail.orderType === "DAMAGE" && (
                         <Button
@@ -333,6 +318,22 @@ function UpdateShipmentAssignRefillRequestModal({
                         </Button>
                       )}
                   </div>
+                )}
+
+                {shipmentDetail?.status === "DeliveredReturn" && (
+                  <Button
+                    variant="success"
+                    disabled={receiveReturnMutation.isPending}
+                    onClick={handleReceiveReturn}
+                    className="px-8 h-11 rounded-xl font-bold bg-green-600 shadow-lg shadow-green-100 transition-all hover:bg-green-700 hover:scale-[1.02]"
+                  >
+                    {receiveReturnMutation.isPending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4" />
+                    )}
+                    Đã nhận hàng trả về
+                  </Button>
                 )}
               </div>
             </DialogFooter>

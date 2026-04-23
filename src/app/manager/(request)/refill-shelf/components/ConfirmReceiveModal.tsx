@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/src/styles/components/ui/dialog";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { PackageCheck } from "lucide-react";
+import { Layers, PackageCheck } from "lucide-react";
 import { memo, useEffect } from "react";
 import {
   getShipmentForReceiveByIdAPI,
@@ -142,16 +142,35 @@ function ConfirmReceiveModal({
                       <div className="col-span-8 flex gap-3 items-start">
                         <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border bg-slate-50">
                           <Image
-                            src={item.imageUrl || "/placeholder.png"}
-                            alt={item.shelfTypeName}
+                            src={item?.imageUrl || "/placeholder.png"}
+                            alt={item?.shelfTypeName}
                             fill
                             className="object-cover"
                           />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-bold text-slate-700 truncate">
-                            {item.shelfTypeName}
+                            {item?.shelfTypeName}
                           </p>
+                          <div className="flex items-center gap-2 mt-1.5">
+                            <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
+                              {item?.shelfCode}
+                            </div>
+                            <div className="flex items-center text-[12px] text-slate-500 whitespace-nowrap">
+                              <span className="font-medium">
+                                {item?.width}×{item?.height}×{item?.depth}
+                              </span>
+                            </div>
+
+                            <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+
+                            <div className="flex items-center gap-1 text-[12px]">
+                              <Layers className="w-3.5 h-3.5 text-blue-500" />
+                              <span className="font-semibold text-slate-700">
+                                {item?.totalLevels} tầng
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
 

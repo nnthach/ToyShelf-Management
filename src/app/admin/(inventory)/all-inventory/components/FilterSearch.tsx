@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
-import { InventoryLocation, ProductCategory } from "@/src/types";
+import { InventoryLocation, Partner, ProductCategory } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
@@ -19,11 +19,13 @@ type FilterBarProps = {
   resultCount?: number;
   categoryList?: ProductCategory[];
   locationList?: InventoryLocation[];
+  partnerList?: Partner[];
   onSearch: (val: string) => void;
   onApplyFilter: (val: {
     isActive?: boolean;
     order?: string;
     locationId?: string;
+    partnerId?: string;
     categoryId?: string;
     pageNumber?: number;
     pageSize?: number;
@@ -37,6 +39,7 @@ export default function FilterSearch({
   loading,
   categoryList,
   locationList,
+  partnerList,
   onSearch,
   onApplyFilter,
   onReset,
@@ -48,9 +51,22 @@ export default function FilterSearch({
   const [locationValue, setLocationValue] = useState(query.locationId || "");
   const debouncedLocation = useDebounce(locationValue, 300);
 
+  const [partnerValue, setPartnerValue] = useState(query.partnerId || "");
+  const debouncedPartner = useDebounce(partnerValue, 300);
+
   useEffect(() => {
     onSearch(debouncedSearch);
   }, [debouncedSearch]);
+
+  useEffect(() => {
+    if (debouncedPartner !== query.partnerId) {
+      onApplyFilter({
+        partnerId: debouncedPartner || undefined,
+        locationId: undefined,
+        pageNumber: 1,
+      });
+    }
+  }, [debouncedPartner]);
 
   useEffect(() => {
     if (debouncedLocation !== query.locationId) {
@@ -135,7 +151,7 @@ export default function FilterSearch({
                 <option value={50}>50</option>
               </select>
             </div>
-            
+
             {/* Category */}
             <div className="grid gap-2">
               <Label>Danh mục</Label>
@@ -206,6 +222,20 @@ export default function FilterSearch({
           </div>
         </PopoverContent>
       </Popover>
+
+      {/*Partner */}
+      <select
+        className="border rounded-md h-9 px-2"
+        value={partnerValue}
+        onChange={(e) => setPartnerValue(e.target.value)}
+      >
+        <option value={""}>Chọn đối tác</option>
+        {partnerList?.map((p) => (
+          <option key={p.id} value={p.id}>
+            {p.companyName}
+          </option>
+        ))}
+      </select>
 
       {/*Location id */}
       <select

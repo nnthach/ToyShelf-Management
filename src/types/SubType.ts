@@ -28,6 +28,7 @@ export interface QueryParams {
   toDate?: string;
   type?: string;
   email?: string;
+  warehouseLocationId?: string;
 }
 
 export interface LoginRes {

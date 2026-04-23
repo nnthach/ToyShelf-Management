@@ -1,24 +1,15 @@
 import { useDebounce } from "@/src/hooks/useDebounce";
-import { Button } from "@/src/styles/components/ui/button";
-import { Input } from "@/src/styles/components/ui/input";
-import { Label } from "@/src/styles/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/src/styles/components/ui/popover";
-import { InventoryLocation, ProductCategory } from "@/src/types";
+import { InventoryLocation, Partner } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
-import { PopoverClose } from "@radix-ui/react-popover";
-import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
+  partnerList?: Partner[];
   locationList?: InventoryLocation[];
-  onApplyFilter: (val: { locationId?: string }) => void;
+  onApplyFilter: (val: { locationId?: string; partnerId?: string }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
@@ -26,6 +17,7 @@ type FilterBarProps = {
 export default function FilterSearch({
   query,
   loading,
+  partnerList,
   locationList,
   onApplyFilter,
   onReset,
@@ -33,6 +25,18 @@ export default function FilterSearch({
 }: FilterBarProps) {
   const [locationValue, setLocationValue] = useState(query.locationId || "");
   const debouncedLocation = useDebounce(locationValue, 300);
+
+  const [partnerValue, setPartnerValue] = useState(query.partnerId || "");
+  const debouncedPartner = useDebounce(partnerValue, 300);
+
+  useEffect(() => {
+    if (debouncedPartner !== query.partnerId) {
+      onApplyFilter({
+        partnerId: debouncedPartner || undefined,
+        locationId: undefined,
+      });
+    }
+  }, [debouncedPartner]);
 
   useEffect(() => {
     if (debouncedLocation !== query.locationId) {
@@ -44,6 +48,19 @@ export default function FilterSearch({
 
   return (
     <div className="inline-flex items-center gap-3">
+      {/*Partner */}
+      <select
+        className="border rounded-md h-9 px-2"
+        value={partnerValue}
+        onChange={(e) => setPartnerValue(e.target.value)}
+      >
+        <option value={""}>Chọn đối tác</option>
+        {partnerList?.map((p) => (
+          <option key={p.id} value={p.id}>
+            {p.companyName}
+          </option>
+        ))}
+      </select>
       {/*Location id */}
       <select
         className="border rounded-md h-9 px-2"

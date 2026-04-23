@@ -303,7 +303,7 @@ function ViewRefillShelfRequestModalDetail({
                 {/* SECTION 3: THÔNG TIN VẬN CHUYỂN & ĐIỀU PHỐI */}
                 <section>
                   {/* Header có Status */}
-                  <div className="flex items-center gap-2 text-primary font-bold uppercase text-sm tracking-wider">
+                  <div className="flex items-center mb-4 gap-2 text-primary font-bold uppercase text-sm tracking-wider">
                     <Truck className="h-4 w-4" /> 3. Trạng thái vận chuyển
                   </div>
 
