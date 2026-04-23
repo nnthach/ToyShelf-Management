@@ -24,7 +24,10 @@ export function useSignalR({
   const connectionRef = useRef<signalR.HubConnection | null>(null);
 
   useEffect(() => {
-    // tạo connect
+    if (connectionRef.current) return;
+
+    let isCancelled = false; // ← flag này
+
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(url)
       .withAutomaticReconnect()
@@ -33,66 +36,47 @@ export function useSignalR({
 
     connectionRef.current = connection;
 
-    // disconnect
     connection.onclose(() => {
       setStatus("disconnected");
       onDisconnected?.();
     });
-
-    // try reconnect
     connection.onreconnecting(() => setStatus("connecting"));
-
-    // connected
     connection.onreconnected(() => {
       setStatus("connected");
       onConnected?.();
     });
 
-    // connected
     connection
       .start()
       .then(() => {
+        if (isCancelled) return; // ← nếu đã bị cleanup thì bỏ qua
         setStatus("connected");
         onConnected?.();
       })
       .catch((err: Error) => {
+        if (isCancelled) return; // ← bỏ qua lỗi do cleanup gây ra
         setStatus("error");
         onError?.(err);
         console.error("SignalR connection error:", err);
       });
 
     return () => {
-      connection.stop();
+      isCancelled = true; // ← đánh dấu đã cleanup
       connectionRef.current = null;
+      connection.stop(); // stop sau khi set null để tránh reuse
     };
   }, [url]);
 
-  const invoke = useCallback(
-    async <T = void>(
-      method: string,
-      ...args: unknown[]
-    ): Promise<T | undefined> => {
-      const conn = connectionRef.current;
-      if (conn?.state === signalR.HubConnectionState.Connected) {
-        return conn.invoke<T>(method, ...args);
-      }
-      console.warn("SignalR: invoke called but not connected");
-      return undefined;
-    },
-    [],
-  );
-
   const on = useCallback(
     <T extends unknown[]>(event: string, handler: (...args: T) => void) => {
-      connectionRef.current?.on(event, handler as (...args: unknown[]) => void);
-      return () =>
-        connectionRef.current?.off(
-          event,
-          handler as (...args: unknown[]) => void,
-        );
+      const conn = connectionRef.current;
+      if (!conn) return () => {};
+
+      conn.on(event, handler as (...args: unknown[]) => void);
+      return () => conn.off(event, handler as (...args: unknown[]) => void);
     },
     [],
   );
 
-  return { status, invoke, on };
+  return { status, on };
 }
