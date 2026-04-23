@@ -38,7 +38,7 @@ export const getShipmentAssignColumnColumns = (
   },
   {
     accessorKey: "shipperName",
-    header: "Người giao hàng",
+    header: "Nhân viên giao hàng",
   },
   {
     accessorKey: "status",

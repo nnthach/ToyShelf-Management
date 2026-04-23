@@ -130,7 +130,7 @@ export const formatShipmentAssignStatusText = (status: string) => {
     case "Accepted":
       return "Nhân viên giao hàng chấp nhận";
     case "Rejected":
-      return "Đã từ chối";
+      return "Nhân viên giao hàng từ chối";
     case "InProgress":
       return "Đang giao hàng";
     case "Completed":
@@ -149,15 +149,15 @@ export const formatShipmentAssignStatusColor = (status: string) => {
     case "Assigned":
       return "bg-orange-100 text-orange-800 px-3 py-1 rounded-2xl";
     case "Accepted":
-      return "bg-emerald-100 text-emerald-800 px-3 py-1 rounded-2xl";
+      return "bg-cyan-100 text-cyan-800 px-3 py-1 rounded-2xl";
     case "Rejected":
-      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
+      return "bg-red-200 text-red-800 px-3 py-1 rounded-2xl";
     case "InProgress":
       return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
     case "Completed":
-      return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
+      return "bg-green-300 text-green-800 px-3 py-1 rounded-2xl";
     case "Cancelled":
-      return "bg-gray-100 text-gray-800 px-3 py-1 rounded-2xl";
+      return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
     default:
       return "bg-slate-100 text-slate-800 px-3 py-1 rounded-2xl";
   }
