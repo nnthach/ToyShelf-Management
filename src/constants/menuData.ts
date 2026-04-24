@@ -308,7 +308,7 @@ export const WarehouseManagerSidebarGroups = [
     items: [
       {
         title: "Giao và trả hàng",
-        url: "/warehouse/refill-stock",
+        url: "/warehouse/assigned-shipment",
         icon: PackagePlus,
       },
     ],
