@@ -16,9 +16,7 @@ import { toast } from "react-toastify";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Send, XCircle, Truck, User } from "lucide-react";
 import { assignShipperShipmentAssignAPI } from "@/src/services/shipment-assignment.service";
-import {
-  getAllWarehouseStaffAPI,
-} from "@/src/services/user.service";
+import { getAllWarehouseStaffAPI } from "@/src/services/user.service";
 import { WarehouseStaff } from "@/src/types";
 import { memo } from "react";
 import { useAuth } from "@/src/hooks/useAuth";
@@ -151,7 +149,7 @@ function AssignShipperModal({
             }}
             className="flex-1 h-11 font-bold border-slate-200 hover:bg-slate-100 text-slate-600 rounded-xl transition-all"
           >
-            <XCircle className="h-4 w-4 mr-2" /> Huỷ
+            <XCircle className="h-4 w-4" /> Huỷ
           </Button>
           <Button
             type="submit"

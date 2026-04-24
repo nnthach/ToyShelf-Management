@@ -338,7 +338,7 @@ function CreateCommissionTableModal() {
             variant="success"
             className="px-8"
           >
-            <Send className="mr-2 h-4 w-4" /> Xác nhận tạo
+            <Send className="h-4 w-4" /> Xác nhận tạo
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -528,7 +528,7 @@ function ViewRefillRequestModalDetail({
                     {isApproving ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <XCircle className="h-4 w-4 mr-2" />
+                      <XCircle className="h-4 w-4" />
                     )}
                     Từ chối
                   </Button>
@@ -541,7 +541,7 @@ function ViewRefillRequestModalDetail({
                     {isApproving ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                      <CheckCircle2 className="h-4 w-4" />
                     )}
                     Chấp nhận
                   </Button>

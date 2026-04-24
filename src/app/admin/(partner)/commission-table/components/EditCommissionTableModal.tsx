@@ -363,7 +363,7 @@ function EditPriceTableModal({
             variant="success"
             className="px-8"
           >
-            <Send className="mr-2 h-4 w-4" /> Lưu
+            <Send className="h-4 w-4" /> Lưu
           </Button>
         </DialogFooter>
       </DialogContent>

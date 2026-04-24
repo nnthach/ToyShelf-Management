@@ -287,7 +287,7 @@ function CreateReturnModal() {
             {isSubmitting ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <CheckCircle2 className="h-4 w-4 mr-2" />
+              <CheckCircle2 className="h-4 w-4" />
             )}
             Xác nhận trả hàng
           </Button>

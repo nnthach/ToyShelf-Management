@@ -170,14 +170,14 @@ function UpdateReturnRequestModal({
                     onClick={() => setIsOpenRejectModal(true)}
                     className="px-8 border-2"
                   >
-                    <XCircle className="h-4 w-4 mr-2" /> Từ chối
+                    <XCircle className="h-4 w-4" /> Từ chối
                   </Button>
                   <Button
                     variant="success"
                     onClick={handleApprove}
                     className="px-8 border-2"
                   >
-                    <CheckCircle2 className="h-4 w-4 mr-2" /> Chấp nhận
+                    <CheckCircle2 className="h-4 w-4" /> Chấp nhận
                   </Button>
                 </>
               )}
@@ -189,7 +189,7 @@ function UpdateReturnRequestModal({
                     onClick={() => setIsOpenAssignWarehouseModal(true)}
                     className="px-8 shadow-lg shadow-green-200"
                   >
-                    <CheckCircle2 className="h-4 w-4 mr-2" /> Điều phối kho
+                    <CheckCircle2 className="h-4 w-4" /> Điều phối kho
                   </Button>
                 )}
             </DialogFooter>
