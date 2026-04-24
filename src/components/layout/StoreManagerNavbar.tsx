@@ -35,7 +35,7 @@ const StoreManagerNavbar = () => {
           {open ? <ChevronLeft /> : <Menu />}
         </Button>
         <h5 className="font-semibold text-lg">
-          Hệ thống dành cho nhân viên đối tác
+          Hệ thống dành cho quản lý cửa hàng
         </h5>
       </div>
       {/*right */}

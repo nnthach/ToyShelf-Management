@@ -18,6 +18,7 @@ import {
 import {
   approveRefillRequestByPartnerAPI,
   getRefillDetailAPI,
+  rejectRefillRequestAPI,
 } from "@/src/services/refill.service";
 import { getShipmentDetailByStoreOrderIdAPI } from "@/src/services/shipment.service";
 import { RefillRequestProductColor, Shipment } from "@/src/types";
@@ -31,6 +32,7 @@ import {
   User,
   UserCheck,
   Warehouse,
+  XCircle,
 } from "lucide-react";
 import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
@@ -85,6 +87,30 @@ function ViewRefillRequestModalDetail({
       toast.success("Chấp nhận yêu cầu thành công");
     } catch (error) {
       toast.error(getErrorMessage(error, "Chấp nhận yêu cầu thất bại"));
+    } finally {
+      setIsApproving(false);
+    }
+  }
+
+  async function handleReject() {
+    setIsApproving(true);
+
+    try {
+      await rejectRefillRequestAPI(requestId);
+
+      queryClient.invalidateQueries({
+        queryKey: ["refillRequests"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["storeOrderDetail", requestId],
+      });
+
+      toast.success("Từ chối yêu cầu thành công");
+
+      onClose();
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Từ chối yêu cầu thất bại"));
     } finally {
       setIsApproving(false);
     }
@@ -492,19 +518,34 @@ function ViewRefillRequestModalDetail({
           <div className="p-4 border-t bg-white">
             <DialogFooter className="gap-2">
               {storeOrderDetail?.status === "Pending" && (
-                <Button
-                  variant="success"
-                  onClick={handleApprove}
-                  disabled={isApproving}
-                  className="px-8 border-2"
-                >
-                  {isApproving ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <CheckCircle2 className="h-4 w-4 mr-2" />
-                  )}
-                  Chấp nhận
-                </Button>
+                <>
+                  <Button
+                    variant="error"
+                    onClick={handleReject}
+                    disabled={isApproving}
+                    className="px-8 border-2"
+                  >
+                    {isApproving ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <XCircle className="h-4 w-4 mr-2" />
+                    )}
+                    Từ chối
+                  </Button>
+                  <Button
+                    variant="success"
+                    onClick={handleApprove}
+                    disabled={isApproving}
+                    className="px-8 border-2"
+                  >
+                    {isApproving ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                    )}
+                    Chấp nhận
+                  </Button>
+                </>
               )}
             </DialogFooter>
           </div>

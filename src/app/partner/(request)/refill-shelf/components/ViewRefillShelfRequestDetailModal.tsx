@@ -30,6 +30,7 @@ import {
   User,
   UserCheck,
   Warehouse,
+  XCircle,
 } from "lucide-react";
 import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
@@ -506,19 +507,28 @@ function ViewRefillShelfRequestModalDetail({
           <div className="p-4 border-t bg-white">
             <DialogFooter className="gap-2">
               {storeOrderShelfDetail?.status === "Pending" && (
-                <Button
-                  variant="success"
-                  onClick={handleApprove}
-                  disabled={isApproving}
-                  className="px-8 border-2"
-                >
-                  {isApproving ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <CheckCircle2 className="h-4 w-4 mr-2" />
-                  )}
-                  Chấp nhận
-                </Button>
+                <>
+                  <Button
+                    variant="error"
+                    // onClick={() => setIsOpenRejectModal(true)}
+                    className="px-8 border-2"
+                  >
+                    <XCircle className="h-4 w-4 mr-2" /> Từ chối
+                  </Button>
+                  <Button
+                    variant="success"
+                    onClick={handleApprove}
+                    disabled={isApproving}
+                    className="px-8 border-2"
+                  >
+                    {isApproving ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                    )}
+                    Chấp nhận
+                  </Button>
+                </>
               )}
             </DialogFooter>
           </div>

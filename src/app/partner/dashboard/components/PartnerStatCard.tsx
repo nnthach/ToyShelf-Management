@@ -25,7 +25,7 @@ function PartnerStatCard() {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mb-4">
       <FilterStatCard
         query={query}
         updateQuery={updateQuery}

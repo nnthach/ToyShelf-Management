@@ -357,8 +357,8 @@ export const formatOrderStatusText = (status: string) => {
       return "Đã thanh toán";
     case "CANCELED":
       return "Đã hủy";
-    case "Partner":
-      return "Nhân viên đối tác";
+    case "CREATED":
+      return "Đã tạo";
     case "PartnerAdmin":
       return "Đối tác";
     case "Admin":
@@ -370,12 +370,8 @@ export const formatOrderStatusColor = (status: string) => {
   switch (status) {
     case "PAID":
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
-    case "Warehouse":
-      return "bg-purple-100 text-purple-800 px-3 py-1 rounded-2xl";
-    case "Partner":
-      return "bg-teal-100 text-teal-800 px-3 py-1 rounded-2xl";
-    case "PartnerAdmin":
-      return "bg-indigo-100 text-indigo-800 px-3 py-1 rounded-2xl";
+    case "CREATED":
+      return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
     case "CANCELED":
       return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
     default:
