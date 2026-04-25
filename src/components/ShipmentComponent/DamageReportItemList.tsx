@@ -156,7 +156,7 @@ const ShelfDamageItem = ({ item }: { item: DamageReportItem }) => {
   return (
     <div className="flex items-start justify-between gap-3">
       <div className="flex items-start gap-3 flex-1 min-w-0">
-        <div className="h-12 w-12 rounded-lg border border-orange-200 bg-orange-50 flex-shrink-0 flex items-center justify-center shadow-sm">
+        <div className="h-12 w-12 rounded-lg border border-slate-200 bg-slate-100 flex-shrink-0 overflow-hidden relative shadow-sm">
           {item?.shelf?.imageUrl ? (
             <Image
               src={item?.shelf?.imageUrl}
