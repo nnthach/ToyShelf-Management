@@ -1,82 +1,69 @@
-import { useEffect, useRef, useState, useCallback } from "react";
 import * as signalR from "@microsoft/signalr";
+import { useEffect, useRef } from "react";
+import { Notification } from "../types";
+import { useQueryClient } from "@tanstack/react-query";
 
-interface UseSignalROptions {
-  url: string;
-  onConnected?: () => void;
-  onDisconnected?: () => void;
-  onError?: (error: Error) => void;
-}
-
-export type SignalRStatus =
-  | "connecting"
-  | "connected"
-  | "disconnected"
-  | "error";
+type UseSignalROptions = {
+  userId?: string;
+  role: string;
+  onSystemMessage?: (msg: string) => void;
+  onNotification?: (data: Notification) => void;
+};
 
 export function useSignalR({
-  url,
-  onConnected,
-  onDisconnected,
-  onError,
+  userId,
+  role,
+  onSystemMessage,
+  onNotification,
 }: UseSignalROptions) {
-  const [status, setStatus] = useState<SignalRStatus>("connecting");
   const connectionRef = useRef<signalR.HubConnection | null>(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (connectionRef.current) return;
-
-    let isCancelled = false; // ← flag này
+    if (!userId) return;
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(url)
-      .withAutomaticReconnect()
+      .withUrl("https://toyshelf.io.vn/hubs/notification", {
+        transport: signalR.HttpTransportType.LongPolling,
+        skipNegotiation: false,
+      })
       .configureLogging(signalR.LogLevel.Information)
+      .withAutomaticReconnect()
       .build();
 
     connectionRef.current = connection;
 
-    connection.onclose(() => {
-      setStatus("disconnected");
-      onDisconnected?.();
-    });
-    connection.onreconnecting(() => setStatus("connecting"));
-    connection.onreconnected(() => {
-      setStatus("connected");
-      onConnected?.();
+    if (onSystemMessage) {
+      connection.on("ReceiveSystemMessage", onSystemMessage);
+    }
+
+    if (onNotification) {
+      connection.on("ReceiveNewNotification", onNotification);
+      console.log("onNotification", onNotification);
+    }
+
+    connection.onreconnected(async () => {
+      console.log("Reconnected");
+      await connection.invoke("JoinSystem", userId, role);
     });
 
-    connection
-      .start()
-      .then(() => {
-        if (isCancelled) return; // ← nếu đã bị cleanup thì bỏ qua
-        setStatus("connected");
-        onConnected?.();
-      })
-      .catch((err: Error) => {
-        if (isCancelled) return; // ← bỏ qua lỗi do cleanup gây ra
-        setStatus("error");
-        onError?.(err);
-        console.error("SignalR connection error:", err);
-      });
+    const start = async () => {
+      try {
+        await connection.start();
+        console.log("Connected");
+
+        await connection.invoke("JoinSystem", userId, role);
+      } catch (err) {
+        console.error("SignalR error:", err);
+      }
+    };
+
+    start();
 
     return () => {
-      isCancelled = true; // ← đánh dấu đã cleanup
-      connectionRef.current = null;
-      connection.stop(); // stop sau khi set null để tránh reuse
+      connection.stop();
     };
-  }, [url]);
+  }, [userId, role, onSystemMessage, onNotification]);
 
-  const on = useCallback(
-    <T extends unknown[]>(event: string, handler: (...args: T) => void) => {
-      const conn = connectionRef.current;
-      if (!conn) return () => {};
-
-      conn.on(event, handler as (...args: unknown[]) => void);
-      return () => conn.off(event, handler as (...args: unknown[]) => void);
-    },
-    [],
-  );
-
-  return { status, on };
+  return connectionRef;
 }

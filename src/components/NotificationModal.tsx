@@ -13,7 +13,6 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDateTime } from "../utils/format";
 import { Notification } from "../types";
-import { useSidebar } from "../styles/components/ui/sidebar";
 import { Button } from "../styles/components/ui/button";
 
 function NotificationModal() {
@@ -46,9 +45,15 @@ function NotificationModal() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" className="relative">
           <Bell className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Notification</span>
+
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
         </Button>
       </PopoverTrigger>
 
