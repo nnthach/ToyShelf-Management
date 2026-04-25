@@ -17,7 +17,7 @@ import { getAllProductColorColorAPI } from "@/src/services/product.service";
 import { ProductColorItem } from "@/src/types";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@/src/hooks/useDebounce";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ReturnItemProps {
   index: number;
@@ -37,6 +37,7 @@ function ReturnItem({
   const [searchProduct, setSearchProduct] = useState("");
   const debounceSearch = useDebounce(searchProduct, 500);
   const [openDropdown, setOpenDropdown] = useState(false);
+  const { watch, setValue } = form;
 
   // product color
   const { data: productColorIdList = [] } = useQuery({
@@ -69,6 +70,14 @@ function ReturnItem({
       label: "Đồ chơi",
     },
   ];
+
+  const typeValue = watch(`items.${index}.type`);
+
+  useEffect(() => {
+    if (typeValue === "Shelf") {
+      setValue(`items.${index}.quantity`, 1);
+    }
+  }, [typeValue]);
 
   return (
     <div className="group relative bg-white border border-slate-200 p-4 rounded-xl shadow-sm hover:border-blue-200 transition-all">
@@ -163,6 +172,7 @@ function ReturnItem({
             placeholder="0"
             icon={<Hash size={16} />}
             required
+            disabled={typeValue === "Shelf"}
           />
 
           {/* Hàng 2: Sản phẩm (Chiếm full ngang nếu cần hoặc chia đôi) */}

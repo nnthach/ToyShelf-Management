@@ -34,6 +34,7 @@ import {
   Truck,
   User,
   UserCheck,
+  UserX,
   Warehouse,
 } from "lucide-react";
 import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
@@ -159,9 +160,9 @@ function ViewRefillShelfRequestModalDetail({
                     />
                     {storeOrderShelfDetail?.status === "Rejected" ? (
                       <ShipInfoItem
-                        label="Quản trị viên từ chối"
+                        label="Người từ chối"
                         value={storeOrderShelfDetail?.rejectName}
-                        icon={<User className="h-3 w-3" />}
+                        icon={<UserX className="h-3 w-3" />}
                       />
                     ) : (
                       <ShipInfoItem

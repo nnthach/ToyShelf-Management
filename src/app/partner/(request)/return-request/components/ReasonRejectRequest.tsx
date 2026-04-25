@@ -76,8 +76,8 @@ function ReasonRejectRequestModal({
               Từ chối đơn trả hàng
             </DialogTitle>
             <DialogDescription>
-              Vui lòng cung cấp lý do cụ thể để chủ cửa hàng có thể điều chỉnh
-              lại thông tin.
+              Vui lòng cung cấp lý do cụ thể để cửa hàng có thể điều chỉnh lại
+              thông tin.
             </DialogDescription>
           </div>
         </DialogHeader>

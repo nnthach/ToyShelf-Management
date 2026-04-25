@@ -14,7 +14,6 @@ import { AlertCircle, Send, XCircle } from "lucide-react";
 import { rejectRefillShelfRequestAPI } from "@/src/services/refill-shelf.service";
 import { useState } from "react";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
-import { rejectDamageReportRequestAPI } from "@/src/services/damage-report.service";
 
 type ReasonRejectRequestModalProps = {
   requestId: string;
@@ -37,10 +36,10 @@ function ReasonRejectRequestModal({
   async function handleReject() {
     setIsSubmitting(true);
     try {
-      await rejectDamageReportRequestAPI(requestId, rejectReason);
+      await rejectRefillShelfRequestAPI(requestId, rejectReason);
 
       queryClient.invalidateQueries({
-        queryKey: ["returnRequests"],
+        queryKey: ["refillShelfRequests"],
       });
 
       toast.success("Từ chối yêu cầu thành công");
@@ -73,10 +72,10 @@ function ReasonRejectRequestModal({
 
           <div className="text-center space-y-1">
             <DialogTitle className="text-xl font-bold text-red-700">
-              Từ chối đơn trả hàng
+              Từ chối đơn đặt kệ
             </DialogTitle>
             <DialogDescription>
-              Vui lòng cung cấp lý do cụ thể để chủ cửa hàng có thể điều chỉnh
+              Vui lòng cung cấp lý do cụ thể để cửa hàng có thể điều chỉnh
               lại thông tin.
             </DialogDescription>
           </div>

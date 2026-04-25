@@ -35,7 +35,10 @@ export const partnerApproveDamageReportRequestAPI = async <T>(id: string) => {
   return res.data;
 };
 
-export const rejectDamageReportRequestAPI = async (id: string) => {
-  const res = await api.patch(`/DamageReport/${id}/reject`);
+export const rejectDamageReportRequestAPI = async (
+  id: string,
+  reason?: string,
+) => {
+  const res = await api.patch(`/DamageReport/${id}/reject`, reason);
   return res.data;
 };

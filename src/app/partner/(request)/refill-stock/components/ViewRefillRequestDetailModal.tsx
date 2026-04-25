@@ -31,6 +31,7 @@ import {
   Truck,
   User,
   UserCheck,
+  UserX,
   Warehouse,
   XCircle,
 } from "lucide-react";
@@ -207,9 +208,9 @@ function ViewRefillRequestModalDetail({
                     {storeOrderDetail?.status === "Rejected" ? (
                       <>
                         <ShipInfoItem
-                          label="Quản trị viên từ chối"
+                          label="Người từ chối"
                           value={storeOrderDetail?.rejectName}
-                          icon={<User className="h-3.5 w-3.5" />}
+                          icon={<UserX className="h-3.5 w-3.5" />}
                         />
                         <ShipInfoItem
                           label="Thời gian từ chối"

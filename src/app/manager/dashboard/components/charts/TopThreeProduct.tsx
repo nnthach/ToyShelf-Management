@@ -53,7 +53,7 @@ const TopThreeProduct = () => {
       <CardContent className="p-0 flex flex-1 flex-col gap-3">
         {topSelling?.map((product, index) => (
           <div
-            key={product.id}
+            key={index}
             onClick={() => openById(product.id)}
             className={`
         group relative cursor-pointer p-3 flex flex-col rounded-2xl border border-transparent transition-all hover:border-blue-100 hover:shadow-md

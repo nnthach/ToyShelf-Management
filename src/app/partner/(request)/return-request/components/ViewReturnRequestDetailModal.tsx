@@ -49,6 +49,7 @@ import { getShipmentDetailByDamageReportIdAPI } from "@/src/services/shipment.se
 import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import ReasonRejectRequestModal from "./ReasonRejectRequest";
 
 type ViewReturnRequestModalDetailProps = {
   requestId: string;
@@ -64,6 +65,8 @@ function ViewReturnRequestModalDetail({
   const queryClient = useQueryClient();
 
   const [isApproving, setIsApproving] = useState(false);
+
+  const [isOpenRejectModal, setIsOpenRejectModal] = useState(false);
 
   const { data: damageRequestDetail, isLoading } = useQuery({
     queryKey: ["damageRequestDetail", requestId],
@@ -390,7 +393,7 @@ function ViewReturnRequestModalDetail({
                 <>
                   <Button
                     variant="error"
-                    // onClick={() => setIsOpenRejectModal(true)}
+                    onClick={() => setIsOpenRejectModal(true)}
                     className="px-8 border-2"
                   >
                     <XCircle className="h-4 w-4" /> Từ chối
@@ -414,6 +417,13 @@ function ViewReturnRequestModalDetail({
           </div>
         </DialogContent>
       </Dialog>
+
+      <ReasonRejectRequestModal
+        requestId={requestId}
+        isOpen={isOpenRejectModal}
+        onClose={() => setIsOpenRejectModal(false)}
+        onSuccess={onClose}
+      />
     </>
   );
 }
