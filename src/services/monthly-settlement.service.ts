@@ -5,6 +5,14 @@ export const getAllMonthlySettlementAPI = async <T>(params: T) => {
   return res.data;
 };
 
+export const exportMonthlySettlementAPI = async <T>(params: T) => {
+  const res = await api.get("/MonthlySettlement/export-excel", {
+    params,
+    responseType: "blob",
+  });
+  return res.data;
+};
+
 export const getMonthlySettlementDetailAPI = async (id: string) => {
   const res = await api.get(`/MonthlySettlement/${id}`);
   return res.data;

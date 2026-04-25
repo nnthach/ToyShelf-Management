@@ -9,8 +9,12 @@ import { QueryParams } from "@/src/types/SubType";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
 import { getAllMonthlySettlementAPI } from "@/src/services/monthly-settlement.service";
+import { useState } from "react";
+import ExportMonthlySettlement from "./components/ExportMonthlySettlement";
 
 export default function AdminMonthlySettlementManage() {
+  const [isOpenExportModal, setIsOpenExportModal] = useState(false);
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: undefined,
     year: undefined,
@@ -69,13 +73,21 @@ export default function AdminMonthlySettlementManage() {
             />
 
             <div className="space-x-3">
-              <Button variant={"outline"}>
+              <Button
+                variant={"outline"}
+                onClick={() => setIsOpenExportModal(true)}
+              >
                 <Upload /> Xuất dữ liệu
               </Button>
             </div>
           </div>
         </DataTable>
       </div>
+
+      <ExportMonthlySettlement
+        isOpen={isOpenExportModal}
+        onClose={() => setIsOpenExportModal(false)}
+      />
     </div>
   );
 }
