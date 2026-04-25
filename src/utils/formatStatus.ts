@@ -260,11 +260,11 @@ export const formatStoreOrderRefillRequestStatusColor = (status: string) => {
 export const formatMonthlySettlementStatusText = (status: string) => {
   switch (status) {
     case "PENDING":
-      return "Đang chờ duyệt";
+      return "Đang chờ";
     case "PAID":
       return "Đã thanh toán";
     case "RECEIVED":
-      return "Đối tác đã nhận";
+      return "Đã nhận tiền";
     default:
       return "N/A";
   }

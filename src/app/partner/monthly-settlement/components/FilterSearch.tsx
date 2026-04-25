@@ -55,16 +55,15 @@ export default function FilterSearch({
   });
 
   const isFiltered =
-    (showStatus && query.status !== "") ||
-    (showMonth && query.month !== 0) ||
-    (showYear && query.year !== 0) ||
-    (showPartner && query.partnerId !== "");
+    (showStatus && query.status !== undefined && query.status !== "") ||
+    (showMonth && query.month !== undefined && query.month !== 0) ||
+    (showYear && query.year !== undefined && query.year !== 0);
 
   const handleApply = () => {
     onApplyFilter({
-      status: tempFilter.status,
-      month: tempFilter.month || undefined,
-      year: tempFilter.year || undefined,
+      status: tempFilter.status || undefined,
+      month: tempFilter.month > 0 ? tempFilter.month : undefined,
+      year: tempFilter.year > 0 ? tempFilter.year : undefined,
       partnerId: tempFilter.partnerId || undefined,
     });
   };
@@ -96,10 +95,8 @@ export default function FilterSearch({
             {showYear && (
               <div className="grid gap-2">
                 <Label>Năm</Label>
-                <input
-                  type="number"
+                <select
                   className="border rounded-md h-9 px-2"
-                  placeholder="Nhập năm"
                   value={tempFilter.year || ""}
                   onChange={(e) =>
                     setTempFilter((p) => ({
@@ -107,7 +104,17 @@ export default function FilterSearch({
                       year: parseInt(e.target.value) || 0,
                     }))
                   }
-                />
+                >
+                  <option value="">Tất cả</option>
+                  {Array.from({ length: 5 }, (_, i) => {
+                    const year = new Date().getFullYear() - i;
+                    return (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
             )}
 
@@ -141,21 +148,17 @@ export default function FilterSearch({
                 <Label>Trạng thái</Label>
                 <select
                   className="border rounded-md h-9 px-2"
-                  value={
-                    tempFilter.status === undefined || tempFilter.status === ""
-                      ? "all"
-                      : String(tempFilter.status)
-                  }
+                  value={tempFilter.status || ""}
                   onChange={(e) =>
                     setTempFilter((p) => ({
                       ...p,
-                      status: e.target.value === "all" ? "" : e.target.value,
+                      status: e.target.value || undefined,
                     }))
                   }
                 >
-                  <option value="all">Tất cả</option>
-                  <option value="true">Hoạt động</option>
-                  <option value="false">Không hoạt động</option>
+                  <option value="">Tất cả</option>
+                  <option value="PAID">Đã thanh toán</option>
+                  <option value="RECEIVED">Đã nhận tiền</option>
                 </select>
               </div>
             )}

@@ -2,8 +2,6 @@
 
 import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getMonthlySettlementColumns } from "./columns";
-import { Button } from "@/src/styles/components/ui/button";
-import { Upload } from "lucide-react";
 import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import useQueryParams from "@/src/hooks/useQueryParams";
@@ -16,9 +14,9 @@ export default function PartnerMonthlySettlementManage() {
   const { partner } = useAuth();
   const partnerId = partner?.partnerId;
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-    // year: 0,
-    // month: 0,
+    status: undefined,
+    year: undefined,
+    month: undefined,
     partnerId: partnerId,
   });
 

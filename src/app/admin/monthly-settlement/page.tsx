@@ -12,10 +12,10 @@ import { getAllMonthlySettlementAPI } from "@/src/services/monthly-settlement.se
 
 export default function AdminMonthlySettlementManage() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    status: "",
-    // year: 0,
-    // month: 0,
-    partnerId: "",
+    status: undefined,
+    year: undefined,
+    month: undefined,
+    partnerId: undefined,
   });
 
   const {
