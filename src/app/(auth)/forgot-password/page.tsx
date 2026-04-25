@@ -16,7 +16,15 @@ import {
 import { FieldGroup, FieldLabel } from "@/src/styles/components/ui/field";
 import { Input } from "@/src/styles/components/ui/input";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
-import { ArrowLeft, Eye, EyeOff, LogIn, LogOut, Mail } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  Eye,
+  EyeOff,
+  LogIn,
+  LogOut,
+  Mail,
+} from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -280,7 +288,7 @@ export default function ForgotPasswordPage() {
                 className="w-[48%] bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-lg shadow-blue-500/25 transition-all active:scale-95"
                 disabled={isLoading}
               >
-                <LogIn />
+                <Check />
                 Cập nhật mật khẩu
               </Button>
             </>
