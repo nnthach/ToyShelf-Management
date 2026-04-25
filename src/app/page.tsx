@@ -114,9 +114,9 @@ export default function HomePage() {
           {/* Stats Preview */}
           <div className="space-y-4">
             {[
-              { icon: "💰", label: "Doanh thu", val: "250,520 VND" },
-              { icon: "📦", label: "Đơn hàng", val: "15,640" },
-              { icon: "🤝", label: "Đối tác", val: "153" },
+              { icon: "💰", label: "Doanh thu", val: "2,400,000,000+ VND" },
+              { icon: "📦", label: "Đơn hàng", val: "150,000+" },
+              { icon: "🤝", label: "Đối tác", val: "1,200+" },
             ].map((item, i) => (
               <div
                 key={i}
