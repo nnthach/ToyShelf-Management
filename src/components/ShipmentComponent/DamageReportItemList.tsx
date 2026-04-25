@@ -157,12 +157,22 @@ const ShelfDamageItem = ({ item }: { item: DamageReportItem }) => {
     <div className="flex items-start justify-between gap-3">
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <div className="h-12 w-12 rounded-lg border border-orange-200 bg-orange-50 flex-shrink-0 flex items-center justify-center shadow-sm">
-          <Warehouse className="h-6 w-6 text-orange-500" />
+          {item?.shelf?.imageUrl ? (
+            <Image
+              src={item?.shelf?.imageUrl}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="48px"
+            />
+          ) : (
+            <Warehouse className="h-6 w-6 text-orange-500" />
+          )}
         </div>
 
         <div className="min-w-0 flex-1 flex flex-col gap-1.5">
           <h5 className="font-bold text-[13px] text-slate-800 leading-snug truncate">
-            Kệ: {item?.shelf?.shelfName || "N/A"}
+            {item?.shelf?.shelfName || "N/A"}
           </h5>
 
           <div className="flex flex-wrap items-center gap-1.5">
