@@ -14,11 +14,23 @@ import {
 
 export const getOrderColumns = (): ColumnDef<Order>[] => [
   {
+    accessorKey: "orderCode",
+    header: "Mã đơn hàng",
+    cell: ({ row }) => {
+      const { orderCode } = row.original;
+      return <p className="font-semibold">{orderCode}</p>;
+    },
+  },
+  {
+    accessorKey: "bankReference",
+    header: "Mã giao dịch",
+  },
+  {
     accessorKey: "storeName",
     header: "Cửa hàng",
     cell: ({ row }) => {
-      const { storeName } = row.original;
-      return <p className="font-semibold">{storeName}</p>;
+      const value = row.getValue("storeName") as string;
+      return <span className="font-medium text-blue-600">{value}</span>;
     },
   },
   {
@@ -39,13 +51,14 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
     header: "Tổng tiền",
     cell: ({ row }) => {
       const value = row.getValue("totalAmount") as number;
-      return <span>{value?.toLocaleString("vi-VN")}đ</span>;
+      return (
+        <span className="font-semibold text-green-600">
+          {value?.toLocaleString("vi-VN")}đ
+        </span>
+      );
     },
   },
-  {
-    accessorKey: "paymentMethod",
-    header: "Phương thức thanh toán",
-  },
+
   {
     accessorKey: "status",
     header: "Trạng thái",

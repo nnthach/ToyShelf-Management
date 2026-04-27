@@ -3,16 +3,25 @@
 import React from "react";
 import { useAuth } from "@/src/hooks/useAuth";
 import BannerInfo from "./components/BannerInfo";
-import { useRouter } from "next/navigation";
 import StoreStatCard from "./components/StoreStatCard";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 import TotalRevenueChart from "./components/charts/TotalRevenueChart";
 import TotalOrderChart from "./components/charts/TotalOrderChart";
 import TopThreeProduct from "./components/charts/TopThreeProduct";
+import { useQuery } from "@tanstack/react-query";
+import { getStoreDetailAPI } from "@/src/services/store.service";
 
 export default function StoreManagerDashboard() {
   const { user, myStore } = useAuth();
-  const router = useRouter();
+
+  const storeId = myStore?.storeId;
+
+  const { data: storeDetail, isLoading } = useQuery({
+    queryKey: ["store", storeId],
+    queryFn: () => getStoreDetailAPI(storeId!),
+    select: (res) => res.data,
+    enabled: !!storeId,
+  });
 
   if (!myStore) {
     return <LoadingPageComponent />;
@@ -21,7 +30,7 @@ export default function StoreManagerDashboard() {
   return (
     <div className="space-y-6">
       {/* Banner thông tin Manager */}
-      <BannerInfo />
+      <BannerInfo storeDetail={storeDetail}/>
 
       {/*Statistic card */}
       <StoreStatCard storeId={myStore?.storeId || ""} />

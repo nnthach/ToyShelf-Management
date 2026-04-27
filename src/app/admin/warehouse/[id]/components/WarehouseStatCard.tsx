@@ -7,7 +7,13 @@ import { Box, PackageCheck, Server } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
 
-function WarehouseStatCard({ warehouseId }: { warehouseId: string }) {
+function WarehouseStatCard({
+  warehouseId,
+  inventoryLocationId,
+}: {
+  warehouseId: string;
+  inventoryLocationId: string;
+}) {
   const router = useRouter();
 
   const { query, updateQuery, isFiltered, resetDates, apiFormattedDates } =
@@ -39,16 +45,26 @@ function WarehouseStatCard({ warehouseId }: { warehouseId: string }) {
           color="bg-green-100 text-green-900"
         />
         <StatCardWithButton
-          title="Hàng Tồn kho"
+          title="Hàng trong kho"
           value={warehouseStatCard?.totalInventory}
           icon={Box}
           color="bg-blue-100 text-blue-900"
+          action={() =>
+            router.push(
+              `/admin/all-inventory?locationId=${inventoryLocationId}`,
+            )
+          }
         />
         <StatCardWithButton
-          title="Kệ Tồn Kho"
+          title="Kệ trong kho"
           value={warehouseStatCard?.totalShelves}
           icon={Server}
-          color="bg-purple-100 text-purple-900"
+          color="bg-orange-100 text-orange-900"
+          action={() =>
+            router.push(
+              `/admin/shelf-inventory?locationId=${inventoryLocationId}`,
+            )
+          }
         />
       </div>
     </div>

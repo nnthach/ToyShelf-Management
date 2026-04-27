@@ -20,7 +20,8 @@ export default function AdminOrderManagement() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     storeId: "",
     partnerId: "",
-    email: "",
+    searchTerm: "",
+    date: "",
   });
 
   const {
@@ -56,7 +57,7 @@ export default function AdminOrderManagement() {
           Danh sách đơn hàng
         </h1>
         <p className="text-gray-500 dark:text-gray-200">
-          Bộ lọc thông minh theo đối tác và cửa hàng trong hệ thống
+          Bộ lọc thông minh theo đơn hàng của đối tác và cửa hàng
         </p>
       </div>
       {/*Table */}
@@ -73,7 +74,7 @@ export default function AdminOrderManagement() {
               partnerList={partnerList}
               storeList={storeList}
               resultCount={orderList.length}
-              onSearch={(val) => updateQuery({ email: val })}
+              onSearch={(val) => updateQuery({ searchTerm: val })}
               onPartnerChange={setTempPartnerId}
               onApplyFilter={(filter) =>
                 updateQuery({

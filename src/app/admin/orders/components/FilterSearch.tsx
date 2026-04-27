@@ -20,7 +20,11 @@ type FilterBarProps = {
   storeList: Store[];
   resultCount?: number;
   onSearch: (val: string) => void;
-  onApplyFilter: (val: { storeId?: string; partnerId?: string }) => void;
+  onApplyFilter: (val: {
+    storeId?: string;
+    partnerId?: string;
+    date?: string;
+  }) => void;
   onReset: () => void;
   onRefresh?: () => void;
   onPartnerChange?: (partnerId: string) => void;
@@ -37,7 +41,7 @@ export default function FilterSearch({
   onRefresh,
   onPartnerChange,
 }: FilterBarProps) {
-  const [searchInput, setSearchInput] = useState(query.email ?? "");
+  const [searchInput, setSearchInput] = useState(query.searchTerm ?? "");
   const debouncedSearch = useDebounce(searchInput, 500);
 
   useEffect(() => {
@@ -47,18 +51,24 @@ export default function FilterSearch({
   const [tempFilter, setTempFilter] = useState<{
     storeId?: string;
     partnerId?: string;
+    date?: string;
   }>({
     storeId: query.storeId ?? "",
     partnerId: query.partnerId ?? "",
+    date: query.date ?? "",
   });
 
   const isFiltered =
-    query.email || query.storeId !== "" || query.partnerId !== "";
+    query.searchTerm ||
+    query.storeId !== "" ||
+    query.partnerId !== "" ||
+    query.date !== "";
 
   const handleApply = () => {
     onApplyFilter({
       partnerId: tempFilter.partnerId || undefined,
       storeId: tempFilter.storeId || undefined,
+      date: tempFilter.date || undefined,
     });
   };
 
@@ -67,6 +77,7 @@ export default function FilterSearch({
     setTempFilter({
       partnerId: "",
       storeId: "",
+      date: "",
     });
     onReset();
   };
@@ -128,6 +139,21 @@ export default function FilterSearch({
               </select>
             </div>
 
+            <div className="grid gap-2">
+              <Label>Ngày</Label>
+              <input
+                type="date"
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.date || ""}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    date: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
             <PopoverClose asChild>
               <Button onClick={handleApply}>Áp dụng</Button>
             </PopoverClose>
@@ -139,7 +165,7 @@ export default function FilterSearch({
       <div className="relative w-[250px]">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <Input
-          placeholder="Nhập email khác hàng"
+          placeholder="Tìm kiếm đơn hàng..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           disabled={loading}

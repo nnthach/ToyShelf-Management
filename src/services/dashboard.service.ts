@@ -15,11 +15,21 @@ export const getDashboardStoreStatCard = async <T>(params: T, id?: string) => {
   return res.data;
 };
 
+export const getDashboardStoreInventoryStatCard = async <T>(id?: string) => {
+  const res = await api.get(`/Dashboard/stat-card/store/${id}/inventory`);
+  return res.data;
+};
+
 export const getDashboardWarehouseStatCard = async <T>(
   params?: T,
   id?: string,
 ) => {
-  const res = await api.get(`/Dashboard/warehouse/${id}`, { params });
+  const res = await api.get(`/Dashboard/warehouse/${id}/stat-card`, { params });
+  return res.data;
+};
+
+export const getDashboardWarehouseChart = async <T>(params: T, id?: string) => {
+  const res = await api.get(`/Dashboard/warehouse/${id}/chart`, { params });
   return res.data;
 };
 

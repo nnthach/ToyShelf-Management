@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/src/styles/components/ui/sheet";
-import { getOrderDetailAPI } from "@/src/services/order.service";
+import { getOrderDetailPartnerAPI } from "@/src/services/order.service";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import {
@@ -28,9 +28,9 @@ import { useState } from "react";
 function ViewDetailSheet({ orderCode }: { orderCode: number }) {
   const [open, setOpen] = useState(false);
 
-  const { data: orderDetail, isLoading } = useQuery({
-    queryKey: ["order", orderCode],
-    queryFn: () => getOrderDetailAPI(orderCode),
+  const { data: orderDetailPartner } = useQuery({
+    queryKey: ["orderPartner", orderCode],
+    queryFn: () => getOrderDetailPartnerAPI(orderCode),
     select: (res) => res.data,
     enabled: !!orderCode && open,
   });
@@ -51,16 +51,16 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
           <div className="flex justify-between items-center">
             <SheetTitle className="flex items-center gap-2 text-xl">
               <Package className="text-blue-600" size={24} />
-              Đơn hàng #{orderDetail?.orderCode || 0}
+              Đơn hàng #{orderDetailPartner?.orderCode || 0}
             </SheetTitle>
             <span
-              className={`px-3 py-1 rounded-full text-sm mr-4 font-bold shadow-sm ${formatOrderStatusColor(orderDetail?.status || "")}`}
+              className={`px-3 py-1 rounded-full text-sm mr-4 font-bold shadow-sm ${formatOrderStatusColor(orderDetailPartner?.status || "")}`}
             >
-              {formatOrderStatusText(orderDetail?.status || "")}
+              {formatOrderStatusText(orderDetailPartner?.status || "")}
             </span>
           </div>
         </SheetHeader>
-        {!orderDetail ? (
+        {!orderDetailPartner ? (
           <div className="p-6">Loading...</div>
         ) : (
           <>
@@ -74,25 +74,26 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
                   <div className="space-y-1">
                     <p className="text-sm text-slate-500">Tên khách hàng</p>
                     <p className="font-semibold text-md">
-                      {orderDetail.customerName}
+                      {orderDetailPartner.customerName}
                     </p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm text-slate-500">Email</p>
                     <p className="font-semibold text-md flex items-center gap-1">
-                      {orderDetail.customerEmail}
+                      {orderDetailPartner.customerEmail}
                     </p>
                   </div>
                   <div className="space-y-1 col-span-2">
                     <p className="text-sm text-slate-500">Cửa hàng</p>
                     <p className="font-semibold text-md flex items-center gap-1">
-                      {orderDetail.storeName}
+                      {orderDetailPartner.storeName}
                     </p>
                   </div>
                   <div className="space-y-1 col-span-2">
                     <p className="text-sm text-slate-500">Nhân viên</p>
                     <p className="font-semibold text-md flex items-center gap-1">
-                      {orderDetail.staffName} - {orderDetail.staffEmail}
+                      {orderDetailPartner?.staffName || "N/A"} -{" "}
+                      {orderDetailPartner?.staffEmail || "N/A"}
                     </p>
                   </div>
                 </div>
@@ -102,47 +103,80 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
               <section className="space-y-4">
                 <h3 className="text-sm font-bold uppercase tracking-wider text-slate-600 flex items-center gap-2">
                   <ShoppingBag size={14} /> Danh sách sản phẩm (
-                  {orderDetail.items?.length || 0})
+                  {orderDetailPartner.items?.length || 0})
                 </h3>
                 <div className="space-y-3">
-                  {orderDetail.items?.map(
+                  {orderDetailPartner.items?.map(
                     (item: RefillRequestProductColor, index: number) => (
                       <div
                         key={index}
-                        className="flex gap-4 p-2 border rounded-xl hover:bg-slate-50 transition-colors"
+                        className="flex gap-4 p-3 border rounded-xl hover:bg-slate-50 transition-colors"
                       >
-                        <div className="relative w-18 h-18 rounded-lg overflow-hidden border shrink-0 bg-gray-50 flex items-center justify-center">
+                        {/* Ảnh sản phẩm */}
+                        <div className="relative w-24 h-24 rounded-lg overflow-hidden border shrink-0 bg-gray-50 flex items-center justify-center">
                           {item?.imageUrl ? (
                             <Image
                               src={
                                 item.imageUrl ||
                                 "/images/placeholder-product.png"
                               }
-                              alt={item.productName || "N/A"}
+                              alt={item.productName || "Product"}
                               fill
                               className="object-contain p-1"
                             />
                           ) : (
-                            <Package size={20} className="text-slate-300" /> // Hiển thị icon nếu không có ảnh
+                            <Package size={24} className="text-slate-300" />
                           )}
                         </div>
-                        <div className="flex-1 min-w-0 flex flex-col justify-center">
-                          <h4 className="font-bold text-md truncate">
-                            {item.productName}
-                          </h4>
-                          <p className="text-xs text-slate-500 font-mono uppercase">
-                            {item.sku}
-                          </p>
+
+                        {/* Nội dung thông tin */}
+                        <div className="flex-1 min-w-0 flex flex-col justify-between">
+                          {/* Phần trên: Tên sản phẩm & SKU */}
+                          <div>
+                            <h4 className="font-bold text-slate-800 truncate">
+                              {item.productName}
+                            </h4>
+                            <p className="text-[10px] text-slate-400 font-mono uppercase tracking-wider">
+                              {item.sku}
+                            </p>
+                          </div>
+
+                          {/* Phần dưới: Giá và Hoa hồng */}
                           <div className="flex justify-between items-end mt-1">
-                            <p className="text-sm">
-                              {(item?.price ?? 0).toLocaleString()}đ x{" "}
-                              <span className="font-semibold">
-                                {item.quantity}
-                              </span>
-                            </p>
-                            <p className="font-bold text-md text-blue-600">
-                              {(item.subTotal ?? 0).toLocaleString()}đ
-                            </p>
+                            {/* Bên trái: Đơn giá và % Hoa hồng */}
+                            <div className="space-y-0.5">
+                              <div className="text-sm text-slate-600">
+                                <span>{item.price?.toLocaleString()}đ</span>
+                                <span className="mx-1 text-slate-500">×</span>
+                                <span className="font-medium text-slate-700">
+                                  {item.quantity}
+                                </span>
+                              </div>
+                              {item?.commissionRate != null && (
+                                <p className="text-[12px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded w-fit">
+                                  Hoa hồng{" "}
+                                  {((item.commissionRate ?? 0) * 100).toFixed(
+                                    0,
+                                  )}
+                                  %
+                                </p>
+                              )}
+                            </div>
+
+                            {/* Bên phải: Thành tiền và Số tiền hoa hồng */}
+                            <div className="text-right">
+                              <p className="text-sm font-bold text-slate-900">
+                                {item.subTotal?.toLocaleString()}đ
+                              </p>
+
+                              {/* Chỉ hiện tiền hoa hồng nếu có số > 0 */}
+                              {item?.commissionAmount ||
+                                (0 > 0 && (
+                                  <p className="text-[12px] text-emerald-600 font-semibold italic">
+                                    + {item.commissionAmount?.toLocaleString()}đ
+                                  </p>
+                                ))}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -153,29 +187,39 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
 
               {/* Section: Thanh toán & Thời gian */}
               <section className="grid grid-cols-2 gap-4 border-t pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-orange-50 text-orange-600 rounded-lg">
+                {/* Cột 1: Thông tin thanh toán gộp */}
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-orange-50 text-orange-600 rounded-lg shrink-0">
                     <CreditCard size={20} />
                   </div>
                   <div>
                     <p className="text-[10px] text-slate-500 uppercase font-bold">
                       Thanh toán
                     </p>
-                    <p className="text-sm font-semibold">
-                      {orderDetail.paymentMethod}
+                    <p className="text-sm font-semibold text-slate-900">
+                      {orderDetailPartner.paymentMethod}
                     </p>
+                    {orderDetailPartner.bankReference && (
+                      <p className="text-[12px] text-slate-600 mt-0.5 font-medium break-all">
+                        Mã: {orderDetailPartner.bankReference}
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+
+                {/* Cột 2: Thời gian */}
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-blue-50 text-blue-600 rounded-lg shrink-0">
                     <Calendar size={20} />
                   </div>
                   <div>
                     <p className="text-[10px] text-slate-500 uppercase font-bold">
                       Ngày tạo
                     </p>
-                    <p className="text-sm font-semibold">
-                      {new Date(orderDetail.createdAt).toLocaleString("vi-VN")}
+                    <p className="text-sm font-semibold text-slate-900">
+                      {new Date(orderDetailPartner.createdAt).toLocaleString(
+                        "vi-VN",
+                      )}
                     </p>
                   </div>
                 </div>
@@ -183,13 +227,30 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
             </div>
 
             {/* Footer: Tổng tiền */}
-            <div className="p-6 border-t bg-slate-50">
+            <div className="p-6 border-t bg-slate-50 space-y-4">
+              {/* Dòng 1: Tổng giá trị đơn hàng */}
               <div className="flex justify-between items-center">
-                <span className="text-slate-500 font-medium">
-                  Tổng thanh toán
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-4 bg-slate-300 rounded-full"></div>
+                  <span className="text-slate-600 font-semibold text-sm">
+                    Tổng thanh toán
+                  </span>
+                </div>
+                <span className="text-xl font-bold text-slate-900">
+                  {orderDetailPartner.totalAmount?.toLocaleString()}đ
                 </span>
-                <span className="text-2xl font-black text-green-600">
-                  {orderDetail.totalAmount?.toLocaleString()}đ
+              </div>
+
+              {/* Dòng 2: Tổng hoa hồng */}
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-4 bg-emerald-400 rounded-full"></div>
+                  <span className="text-slate-600 font-semibold text-sm">
+                    Tổng hoa hồng nhận được
+                  </span>
+                </div>
+                <span className="text-xl font-bold text-emerald-600">
+                  {orderDetailPartner.totalCommission?.toLocaleString()}đ
                 </span>
               </div>
             </div>

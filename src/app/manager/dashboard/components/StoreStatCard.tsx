@@ -2,8 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { DollarSign, ShoppingCart } from "lucide-react";
-import { getDashboardStoreStatCard } from "@/src/services/dashboard.service";
+import { Box, DollarSign, Server, ShoppingCart } from "lucide-react";
+import {
+  getDashboardStoreInventoryStatCard,
+  getDashboardStoreStatCard,
+} from "@/src/services/dashboard.service";
 import StatCardWithButton from "@/src/components/StatCardWithButton";
 import { useFilterStatCard } from "@/src/hooks/useFilterStatCard";
 import FilterStatCard from "@/src/components/FilterStatCard";
@@ -17,6 +20,13 @@ function StoreStatCard({ storeId }: { storeId: string }) {
   const { data: storeStatCard } = useQuery({
     queryKey: ["storeStatCard", storeId, apiFormattedDates],
     queryFn: () => getDashboardStoreStatCard(apiFormattedDates, storeId),
+    select: (res) => res.data,
+    enabled: !!storeId,
+  });
+
+  const { data: storeStatCardInventory } = useQuery({
+    queryKey: ["storeStatCardInventory", storeId],
+    queryFn: () => getDashboardStoreInventoryStatCard(storeId),
     select: (res) => res.data,
     enabled: !!storeId,
   });
@@ -37,6 +47,7 @@ function StoreStatCard({ storeId }: { storeId: string }) {
           value={`${(storeStatCard?.totalRevenue ?? 0).toLocaleString()} VND`}
           icon={DollarSign}
           color="bg-green-100 text-green-900"
+          subTitle="Cập nhật theo bộ lọc"
         />
 
         <StatCardWithButton
@@ -45,6 +56,22 @@ function StoreStatCard({ storeId }: { storeId: string }) {
           icon={ShoppingCart}
           color="bg-orange-100 text-orange-900"
           action={() => router.push(`/manager/orders`)}
+          subTitle="Cập nhật theo bộ lọc"
+        />
+
+        <StatCardWithButton
+          title="Sản phẩm"
+          value={`${storeStatCardInventory?.totalProducts || 0}`}
+          icon={Box}
+          color="bg-blue-100 text-blue-900"
+          action={() => router.push(`/manager/inventory`)}
+        />
+        <StatCardWithButton
+          title="Kệ"
+          value={`${storeStatCardInventory?.totalShelves || 0}`}
+          icon={Server}
+          color="bg-red-100 text-red-900"
+          action={() => router.push(`/manager/shelf-inventory`)}
         />
       </div>
     </div>

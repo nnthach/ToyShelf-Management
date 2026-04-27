@@ -29,6 +29,8 @@ export interface QueryParams {
   type?: string;
   email?: string;
   warehouseLocationId?: string;
+  searchTerm?: string;
+  date?: string;
 }
 
 export interface LoginRes {

@@ -1,12 +1,12 @@
 import { useAuth } from "@/src/hooks/useAuth";
 import { getAllStoreStaffAPI } from "@/src/services/user.service";
-import { StoreStaff } from "@/src/types";
+import { Store, StoreStaff } from "@/src/types";
 import { formatStoreRoleToVN } from "@/src/utils/format";
 import { useQuery } from "@tanstack/react-query";
-import { Target } from "lucide-react";
+import { MapPin, Store as StoreIcon, Target } from "lucide-react";
 import Image from "next/image";
 
-function BannerInfo() {
+function BannerInfo({ storeDetail }: { storeDetail: Store }) {
   const { user, myStore } = useAuth();
 
   const { data: storeStaffList } = useQuery({
@@ -43,15 +43,38 @@ function BannerInfo() {
               <span className="text-sm text-white italic">{user?.email}</span>
             </div>
 
-            {/* Tên Cửa hàng đang quản lý */}
-            <div className="flex items-center gap-2 pt-2">
-              <div>
-                <p className="text-xs text-white/50 uppercase font-bold">
-                  Cửa hàng đang quản lý
-                </p>
-                <p className="text-lg font-semibold text-blue-100">
-                  {myStore?.storeName || "Chưa xác định cửa hàng"}
-                </p>
+            {/* Tên Cửa hàng & Địa chỉ */}
+            <div className="flex flex-col md:flex-row gap-6 pt-2 border-t border-white/10">
+              {/* Cụm Tên Cửa hàng */}
+              <div className="flex items-start gap-3">
+                <div className="p-1.5 bg-blue-500/20 rounded-md mt-1">
+                  <StoreIcon size={16} className="text-blue-300" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-white/50 uppercase font-bold tracking-wider">
+                    Cửa hàng đang quản lý
+                  </p>
+                  <p className="text-base font-semibold text-blue-50">
+                    {storeDetail?.name || "Chưa xác định"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Cụm Địa chỉ */}
+              <div className="flex items-start gap-3 border-white/10 md:border-l md:pl-6">
+                <div className="p-1.5 bg-blue-500/20 rounded-md mt-1">
+                  <MapPin size={16} className="text-blue-300" />
+                </div>
+                <div className="max-w-[300px]">
+                  {" "}
+                  {/* Giới hạn chiều ngang để không bị quá dài */}
+                  <p className="text-[10px] text-white/50 uppercase font-bold tracking-wider">
+                    Địa chỉ
+                  </p>
+                  <p className="text-sm font-medium text-blue-100/80 line-clamp-2 leading-tight">
+                    {storeDetail?.storeAddress || "N/A"}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

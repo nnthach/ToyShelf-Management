@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 
 type StatCardWithButtonProps = {
   title: string;
+  subTitle?: string;
   value: string;
   color?: string | null;
   icon: React.ComponentType<{ className?: string }>;
@@ -10,19 +11,17 @@ type StatCardWithButtonProps = {
 
 function StatCardWithButton({
   title,
+  subTitle,
   value,
   icon: Icon,
   color,
   action,
 }: StatCardWithButtonProps) {
   const safeColor = color ?? "bg-gray-500 text-gray-500";
-  // Tách lấy phần gốc màu (ví dụ: "yellow" từ "bg-yellow-100")
   const colorName = safeColor.split(" ")[0].split("-")[1] || "gray";
-  const textColor = safeColor.split(" ")[1] || "text-gray-500";
 
   return (
     <div className="group relative bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col gap-4 hover:shadow-lg transition-all duration-300 overflow-hidden">
-      {/* Thanh viền màu nằm dưới cùng */}
       <div
         className={`absolute bottom-0 left-0 right-0 h-1.5 bg-${colorName}-500 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]`}
       />
@@ -45,7 +44,7 @@ function StatCardWithButton({
             {value}
           </div>
           <p className="text-[10px] text-gray-400 font-medium uppercase mt-1">
-            Cập nhật liên tục
+            {subTitle ? subTitle : "Cập nhật liên tục"}
           </p>
         </div>
 

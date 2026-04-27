@@ -145,6 +145,7 @@ export interface Order {
   paymentMethod: string;
   customerName: string;
   createdAt: string;
+  bankReference: string;
   customerEmail: string;
   items: RefillRequestProductColor[];
 }
@@ -360,6 +361,8 @@ export interface RefillRequestProductColor {
   remainingQuantity?: number;
   originalQuantity?: number;
   storeOrderId?: string;
+  commissionRate?: number;
+  commissionAmount?: number;
 }
 
 export interface RefillShelfItem {

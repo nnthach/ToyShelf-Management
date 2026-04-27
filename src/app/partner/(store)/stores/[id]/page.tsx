@@ -18,7 +18,6 @@ export default function PartnerStoreDetailPage() {
   const id = params.id as string;
 
   const router = useRouter();
-  const { partner } = useAuth();
 
   const { data: storeDetail, isLoading } = useQuery({
     queryKey: ["store", id],
@@ -56,6 +55,7 @@ export default function PartnerStoreDetailPage() {
       {/*Statistic card */}
       <StoreStatCard
         storeId={id}
+        locationId={storeDetail?.inventoryLocationId}
       />
       {/*Content */}
       <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4">

@@ -54,14 +54,17 @@ export default function ViewWarehouseDetailPage() {
       <WarehouseBannerInfo warehouseDetail={warehouseDetail} />
 
       {/*Statistic card */}
-      <WarehouseStatCard warehouseId={warehouseId} />
+      <WarehouseStatCard
+        warehouseId={warehouseId}
+        inventoryLocationId={warehouseDetail?.warehouse.warehouseLocationId}
+      />
 
       {/*Content */}
-      <div className="grid grid-cols-1 mb-4">
+      {/* <div className="grid grid-cols-1 mb-4">
         <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">
-          <TotalShipOrderBarChart />
+          <TotalShipOrderBarChart warehouseId={warehouseId} />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

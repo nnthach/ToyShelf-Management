@@ -56,7 +56,7 @@ function AdminStatCard() {
           title="Cửa hàng"
           value={`${adminStatCard?.totalStores || 0}`}
           icon={Store}
-          color="bg-purple-100 text-purple-900"
+          color="bg-red-100 text-red-900"
           action={() => router.push(`/admin/stores`)}
         />
       </div>

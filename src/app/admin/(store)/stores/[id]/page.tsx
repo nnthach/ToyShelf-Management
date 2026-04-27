@@ -54,6 +54,7 @@ export default function PartnerStoreDetailPage() {
       {/*Statistic card */}
         <StoreStatCard
           storeId={id}
+          locationId={storeDetail?.inventoryLocationId}
         />
 
       {/*Content */}

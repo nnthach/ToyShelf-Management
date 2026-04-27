@@ -2,16 +2,12 @@
 
 import ChartFilter from "@/src/components/ChartFilter";
 import { useDebounce } from "@/src/hooks/useDebounce";
+import { getDashboardWarehouseChart } from "@/src/services/dashboard.service";
+import { ChartItem } from "@/src/types";
 import { ViewType } from "@/src/types/SubType";
+import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import {
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  AreaChart,
-  Area,
-} from "recharts";
-
+import { ResponsiveContainer, Tooltip, XAxis, AreaChart, Area } from "recharts";
 
 interface ShipmentData {
   label: string;
@@ -21,13 +17,11 @@ interface ShipmentData {
   shelfReturn: number;
 }
 
-
 interface LegendPayloadItem {
   value: string;
   color?: string;
   type?: string;
 }
-
 
 // week: 7 ngày, year: 12 tháng — static mock
 const WEEK_DATA: ShipmentData[] = [
@@ -202,31 +196,29 @@ const AREAS = [
   { key: "shelfReturn", label: "Trả hàng Kệ", color: "#F43F5E" },
 ];
 
-const TotalShipOrderAreaChart = () => {
+const TotalShipOrderAreaChart = ({ warehouseId }: { warehouseId: string }) => {
   const [filters, setFilters] = useState({
     viewType: "month" as ViewType,
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
   });
 
-  const timeFrame = filters.viewType;
-  const debouncedFilters = useDebounce(filters, 500);
+  const debouncedFilters = useDebounce(filters, 1000);
 
-  const chartData = useMemo(() => {
-    if (timeFrame === "week") return WEEK_DATA;
-    if (timeFrame === "year") return YEAR_DATA;
-    return MONTH_DATA;
-  }, [timeFrame]);
+  const queryParams = {
+    viewType: debouncedFilters.viewType,
+    year: debouncedFilters.year,
+    ...(debouncedFilters.viewType === "month" && {
+      month: debouncedFilters.month,
+    }),
+  };
 
-  const totalAll = chartData.reduce(
-    (acc, curr) =>
-      acc +
-      curr.productDelivery +
-      curr.shelfDelivery +
-      curr.productReturn +
-      curr.shelfReturn,
-    0,
-  );
+  const { data: warehouseChart = [], isLoading } = useQuery({
+    queryKey: ["warehouseChart", queryParams],
+    queryFn: () => getDashboardWarehouseChart(queryParams, warehouseId),
+    select: (res) => res.data,
+    enabled: !!warehouseId,
+  });
 
   return (
     <div className="flex flex-col h-full w-full bg-white p-2">
@@ -235,15 +227,15 @@ const TotalShipOrderAreaChart = () => {
         <div>
           <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">
             Tổng đơn giao hàng{" "}
-            {timeFrame === "week"
+            {filters.viewType === "week"
               ? "tuần này"
-              : timeFrame === "month"
-                ? "tháng"
-                : "năm"}
+              : filters.viewType === "month"
+                ? "tháng này"
+                : "năm nay"}
           </h3>
 
           <p className="text-2xl font-bold text-gray-900 mt-1">
-            {totalAll.toLocaleString()}
+            {/* {totalAll.toLocaleString()} */}
             <span className="text-base ml-1">đơn</span>
           </p>
         </div>
@@ -255,7 +247,7 @@ const TotalShipOrderAreaChart = () => {
       <div className="flex-1 min-h-[350px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={chartData}
+            data={warehouseChart}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
             <defs>
@@ -280,7 +272,15 @@ const TotalShipOrderAreaChart = () => {
               tickLine={false}
               tick={{ fill: "#9CA3AF", fontSize: 11 }}
               dy={10}
-              interval={timeFrame === "month" ? 1 : 0}
+              ticks={
+                filters.viewType === "month"
+                  ? warehouseChart
+                      .filter((_: ChartItem, i: number) =>
+                        [0, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29].includes(i),
+                      )
+                      .map((d: ChartItem) => d.dateLabel)
+                  : undefined
+              }
             />
 
             <Tooltip
