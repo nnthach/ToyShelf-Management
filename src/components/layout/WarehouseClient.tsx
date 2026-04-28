@@ -5,10 +5,36 @@ import AccountAdminProfileModal from "../AccountAdminProfileModal";
 import AccountAdminPasswordModal from "../AccountAdminPasswordModal";
 import WarehouseSidebar from "./WarehouseSidebar";
 import WarehouseNavbar from "./WarehouseNavbar";
+import { useAuth } from "@/src/hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSignalR } from "@/src/hooks/useSignalR";
 
-export function WarehouseClientShell({ children }: { children: React.ReactNode }) {
+export function WarehouseClientShell({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { isProfileOpen, isChangePasswordOpen, closeAll } =
     useAccountAdminModal();
+
+  const { user } = useAuth();
+  const userId = user?.id;
+
+  const queryClient = useQueryClient();
+
+  useSignalR({
+    userId,
+    role: "PartnerAdmin",
+    onSystemMessage: (msg) => {
+      console.log("SYSTEM:", msg);
+    },
+    onNotification: (data) => {
+      console.log("NOTI:", data);
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", userId],
+      });
+    },
+  });
 
   return (
     <>

@@ -5,6 +5,9 @@ import AccountAdminProfileModal from "../AccountAdminProfileModal";
 import AccountAdminPasswordModal from "../AccountAdminPasswordModal";
 import StoreManagerSidebar from "./StoreManagerSidebar";
 import StoreManagerNavbar from "./StoreManagerNavbar";
+import { useSignalR } from "@/src/hooks/useSignalR";
+import { useAuth } from "@/src/hooks/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function StoreManagerClientShell({
   children,
@@ -13,6 +16,24 @@ export function StoreManagerClientShell({
 }) {
   const { isProfileOpen, isChangePasswordOpen, closeAll } =
     useAccountAdminModal();
+  const { user } = useAuth();
+  const userId = user?.id;
+
+  const queryClient = useQueryClient();
+
+  useSignalR({
+    userId,
+    role: "PartnerAdmin",
+    onSystemMessage: (msg) => {
+      console.log("SYSTEM:", msg);
+    },
+    onNotification: (data) => {
+      console.log("NOTI:", data);
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", userId],
+      });
+    },
+  });
 
   return (
     <>
