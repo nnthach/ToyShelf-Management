@@ -172,7 +172,7 @@ function ViewDetailSheet({
               <div className="flex-1 flex flex-col min-h-0">
                 <div className="flex-none mb-3 px-1">
                   <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                    Chi tiết giao dịch từng ngày
+                    Chi tiết doanh thu từng ngày
                   </h3>
                 </div>
                 <div className="flex-1 min-h-0 border border-slate-200/60 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 shadow-sm overflow-hidden">

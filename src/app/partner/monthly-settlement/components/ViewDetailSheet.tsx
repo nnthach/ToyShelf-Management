@@ -32,6 +32,7 @@ import {
 } from "@/src/utils/formatStatus";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import OrderInDayModal from "./OrderInDayModal";
 
 function ViewDetailSheet({
   monthlySettlementId,
@@ -41,6 +42,11 @@ function ViewDetailSheet({
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
+
+  const [isOpenOrderInDay, setIsOpenOrderInDay] = useState(false);
+  const [orderInDayData, setOrderInDayData] = useState<DailySummary | null>(
+    null,
+  );
 
   const { data: detail, isLoading } = useQuery({
     queryKey: ["monthlySettlement", monthlySettlementId],
@@ -170,7 +176,11 @@ function ViewDetailSheet({
                       {detail?.dailySummaries?.map((h: DailySummary) => (
                         <div
                           key={h.date}
-                          className="group flex items-center gap-6 px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100/50 dark:border-slate-800 last:border-0 cursor-default"
+                          onClick={() => {
+                            setOrderInDayData(h);
+                            setIsOpenOrderInDay(true);
+                          }}
+                          className="group cursor-pointer flex items-center gap-6 px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100/50 dark:border-slate-800 last:border-0 cursor-default"
                         >
                           {/* Phần 1: Thời gian (Ngày) */}
                           <div className="flex-none flex flex-col min-w-[85px]">
@@ -365,6 +375,15 @@ function ViewDetailSheet({
             </div>
           </div>
         )}
+
+        <OrderInDayModal
+          data={orderInDayData}
+          isOpen={isOpenOrderInDay}
+          onClose={() => {
+            setIsOpenOrderInDay(false);
+            setOrderInDayData(null);
+          }}
+        />
       </SheetContent>
     </Sheet>
   );

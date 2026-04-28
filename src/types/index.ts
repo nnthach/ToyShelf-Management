@@ -231,7 +231,18 @@ export interface DailySummary {
   totalSalesAmount: number;
   totalCommissionAmount: number;
   totalProductsSold: number;
-  transactions: CommissionHistory[];
+  transactions: [
+    {
+      id: string;
+      orderId: string;
+      orderCode: number;
+      totalAmount: number;
+      totalCommission: number;
+      status: string;
+      createdAt: string;
+      orderDate: string;
+    },
+  ];
 }
 export interface CommissionHistory {
   id: string;
@@ -631,10 +642,11 @@ export interface Shipment {
   warehouseReceivedAt?: string;
   productItems: RefillRequestProductColor[];
   shelfItems: RefillShelfItem[];
-  shelfOrderIds:[{
-    id:string,
-    
-  }]
+  shelfOrderIds: [
+    {
+      id: string;
+    },
+  ];
 }
 
 export interface ChartItem {
