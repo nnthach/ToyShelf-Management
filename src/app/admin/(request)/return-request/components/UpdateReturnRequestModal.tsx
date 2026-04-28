@@ -62,7 +62,7 @@ function UpdateReturnRequestModal({
     enabled: !!requestId && isOpen,
   });
 
-  const { data: shipmentDetail } = useQuery({
+  const { data: shipmentDetail, isLoading: isLoadingShipmentDetail } = useQuery({
     queryKey: ["shipmentDetail", requestId],
     queryFn: () => getShipmentDetailByDamageReportIdAPI(requestId!),
     select: (res) => res.data as Shipment[],
@@ -143,9 +143,11 @@ function UpdateReturnRequestModal({
                   />
                   <ShipmentAssignDetailDamageSection
                     shipmentAssignments={shipmentAssigns ?? []}
+                    isLoading={isLoadingAssigns}
                   />
                   <ShipmentDetailDamageSection
                     shipmentDetail={shipmentDetail}
+                    isLoading={isLoadingShipmentDetail}
                   />
                 </div>
 

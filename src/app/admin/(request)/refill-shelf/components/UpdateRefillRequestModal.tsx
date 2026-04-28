@@ -64,12 +64,14 @@ function UpdateRefillShelfRequestModal({
     enabled: !!requestId && isOpen,
   });
 
-  const { data: shipmentDetail } = useQuery({
-    queryKey: ["shipmentDetail", requestId],
-    queryFn: () => getShipmentDetailByShelfOrderIdAPI(requestId!),
-    select: (res) => res.data as Shipment[],
-    enabled: !!requestId && isOpen,
-  });
+  const { data: shipmentDetail, isLoading: isLoadingShipmentDetail } = useQuery(
+    {
+      queryKey: ["shipmentDetail", requestId],
+      queryFn: () => getShipmentDetailByShelfOrderIdAPI(requestId!),
+      select: (res) => res.data as Shipment[],
+      enabled: !!requestId && isOpen,
+    },
+  );
 
   async function handleApprove() {
     try {
@@ -146,8 +148,12 @@ function UpdateRefillShelfRequestModal({
                   <StoreOrderDetailSection storeOrderDetail={requestDetail} />
                   <ShipmentAssignDetailSection
                     shipmentAssignments={shipmentAssigns ?? []}
+                    isLoading={isLoadingAssigns}
                   />
-                  <ShipmentDetailSection shipmentDetail={shipmentDetail} />
+                  <ShipmentDetailSection
+                    shipmentDetail={shipmentDetail}
+                    isLoading={isLoadingShipmentDetail}
+                  />
                 </div>
 
                 <div className="col-span-5 flex flex-col bg-slate-50/50 overflow-hidden">

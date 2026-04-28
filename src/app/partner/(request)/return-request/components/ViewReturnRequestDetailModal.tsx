@@ -75,12 +75,14 @@ function ViewReturnRequestModalDetail({
     enabled: !!requestId,
   });
 
-  const { data: shipmentDetail } = useQuery({
-    queryKey: ["shipmentDetail", requestId],
-    queryFn: () => getShipmentDetailByDamageReportIdAPI(requestId!),
-    select: (res) => res.data[0] as Shipment,
-    enabled: !!requestId && isOpen,
-  });
+  const { data: shipmentDetail, isLoading: isLoadingShipmentDetail } = useQuery(
+    {
+      queryKey: ["shipmentDetail", requestId],
+      queryFn: () => getShipmentDetailByDamageReportIdAPI(requestId!),
+      select: (res) => res.data[0] as Shipment,
+      enabled: !!requestId && isOpen,
+    },
+  );
 
   async function handleApprove() {
     setIsApproving(true);
@@ -320,7 +322,11 @@ function ViewReturnRequestModalDetail({
                     )}
                   </div>
 
-                  {shipmentDetail ? (
+                  {isLoadingShipmentDetail ? (
+                    <div className="p-12 text-center text-slate-400 text-sm bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                      Đang tải dữ liệu...
+                    </div>
+                  ) : shipmentDetail ? (
                     <div className="bg-green-50/30 p-4 rounded-xl border border-dashed border-green-100 space-y-4">
                       <div className="grid grid-cols-2 gap-8 pb-4 border-b border-dashed">
                         <div className="space-y-3">

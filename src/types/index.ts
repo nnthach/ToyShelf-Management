@@ -595,6 +595,9 @@ export interface ShipmentAssign {
   productItems: RefillRequestProductColor[];
   shelfItems: RefillShelfItem[];
   damageReturnItems: ShipmentDamageItem[];
+  shelfOrders: [{ id: string; code: string }];
+  storeOrders: [{ id: string; code: string }];
+  damageReports: [{ id: string; code: string }];
 }
 
 export interface ShipmentDamageItem {
@@ -628,6 +631,10 @@ export interface Shipment {
   warehouseReceivedAt?: string;
   productItems: RefillRequestProductColor[];
   shelfItems: RefillShelfItem[];
+  shelfOrderIds:[{
+    id:string,
+    
+  }]
 }
 
 export interface ChartItem {

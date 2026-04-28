@@ -66,7 +66,6 @@ function UpdateShipmentAssignRefillRequestModal({
     enabled: !!requestId && isOpen,
   });
 
-  console.log("shipmentDetail test", shipmentDetail);
   // receive return
   const receiveReturnMutation = useMutation({
     mutationFn: () => warehouseReceiveReturnShipmentAPI(shipmentDetail.id),
@@ -192,6 +191,7 @@ function UpdateShipmentAssignRefillRequestModal({
                   />
                   <WarehouseShipmentDetailSection
                     shipmentDetail={shipmentDetail}
+                    isLoading={isLoadingShipment}
                   />
                 </div>
 
@@ -245,22 +245,6 @@ function UpdateShipmentAssignRefillRequestModal({
             <DialogFooter className="flex flex-row items-center justify-between w-full sm:justify-between gap-4">
               {/* BÊN TRÁI: THẺ GHI CHÚ (NOTES) - Chỉ chiếm không gian cần thiết */}
               <div className="flex-1">
-                {((shipmentDetail && shipmentDetail?.status !== "Shipping") ||
-                  shipmentDetail?.status !== "Delivered") && (
-                  <div className="hidden md:flex items-center gap-3 bg-blue-50/80 px-4 py-2.5 rounded-2xl border border-blue-100/50 shadow-sm w-fit">
-                    <div className="bg-blue-600 p-1.5 rounded-lg shadow-sm shadow-blue-200 shrink-0">
-                      <Info size={14} className="text-white animate-pulse" />
-                    </div>
-                    <div className="flex flex-col">
-                      <p className="text-[10px] font-black text-blue-600 uppercase tracking-wider leading-none mb-1">
-                        Hướng dẫn điều phối
-                      </p>
-                      <p className="text-[13px] text-blue-800 font-medium italic line-clamp-1">
-                        {getStatusMessage()}
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* BÊN PHẢI: CÁC NÚT ACTIONS - Gom cụm lại bên phải */}

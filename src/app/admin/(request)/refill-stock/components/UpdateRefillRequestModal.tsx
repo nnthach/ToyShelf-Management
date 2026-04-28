@@ -56,15 +56,16 @@ function UpdateRefillRequestModal({
     enabled: !!requestId && isOpen,
   });
 
+  const isHasShipmentAssign = requestDetail?.shipmentAssignmentIds?.length > 0;
   // 2. Fetch toàn bộ chi tiết của các assignment cùng lúc
   const { data: shipmentAssigns, isLoading: isLoadingAssigns } = useQuery({
     queryKey: ["shipmentAssigns", requestId],
     queryFn: () => getShipmentAssignDetailByStoreOrderIdAPI(requestId!),
     select: (res) => res.data,
-    enabled: !!requestId && isOpen,
+    enabled: !!requestId && isOpen && isHasShipmentAssign,
   });
 
-  const { data: shipmentDetail } = useQuery({
+  const { data: shipmentDetail, isLoading: isLoadingShipmentDetail } = useQuery({
     queryKey: ["shipmentDetail", requestId],
     queryFn: () => getShipmentDetailByStoreOrderIdAPI(requestId!),
     select: (res) => res.data as Shipment[],
@@ -165,8 +166,9 @@ function UpdateRefillRequestModal({
                   <StoreOrderDetailSection storeOrderDetail={requestDetail} />
                   <ShipmentAssignDetailSection
                     shipmentAssignments={shipmentAssigns ?? []}
+                    isLoading={isLoadingAssigns}
                   />
-                  <ShipmentDetailSection shipmentDetail={shipmentDetail} />
+                  <ShipmentDetailSection shipmentDetail={shipmentDetail} isLoading={isLoadingShipmentDetail} />
                 </div>
 
                 {/* CỘT PHẢI: DANH SÁCH SẢN PHẨM (5 columns) */}

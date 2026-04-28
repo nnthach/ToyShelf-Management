@@ -20,10 +20,12 @@ import Image from "next/image";
 
 interface ShipmentAssignDetailSectionProps {
   shipmentAssignments: ShipmentAssign[] | [];
+  isLoading?: boolean;
 }
 
 function ShipmentAssignDetailSection({
   shipmentAssignments,
+  isLoading,
 }: ShipmentAssignDetailSectionProps) {
   const hasData = shipmentAssignments && shipmentAssignments.length > 0;
   return (
@@ -31,7 +33,11 @@ function ShipmentAssignDetailSection({
       <div className="flex items-center gap-2 mb-4 text-primary font-bold uppercase text-xs tracking-wider">
         <Warehouse className="h-4 w-4" /> 2. Điều phối & Kho hàng
       </div>
-      {hasData ? (
+      {isLoading ? (
+        <div className="p-12 text-center text-slate-400 text-sm bg-slate-50 rounded-xl border border-dashed border-slate-200">
+          Đang tải dữ liệu...
+        </div>
+      ) : hasData ? (
         <div className="space-y-4">
           {shipmentAssignments.map((assignment, index) => (
             <div
@@ -45,8 +51,43 @@ function ShipmentAssignDetailSection({
                   {index + 1}
                 </span>
                 <span className="text-[10px] text-slate-400 font-mono">
-                  ID: {assignment.id?.slice(-8).toUpperCase()}
+                  ID: {assignment.id?.toUpperCase()}
                 </span>
+              </div>
+
+              <div className="px-4 py-3 border-b border-slate-50 dark:border-slate-800/50 bg-blue-50/30 dark:bg-blue-900/10">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mb-2 block">
+                  Đơn hàng cần giao (
+                  {
+                    [
+                      ...(assignment?.storeOrders || []),
+                      ...(assignment?.shelfOrders || []),
+                    ].length
+                  }
+                  )
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    ...(assignment?.storeOrders || []),
+                    ...(assignment?.shelfOrders || []),
+                  ].length > 0 ? (
+                    [
+                      ...(assignment?.storeOrders || []),
+                      ...(assignment?.shelfOrders || []),
+                    ].map((order) => (
+                      <span
+                        key={order.id}
+                        className="inline-flex items-center px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 text-[11px] font-bold border border-blue-100 dark:border-blue-900 shadow-sm"
+                      >
+                        {order.code}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-xs text-slate-400 italic">
+                      Chưa có mã đơn
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/*Thông tin kho */}

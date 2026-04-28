@@ -10,10 +10,12 @@ import Image from "next/image";
 
 interface ShipmentDetailDamageSectionProps {
   shipmentDetail: Shipment[] | undefined;
+  isLoading: boolean;
 }
 
 function ShipmentDetailDamageSection({
   shipmentDetail,
+  isLoading,
 }: ShipmentDetailDamageSectionProps) {
   // Kiểm tra nếu có dữ liệu trong mảng
   const hasShipments = shipmentDetail && shipmentDetail.length > 0;
@@ -25,7 +27,11 @@ function ShipmentDetailDamageSection({
         <Truck className="h-4 w-4" /> 3. Vận chuyển & Giao hàng
       </div>
 
-      {hasShipments ? (
+      {isLoading ? (
+        <div className="p-12 text-center text-slate-400 text-sm bg-slate-50 rounded-xl border border-dashed border-slate-200">
+          Đang tải dữ liệu...
+        </div>
+      ) : hasShipments ? (
         <div className="space-y-6">
           {shipmentDetail.map((shipment, index) => (
             <div

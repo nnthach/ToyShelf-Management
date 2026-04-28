@@ -6,17 +6,23 @@ import { formatShipmentStatusText } from "@/src/utils/formatStatus";
 
 interface WarehouseShipmentDetailSectionProps {
   shipmentDetail: Shipment;
+  isLoading?: boolean;
 }
 
 function WarehouseShipmentDetailSection({
   shipmentDetail,
+  isLoading,
 }: WarehouseShipmentDetailSectionProps) {
   return (
     <section>
       <div className="flex items-center gap-2 mb-4 text-primary font-bold uppercase text-xs tracking-wider">
         <Truck className="h-4 w-4" /> 2. Lộ trình vận chuyển thực tế
       </div>
-      {shipmentDetail ? (
+      {isLoading ? (
+        <div className="p-12 text-center text-slate-400 text-sm bg-slate-50 rounded-xl border border-dashed border-slate-200">
+          Đang tải dữ liệu...
+        </div>
+      ) : shipmentDetail ? (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4 bg-green-50/30 p-4 rounded-xl border border-green-100">
             <div className="col-span-2">

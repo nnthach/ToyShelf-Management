@@ -65,12 +65,13 @@ function ViewRefillRequestModalDetail({
     enabled: !!requestId,
   });
 
-  const { data: shipmentDetailList } = useQuery({
-    queryKey: ["shipmentDetailList", requestId],
-    queryFn: () => getShipmentDetailByStoreOrderIdAPI(requestId!),
-    select: (res) => res.data as Shipment[],
-    enabled: !!requestId && isOpen,
-  });
+  const { data: shipmentDetailList, isLoading: isLoadingShipmentDetail } =
+    useQuery({
+      queryKey: ["shipmentDetailList", requestId],
+      queryFn: () => getShipmentDetailByStoreOrderIdAPI(requestId!),
+      select: (res) => res.data as Shipment[],
+      enabled: !!requestId && isOpen,
+    });
 
   async function handleApprove() {
     setIsApproving(true);
@@ -346,7 +347,11 @@ function ViewRefillRequestModalDetail({
                     <Truck className="h-4 w-4" /> 3. Trạng thái vận chuyển
                   </div>
 
-                  {shipmentDetailList && shipmentDetailList.length > 0 ? (
+                  {isLoadingShipmentDetail ? (
+                    <div className="p-12 text-center text-slate-400 text-sm bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                      Đang tải dữ liệu...
+                    </div>
+                  ) : shipmentDetailList && shipmentDetailList.length > 0 ? (
                     <div className="space-y-6">
                       {shipmentDetailList.map((shipment, index) => {
                         const isReceived = shipment.storeReceivedAt;

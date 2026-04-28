@@ -8,17 +8,18 @@ import {
 } from "lucide-react";
 import ShipInfoItem from "./ShipInfoItem";
 import { formatShipmentAssignStatusText } from "@/src/utils/formatStatus";
-import { formatColorNameToVN, formatDateTime } from "@/src/utils/format";
+import { formatDateTime } from "@/src/utils/format";
 import EmptySection from "./EmptySection";
 import { memo } from "react";
-import Image from "next/image";
 
 interface ShipmentAssignDetailDamageSectionProps {
   shipmentAssignments: ShipmentAssign[] | [];
+  isLoading: boolean;
 }
 
 function ShipmentAssignDetailDamageSection({
   shipmentAssignments,
+  isLoading,
 }: ShipmentAssignDetailDamageSectionProps) {
   const hasData = shipmentAssignments && shipmentAssignments.length > 0;
   return (
@@ -26,7 +27,11 @@ function ShipmentAssignDetailDamageSection({
       <div className="flex items-center gap-2 mb-4 text-primary font-bold uppercase text-xs tracking-wider">
         <Warehouse className="h-4 w-4" /> 2. Điều phối & Kho hàng
       </div>
-      {hasData ? (
+      {isLoading ? (
+        <div className="p-12 text-center text-slate-400 text-sm bg-slate-50 rounded-xl border border-dashed border-slate-200">
+          Đang tải dữ liệu...
+        </div>
+      ) : hasData ? (
         <div className="space-y-4">
           {shipmentAssignments.map((assignment, index) => (
             <div
