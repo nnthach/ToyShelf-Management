@@ -5,9 +5,11 @@ import { formatStoreRoleToVN } from "@/src/utils/format";
 import { useQuery } from "@tanstack/react-query";
 import {
   Building,
+  Layers,
   MapPin,
   Pencil,
   Phone,
+  Server,
   Sparkles,
   Target,
   UserCircle,
@@ -63,6 +65,11 @@ function StoreBannerInfo({ storeDetail }: StoreBannerInfoProps) {
               icon={MapPin}
               label="Khu vực"
               value={storeDetail?.cityName}
+            />
+            <InfoItem
+              icon={Server}
+              label="Giới hạn kệ"
+              value={storeDetail?.maxShelvesPerStore}
             />
 
             <div className="col-span-1 sm:col-span-2 flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-all mt-1">
@@ -128,7 +135,7 @@ function InfoItem({
 }: {
   icon: React.ElementType;
   label: string;
-  value?: string;
+  value?: string | number;
   isMonospace?: boolean;
 }) {
   return (

@@ -3,7 +3,7 @@ import { getAllStoreStaffAPI } from "@/src/services/user.service";
 import { Store, StoreStaff } from "@/src/types";
 import { formatStoreRoleToVN } from "@/src/utils/format";
 import { useQuery } from "@tanstack/react-query";
-import { MapPin, Store as StoreIcon, Target } from "lucide-react";
+import { MapPin, Server, Store as StoreIcon, Target } from "lucide-react";
 import Image from "next/image";
 
 function BannerInfo({ storeDetail }: { storeDetail: Store }) {
@@ -27,8 +27,8 @@ function BannerInfo({ storeDetail }: { storeDetail: Store }) {
           className="object-cover"
         />
 
-        {/* Gradient overlay: Chuyển từ Indigo sang Blue để tạo cảm giác quản lý tin cậy */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-blue-900/80 to-transparent"></div>
+        {/* Gradient overlay: Chỉnh lại để bên phải vẫn có một lớp phủ mờ bảo vệ chữ */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/70 to-slate-900/30"></div>
 
         {/* Content */}
         <div className="relative px-8 py-6 text-white w-full flex justify-between items-center">
@@ -74,6 +74,29 @@ function BannerInfo({ storeDetail }: { storeDetail: Store }) {
                   <p className="text-sm font-semibold text-blue-50">
                     {storeDetail?.storeAddress || "N/A"}
                   </p>
+                </div>
+              </div>
+
+              {/* Cụm Giới hạn kệ */}
+              <div className="flex items-start gap-3 border-white/20 md:border-l md:pl-6">
+                {/* Icon container: Tăng độ sáng icon và thêm hiệu ứng kính mờ */}
+                <div className="p-1.5 bg-blue-400/20 backdrop-blur-md rounded-md mt-1 border border-white/10 shadow-lg">
+                  <Server size={16} className="text-blue-300" />
+                </div>
+
+                <div>
+                  <p className="text-[10px] text-white/70 uppercase font-extrabold tracking-widest drop-shadow-md">
+                    Giới hạn kệ
+                  </p>
+                  <div className="flex items-baseline gap-1">
+                    {/* text-blue-50 sẽ nổi hơn text-white thuần trên nền sáng */}
+                    <p className="text-lg font-black text-white drop-shadow-lg">
+                      {storeDetail?.maxShelvesPerStore || 0}
+                    </p>
+                    <span className="text-[10px] text-blue-100/80 font-bold uppercase">
+                      kệ
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

@@ -328,6 +328,40 @@ function ViewRefillRequestModalDetail({
                               )}
                             </div>
 
+                            <div className="px-4 py-3 border-b border-slate-50 dark:border-slate-800/50 bg-green-50/30 dark:bg-green-900/10">
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mb-2 block">
+                                Đơn giao (
+                                {
+                                  [
+                                    ...(shipment?.storeOrders || []),
+                                    ...(shipment?.shelfOrders || []),
+                                  ].length
+                                }
+                                )
+                              </span>
+                              <div className="flex flex-wrap gap-1.5">
+                                {[
+                                  ...(shipment?.storeOrders || []),
+                                  ...(shipment?.shelfOrders || []),
+                                ].length > 0 ? (
+                                  [
+                                    ...(shipment?.storeOrders || []),
+                                    ...(shipment?.shelfOrders || []),
+                                  ].map((order) => (
+                                    <span
+                                      key={order.id}
+                                      className="inline-flex items-center px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-green-600 dark:text-green-400 text-[11px] font-bold border border-green-100 dark:border-green-900 shadow-sm"
+                                    >
+                                      {order.code}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="text-xs text-slate-400 italic">
+                                    Chưa có mã đơn
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                             <div className="p-4 space-y-4">
                               {/* Info: Warehouse & Shipper */}
                               <div className="grid grid-cols-2 gap-4">

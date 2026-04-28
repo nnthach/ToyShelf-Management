@@ -73,6 +73,7 @@ export interface Store {
   reviewedByUserName: string;
   reviewedByUserEmail: string;
   partnerName: string;
+  maxShelvesPerStore: number;
 }
 
 export interface Color {
@@ -642,11 +643,9 @@ export interface Shipment {
   warehouseReceivedAt?: string;
   productItems: RefillRequestProductColor[];
   shelfItems: RefillShelfItem[];
-  shelfOrderIds: [
-    {
-      id: string;
-    },
-  ];
+  shelfOrders: [{ id: string; code: string }];
+  storeOrders: [{ id: string; code: string }];
+  damageReports: [{ id: string; code: string }];
 }
 
 export interface ChartItem {

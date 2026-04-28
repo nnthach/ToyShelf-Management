@@ -57,7 +57,7 @@ function ShipmentAssignDetailSection({
 
               <div className="px-4 py-3 border-b border-slate-50 dark:border-slate-800/50 bg-blue-50/30 dark:bg-blue-900/10">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mb-2 block">
-                  Đơn hàng cần giao (
+                  Đơn hàng giao (
                   {
                     [
                       ...(assignment?.storeOrders || []),
