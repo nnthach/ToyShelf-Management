@@ -3,7 +3,10 @@
 import FilterStatCard from "@/src/components/FilterStatCard";
 import StatCardWithButton from "@/src/components/StatCardWithButton";
 import { useFilterStatCard } from "@/src/hooks/useFilterStatCard";
-import { getDashboardAdminStatCard } from "@/src/services/dashboard.service";
+import {
+  getDashboardAdminStatCard,
+  getDashboardAdminStatCardV2,
+} from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
 import { DollarSign, ShoppingCart, Store, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,6 +20,12 @@ function AdminStatCard() {
   const { data: adminStatCard } = useQuery({
     queryKey: ["adminStatCard", apiFormattedDates],
     queryFn: () => getDashboardAdminStatCard(apiFormattedDates),
+    select: (res) => res.data,
+  });
+
+  const { data: adminStatCardV2 } = useQuery({
+    queryKey: ["adminStatCardV2"],
+    queryFn: () => getDashboardAdminStatCardV2({}),
     select: (res) => res.data,
   });
 
@@ -47,14 +56,14 @@ function AdminStatCard() {
         />
         <StatCardWithButton
           title="Đối tác"
-          value={`${adminStatCard?.totalPartners || 0}`}
+          value={`${adminStatCardV2?.totalPartners || 0}`}
           icon={Users}
           color="bg-blue-100 text-blue-900"
           action={() => router.push(`/admin/partners`)}
         />
         <StatCardWithButton
           title="Cửa hàng"
-          value={`${adminStatCard?.totalStores || 0}`}
+          value={`${adminStatCardV2?.totalStores || 0}`}
           icon={Store}
           color="bg-red-100 text-red-900"
           action={() => router.push(`/admin/stores`)}

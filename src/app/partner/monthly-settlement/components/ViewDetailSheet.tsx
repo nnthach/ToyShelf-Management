@@ -25,7 +25,7 @@ import {
 } from "@/src/services/monthly-settlement.service";
 import { useState } from "react";
 import { formatDateTime } from "@/src/utils/format";
-import { CommissionHistory } from "@/src/types";
+import { CommissionHistory, DailySummary } from "@/src/types";
 import {
   formatMonthlySettlementStatusColor,
   formatMonthlySettlementStatusText,
@@ -161,64 +161,68 @@ function ViewDetailSheet({
               <div className="flex-1 flex flex-col min-h-0">
                 <div className="flex-none mb-3 px-1">
                   <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                    Chi tiết giao dịch
-                    <span className="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-full text-[10px] font-bold">
-                      {detail?.histories?.length ?? 0}
-                    </span>
+                    Chi tiết giao dịch từng ngày
                   </h3>
                 </div>
                 <div className="flex-1 min-h-0 border border-slate-200/60 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
                   <ScrollArea className="h-full w-full">
                     <div className="divide-y divide-slate-50 dark:divide-slate-800">
-                      {detail?.histories?.map((h: CommissionHistory) => (
+                      {detail?.dailySummaries?.map((h: DailySummary) => (
                         <div
-                          key={h.id}
+                          key={h.date}
                           className="group flex items-center gap-6 px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100/50 dark:border-slate-800 last:border-0 cursor-default"
                         >
+                          {/* Phần 1: Thời gian (Ngày) */}
                           <div className="flex-none flex flex-col min-w-[85px]">
                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
-                              {formatDateTime(h.orderDate).date}
+                              Ngày
                             </span>
-                            <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
-                              {formatDateTime(h.orderDate).time}
+                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                              {new Date(h.date).toLocaleDateString("vi-VN")}
                             </span>
                           </div>
 
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                                #{h.orderCode}
+                          {/* Phần 2: Thống kê số lượng */}
+                          <div className="flex-1 min-w-0 grid grid-cols-2 gap-4">
+                            <div className="flex flex-col">
+                              <span className="text-[10px] font-medium text-slate-500 uppercase">
+                                Đơn hàng
                               </span>
-                              {h.paymentMethod === "QR" && (
-                                <span className="text-[9px] font-black px-1.5 py-0.5 bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 rounded-sm border border-blue-100/50 dark:border-blue-800">
-                                  QR
-                                </span>
-                              )}
+                              <span className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                {h.totalOrders}
+                              </span>
                             </div>
-                            <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">
-                              <span>Số lượng:</span>
-                              <span className="text-slate-900 dark:text-slate-300 font-bold">
-                                {h.quantity}
+                            <div className="flex flex-col">
+                              <span className="text-[10px] font-medium text-slate-500 uppercase">
+                                Sản phẩm
+                              </span>
+                              <span className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                {h.totalProductsSold}
                               </span>
                             </div>
                           </div>
 
+                          {/* Phần 3: Tài chính (Doanh số & Hoa hồng) */}
                           <div className="text-right flex-none">
                             <div className="flex flex-col items-end">
                               <span className="text-[15px] font-black text-green-600 dark:text-green-500 tabular-nums">
-                                +{h.commissionAmount.toLocaleString("vi-VN")}₫
+                                Hoa hồng:{" "}
+                                {h.totalCommissionAmount.toLocaleString(
+                                  "vi-VN",
+                                )}
+                                ₫
                               </span>
-                              <span className="text-[10px] font-bold text-slate-400 mt-0.5">
-                                Mức hoa hồng: {(h.appliedRate * 100).toFixed(0)}
-                                %
+                              <span className="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">
+                                Doanh thu:{" "}
+                                {h.totalSalesAmount.toLocaleString("vi-VN")}₫
                               </span>
                             </div>
                           </div>
                         </div>
                       ))}
 
-                      {(!detail?.histories ||
-                        detail.histories.length === 0) && (
+                      {(!detail?.dailySummaries ||
+                        detail.dailySummaries.length === 0) && (
                         <div className="py-20 flex flex-col items-center justify-center text-slate-400">
                           <Package size={40} className="opacity-10 mb-2" />
                           <p className="text-xs font-medium uppercase tracking-widest">

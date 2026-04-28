@@ -90,7 +90,9 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
                     </p>
                   </div>
                   <div className="space-y-1 col-span-2">
-                    <p className="text-sm text-slate-500">Nhân viên</p>
+                    <p className="text-sm text-slate-500">
+                      Nhân viên thực hiện
+                    </p>
                     <p className="font-semibold text-md flex items-center gap-1">
                       {orderDetailPartner?.staffName || "N/A"} -{" "}
                       {orderDetailPartner?.staffEmail || "N/A"}
@@ -169,13 +171,12 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
                                 {item.subTotal?.toLocaleString()}đ
                               </p>
 
-                              {/* Chỉ hiện tiền hoa hồng nếu có số > 0 */}
-                              {item?.commissionAmount ||
-                                (0 > 0 && (
-                                  <p className="text-[12px] text-emerald-600 font-semibold italic">
-                                    + {item.commissionAmount?.toLocaleString()}đ
-                                  </p>
-                                ))}
+                              <p className="text-[14px] text-emerald-600 font-semibold">
+                                {Number(
+                                  item?.commissionAmount || 0,
+                                ).toLocaleString()}
+                                đ
+                              </p>
                             </div>
                           </div>
                         </div>

@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
-import { Partner } from "@/src/types";
+import { Partner, Store } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 
 import { PopoverClose } from "@radix-ui/react-popover";
@@ -19,11 +19,15 @@ type FilterBarProps = {
   loading: boolean;
   resultCount?: number;
   partnerList: Partner[];
+  storeList: Store[];
   onSearch: (val: string) => void;
   onApplyFilter: (val: {
     pageNumber?: number;
     pageSize?: number;
     partnerId?: string;
+    fromDate?: string;
+    toDate?: string;
+    storeId?: string;
   }) => void;
   onReset: () => void;
   onRefresh?: () => void;
@@ -33,6 +37,7 @@ export default function FilterSearch({
   query,
   loading,
   partnerList,
+  storeList,
   onSearch,
   onApplyFilter,
   onReset,
@@ -60,16 +65,30 @@ export default function FilterSearch({
   const [tempFilter, setTempFilter] = useState<{
     pageSize: number;
     pageNumber: number;
+    storeId?: string;
+    fromDate?: string;
+    toDate?: string;
   }>({
     pageSize: query.pageSize ?? 10,
     pageNumber: query.pageNumber ?? 1,
+    storeId: query.storeId || undefined,
+    fromDate: query.fromDate || undefined,
+    toDate: query.toDate || undefined,
   });
 
-  const isFiltered = query.keyword || query.pageSize !== 10;
+  const isFiltered =
+    query.keyword ||
+    query.pageSize !== 10 ||
+    query.storeId ||
+    query.fromDate ||
+    query.toDate;
 
   const handleApply = () => {
     onApplyFilter({
       pageSize: tempFilter.pageSize || 10,
+      storeId: tempFilter.storeId || undefined,
+      fromDate: tempFilter.fromDate || undefined,
+      toDate: tempFilter.toDate || undefined,
     });
   };
 
@@ -78,6 +97,9 @@ export default function FilterSearch({
     setTempFilter({
       pageNumber: 1,
       pageSize: 10,
+      storeId: undefined,
+      fromDate: undefined,
+      toDate: undefined,
     });
     onReset();
   };
@@ -115,6 +137,58 @@ export default function FilterSearch({
               </select>
             </div>
 
+            {/* Store ID */}
+            <div className="grid gap-2">
+              <Label>Cửa hàng</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.storeId}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    storeId: e.target.value || undefined,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {storeList?.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* From Date */}
+            <div className="grid gap-2">
+              <Label>Từ ngày</Label>
+              <Input
+                type="date"
+                value={tempFilter.fromDate}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    fromDate: e.target.value || undefined,
+                  }))
+                }
+              />
+            </div>
+
+            {/* To Date */}
+            <div className="grid gap-2">
+              <Label>Đến ngày</Label>
+              <Input
+                type="date"
+                value={tempFilter.toDate}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    toDate: e.target.value || undefined,
+                  }))
+                }
+              />
+            </div>
+
             <PopoverClose asChild>
               <Button onClick={handleApply}>Áp dụng</Button>
             </PopoverClose>
@@ -128,6 +202,7 @@ export default function FilterSearch({
         value={partnerValue}
         onChange={(e) => setPartnerValue(e.target.value)}
       >
+        <option value="">Chọn đối tác</option>
         {partnerList?.map((p) => (
           <option key={p.id} value={p.id}>
             {p.companyName}

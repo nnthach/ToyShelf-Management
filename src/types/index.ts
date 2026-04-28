@@ -225,6 +225,14 @@ export interface CommissionTableApply {
   name: string;
 }
 
+export interface DailySummary {
+  date: string;
+  totalOrders: number;
+  totalSalesAmount: number;
+  totalCommissionAmount: number;
+  totalProductsSold: number;
+  transactions: CommissionHistory[];
+}
 export interface CommissionHistory {
   id: string;
   orderItemId: string;

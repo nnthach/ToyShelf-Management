@@ -15,7 +15,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/src/styles/components/ui/sheet";
-import { getOrderDetailAPI } from "@/src/services/order.service";
+import {
+  getOrderDetailPartnerAPI,
+} from "@/src/services/order.service";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import {
@@ -30,7 +32,7 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
 
   const { data: orderDetail, isLoading } = useQuery({
     queryKey: ["order", orderCode],
-    queryFn: () => getOrderDetailAPI(orderCode),
+    queryFn: () => getOrderDetailPartnerAPI(orderCode),
     select: (res) => res.data,
     enabled: !!orderCode && open,
   });
@@ -161,9 +163,14 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
                     <p className="text-[10px] text-slate-500 uppercase font-bold">
                       Thanh toán
                     </p>
-                    <p className="text-sm font-semibold">
+                    <p className="text-sm font-semibold text-slate-900">
                       {orderDetail.paymentMethod}
                     </p>
+                    {orderDetail.bankReference && (
+                      <p className="text-[12px] text-slate-600 mt-0.5 font-medium break-all">
+                        Mã: {orderDetail.bankReference}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-3">

@@ -20,7 +20,7 @@ export default function StoreManageOrders() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
       storeId: storeId,
-      email: "",
+      searchTerm: "",
     },
     {
       excludeResetKeys: ["storeId"],
@@ -68,7 +68,7 @@ export default function StoreManageOrders() {
               query={query}
               loading={isLoading}
               resultCount={orderList.length}
-              onSearch={(val) => updateQuery({ email: val })}
+              onSearch={(val) => updateQuery({ searchTerm: val })}
               onApplyFilter={(filter) =>
                 updateQuery({
                   ...filter,

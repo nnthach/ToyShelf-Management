@@ -1,7 +1,10 @@
 import FilterStatCard from "@/src/components/FilterStatCard";
 import StatCardWithButton from "@/src/components/StatCardWithButton";
 import { useFilterStatCard } from "@/src/hooks/useFilterStatCard";
-import { getDashboardPartnerStatCard } from "@/src/services/dashboard.service";
+import {
+  getDashboardPartnerStatCard,
+  getDashboardPartnerStatCardV2,
+} from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
 import { Box, DollarSign, ShoppingCart, Store } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -16,6 +19,13 @@ function PartnerStatCard({ partnerId }: { partnerId: string }) {
   const { data: partnerStatCard } = useQuery({
     queryKey: ["partnerStatCard", partnerId, apiFormattedDates],
     queryFn: () => getDashboardPartnerStatCard(apiFormattedDates, partnerId!),
+    select: (res) => res.data,
+    enabled: !!partnerId,
+  });
+
+  const { data: partnerStatCardV2 } = useQuery({
+    queryKey: ["partnerStatCardV2", partnerId],
+    queryFn: () => getDashboardPartnerStatCardV2(partnerId),
     select: (res) => res.data,
     enabled: !!partnerId,
   });
@@ -49,7 +59,7 @@ function PartnerStatCard({ partnerId }: { partnerId: string }) {
         />
         <StatCardWithButton
           title="Đơn hàng"
-          value={`${partnerStatCard?.orders}`}
+          value={`${partnerStatCard?.orders || 0}`}
           icon={ShoppingCart}
           color="bg-purple-100 text-purple-900"
           action={() => router.push(`/admin/orders?partnerId=${partnerId}`)}
@@ -57,7 +67,7 @@ function PartnerStatCard({ partnerId }: { partnerId: string }) {
 
         <StatCardWithButton
           title="Cửa hàng"
-          value={`${partnerStatCard?.stores}`}
+          value={`${partnerStatCardV2?.totalStores || 0}`}
           icon={Store}
           color="bg-orange-100 text-orange-900"
           action={() => router.push(`/admin/stores?companyid=${partnerId}`)}

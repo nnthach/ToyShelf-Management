@@ -71,7 +71,7 @@ function BannerInfo({ storeDetail }: { storeDetail: Store }) {
                   <p className="text-[10px] text-white/50 uppercase font-bold tracking-wider">
                     Địa chỉ
                   </p>
-                  <p className="text-sm font-medium text-blue-100/80 line-clamp-2 leading-tight">
+                  <p className="text-sm font-semibold text-blue-50">
                     {storeDetail?.storeAddress || "N/A"}
                   </p>
                 </div>

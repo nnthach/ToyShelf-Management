@@ -5,8 +5,18 @@ export const getDashboardPartnerStatCard = async <T>(params: T, id: string) => {
   return res.data;
 };
 
+export const getDashboardPartnerStatCardV2 = async (id: string) => {
+  const res = await api.get(`/Dashboard/partner/${id}/stores-count`);
+  return res.data;
+};
+
 export const getDashboardAdminStatCard = async <T>(params: T) => {
   const res = await api.get(`/Dashboard/admin/stat-card`, { params });
+  return res.data;
+};
+
+export const getDashboardAdminStatCardV2 = async <T>(params: T) => {
+  const res = await api.get(`/Dashboard/admin/stat-card-count`, { params });
   return res.data;
 };
 
