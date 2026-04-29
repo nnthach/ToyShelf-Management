@@ -71,7 +71,7 @@ export const getCommissionTableApplyColumns = (
 
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const commission = row.original;
       return (

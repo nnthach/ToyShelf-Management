@@ -80,7 +80,7 @@ export const getMonthlySettlementColumns =
     },
     {
       accessorKey: "action",
-      header: "Hành động",
+      header: "Thao tác",
       cell: ({ row }) => {
         const monthlySettlement = row.original;
         return <ViewDetailSheet monthlySettlementId={monthlySettlement.id} />;

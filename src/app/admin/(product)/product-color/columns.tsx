@@ -39,7 +39,7 @@ export const getProductColorColumns = (
   },
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const color = row.original;
       return (

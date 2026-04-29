@@ -82,7 +82,7 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
 
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const order = row.original;
       return <ViewDetailSheet orderCode={order.orderCode} />;

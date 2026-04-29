@@ -24,7 +24,7 @@ export function WarehouseClientShell({
 
   useSignalR({
     userId,
-    role: "PartnerAdmin",
+    role: "Warehouse",
     onSystemMessage: (msg) => {
       console.log("SYSTEM:", msg);
     },

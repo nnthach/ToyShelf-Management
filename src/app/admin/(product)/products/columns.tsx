@@ -57,7 +57,7 @@ export const getProductColumns = (
   },
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const product = row.original;
       return (

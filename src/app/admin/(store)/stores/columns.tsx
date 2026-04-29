@@ -75,7 +75,7 @@ export const getStoreColumns = (): ColumnDef<Store>[] => [
   },
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const store = row.original;
       return <StoreActionCell id={store.id} />;

@@ -42,7 +42,7 @@ export const getPartnerTierColumns = (
 
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const partnerTier = row.original;
       return (

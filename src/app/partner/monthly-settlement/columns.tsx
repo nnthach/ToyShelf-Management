@@ -15,27 +15,6 @@ import {
 export const getMonthlySettlementColumns =
   (): ColumnDef<MonthlySettlement>[] => [
     {
-      accessorKey: "partnerName",
-      header: "Đối tác",
-      cell: ({ row }) => {
-        const partnerName = row.getValue("partnerName") as string;
-        return (
-          <span className="block max-w-[200px] truncate" title={partnerName}>
-            {partnerName}
-          </span>
-        );
-      },
-    },
-    {
-      accessorKey: "month-year",
-      header: "Tháng năm",
-      cell: ({ row }) => {
-        const month = row.original.month;
-        const year = row.original.year;
-        return `${month}/${year}`;
-      },
-    },
-    {
       accessorKey: "totalSalesAmount",
       header: "Tổng tiền bán được",
       cell: ({ row }) => {
@@ -56,6 +35,15 @@ export const getMonthlySettlementColumns =
           style: "currency",
           currency: "VND",
         });
+      },
+    },
+    {
+      accessorKey: "month-year",
+      header: "Tháng năm",
+      cell: ({ row }) => {
+        const month = row.original.month;
+        const year = row.original.year;
+        return `${month}/${year}`;
       },
     },
 
@@ -83,7 +71,7 @@ export const getMonthlySettlementColumns =
     },
     {
       accessorKey: "action",
-      header: "Hành động",
+      header: "Thao tác",
       cell: ({ row }) => {
         const monthlySettlement = row.original;
         return <ViewDetailSheet monthlySettlementId={monthlySettlement.id} />;

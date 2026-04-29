@@ -73,7 +73,7 @@ export const getStaffColumns = (
   },
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const staff = row.original;
 

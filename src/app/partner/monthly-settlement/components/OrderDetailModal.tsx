@@ -94,12 +94,6 @@ function OrderDetailModal({
                       {orderDetail?.storeName}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-slate-500">Đối tác</span>
-                    <span className="text-sm font-bold text-blue-600">
-                      {orderDetail?.partnerName}
-                    </span>
-                  </div>
                 </div>
               </div>
 

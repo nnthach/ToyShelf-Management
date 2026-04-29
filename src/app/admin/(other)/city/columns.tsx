@@ -23,7 +23,7 @@ export const getCityColumns = (
 
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const city = row.original;
       return (

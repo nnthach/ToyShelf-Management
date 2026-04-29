@@ -283,26 +283,10 @@ function ViewDetailSheet({
                       <div className="flex items-center gap-2">
                         <div className="w-1 h-4 bg-blue-500 rounded-full" />
                         <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                          Thông tin đối tác
+                          Trạng thái đối soát
                         </h4>
                       </div>
                       <div className="grid gap-3 bg-slate-50/50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-slate-500">
-                            Mã đối tác
-                          </span>
-                          <span className="text-sm font-mono font-bold bg-white dark:bg-slate-800 px-2 py-0.5 rounded shadow-sm border border-slate-100 dark:border-slate-700">
-                            {detail?.partnerCode}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-slate-500">
-                            Tên đối tác
-                          </span>
-                          <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                            {detail?.partnerName}
-                          </span>
-                        </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-slate-500">
                             Trạng thái

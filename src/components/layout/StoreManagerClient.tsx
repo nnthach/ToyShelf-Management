@@ -23,7 +23,7 @@ export function StoreManagerClientShell({
 
   useSignalR({
     userId,
-    role: "PartnerAdmin",
+    role: "Partner",
     onSystemMessage: (msg) => {
       console.log("SYSTEM:", msg);
     },

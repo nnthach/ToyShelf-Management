@@ -61,7 +61,7 @@ export const getWarehouseColumns = (): ColumnDef<Warehouse>[] => [
   },
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => <ActionCell id={row.original.id} />,
   },
 ];

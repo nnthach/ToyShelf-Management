@@ -52,7 +52,7 @@ export const getStoreRefillShelfRequestColumns = (
   },
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const storeRefillRequest = row.original;
       return (

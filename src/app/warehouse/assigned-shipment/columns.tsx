@@ -78,7 +78,7 @@ export const getShipmentAssignColumnColumns = (
   },
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const shipmentAssignRequest = row.original;
       return (

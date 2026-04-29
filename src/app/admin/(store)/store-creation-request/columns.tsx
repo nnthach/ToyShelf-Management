@@ -67,7 +67,7 @@ export const getStoreCreateRequestColumns = (
   },
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const storeCreateRequest = row.original;
       return (

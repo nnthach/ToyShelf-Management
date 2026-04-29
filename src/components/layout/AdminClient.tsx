@@ -19,7 +19,7 @@ export function AdminClientShell({ children }: { children: React.ReactNode }) {
 
   useSignalR({
     userId,
-    role: "PartnerAdmin",
+    role: "Admin",
     onSystemMessage: (msg) => {
       console.log("SYSTEM:", msg);
     },

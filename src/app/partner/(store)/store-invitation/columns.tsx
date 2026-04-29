@@ -72,7 +72,7 @@ export const getStoreInviteColumns = (
   },
   {
     accessorKey: "action",
-    header: "Hành động",
+    header: "Thao tác",
     cell: ({ row }) => {
       const invite = row.original;
 
