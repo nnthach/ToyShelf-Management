@@ -39,6 +39,7 @@ import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
 import Image from "next/image";
 import { getRefillShelfDetailAPI } from "@/src/services/refill-shelf.service";
 import { formatDateTime } from "@/src/utils/format";
+import { ShipmentUrls } from "@/src/components/ShipmentComponent/ShipmentUrls";
 
 type ViewRefillShelfRequestModalDetailProps = {
   requestId: string;
@@ -419,7 +420,9 @@ function ViewRefillShelfRequestModalDetail({
                                   time={shipment.storeReceivedAt}
                                 />
                               </div>
-
+                              <ShipmentUrls
+                                mediaUrls={shipment.mediaUrls || []}
+                              />
                               {/* Danh sách sản phẩm trong shipment */}
                               <div className="space-y-2">
                                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1.5">

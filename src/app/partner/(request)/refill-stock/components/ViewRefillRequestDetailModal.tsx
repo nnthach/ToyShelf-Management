@@ -42,6 +42,7 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { useState } from "react";
+import { ShipmentUrls } from "@/src/components/ShipmentComponent/ShipmentUrls";
 
 type ViewRefillRequestModalDetailProps = {
   requestId: string;
@@ -461,6 +462,10 @@ function ViewRefillRequestModalDetail({
                                   time={shipment.storeReceivedAt}
                                 />
                               </div>
+
+                              <ShipmentUrls
+                                mediaUrls={shipment.mediaUrls || []}
+                              />
 
                               {/* Danh sách sản phẩm trong shipment */}
                               <div className="space-y-2">

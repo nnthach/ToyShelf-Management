@@ -36,6 +36,7 @@ import ShipInfoItem from "@/src/components/ShipmentComponent/ShipInfoItem";
 import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
 import { formatColorNameToVN, formatDateTime } from "@/src/utils/format";
 import Image from "next/image";
+import { ShipmentUrls } from "@/src/components/ShipmentComponent/ShipmentUrls";
 
 type ViewRefillRequestModalDetailProps = {
   requestId: string;
@@ -408,6 +409,10 @@ function ViewRefillRequestModalDetail({
                                   time={shipment.storeReceivedAt}
                                 />
                               </div>
+
+                              <ShipmentUrls
+                                mediaUrls={shipment.mediaUrls || []}
+                              />
 
                               {/* Danh sách sản phẩm trong shipment */}
                               <div className="space-y-2">

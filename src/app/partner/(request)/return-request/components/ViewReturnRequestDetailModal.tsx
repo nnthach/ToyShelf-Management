@@ -50,6 +50,7 @@ import ShipTimeNode from "@/src/components/ShipmentComponent/ShipTimeNode";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import ReasonRejectRequestModal from "./ReasonRejectRequest";
+import { ShipmentUrls } from "@/src/components/ShipmentComponent/ShipmentUrls";
 
 type ViewReturnRequestModalDetailProps = {
   requestId: string;
@@ -381,6 +382,7 @@ function ViewReturnRequestModalDetail({
                           time={shipmentDetail.warehouseReceivedAt}
                         />
                       </div>
+                      <ShipmentUrls mediaUrls={shipmentDetail.mediaUrls || []} />
                     </div>
                   ) : (
                     <div className="p-12 text-center text-slate-400 italic text-sm bg-slate-100 rounded-xl">

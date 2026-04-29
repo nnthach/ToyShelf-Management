@@ -48,7 +48,6 @@ export default function AdminCommissionHistory() {
     queryKey: ["commissionHistories", query],
     queryFn: () => getAllCommissionHistoryAPI(query),
     select: (res) => res.data,
-    enabled: !!query.partnerId,
   });
 
   const columns = getCommissionHistoryColumns();

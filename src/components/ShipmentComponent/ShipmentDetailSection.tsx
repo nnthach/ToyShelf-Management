@@ -18,6 +18,8 @@ import { memo } from "react";
 import { formatShipmentStatusText } from "@/src/utils/formatStatus";
 import { formatColorNameToVN } from "@/src/utils/format";
 import Image from "next/image";
+import { ImageView } from "../ImageView";
+import { ShipmentUrls } from "./ShipmentUrls";
 
 interface ShipmentDetailSectionProps {
   shipmentDetail: Shipment[] | undefined;
@@ -142,6 +144,10 @@ function ShipmentDetailSection({
                     label="Hoàn tất"
                     time={shipment.storeReceivedAt}
                   />
+                </div>
+
+                <div className="mt-1">
+                  <ShipmentUrls mediaUrls={shipment.mediaUrls || []} />
                 </div>
 
                 {/* Danh sách sản phẩm trong shipment */}

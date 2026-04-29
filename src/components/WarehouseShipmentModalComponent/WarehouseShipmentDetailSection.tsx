@@ -3,6 +3,7 @@ import { ArrowRight, Package, Truck, UserCheck } from "lucide-react";
 import ShipInfoItem from "../ShipmentComponent/ShipInfoItem";
 import ShipTimeNode from "../ShipmentComponent/ShipTimeNode";
 import { formatShipmentStatusText } from "@/src/utils/formatStatus";
+import { ShipmentUrls } from "../ShipmentComponent/ShipmentUrls";
 
 interface WarehouseShipmentDetailSectionProps {
   shipmentDetail: Shipment;
@@ -52,6 +53,8 @@ function WarehouseShipmentDetailSection({
                 {shipmentDetail.toLocationName}
               </span>
             </div>
+
+            <ShipmentUrls mediaUrls={shipmentDetail.mediaUrls || []} />
           </div>
           {/* Time nodes */}
           <div className="grid grid-cols-3 gap-2">

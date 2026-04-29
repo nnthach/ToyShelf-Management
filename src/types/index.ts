@@ -646,6 +646,7 @@ export interface Shipment {
   shelfOrders: [{ id: string; code: string }];
   storeOrders: [{ id: string; code: string }];
   damageReports: [{ id: string; code: string }];
+  mediaUrls: string[];
 }
 
 export interface ChartItem {

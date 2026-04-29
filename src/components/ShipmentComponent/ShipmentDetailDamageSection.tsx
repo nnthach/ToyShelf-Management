@@ -7,6 +7,7 @@ import { memo } from "react";
 import { formatShipmentStatusText } from "@/src/utils/formatStatus";
 import { formatColorNameToVN } from "@/src/utils/format";
 import Image from "next/image";
+import { ShipmentUrls } from "./ShipmentUrls";
 
 interface ShipmentDetailDamageSectionProps {
   shipmentDetail: Shipment[] | undefined;
@@ -102,6 +103,9 @@ function ShipmentDetailDamageSection({
                     label="Kho xác nhận"
                     time={shipment.warehouseReceivedAt}
                   />
+                </div>
+                <div className="mt-1">
+                  <ShipmentUrls mediaUrls={shipment.mediaUrls || []} />
                 </div>
               </div>
             </div>

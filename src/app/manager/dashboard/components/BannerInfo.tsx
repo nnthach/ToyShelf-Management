@@ -81,7 +81,7 @@ function BannerInfo({ storeDetail }: { storeDetail: Store }) {
               <div className="flex items-start gap-3 border-white/20 md:border-l md:pl-6">
                 {/* Icon container: Tăng độ sáng icon và thêm hiệu ứng kính mờ */}
                 <div className="p-1.5 bg-blue-400/20 backdrop-blur-md rounded-md mt-1 border border-white/10 shadow-lg">
-                  <Server size={16} className="text-blue-300" />
+                  <Server size={15} className="text-blue-300" />
                 </div>
 
                 <div>
@@ -90,7 +90,7 @@ function BannerInfo({ storeDetail }: { storeDetail: Store }) {
                   </p>
                   <div className="flex items-baseline gap-1">
                     {/* text-blue-50 sẽ nổi hơn text-white thuần trên nền sáng */}
-                    <p className="text-lg font-black text-white drop-shadow-lg">
+                    <p className="text-sm font-semibold text-white drop-shadow-lg">
                       {storeDetail?.maxShelvesPerStore || 0}
                     </p>
                     <span className="text-[10px] text-blue-100/80 font-bold uppercase">

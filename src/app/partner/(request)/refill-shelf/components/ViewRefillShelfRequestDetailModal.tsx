@@ -44,6 +44,7 @@ import { toast } from "react-toastify";
 import { formatDateTime } from "@/src/utils/format";
 import { useState } from "react";
 import ReasonRejectRequestModal from "./ReasonRejectRequest";
+import { ShipmentUrls } from "@/src/components/ShipmentComponent/ShipmentUrls";
 
 type ViewRefillShelfRequestModalDetailProps = {
   requestId: string;
@@ -448,6 +449,10 @@ function ViewRefillShelfRequestModalDetail({
                                   time={shipment.storeReceivedAt}
                                 />
                               </div>
+
+                              <ShipmentUrls
+                                mediaUrls={shipment.mediaUrls || []}
+                              />
 
                               {/* Danh sách sản phẩm trong shipment */}
                               <div className="space-y-2">

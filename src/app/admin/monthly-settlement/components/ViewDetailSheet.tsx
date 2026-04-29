@@ -1,10 +1,8 @@
 "use client";
 
-import { Card, CardHeader } from "@/src/styles/components/ui/card";
 import { ScrollArea } from "@/src/styles/components/ui/scroll-area";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -21,37 +19,31 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { Button } from "@/src/styles/components/ui/button";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  getMonthlySettlementDetailAPI,
-  updateMonthlySettlementBankedAPI,
-} from "@/src/services/monthly-settlement.service";
+import { useQuery } from "@tanstack/react-query";
+import { getMonthlySettlementDetailAPI } from "@/src/services/monthly-settlement.service";
 import { useState } from "react";
-import {DailySummary } from "@/src/types";
+import { DailySummary } from "@/src/types";
 import {
   formatMonthlySettlementStatusColor,
   formatMonthlySettlementStatusText,
 } from "@/src/utils/formatStatus";
 import DeductionModal from "./DeductionModal";
-import { toast } from "react-toastify";
-import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import OrderInDayModal from "./OrderInDayModal";
-import { set } from "zod";
+import ConfirmPaymentWithImg from "./ConfirmPaymentWithImg";
 
 function ViewDetailSheet({
   monthlySettlementId,
 }: {
   monthlySettlementId: string;
 }) {
-  const queryClient = useQueryClient();
-
   const [open, setOpen] = useState(false);
   const [isOpenDeduction, setIsOpenDeduction] = useState(false);
+  const [isOpenConfirmPay, setIsOpenConfirmPay] = useState(false);
 
   const [isOpenOrderInDay, setIsOpenOrderInDay] = useState(false);
-  const [orderInDayData, setOrderInDayData] = useState<
-    DailySummary | null
-  >(null);
+  const [orderInDayData, setOrderInDayData] = useState<DailySummary | null>(
+    null,
+  );
 
   const { data: detail, isLoading } = useQuery({
     queryKey: ["monthlySettlement", monthlySettlementId],
@@ -59,33 +51,6 @@ function ViewDetailSheet({
     select: (res) => res.data,
     enabled: !!monthlySettlementId && open,
   });
-
-  const paidMutation = useMutation({
-    mutationFn: updateMonthlySettlementBankedAPI,
-    onSuccess: () => {
-      toast.success("Xác nhận chuyển tiền thành công");
-
-      // reload danh sách
-      queryClient.invalidateQueries({
-        queryKey: ["monthlySettlement", monthlySettlementId],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: ["monthlySettlements"],
-      });
-    },
-    onError: (error) => {
-      toast.error(getErrorMessage(error, "Xác nhận chuyển tiền thất bại"));
-    },
-  });
-
-  const handlePaid = (monthlySettlementId: string) => {
-    const confirmPaid = window.confirm("Bạn có chắc đã chuyển tiền không?");
-
-    if (!confirmPaid) return;
-
-    paidMutation.mutate(monthlySettlementId);
-  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -255,34 +220,81 @@ function ViewDetailSheet({
             <div className="flex-1 bg-white dark:bg-slate-950 border-l border-slate-200/60 dark:border-slate-800 flex flex-col shadow-[-4px_0_15px_rgba(0,0,0,0.02)]">
               <div className="flex-1 overflow-y-auto custom-scrollbar">
                 <div className="p-8 pt-0 space-y-4">
-                  {/* Đối tác Section */}
+                  {/* Section: Thông tin đối tác & Ngân hàng */}
                   <section className="space-y-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1 h-4 bg-blue-500 rounded-full" />
-                      <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                        Thông tin đối tác
-                      </h4>
-                    </div>
-                    <div className="grid gap-3 bg-slate-50/50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-slate-500">
-                          Mã đối tác
-                        </span>
-                        <span className="text-sm font-mono font-bold bg-white dark:bg-slate-800 px-2 py-0.5 rounded shadow-sm border border-slate-100 dark:border-slate-700">
-                          {detail?.partnerCode}
-                        </span>
+                    {/* Khối Thông tin đối tác */}
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-1 h-4 bg-blue-500 rounded-full" />
+                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                          Thông tin đối tác
+                        </h4>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-slate-500">
-                          Trạng thái kỳ
-                        </span>
-                        <span
-                          className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ring-1 ring-inset ${formatMonthlySettlementStatusColor(detail?.status || "")}`}
-                        >
-                          {formatMonthlySettlementStatusText(
-                            detail?.status || "",
-                          )}
-                        </span>
+                      <div className="grid gap-3 bg-slate-50/50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Mã đối tác
+                          </span>
+                          <span className="text-sm font-mono font-bold bg-white dark:bg-slate-800 px-2 py-0.5 rounded shadow-sm border border-slate-100 dark:border-slate-700">
+                            {detail?.partnerCode}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Tên đối tác
+                          </span>
+                          <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            {detail?.partnerName}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Trạng thái
+                          </span>
+                          <span
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ring-1 ring-inset ${formatMonthlySettlementStatusColor(detail?.status || "")}`}
+                          >
+                            {formatMonthlySettlementStatusText(
+                              detail?.status || "",
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Khối Thông tin ngân hàng */}
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-1 h-4 bg-yellow-500 rounded-full" />
+                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                          Tài khoản thụ hưởng
+                        </h4>
+                      </div>
+                      <div className="grid gap-3 bg-yellow-50/30 dark:bg-yellow-900/10 p-4 rounded-2xl border border-yellow-100/50 dark:border-yellow-800/50">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Ngân hàng
+                          </span>
+                          <span className="text-sm font-bold text-slate-700 dark:text-slate-200 text-right">
+                            {detail?.bankName || "N/A"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Số tài khoản
+                          </span>
+                          <span className="text-sm font-bold uppercase text-slate-700 dark:text-slate-200">
+                            {detail?.bankAccountNumber || "N/A"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Chủ tài khoản
+                          </span>
+                          <span className="text-sm font-bold uppercase text-slate-700 dark:text-slate-200">
+                            {detail?.bankAccountName || "N/A"}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </section>
@@ -378,8 +390,7 @@ function ViewDetailSheet({
 
                     <Button
                       variant="success"
-                      disabled={paidMutation.isPending}
-                      onClick={() => handlePaid(detail.id)}
+                      onClick={() => setIsOpenConfirmPay(true)}
                       className="flex-[1.5] h-11 font-bold rounded-xl"
                     >
                       <CheckCircle2 size={18} strokeWidth={2.5} />
@@ -396,6 +407,12 @@ function ViewDetailSheet({
           monthlySettlementId={monthlySettlementId}
           isOpen={isOpenDeduction}
           onClose={() => setIsOpenDeduction(false)}
+        />
+
+        <ConfirmPaymentWithImg
+          monthlySettlementId={monthlySettlementId}
+          isOpen={isOpenConfirmPay}
+          onClose={() => setIsOpenConfirmPay(false)}
         />
 
         <OrderInDayModal
