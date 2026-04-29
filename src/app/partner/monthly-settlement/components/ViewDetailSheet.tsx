@@ -21,11 +21,11 @@ import { Button } from "@/src/styles/components/ui/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getMonthlySettlementDetailAPI,
+  getMonthlySettlementPendingAmountAPI,
   receiveMonthlySettlementAPI,
 } from "@/src/services/monthly-settlement.service";
 import { useState } from "react";
-import { formatDateTime } from "@/src/utils/format";
-import { CommissionHistory, DailySummary } from "@/src/types";
+import { DailySummary } from "@/src/types";
 import {
   formatMonthlySettlementStatusColor,
   formatMonthlySettlementStatusText,
@@ -33,6 +33,7 @@ import {
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import OrderInDayModal from "./OrderInDayModal";
+import { useAuth } from "@/src/hooks/useAuth";
 
 function ViewDetailSheet({
   monthlySettlementId,
@@ -40,8 +41,10 @@ function ViewDetailSheet({
   monthlySettlementId: string;
 }) {
   const queryClient = useQueryClient();
-
   const [open, setOpen] = useState(false);
+  const { partner } = useAuth();
+
+  const partnerId = partner?.partnerId;
 
   const [isOpenOrderInDay, setIsOpenOrderInDay] = useState(false);
   const [orderInDayData, setOrderInDayData] = useState<DailySummary | null>(
@@ -53,6 +56,13 @@ function ViewDetailSheet({
     queryFn: () => getMonthlySettlementDetailAPI(monthlySettlementId),
     select: (res) => res.data,
     enabled: !!monthlySettlementId && open,
+  });
+
+  const { data: detailPendingAmount } = useQuery({
+    queryKey: ["detailPendingAmount", partnerId],
+    queryFn: () => getMonthlySettlementPendingAmountAPI(partnerId!),
+    select: (res) => res.data,
+    enabled: !!partnerId && open,
   });
 
   const receiveMutation = useMutation({
@@ -100,18 +110,34 @@ function ViewDetailSheet({
             <SheetTitle className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
               Chi tiết Đối soát hoa hồng
             </SheetTitle>
-            <SheetDescription className="flex items-center gap-2 text-slate-500 font-medium text-sm">
-              <span className="text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded font-bold uppercase text-[10px] tracking-widest border border-blue-100 dark:border-blue-800">
-                {detail?.partnerCode}
-              </span>
-              <span className="text-slate-300">|</span>
-              <span className="text-slate-700 dark:text-slate-300">
-                {detail?.partnerName}
-              </span>
-              <span className="text-slate-300">•</span>
-              <span>
-                Tháng {detail?.month}/{detail?.year}
-              </span>
+            <SheetDescription className="flex justify-between items-center w-full">
+              {/* Thông tin bên trái */}
+              <div className="flex items-center gap-2 text-slate-500 font-medium text-sm">
+                <span className="text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded font-bold uppercase text-[10px] tracking-widest border border-blue-100 dark:border-blue-800">
+                  {detail?.partnerCode}
+                </span>
+                <span className="text-slate-300">|</span>
+                <span className="text-slate-700 dark:text-slate-300">
+                  {detail?.partnerName}
+                </span>
+                <span className="text-slate-300">•</span>
+                <span>
+                  Tháng {detail?.month}/{detail?.year}
+                </span>
+              </div>
+
+              {/* Tiền chưa thanh toán bên phải */}
+              <div className="flex items-center gap-1.5 text-sm">
+                <span className="text-slate-500 font-medium">
+                  Chưa thanh toán:
+                </span>
+                <span className="font-bold text-rose-600 dark:text-rose-400">
+                  {detailPendingAmount?.unsettledAmount?.toLocaleString(
+                    "vi-VN",
+                  ) || "0"}{" "}
+                  ₫
+                </span>
+              </div>
             </SheetDescription>
           </div>
         </SheetHeader>
@@ -135,7 +161,7 @@ function ViewDetailSheet({
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                      Sản lượng đơn
+                      Số lượng đơn
                     </p>
                     <p className="text-xl font-black text-slate-900 dark:text-slate-100">
                       {detail?.totalItems ?? 0}{" "}
@@ -151,7 +177,7 @@ function ViewDetailSheet({
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                      Doanh số tháng
+                      Doanh thu
                     </p>
                     <p className="text-xl font-black text-slate-900 dark:text-slate-100">
                       {detail?.totalSalesAmount?.toLocaleString("vi-VN")}
@@ -167,7 +193,7 @@ function ViewDetailSheet({
               <div className="flex-1 flex flex-col min-h-0">
                 <div className="flex-none mb-3 px-1">
                   <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                    Chi tiết giao dịch từng ngày
+                    Chi tiết doanh thu từng ngày
                   </h3>
                 </div>
                 <div className="flex-1 min-h-0 border border-slate-200/60 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
@@ -250,34 +276,81 @@ function ViewDetailSheet({
             <div className="flex-1 bg-white dark:bg-slate-950 border-l border-slate-200/60 dark:border-slate-800 flex flex-col shadow-[-4px_0_15px_rgba(0,0,0,0.02)]">
               <div className="flex-1 overflow-y-auto custom-scrollbar">
                 <div className="p-8 pt-0 space-y-4">
-                  {/* Đối tác Section */}
+                  {/* Section: Thông tin đối tác & Ngân hàng */}
                   <section className="space-y-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1 h-4 bg-blue-500 rounded-full" />
-                      <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                        Thông tin đối tác
-                      </h4>
-                    </div>
-                    <div className="grid gap-3 bg-slate-50/50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-slate-500">
-                          Mã đối tác
-                        </span>
-                        <span className="text-sm font-mono font-bold bg-white dark:bg-slate-800 px-2 py-0.5 rounded shadow-sm border border-slate-100 dark:border-slate-700">
-                          {detail?.partnerCode}
-                        </span>
+                    {/* Khối Thông tin đối tác */}
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-1 h-4 bg-blue-500 rounded-full" />
+                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                          Thông tin đối tác
+                        </h4>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-slate-500">
-                          Trạng thái kỳ
-                        </span>
-                        <span
-                          className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ring-1 ring-inset ${formatMonthlySettlementStatusColor(detail?.status || "")}`}
-                        >
-                          {formatMonthlySettlementStatusText(
-                            detail?.status || "",
-                          )}
-                        </span>
+                      <div className="grid gap-3 bg-slate-50/50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Mã đối tác
+                          </span>
+                          <span className="text-sm font-mono font-bold bg-white dark:bg-slate-800 px-2 py-0.5 rounded shadow-sm border border-slate-100 dark:border-slate-700">
+                            {detail?.partnerCode}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Tên đối tác
+                          </span>
+                          <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            {detail?.partnerName}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Trạng thái
+                          </span>
+                          <span
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ring-1 ring-inset ${formatMonthlySettlementStatusColor(detail?.status || "")}`}
+                          >
+                            {formatMonthlySettlementStatusText(
+                              detail?.status || "",
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Khối Thông tin ngân hàng */}
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-1 h-4 bg-yellow-500 rounded-full" />
+                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                          Tài khoản thụ hưởng
+                        </h4>
+                      </div>
+                      <div className="grid gap-3 bg-yellow-50/30 dark:bg-yellow-900/10 p-4 rounded-2xl border border-yellow-100/50 dark:border-yellow-800/50">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Ngân hàng
+                          </span>
+                          <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 text-right">
+                            {detail?.bankName || "N/A"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Số tài khoản
+                          </span>
+                          <span className="text-sm font-semibold uppercase text-slate-700 dark:text-slate-200">
+                            {detail?.bankAccountNumber || "N/A"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-500">
+                            Chủ tài khoản
+                          </span>
+                          <span className="text-sm font-semibold uppercase text-slate-700 dark:text-slate-200">
+                            {detail?.bankAccountName || "N/A"}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </section>

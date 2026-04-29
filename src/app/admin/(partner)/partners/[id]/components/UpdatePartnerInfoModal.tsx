@@ -24,14 +24,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Building2,
+  CreditCard,
   Edit,
   Info,
+  Landmark,
   MapIcon,
   MapPin,
   Navigation,
   Pencil,
   Search,
   ShieldCheck,
+  User,
 } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -53,6 +56,9 @@ function UpdatePartnerInfoModal({ partner }: { partner: Partner }) {
   const form = useForm<UpdatePartnerFormValues>({
     resolver: zodResolver(updatePartnerSchema),
     defaultValues: {
+      bankName: "",
+      bankAccountNumber: "",
+      bankAccountName: "",
       companyName: "",
       partnerTierId: "",
       address: "",
@@ -69,6 +75,9 @@ function UpdatePartnerInfoModal({ partner }: { partner: Partner }) {
         latitude: partner.latitude,
         longitude: partner.longitude,
         partnerTierId: partner.partnerTierId,
+        bankName: partner.bankName,
+        bankAccountNumber: partner.bankAccountNumber,
+        bankAccountName: partner.bankAccountName,
       });
 
       window.dispatchEvent(
@@ -166,7 +175,7 @@ function UpdatePartnerInfoModal({ partner }: { partner: Partner }) {
                     name="companyName"
                     label="Tên công ty"
                     icon={<Building2 size={18} />}
-                    placeholder="Nhập tên chính thức của doanh nghiệp..."
+                    placeholder="Nhập tên công ty..."
                     required
                   />
 
@@ -177,6 +186,30 @@ function UpdatePartnerInfoModal({ partner }: { partner: Partner }) {
                     placeholder="Chọn hạng mức hợp tác"
                     type="select"
                     selectData={partnerTierOptions}
+                    required
+                  />
+
+                  <FormFieldCustom
+                    name="bankName"
+                    label="Ngân hàng"
+                    icon={<Landmark size={18} />}
+                    placeholder="Nhập tên ngân hàng..."
+                    required
+                  />
+
+                  <FormFieldCustom
+                    name="bankAccountNumber"
+                    label="Số tài khoản ngân hàng"
+                    icon={<CreditCard size={18} />}
+                    placeholder="Nhập số tài khoản ngân hàng..."
+                    required
+                  />
+
+                  <FormFieldCustom
+                    name="bankAccountName"
+                    label="Chủ tài khoản"
+                    icon={<User size={18} />}
+                    placeholder="Nhập tên chủ tài khoản..."
                     required
                   />
 

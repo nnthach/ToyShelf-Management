@@ -20,7 +20,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/src/styles/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import { getMonthlySettlementDetailAPI } from "@/src/services/monthly-settlement.service";
+import {
+  getMonthlySettlementDetailAPI,
+  getMonthlySettlementPendingAmountAPI,
+} from "@/src/services/monthly-settlement.service";
 import { useState } from "react";
 import { DailySummary } from "@/src/types";
 import {
@@ -52,6 +55,14 @@ function ViewDetailSheet({
     enabled: !!monthlySettlementId && open,
   });
 
+  const partnerId = detail?.partnerId || "";
+  const { data: detailPendingAmount } = useQuery({
+    queryKey: ["detailPendingAmount", partnerId],
+    queryFn: () => getMonthlySettlementPendingAmountAPI(partnerId),
+    select: (res) => res.data,
+    enabled: !!partnerId && open,
+  });
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -70,18 +81,34 @@ function ViewDetailSheet({
             <SheetTitle className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
               Chi tiết Đối soát hoa hồng
             </SheetTitle>
-            <SheetDescription className="flex items-center gap-2 text-slate-500 font-medium text-sm">
-              <span className="text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded font-bold uppercase text-[10px] tracking-widest border border-blue-100 dark:border-blue-800">
-                {detail?.partnerCode}
-              </span>
-              <span className="text-slate-300">|</span>
-              <span className="text-slate-700 dark:text-slate-300">
-                {detail?.partnerName}
-              </span>
-              <span className="text-slate-300">•</span>
-              <span>
-                Tháng {detail?.month}/{detail?.year}
-              </span>
+            <SheetDescription className="flex justify-between items-center w-full">
+              {/* Thông tin bên trái */}
+              <div className="flex items-center gap-2 text-slate-500 font-medium text-sm">
+                <span className="text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded font-bold uppercase text-[10px] tracking-widest border border-blue-100 dark:border-blue-800">
+                  {detail?.partnerCode}
+                </span>
+                <span className="text-slate-300">|</span>
+                <span className="text-slate-700 dark:text-slate-300">
+                  {detail?.partnerName}
+                </span>
+                <span className="text-slate-300">•</span>
+                <span>
+                  Tháng {detail?.month}/{detail?.year}
+                </span>
+              </div>
+
+              {/* Tiền chưa thanh toán bên phải */}
+              <div className="flex items-center gap-1.5 text-sm">
+                <span className="text-slate-500 font-medium">
+                  Chưa thanh toán:
+                </span>
+                <span className="font-bold text-rose-600 dark:text-rose-400">
+                  {detailPendingAmount?.unsettledAmount?.toLocaleString(
+                    "vi-VN",
+                  ) || "0"}{" "}
+                  ₫
+                </span>
+              </div>
             </SheetDescription>
           </div>
         </SheetHeader>
@@ -275,7 +302,7 @@ function ViewDetailSheet({
                           <span className="text-sm text-slate-500">
                             Ngân hàng
                           </span>
-                          <span className="text-sm font-bold text-slate-700 dark:text-slate-200 text-right">
+                          <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 text-right">
                             {detail?.bankName || "N/A"}
                           </span>
                         </div>
@@ -283,7 +310,7 @@ function ViewDetailSheet({
                           <span className="text-sm text-slate-500">
                             Số tài khoản
                           </span>
-                          <span className="text-sm font-bold uppercase text-slate-700 dark:text-slate-200">
+                          <span className="text-sm font-semibold uppercase text-slate-700 dark:text-slate-200">
                             {detail?.bankAccountNumber || "N/A"}
                           </span>
                         </div>
@@ -291,7 +318,7 @@ function ViewDetailSheet({
                           <span className="text-sm text-slate-500">
                             Chủ tài khoản
                           </span>
-                          <span className="text-sm font-bold uppercase text-slate-700 dark:text-slate-200">
+                          <span className="text-sm font-semibold uppercase text-slate-700 dark:text-slate-200">
                             {detail?.bankAccountName || "N/A"}
                           </span>
                         </div>

@@ -32,11 +32,21 @@ export const getPartnerColumns = (): ColumnDef<User>[] => [
   {
     accessorKey: "code",
     header: "Mã đối tác",
+    cell: ({ row }) => {
+      return (
+        <span className="font-bold text-slate-900">{row.getValue("code")}</span>
+      );
+    },
   },
 
   {
     accessorKey: "companyName",
     header: "Tên công ty",
+    cell: ({ row }) => (
+      <span className="font-medium text-slate-900 line-clamp-1">
+        {row.getValue("companyName")}
+      </span>
+    ),
   },
 
   {

@@ -25,7 +25,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Building2,
   Calendar,
+  CreditCard,
   Info,
+  Landmark,
   Layers,
   MapIcon,
   MapPin,
@@ -34,6 +36,7 @@ import {
   Search,
   Send,
   ShieldCheck,
+  User,
 } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -55,6 +58,9 @@ function CreatePartnerModal() {
   const form = useForm<PartnerFormValues>({
     resolver: zodResolver(partnerSchema),
     defaultValues: {
+      bankName: "",
+      bankAccountNumber: "",
+      bankAccountName: "",
       companyName: "",
       partnerTierId: "",
       commissionTableId: "",
@@ -154,7 +160,7 @@ function CreatePartnerModal() {
                     name="companyName"
                     label="Tên công ty"
                     icon={<Building2 size={18} />}
-                    placeholder="Nhập tên chính thức của doanh nghiệp..."
+                    placeholder="Nhập tên công ty..."
                     required
                   />
 
@@ -165,6 +171,30 @@ function CreatePartnerModal() {
                     placeholder="Chọn hạng mức hợp tác"
                     type="select"
                     selectData={partnerTierOptions}
+                    required
+                  />
+
+                  <FormFieldCustom
+                    name="bankName"
+                    label="Ngân hàng"
+                    icon={<Landmark size={18} />}
+                    placeholder="Nhập tên ngân hàng..."
+                    required
+                  />
+
+                  <FormFieldCustom
+                    name="bankAccountNumber"
+                    label="Số tài khoản ngân hàng"
+                    icon={<CreditCard size={18} />}
+                    placeholder="Nhập số tài khoản ngân hàng..."
+                    required
+                  />
+
+                  <FormFieldCustom
+                    name="bankAccountName"
+                    label="Chủ tài khoản"
+                    icon={<User size={18} />}
+                    placeholder="Nhập tên chủ tài khoản..."
                     required
                   />
 

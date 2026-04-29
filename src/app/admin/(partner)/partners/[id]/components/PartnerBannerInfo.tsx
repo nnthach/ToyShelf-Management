@@ -6,11 +6,12 @@ import {
   History,
   Calendar,
   CheckCircle2,
-  FilePlus,
   Settings,
   MapPin,
   Lock,
   ShieldCheck,
+  CreditCard,
+  ExternalLink,
 } from "lucide-react";
 import Image from "next/image";
 import CreatePartnerAccountModal from "./CreatePartnerAccountModal";
@@ -33,10 +34,26 @@ import {
   restorePartnerAPI,
 } from "@/src/services/partner.service";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import { memo, useState } from "react";
+import BankInfoModal from "./BankInfoModal";
 
 function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
   const queryClient = useQueryClient();
   const partnerId = partnerDetail?.id || "";
+
+  const [bankModalData, setBankModalData] = useState<{
+    bankName: string;
+    bankAccountNumber: string;
+    bankAccountName: string;
+  } | null>(null);
+
+  const handleOpenBankModal = () => {
+    setBankModalData({
+      bankName: partnerDetail?.bankName || "",
+      bankAccountNumber: partnerDetail?.bankAccountNumber || "",
+      bankAccountName: partnerDetail?.bankAccountName || "",
+    });
+  };
 
   const disableMutation = useMutation({
     mutationFn: disablePartnerAPI,
@@ -138,7 +155,19 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
                     {partnerDetail?.partnerAccount?.email ||
                       "Chưa có tài khoản sở hữu"}
                   </p>
+                  {/*Bank info */}
+                  <div className="flex items-center gap-2.5 mt-2">
+                    <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                    <button
+                      onClick={handleOpenBankModal}
+                      className="group flex items-center gap-2 text-[13px] text-white/90 hover:text-emerald-400 transition-colors font-medium cursor-pointer"
+                    >
+                      <span>Thông tin ngân hàng và thanh toán</span>
+                      <ExternalLink size={10} className="opacity-50" />
+                    </button>
+                  </div>
                 </div>
+
                 <div className="pl-6 border-l border-white/10">
                   <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">
                     Giới hạn kệ/Cửa hàng
@@ -334,8 +363,15 @@ function PartnerBannerInfo({ partnerDetail }: { partnerDetail: Partner }) {
           </>
         )}
       </div>
+
+      <BankInfoModal
+        isOpen={!!bankModalData}
+        onClose={() => setBankModalData(null)}
+        data={bankModalData}
+        partnerId={partnerId || ""}
+      />
     </>
   );
 }
 
-export default PartnerBannerInfo;
+export default memo(PartnerBannerInfo);

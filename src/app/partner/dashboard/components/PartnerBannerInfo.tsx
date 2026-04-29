@@ -1,13 +1,20 @@
 "use client";
 
-import { Calendar, CheckCircle2, History, MapPin } from "lucide-react";
+import {
+  Calendar,
+  CheckCircle2,
+  ExternalLink,
+  History,
+  MapPin,
+} from "lucide-react";
 import Image from "next/image";
 import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
-import TimeGreetingSubBanner from "@/src/components/TimeGreetingSubBanner";
 import { useAuth } from "@/src/hooks/useAuth";
 import { getPartnerDetailAPI } from "@/src/services/partner.service";
 import { useQuery } from "@tanstack/react-query";
 import { CommissionTable } from "@/src/types";
+import { useState } from "react";
+import BankInfoModal from "./BankInfoModal";
 
 function PartnerBannerInfo() {
   const { partner, isLoading: isAuthLoading } = useAuth();
@@ -20,6 +27,20 @@ function PartnerBannerInfo() {
     select: (res) => res.data,
     enabled: !!partnerId,
   });
+
+  const [bankModalData, setBankModalData] = useState<{
+    bankName: string;
+    bankAccountNumber: string;
+    bankAccountName: string;
+  } | null>(null);
+
+  const handleOpenBankModal = () => {
+    setBankModalData({
+      bankName: partnerDetail?.bankName || "",
+      bankAccountNumber: partnerDetail?.bankAccountNumber || "",
+      bankAccountName: partnerDetail?.bankAccountName || "",
+    });
+  };
 
   return (
     <>
@@ -79,6 +100,17 @@ function PartnerBannerInfo() {
                     {partnerDetail?.partnerAccount?.email ||
                       "Chưa có tài khoản sở hữu"}
                   </p>
+                  {/*Bank info */}
+                  <div className="flex items-center gap-2.5 mt-2">
+                    <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                    <button
+                      onClick={handleOpenBankModal}
+                      className="group flex items-center gap-2 text-[13px] text-white/90 hover:text-emerald-400 transition-colors font-medium cursor-pointer"
+                    >
+                      <span>Thông tin ngân hàng và thanh toán</span>
+                      <ExternalLink size={10} className="opacity-50" />
+                    </button>
+                  </div>
                 </div>
                 <div className="pl-6 border-l border-white/10">
                   <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">
@@ -214,6 +246,13 @@ function PartnerBannerInfo() {
           )}
         </div>
       </div>
+
+      <BankInfoModal
+        isOpen={!!bankModalData}
+        onClose={() => setBankModalData(null)}
+        data={bankModalData}
+        partnerId={partnerId || ""}
+      />
     </>
   );
 }

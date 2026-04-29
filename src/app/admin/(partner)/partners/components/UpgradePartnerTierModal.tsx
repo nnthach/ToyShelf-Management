@@ -96,18 +96,12 @@ function UpgradePartnerTierModal({ partnerId }: { partnerId: string }) {
 
       <DialogContent className="sm:max-w-[420px] p-0 overflow-hidden border-none shadow-2xl rounded-2xl">
         {/* Header với Gradient Blue */}
-        <DialogHeader className="p-8 bg-gradient-to-br from-blue-600 to-indigo-700 text-white relative">
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-            <ArrowBigUpDash size={80} />
-          </div>
-
-          <DialogTitle className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
-            <Award className="text-yellow-400" />
+        <DialogHeader className="p-6 bg-slate-50/50 border-b">
+          <DialogTitle className="text-xl font-bold text-slate-800">
             Nâng cấp đối tác
           </DialogTitle>
-          <DialogDescription className="text-blue-100 font-medium opacity-90 mt-2 flex items-center gap-2 italic">
-            <Info size={14} /> Thay đổi phân hạng mức độ ưu tiên cho đối tác
-            này.
+          <DialogDescription className="text-slate-500 flex items-center gap-1 mt-0.5">
+            <Info size={14} /> Cập nhật cấp bậc mới cho đối tác.
           </DialogDescription>
         </DialogHeader>
 
@@ -133,7 +127,7 @@ function UpgradePartnerTierModal({ partnerId }: { partnerId: string }) {
               <FormFieldCustom
                 name="newTierId"
                 label="Chọn cấp bậc mới"
-                icon={<Award size={18} className="text-blue-500" />}
+                icon={<Award size={16} />}
                 placeholder="Chọn hạng (Đồng, Bạc, Vàng...)"
                 type="select"
                 selectData={partnerTierOptions}
@@ -149,12 +143,7 @@ function UpgradePartnerTierModal({ partnerId }: { partnerId: string }) {
         {/* Footer */}
         <DialogFooter className="p-6 bg-zinc-50 dark:bg-zinc-900/50 border-t flex gap-3 sm:gap-2">
           <DialogClose asChild>
-            <Button
-              variant="outline"
-              className="flex-1 sm:flex-none font-bold text-zinc-500 hover:bg-zinc-200"
-            >
-              Đóng
-            </Button>
+            <Button variant="outline">Đóng</Button>
           </DialogClose>
           <Button
             type="submit"

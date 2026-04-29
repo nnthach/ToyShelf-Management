@@ -53,6 +53,9 @@ export interface Partner {
   latitude: number;
   longitude: number;
   maxShelvesPerStore: number;
+  bankName: string;
+  bankAccountNumber: string;
+  bankAccountName: string;
 }
 
 export interface Store {

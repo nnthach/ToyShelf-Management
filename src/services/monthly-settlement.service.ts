@@ -18,6 +18,11 @@ export const getMonthlySettlementDetailAPI = async (id: string) => {
   return res.data;
 };
 
+export const getMonthlySettlementPendingAmountAPI = async (id: string) => {
+  const res = await api.get(`/MonthlySettlement/test-wallet/${id}`);
+  return res.data;
+};
+
 export const createMonthlySettlementGenerateAPI = async (
   year: number,
   month: number,
