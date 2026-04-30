@@ -97,7 +97,7 @@ function FileUploadModal() {
             <div className="flex items-center gap-3">
               <input
                 type="file"
-                accept=".glb,.gltf"
+                accept=".glb,.gltf,.fbx,.obj,.bundle,.assetbundle"
                 className="flex-1 border rounded-md px-3 py-2 text-sm cursor-pointer"
                 onChange={(e) => {
                   if (e.target.files?.[0]) {

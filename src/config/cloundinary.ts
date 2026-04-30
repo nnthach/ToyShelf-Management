@@ -1,4 +1,11 @@
-type UploadEntity = "product" | "store" | "staff" | "user" | "shelf" | "return";
+type UploadEntity =
+  | "product"
+  | "store"
+  | "staff"
+  | "user"
+  | "shelf"
+  | "return"
+  | "receipt";
 
 const getUploadConfig = (file: File, entity: UploadEntity) => {
   if (file.type.startsWith("image/")) {
