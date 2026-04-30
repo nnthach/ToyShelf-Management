@@ -44,14 +44,14 @@ function WarehouseStatCard() {
           action={() => router.push(`/warehouse/refill-stocks`)}
         />
         <StatCardWithButton
-          title="Hàng Tồn kho"
+          title="Hàng Tại kho"
           value={warehouseStatCard?.totalInventory}
           icon={Box}
           color="bg-red-100 text-red-900"
           action={() => router.push(`/warehouse/inventory`)}
         />
         <StatCardWithButton
-          title="Kệ Tồn Kho"
+          title="Kệ Tại Kho"
           value={warehouseStatCard?.totalShelves}
           icon={Server}
           color="bg-orange-100 text-orange-900"

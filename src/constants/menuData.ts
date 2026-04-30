@@ -124,7 +124,7 @@ export const AdminSidebarNested = [
         icon: Box,
       },
       {
-        title: "Giám sát kệ tồn kho",
+        title: "Giám sát kệ trưng bày",
         url: "/admin/shelf-inventory",
         icon: Server,
       },
@@ -215,7 +215,7 @@ export const PartnerAdminSidebarGroups = [
         icon: Box,
       },
       {
-        title: "Danh sách kệ tồn kho",
+        title: "Danh sách kệ trưng bày",
         url: "/partner/shelf-inventories",
         icon: Server,
       },
@@ -291,12 +291,12 @@ export const WarehouseManagerSidebarGroups = [
     label: "Hàng tồn kho",
     items: [
       {
-        title: "Quản lý hàng tồn kho",
+        title: "Quản lý hàng tại kho",
         url: "/warehouse/inventory",
         icon: Box,
       },
       {
-        title: "Quản lý kệ tồn kho",
+        title: "Quản lý kệ tại kho",
         url: "/warehouse/shelf-inventory",
         icon: Server,
       },
@@ -346,12 +346,12 @@ export const StoreManagerSidebarGroups = [
     label: "Hàng tồn kho",
     items: [
       {
-        title: "Giám sát hàng tồn kho",
+        title: "Giám sát hàng tại của hàng",
         url: "/manager/inventory",
         icon: Box,
       },
       {
-        title: "Giám sát kệ tồn kho",
+        title: "Giám sát kệ trưng bày",
         url: "/manager/shelf-inventory",
         icon: Server,
       },

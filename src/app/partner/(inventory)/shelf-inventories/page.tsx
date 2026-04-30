@@ -63,10 +63,10 @@ export default function PartnerViewAllInventoryShelf() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Giám sát kệ tồn kho tại {inventoryList?.locationName}
+            Giám sát kệ trưng bày tại {inventoryList?.locationName}
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
-            Danh sách kệ tồn kho tại cửa hàng
+            Danh sách kệ trưng bày tại cửa hàng
           </p>
         </div>
       </div>
@@ -101,6 +101,7 @@ export default function PartnerViewAllInventoryShelf() {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
                 {inventoryList?.shelves.map((shelf: Shelf) => (
                   <ShelfCardWithQuantity
+                    inventoryList={inventoryList}
                     key={shelf.shelfTypeId}
                     shelf={shelf}
                   />
