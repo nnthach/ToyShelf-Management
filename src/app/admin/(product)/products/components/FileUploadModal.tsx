@@ -59,7 +59,7 @@ function FileUploadModal() {
       await deleteFileUploadBySkuAPI(selected.variantSku);
       setSelected(null);
       setSearch("");
-      toast.error("Xóa tệp 3D thành công");
+      toast.success("Xóa tệp 3D thành công");
     } catch (error) {
       toast.error(getErrorMessage(error) || "Xóa tệp 3D thất bại");
     }
