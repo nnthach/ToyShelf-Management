@@ -18,6 +18,8 @@ import {
   deleteFileUploadBySkuAPI,
   productFileUploadAPI,
 } from "@/src/services/product-file-upload.service";
+import { get } from "http";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function FileUploadModal() {
   const [open, setOpen] = useState(false);
@@ -43,7 +45,7 @@ function FileUploadModal() {
       toast.success("Tải tệp 3D thành công");
       setFile(null);
     } catch (error) {
-      toast.error("Tải tệp 3D thất bại");
+      toast.error(getErrorMessage(error) || "Tải tệp 3D thất bại");
     }
   };
 
@@ -59,7 +61,7 @@ function FileUploadModal() {
       setSearch("");
       toast.error("Xóa tệp 3D thành công");
     } catch (error) {
-      toast.error("Xóa tệp 3D thất bại");
+      toast.error(getErrorMessage(error) || "Xóa tệp 3D thất bại");
     }
   };
 
@@ -97,7 +99,7 @@ function FileUploadModal() {
             <div className="flex items-center gap-3">
               <input
                 type="file"
-                accept=".glb,.gltf,.fbx,.obj,.bundle,.assetbundle"
+                // accept=".glb,.gltf,.fbx,.obj,.bundle,.assetbundle"
                 className="flex-1 border rounded-md px-3 py-2 text-sm cursor-pointer"
                 onChange={(e) => {
                   if (e.target.files?.[0]) {
