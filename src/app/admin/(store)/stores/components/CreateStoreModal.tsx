@@ -183,7 +183,7 @@ function CreateStoreModal() {
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-3">
+              {/* <div className="flex items-center gap-3">
                 <FormFieldCustom
                   name="latitude"
                   label="Vĩ độ"
@@ -198,7 +198,7 @@ function CreateStoreModal() {
                   type="number"
                   readOnly={true}
                 />
-              </div>
+              </div> */}
             </form>
           </FormProvider>
           <DialogFooter>

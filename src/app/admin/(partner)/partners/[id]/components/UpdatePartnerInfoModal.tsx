@@ -270,7 +270,7 @@ function UpdatePartnerInfoModal({ partner }: { partner: Partner }) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* <div className="grid grid-cols-2 gap-4">
                     <FormFieldCustom
                       name="latitude"
                       label="Vĩ độ"
@@ -289,7 +289,7 @@ function UpdatePartnerInfoModal({ partner }: { partner: Partner }) {
                       className="bg-white/50"
                       required
                     />
-                  </div>
+                  </div> */}
                 </div>
               </form>
             </FormProvider>

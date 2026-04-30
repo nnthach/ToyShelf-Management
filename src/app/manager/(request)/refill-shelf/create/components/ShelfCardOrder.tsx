@@ -88,7 +88,7 @@ function ShelfCardOrder({
             }}
             className="w-full bg-gray-900 hover:bg-blue-600 text-white"
           >
-            Thêm vào giỏ hàng
+            Chọn kệ
           </Button>
         ) : (
           <div className="flex items-center justify-between border rounded-lg px-2 py-1">

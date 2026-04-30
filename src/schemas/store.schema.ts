@@ -7,8 +7,8 @@ export const storeSchema = z.object({
   storeAddress: z.string().min(1, "Địa chỉ cửa hàng không được để trống"),
   cityId: z.string().min(1, "Thành phố không được để trống"),
   phoneNumber: z.string().min(10, "Số điện thoại không hợp lệ"),
-  latitude: z.number(),
-  longitude: z.number(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
 });
 
 export type StoreFormValues = z.infer<typeof storeSchema>;

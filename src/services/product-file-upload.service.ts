@@ -1,7 +1,16 @@
 import api from "../config/axios";
 
-export const productFileUploadAPI = async <T>(data: T) => {
-  const res = await api.post("/FileUpload/upload", data);
+export const productFileUploadAPI = async (file: File) => {
+  const formData = new FormData();
+  formData.append("file", file); 
+
+  const res = await api.post("/FileUpload/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true, 
+  });
+
   return res.data;
 };
 

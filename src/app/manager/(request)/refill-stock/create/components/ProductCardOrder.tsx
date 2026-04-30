@@ -201,7 +201,7 @@ function ProductCardOrder({
             }}
             className="w-full bg-gray-900 hover:bg-blue-600 text-white"
           >
-            Thêm vào giỏ hàng
+            Chọn sản phẩm
           </Button>
         ) : (
           <div

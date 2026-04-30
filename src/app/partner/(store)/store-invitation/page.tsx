@@ -25,7 +25,7 @@ export default function PartnerManageStoreInvites() {
 
   const { partner } = useAuth();
 
-  const partnerId = partner?.id;
+  const partnerId = partner?.partnerId;
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: "",
@@ -47,6 +47,7 @@ export default function PartnerManageStoreInvites() {
     queryKey: ["stores"],
     queryFn: () => getAllStoreAPI({ companyid: partnerId }),
     select: (res) => res.data as Store[],
+    enabled: !!partnerId,
   });
 
   const storeOptions = storeList.map((s) => ({

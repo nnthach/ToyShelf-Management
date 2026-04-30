@@ -316,7 +316,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
                   </div>
 
                   {/* COORDINATES GRID */}
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* <div className="grid grid-cols-2 gap-4">
                     <FormFieldCustom
                       name="latitude"
                       label="Vĩ độ"
@@ -335,7 +335,7 @@ function UpdateWarehouseModal({ warehouse }: { warehouse: Warehouse }) {
                       className="bg-white/50"
                       required
                     />
-                  </div>
+                  </div> */}
                 </form>
               </FormProvider>
             </div>

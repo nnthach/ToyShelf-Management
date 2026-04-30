@@ -257,7 +257,7 @@ function CreatePartnerModal() {
                   </div>
 
                   {/* COORDINATES GRID */}
-                  <div className="grid grid-cols-2 gap-4">
+                  {/* <div className="grid grid-cols-2 gap-4">
                     <FormFieldCustom
                       name="latitude"
                       label="Vĩ độ"
@@ -276,7 +276,7 @@ function CreatePartnerModal() {
                       icon={<Navigation size={16} />}
                       className="bg-white/50"
                     />
-                  </div>
+                  </div> */}
 
                   <FormFieldCustom
                     name="commissionTableId"

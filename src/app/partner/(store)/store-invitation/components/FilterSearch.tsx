@@ -36,6 +36,7 @@ export default function FilterSearch({
     storeId: query.storeId ?? "",
   });
 
+  console.log("store options: ", storeOptions);
   const isFiltered = query.status !== "" || query.storeId !== "";
 
   const handleApply = () => {

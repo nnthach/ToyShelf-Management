@@ -1,7 +1,10 @@
 "use client";
 
+import { useAuth } from "@/src/hooks/useAuth";
 import { inviteToStoreAPI } from "@/src/services/store-invite.service";
-import { getAllPartnerStoreAPI } from "@/src/services/store.service";
+import {
+  getAllStoreAPI,
+} from "@/src/services/store.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import {
@@ -17,7 +20,6 @@ import {
 import { Store } from "@/src/types";
 import { SelectOption } from "@/src/types/SubType";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Mail, Plus, Send, Sparkles, Store as StoreIcon } from "lucide-react";
@@ -30,6 +32,9 @@ function CreateStoreInviteModal() {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
+  const { partner } = useAuth();
+
+  const partnerId = partner?.partnerId;
 
   const formSchema = z.object({
     email: z.string().min(1, "Email là bắt buộc"),
@@ -48,8 +53,9 @@ function CreateStoreInviteModal() {
 
   const { data: partnerStoreList = [] } = useQuery({
     queryKey: ["partnerStores"],
-    queryFn: () => getAllPartnerStoreAPI({}),
+    queryFn: () => getAllStoreAPI({ companyid: partnerId }),
     select: (res) => res.data as Store[],
+    enabled: !!partnerId,
   });
 
   const storeOptions: SelectOption[] = partnerStoreList.map((store) => ({

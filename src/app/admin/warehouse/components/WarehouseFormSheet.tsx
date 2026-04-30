@@ -249,7 +249,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <FormFieldCustom
                 name="latitude"
                 label="Vĩ độ"
@@ -268,7 +268,7 @@ function WarehouseFormSheet({ warehouse, onClose }: WarehouseFormSheetProps) {
                 icon={<Navigation size={16} />}
                 className="bg-white/50"
               />
-            </div>
+            </div> */}
           </form>
         </FormProvider>
       </div>
