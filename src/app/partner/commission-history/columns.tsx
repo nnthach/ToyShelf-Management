@@ -3,50 +3,75 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CommissionHistory } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
+import {
+  formatOrderStatusColor,
+  formatOrderStatusText,
+} from "@/src/utils/formatStatus";
+import ViewDetailSheet from "./components/ViewDetailSheet";
 
 export const getCommissionHistoryColumns =
   (): ColumnDef<CommissionHistory>[] => [
     {
       accessorKey: "orderCode",
       header: "Mã đơn hàng",
+      cell: ({ row }) => (
+        <span className="font-medium text-blue-600">
+          {row.getValue("orderCode")}
+        </span>
+      ),
     },
     {
-      accessorKey: "appliedRate",
-      header: "Phần trăm áp dụng",
+      accessorKey: "totalAmount",
+      header: "Tổng số tiền",
       cell: ({ row }) => {
-        const commissionHistory = row.original;
+        const value = Number(row.getValue("totalAmount") || 0);
         return (
-          <span>{Number(commissionHistory?.appliedRate || 0) * 100}%</span>
+          <span className="text-gray-600">
+            {value.toLocaleString("vi-VN")}đ
+          </span>
         );
       },
     },
-
     {
-      accessorKey: "commissionAmount",
+      accessorKey: "totalCommission",
       header: "Hoa hồng",
       cell: ({ row }) => {
-        const value = Number(row.getValue("commissionAmount") || 0);
-        return <span>{value.toLocaleString("vi-VN")}đ</span>;
+        const value = Number(row.getValue("totalCommission") || 0);
+        return (
+          <span className="font-bold text-green-600">
+            +{value.toLocaleString("vi-VN")}đ
+          </span>
+        );
       },
     },
-
     {
-      accessorKey: "quantity",
-      header: "Số lượng",
-    },
-    {
-      accessorKey: "paymentMethod",
-      header: "Phương thức thanh toán",
-    },
+      accessorKey: "status",
+      header: "Trạng thái",
+      cell: ({ row }) => {
+        const status = row.getValue("status") as string;
 
+        return (
+          <span className={`${formatOrderStatusColor(status)}`}>
+            {formatOrderStatusText(status)}
+          </span>
+        );
+      },
+    },
     {
       accessorKey: "orderDate",
       header: "Ngày tạo đơn",
       cell: ({ row }) => {
-        const commissionHistory = row.original;
+        const date = row.original.orderDate;
         return (
-          <span>{formatDateTime(commissionHistory.orderDate || "").full}</span>
+          <span className="text-gray-500 italic">
+            {formatDateTime(date || "").full}
+          </span>
         );
       },
+    },
+    {
+      id: "actions",
+      header: "Thao tác",
+      cell: ({ row }) => <ViewDetailSheet orderCode={row.original.orderCode} />,
     },
   ];
