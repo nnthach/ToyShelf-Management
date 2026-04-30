@@ -8,7 +8,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/src/styles/components/ui/dialog";
-import { Plus, Sparkles, Trash2, Upload } from "lucide-react";
+import { Loader2, Plus, Sparkles, Trash2, Upload } from "lucide-react";
 import { getAllProductColorColorAPI } from "@/src/services/product.service";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@/src/hooks/useDebounce";
@@ -28,6 +28,7 @@ function FileUploadModal() {
 
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<ProductColorItem | null>(null);
+  const [isLoadingUpload, setIsLoadingUpload] = useState(false);
 
   const debounce = useDebounce(search, 500);
 
@@ -40,12 +41,20 @@ function FileUploadModal() {
 
   const handleUploadFile = async () => {
     if (!file) return;
+    setIsLoadingUpload(true);
     try {
       await productFileUploadAPI(file);
       toast.success("Tải tệp 3D thành công");
       setFile(null);
+      setSelected(null);
+      setSearch("");
     } catch (error) {
       toast.error(getErrorMessage(error) || "Tải tệp 3D thất bại");
+    } finally {
+      setIsLoadingUpload(false);
+      setFile(null);
+      setSelected(null);
+      setSearch("");
     }
   };
 
@@ -108,8 +117,16 @@ function FileUploadModal() {
                 }}
               />
 
-              <Button onClick={handleUploadFile} disabled={!file}>
-                <Upload size={16} /> Upload
+              <Button
+                onClick={handleUploadFile}
+                disabled={!file || isLoadingUpload}
+              >
+                {isLoadingUpload ? (
+                  <Loader2 className="animate-spin" size={16} />
+                ) : (
+                  <Upload size={16} />
+                )}
+                Upload
               </Button>
             </div>
             {file && <p className="mt-2 text-sm text-gray-500">{file.name}</p>}
