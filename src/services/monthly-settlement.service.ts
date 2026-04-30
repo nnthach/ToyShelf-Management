@@ -19,7 +19,7 @@ export const getMonthlySettlementDetailAPI = async (id: string) => {
 };
 
 export const getMonthlySettlementPendingAmountAPI = async (id: string) => {
-  const res = await api.get(`/MonthlySettlement/test-wallet/${id}`);
+  const res = await api.get(`/MonthlySettlement/wallet/${id}`);
   return res.data;
 };
 

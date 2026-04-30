@@ -100,10 +100,10 @@ function ViewDetailSheet({
               {/* Tiền chưa thanh toán bên phải */}
               <div className="flex items-center gap-1.5 text-sm">
                 <span className="text-slate-500 font-medium">
-                  Chưa thanh toán:
+                  Chờ thanh toán:
                 </span>
                 <span className="font-bold text-rose-600 dark:text-rose-400">
-                  {detailPendingAmount?.unsettledAmount?.toLocaleString(
+                  {detailPendingAmount?.pendingSettlementAmount?.toLocaleString(
                     "vi-VN",
                   ) || "0"}{" "}
                   ₫
