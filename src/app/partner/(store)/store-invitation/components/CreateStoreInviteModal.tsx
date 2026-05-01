@@ -2,9 +2,7 @@
 
 import { useAuth } from "@/src/hooks/useAuth";
 import { inviteToStoreAPI } from "@/src/services/store-invite.service";
-import {
-  getAllStoreAPI,
-} from "@/src/services/store.service";
+import { getAllStoreAPI } from "@/src/services/store.service";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
 import { Button } from "@/src/styles/components/ui/button";
 import {
@@ -22,7 +20,14 @@ import { SelectOption } from "@/src/types/SubType";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Mail, Plus, Send, Sparkles, Store as StoreIcon } from "lucide-react";
+import {
+  Mail,
+  Plus,
+  Send,
+  Sparkles,
+  Store as StoreIcon,
+  User,
+} from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -47,7 +52,7 @@ function CreateStoreInviteModal() {
     defaultValues: {
       email: "",
       storeId: "",
-      storeRole: "Manager",
+      storeRole: "",
     },
   });
 
@@ -79,6 +84,17 @@ function CreateStoreInviteModal() {
       toast.error(getErrorMessage(error, "Mời nhân viên thất bại"));
     }
   }
+
+  const roleOptions = [
+    {
+      value: "Manager",
+      label: "Quản lý",
+    },
+    {
+      value: "Staff",
+      label: "Nhân viên",
+    },
+  ];
 
   return (
     <Dialog
@@ -132,6 +148,16 @@ function CreateStoreInviteModal() {
                 label="Email người nhận"
                 placeholder="email@gmail.com"
                 icon={<Mail size={18} />}
+                required
+              />
+
+              <FormFieldCustom
+                name="storeRole"
+                label="Vai trò"
+                placeholder="Chọn vai trò"
+                type="select"
+                selectData={roleOptions}
+                icon={<User size={18} />}
                 required
               />
             </form>
