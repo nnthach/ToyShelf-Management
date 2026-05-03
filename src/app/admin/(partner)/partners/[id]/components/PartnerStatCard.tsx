@@ -46,6 +46,7 @@ function PartnerStatCard({ partnerId }: { partnerId: string }) {
           value={`${(partnerStatCard?.revenue ?? 0).toLocaleString()} VND`}
           icon={DollarSign}
           color="bg-green-100 text-green-900"
+          subTitle="Cập nhật theo bộ lọc"
         />
 
         <StatCardWithButton
@@ -56,6 +57,7 @@ function PartnerStatCard({ partnerId }: { partnerId: string }) {
           action={() =>
             router.push(`/admin/monthly-settlement?partnerId=${partnerId}`)
           }
+          subTitle="Cập nhật theo bộ lọc"
         />
         <StatCardWithButton
           title="Đơn hàng"
@@ -63,6 +65,7 @@ function PartnerStatCard({ partnerId }: { partnerId: string }) {
           icon={ShoppingCart}
           color="bg-purple-100 text-purple-900"
           action={() => router.push(`/admin/orders?partnerId=${partnerId}`)}
+          subTitle="Cập nhật theo bộ lọc"
         />
 
         <StatCardWithButton

@@ -45,6 +45,7 @@ function AdminStatCard() {
           value={`${(adminStatCard?.totalRevenue ?? 0).toLocaleString() || 0} VND`}
           icon={DollarSign}
           color="bg-green-100 text-green-900"
+          subTitle={"Cập nhật theo bộ lọc"}
         />
 
         <StatCardWithButton
@@ -53,6 +54,7 @@ function AdminStatCard() {
           icon={ShoppingCart}
           color="bg-orange-100 text-orange-900"
           action={() => router.push(`/admin/orders`)}
+          subTitle={"Cập nhật theo bộ lọc"}
         />
         <StatCardWithButton
           title="Đối tác"

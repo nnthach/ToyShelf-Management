@@ -43,9 +43,11 @@ function WarehouseStatCard({
           value={warehouseStatCard?.totalOrders}
           icon={PackageCheck}
           color="bg-green-100 text-green-900"
+          subTitle={"Cập nhật theo bộ lọc"}
         />
         <StatCardWithButton
           title="Hàng trong kho"
+          subTitle={"Cập nhật theo bộ lọc"}
           value={warehouseStatCard?.totalInventory}
           icon={Box}
           color="bg-blue-100 text-blue-900"
@@ -57,6 +59,7 @@ function WarehouseStatCard({
         />
         <StatCardWithButton
           title="Kệ trong kho"
+          subTitle={"Cập nhật theo bộ lọc"}
           value={warehouseStatCard?.totalShelves}
           icon={Server}
           color="bg-orange-100 text-orange-900"

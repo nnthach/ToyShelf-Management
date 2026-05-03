@@ -39,7 +39,7 @@ export const getStoreInviteColumns = (
           className={`px-3 py-1 rounded-2xl text-[12px] font-semibold uppercase ${
             storeRole === "Manager"
               ? "bg-amber-100/50 text-amber-700 border border-amber-200/50"
-              : "bg-slate-100 text-slate-500"
+              : "bg-slate-100 text-slate-500 border border-slate-200/50"
           }`}
         >
           {formatStoreRoleToVN(storeRole)}

@@ -42,6 +42,7 @@ function WarehouseStatCard() {
           icon={Truck}
           color="bg-blue-100 text-blue-900"
           action={() => router.push(`/warehouse/refill-stocks`)}
+          subTitle="Cập nhật theo bộ lọc"
         />
         <StatCardWithButton
           title="Hàng Tại kho"
@@ -49,6 +50,7 @@ function WarehouseStatCard() {
           icon={Box}
           color="bg-red-100 text-red-900"
           action={() => router.push(`/warehouse/inventory`)}
+          subTitle="Cập nhật theo bộ lọc"
         />
         <StatCardWithButton
           title="Kệ Tại Kho"
@@ -56,6 +58,7 @@ function WarehouseStatCard() {
           icon={Server}
           color="bg-orange-100 text-orange-900"
           action={() => router.push(`/warehouse/shelf-inventory`)}
+          subTitle="Cập nhật theo bộ lọc"
         />
       </div>
     </div>

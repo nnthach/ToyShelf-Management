@@ -55,7 +55,7 @@ function StoreStatCard({
 
         <StatCardWithButton
           title="Đơn hàng"
-          value={`${storeStatCard?.totalOrders}`}
+          value={`${storeStatCard?.totalOrders ?? 0}`}
           icon={ShoppingCart}
           color="bg-orange-100 text-orange-900"
           action={() => router.push(`/partner/orders?storeId=${storeId}`)}
@@ -64,7 +64,7 @@ function StoreStatCard({
 
         <StatCardWithButton
           title="Sản phẩm"
-          value={`${storeStatCardInventory?.totalProducts || 0}`}
+          value={`${storeStatCardInventory?.totalProducts ?? 0}`}
           icon={Box}
           color="bg-blue-100 text-blue-900"
           action={() =>
