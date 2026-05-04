@@ -355,7 +355,7 @@ export const formatOrderStatusText = (status: string) => {
   switch (status) {
     case "PAID":
       return "Đã thanh toán";
-    case "CANCELED":
+    case "CANCELLED":
       return "Đã hủy";
     case "CREATED":
       return "Đã tạo";
@@ -372,7 +372,7 @@ export const formatOrderStatusColor = (status: string) => {
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
     case "CREATED":
       return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
-    case "CANCELED":
+    case "CANCELLED":
       return "bg-red-100 text-red-800 px-3 py-1 rounded-2xl";
     default:
       return "bg-gray-100 text-gray-800 px-3 py-1 rounded-2xl";
