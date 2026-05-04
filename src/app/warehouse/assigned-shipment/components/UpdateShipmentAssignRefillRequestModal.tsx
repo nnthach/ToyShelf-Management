@@ -146,12 +146,7 @@ function UpdateShipmentAssignRefillRequestModal({
                 <div>
                   <DialogTitle className="text-xl flex items-center gap-2">
                     <Truck className="h-5 w-5 text-primary" />
-                    Điều phối vận chuyển:{" "}
-                    {shipmentAssignDetail?.orderType === "DAMAGE"
-                      ? shipmentAssignDetail?.damageReports[0].code
-                      : shipmentAssignDetail?.orderType === "SHELF"
-                        ? shipmentAssignDetail?.shelfOrders[0].code
-                        : shipmentAssignDetail?.storeOrders[0].code || "N/A"}
+                    Điều phối vận chuyển
                   </DialogTitle>
                   <DialogDescription>
                     Quản lý lộ trình và xác nhận bàn giao hàng hóa
@@ -186,6 +181,41 @@ function UpdateShipmentAssignRefillRequestModal({
                 <div
                   className={`${columnSize} p-6 space-y-8 border-r overflow-y-auto custom-scrollbar`}
                 >
+                  {/* PHẦN ĐƠN HÀNG GIAO - Đã được chuyển vào đây */}
+                  <div className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-blue-50/30 dark:bg-blue-900/10">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mb-2 block">
+                      Mã đơn (
+                      {
+                        [
+                          ...(shipmentAssignDetail?.storeOrders || []),
+                          ...(shipmentAssignDetail?.shelfOrders || []),
+                        ].length
+                      }
+                      )
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        ...(shipmentAssignDetail?.storeOrders || []),
+                        ...(shipmentAssignDetail?.shelfOrders || []),
+                      ].length > 0 ? (
+                        [
+                          ...(shipmentAssignDetail?.storeOrders || []),
+                          ...(shipmentAssignDetail?.shelfOrders || []),
+                        ].map((order) => (
+                          <span
+                            key={order.id}
+                            className="inline-flex items-center px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 text-[11px] font-bold border border-blue-100 dark:border-blue-900 shadow-sm"
+                          >
+                            {order.code}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-xs text-slate-400 italic">
+                          Chưa có mã đơn
+                        </span>
+                      )}
+                    </div>
+                  </div>
                   <WarehouseShipmentStoreInfo
                     shipmentAssignDetail={shipmentAssignDetail}
                   />
@@ -244,8 +274,7 @@ function UpdateShipmentAssignRefillRequestModal({
           <div className="p-4 border-t bg-white">
             <DialogFooter className="flex flex-row items-center justify-between w-full sm:justify-between gap-4">
               {/* BÊN TRÁI: THẺ GHI CHÚ (NOTES) - Chỉ chiếm không gian cần thiết */}
-              <div className="flex-1">
-              </div>
+              <div className="flex-1"></div>
 
               {/* BÊN PHẢI: CÁC NÚT ACTIONS - Gom cụm lại bên phải */}
               <div className="flex items-center gap-3 shrink-0">

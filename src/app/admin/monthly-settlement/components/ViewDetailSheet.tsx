@@ -81,33 +81,35 @@ function ViewDetailSheet({
             <SheetTitle className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
               Chi tiết Đối soát hoa hồng
             </SheetTitle>
-            <SheetDescription className="flex justify-between items-center w-full">
-              {/* Thông tin bên trái */}
-              <div className="flex items-center gap-2 text-slate-500 font-medium text-sm">
-                <span className="text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded font-bold uppercase text-[10px] tracking-widest border border-blue-100 dark:border-blue-800">
-                  {detail?.partnerCode}
-                </span>
-                <span className="text-slate-300">|</span>
-                <span className="text-slate-700 dark:text-slate-300">
-                  {detail?.partnerName}
-                </span>
-                <span className="text-slate-300">•</span>
-                <span>
-                  Tháng {detail?.month}/{detail?.year}
-                </span>
-              </div>
+            <SheetDescription asChild>
+              <div className="flex justify-between items-center w-full">
+                {/* Thông tin bên trái */}
+                <div className="flex items-center gap-2 text-slate-500 font-medium text-sm">
+                  <span className="text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded font-bold uppercase text-[10px] tracking-widest border border-blue-100 dark:border-blue-800">
+                    {detail?.partnerCode}
+                  </span>
+                  <span className="text-slate-300">|</span>
+                  <span className="text-slate-700 dark:text-slate-300">
+                    {detail?.partnerName}
+                  </span>
+                  <span className="text-slate-300">•</span>
+                  <span>
+                    Tháng {detail?.month}/{detail?.year}
+                  </span>
+                </div>
 
-              {/* Tiền chưa thanh toán bên phải */}
-              <div className="flex items-center gap-1.5 text-sm">
-                <span className="text-slate-500 font-medium">
-                  Chờ thanh toán:
-                </span>
-                <span className="font-bold text-rose-600 dark:text-rose-400">
-                  {detailPendingAmount?.pendingSettlementAmount?.toLocaleString(
-                    "vi-VN",
-                  ) || "0"}{" "}
-                  ₫
-                </span>
+                {/* Tiền chưa thanh toán bên phải */}
+                <div className="flex items-center gap-1.5 text-sm">
+                  <span className="text-slate-500 font-medium">
+                    Chờ thanh toán:
+                  </span>
+                  <span className="font-bold text-rose-600 dark:text-rose-400">
+                    {detailPendingAmount?.pendingSettlementAmount?.toLocaleString(
+                      "vi-VN",
+                    ) || "0"}{" "}
+                    ₫
+                  </span>
+                </div>
               </div>
             </SheetDescription>
           </div>
