@@ -132,7 +132,7 @@ const TopThreePartner = () => {
                 <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100">
                   <Percent size={10} />
                   <span className="text-[11px] font-bold">
-                    {(partner.totalCommission / 1000000).toFixed(1)}M
+                    {partner.totalCommission.toLocaleString()}đ
                   </span>
                 </div>
               </div>
