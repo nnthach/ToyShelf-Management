@@ -85,7 +85,7 @@ function ViewDetailSheet({
               <div className="flex justify-between items-center w-full">
                 {/* Thông tin bên trái */}
                 <div className="flex items-center gap-2 text-slate-500 font-medium text-sm">
-                  <span className="text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded font-bold uppercase text-[10px] tracking-widest border border-blue-100 dark:border-blue-800">
+                  <span className="text-slate-700 dark:text-slate-300">
                     {detail?.partnerCode}
                   </span>
                   <span className="text-slate-300">|</span>
@@ -93,8 +93,14 @@ function ViewDetailSheet({
                     {detail?.partnerName}
                   </span>
                   <span className="text-slate-300">•</span>
-                  <span>
+                  <span className="text-slate-700 dark:text-slate-300">
                     Tháng {detail?.month}/{detail?.year}
+                  </span>
+                  <span className="text-slate-300">•</span>
+                  <span
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ring-1 ring-inset ${formatMonthlySettlementStatusColor(detail?.status || "")}`}
+                  >
+                    {formatMonthlySettlementStatusText(detail?.status || "")}
                   </span>
                 </div>
 
@@ -274,18 +280,6 @@ function ViewDetailSheet({
                           </span>
                           <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             {detail?.partnerName}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-slate-500">
-                            Trạng thái
-                          </span>
-                          <span
-                            className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ring-1 ring-inset ${formatMonthlySettlementStatusColor(detail?.status || "")}`}
-                          >
-                            {formatMonthlySettlementStatusText(
-                              detail?.status || "",
-                            )}
                           </span>
                         </div>
                       </div>

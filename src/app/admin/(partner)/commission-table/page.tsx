@@ -220,13 +220,13 @@ export default function AdminCommissionTable() {
                       {config.icon}
                       <span>Loại bảng: {config.label}</span>
                     </div>
-                    <Badge
-                      className={`${table.isActive ? "bg-green-500" : "bg-gray-400"} text-white border-none text-[10px] px-2`}
+                    <span
+                      className={`inline-flex items-center rounded-xl ${
+                        table.isActive ? "bg-green-500" : "bg-gray-400"
+                      } text-white border-none text-[10px] font-medium px-2 py-1`}
                     >
-                      <span>
-                        {table.isActive ? "ĐANG HOẠT ĐỘNG" : "TẠM NGƯNG"}
-                      </span>
-                    </Badge>
+                      {table.isActive ? "Hoạt động" : "Tạm ngưng"}
+                    </span>
                   </div>
 
                   {/* Dòng 2: Tên bảng và Đối tượng áp dụng */}

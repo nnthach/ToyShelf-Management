@@ -223,7 +223,7 @@ function ViewReturnRequestModalDetail({
                       </div>
                     )}
                     <ShipInfoItem
-                      label="Đối tác chấp nhận"
+                      label="Đại diện công ty chấp nhận"
                       value={damageRequestDetail?.partnerAdminName}
                       icon={<User className="h-3 w-3" />}
                     />
@@ -237,11 +237,22 @@ function ViewReturnRequestModalDetail({
                       icon={<User className="h-3.5 w-3.5" />}
                     />
                     {damageRequestDetail?.status === "Rejected" ? (
-                      <ShipInfoItem
-                        label="Quản trị viên từ chối"
-                        value={damageRequestDetail?.rejectName}
-                        icon={<User className="h-3 w-3" />}
-                      />
+                      <>
+                        <ShipInfoItem
+                          label="Người từ chối"
+                          value={damageRequestDetail?.reviewedByName}
+                          icon={<User className="h-3 w-3" />}
+                        />
+
+                        <ShipInfoItem
+                          label="Thời gian từ chối"
+                          value={
+                            formatDateTime(damageRequestDetail?.reviewedAt)
+                              .full || ""
+                          }
+                          icon={<User className="h-3.5 w-3.5" />}
+                        />
+                      </>
                     ) : (
                       <>
                         <ShipInfoItem
@@ -258,17 +269,6 @@ function ViewReturnRequestModalDetail({
                           icon={<User className="h-3.5 w-3.5" />}
                         />
                       </>
-                    )}
-
-                    {damageRequestDetail?.adminNote && (
-                      <div className="col-span-2">
-                        <ShipInfoItem
-                          label="Ghi chú từ quản trị viên"
-                          value={damageRequestDetail?.adminNote}
-                          icon={<FileText className="h-3 w-3" />}
-                          isNote
-                        />
-                      </div>
                     )}
                   </div>
 
@@ -382,7 +382,9 @@ function ViewReturnRequestModalDetail({
                           time={shipmentDetail.warehouseReceivedAt}
                         />
                       </div>
-                      <ShipmentUrls mediaUrls={shipmentDetail.mediaUrls || []} />
+                      <ShipmentUrls
+                        mediaUrls={shipmentDetail.mediaUrls || []}
+                      />
                     </div>
                   ) : (
                     <div className="p-12 text-center text-slate-400 italic text-sm bg-slate-100 rounded-xl">

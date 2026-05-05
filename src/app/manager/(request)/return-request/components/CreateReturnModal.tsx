@@ -14,7 +14,7 @@ import {
 import { ShelfShelf } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, CheckCircle2, Loader2, Plus, Sparkles } from "lucide-react";
+import { Box, CheckCircle2, Loader2, Notebook, Plus, Sparkles } from "lucide-react";
 import { memo, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import ReturnItem from "./ReturnItem";
@@ -212,17 +212,10 @@ function CreateReturnModal() {
                     </div>
                     <div className="col-span-2 sm:col-span-1 flex items-end pb-2">
                       <FormFieldCustom
-                        name="isWarrantyClaim"
-                        label="Yêu cầu bảo hành"
-                        type="switch"
-                      />
-                    </div>
-                    <div className="col-span-2">
-                      <FormFieldCustom
                         name="description"
                         label="Ghi chú"
                         placeholder="Lý do trả hàng, tình trạng đơn..."
-                        icon={<Box size={16} />}
+                        icon={<Notebook size={16} />}
                       />
                     </div>
                   </div>
