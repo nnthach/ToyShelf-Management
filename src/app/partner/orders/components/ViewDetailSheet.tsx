@@ -7,6 +7,8 @@ import {
   Calendar,
   CreditCard,
   ShoppingBag,
+  Lock,
+  Unlock,
 } from "lucide-react";
 import {
   Sheet,
@@ -48,11 +50,29 @@ function ViewDetailSheet({ orderCode }: { orderCode: number }) {
 
       <SheetContent className="w-full !max-w-[550px] flex flex-col h-full p-0">
         <SheetHeader className="p-6 border-b bg-slate-50/50">
-          <div className="flex justify-between items-center">
-            <SheetTitle className="flex items-center gap-2 text-xl">
-              <Package className="text-blue-600" size={24} />
-              Đơn hàng #{orderDetailPartner?.orderCode || 0}
-            </SheetTitle>
+          <div className="flex justify-between items-start">
+            <div className="flex flex-col gap-1">
+              <SheetTitle className="flex items-center gap-2 text-xl">
+                <Package className="text-blue-600" size={24} />
+                Đơn hàng #{orderDetailPartner?.orderCode || 0}
+              </SheetTitle>
+              {orderDetailPartner?.isLocked ? (
+                <div className="flex items-center gap-1.5 text-amber-600 ml-8">
+                  <Lock size={14} className="opacity-80" />
+                  <span className="text-[12px] font-bold uppercase tracking-wide">
+                    Đã chốt sổ đối soát
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 text-slate-400 ml-8">
+                  <Unlock size={14} className="opacity-80" />
+                  <span className="text-[12px] font-medium italic">
+                    Chưa chốt sổ
+                  </span>
+                </div>
+              )}
+            </div>
+            {/* Badge Status bên phải */}
             <span
               className={`px-3 py-1 rounded-full text-sm mr-4 font-bold shadow-sm ${formatOrderStatusColor(orderDetailPartner?.status || "")}`}
             >

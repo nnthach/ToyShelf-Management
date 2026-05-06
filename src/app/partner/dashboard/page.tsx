@@ -31,11 +31,11 @@ export default function PartnerAdminDashboard() {
           <TotalOrderChart />
         </div>
 
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 min-h-[520px] shadow-sm border border-gray-100">
           <TopThreeStore />
         </div>
 
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 min-h-[520px] shadow-sm border border-gray-100">
           <TopThreeProduct />
         </div>
 

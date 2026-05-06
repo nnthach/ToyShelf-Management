@@ -1,42 +1,47 @@
-import { getDashboardTopPartnerAPI } from "@/src/services/dashboard.service";
-import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
+import { getDashboardTopStoreAPI } from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
-import { Mail, User } from "lucide-react";
 import { useState } from "react";
+import { MapPin, Store } from "lucide-react";
+import { getAllPartnerAPI } from "@/src/services/partner.service";
+import { Partner } from "@/src/types";
 
-interface Partner {
-  partnerId: string;
-  companyName: string;
-  email: string;
-  contactName: string;
+interface Store {
+  storeId: string;
+  storeName: string;
+  city: string;
+  partnerName: string;
   totalRevenue: number;
-  totalCommission: number;
-  tier: string;
+  totalOrders: number;
 }
-function TopPartner() {
+
+function TopStore() {
   const getPreviousMonth = () => {
     const now = new Date();
     now.setMonth(now.getMonth() - 1);
-
     return {
       month: String(now.getMonth() + 1),
       year: String(now.getFullYear()),
+      partnerId: "",
     };
   };
 
-  const [queryTopPartners, setQueryTopPartners] = useState(() =>
-    getPreviousMonth(),
-  );
+  const [query, setQuery] = useState(getPreviousMonth());
 
-  const updateQueryTopPartners = (val: Partial<typeof queryTopPartners>) => {
-    setQueryTopPartners((prev) => ({ ...prev, ...val }));
-  };
+  const { data: topStores } = useQuery({
+    queryKey: ["topStores", query],
+    queryFn: () => getDashboardTopStoreAPI(query),
+    select: (res) => res.data as Store[],
+  });
 
-  const { data: topPartners } = useQuery({
-    queryKey: ["topPartners", queryTopPartners],
-    queryFn: () => getDashboardTopPartnerAPI(queryTopPartners),
+  const { data: partnerList } = useQuery({
+    queryKey: ["partnerList"],
+    queryFn: () => getAllPartnerAPI({}),
     select: (res) => res.data as Partner[],
   });
+
+  const updateQuery = (val: Partial<typeof query>) => {
+    setQuery((prev) => ({ ...prev, ...val }));
+  };
 
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
   const years = Array.from({ length: 10 }, (_, i) => 2020 + i);
@@ -47,8 +52,8 @@ function TopPartner() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3">
           <select
-            value={queryTopPartners.month}
-            onChange={(e) => updateQueryTopPartners({ month: e.target.value })}
+            value={query.month}
+            onChange={(e) => updateQuery({ month: e.target.value })}
             className="bg-gray-100 text-sm font-medium rounded-md px-2 py-1 outline-none"
           >
             <option value="">Tháng</option>
@@ -60,8 +65,8 @@ function TopPartner() {
           </select>
 
           <select
-            value={queryTopPartners.year}
-            onChange={(e) => updateQueryTopPartners({ year: e.target.value })}
+            value={query.year}
+            onChange={(e) => updateQuery({ year: e.target.value })}
             className="bg-gray-100 text-sm font-medium rounded-md px-2 py-1 outline-none"
           >
             <option value="">Năm</option>
@@ -71,12 +76,24 @@ function TopPartner() {
               </option>
             ))}
           </select>
+          <select
+            value={query.partnerId}
+            onChange={(e) => updateQuery({ partnerId: e.target.value })}
+            className="bg-gray-100 text-sm font-medium rounded-md px-2 py-1 outline-none"
+          >
+            <option value="">Đối tác</option>
+            {partnerList?.map((y) => (
+              <option key={y.id} value={y.id}>
+                {y.companyName}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
-        {topPartners?.slice(0, 3).map((partner, index) => (
+        {topStores?.slice(0, 3).map((store, index) => (
           <div
-            key={partner.partnerId}
+            key={store.storeId}
             className={`
           group cursor-pointer relative p-3 flex flex-col gap-4 rounded-lg border transition-all hover:shadow-xl hover:-translate-y-1
           ${
@@ -101,42 +118,36 @@ function TopPartner() {
               {/* Avatar với hiệu ứng mới */}
               <div className="relative shrink-0">
                 <div className="w-16 h-16 rounded-2xl border-2 border-white bg-white shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
-                  <span
-                    className={`text-2xl font-black ${index === 0 ? "text-yellow-500" : "text-slate-400"}`}
-                  >
-                    {partner.contactName.charAt(0)}
-                  </span>
-                </div>
-                <div
-                  className={`absolute -bottom-1 -right-1 px-2 py-0.5 rounded-lg border text-[9px] font-black uppercase tracking-tighter shadow-sm ${formatPartnerTierTextColor(partner.tier)}`}
-                >
-                  {partner.tier}
+                  <Store
+                    size={32}
+                    className={`${index === 0 ? "text-yellow-500" : "text-slate-400"}`}
+                  />
                 </div>
               </div>
 
-              {/* Tên công ty & Thông tin liên hệ */}
+              {/* Tên cửa hàng & Thông tin */}
               <div className="min-w-0 flex-1">
                 <h4 className="text-[16px] font-bold text-slate-900 truncate group-hover:text-blue-600 transition-colors">
-                  {partner.companyName}
+                  {store.storeName}
                 </h4>
                 <div className="flex flex-col gap-0.5">
                   <div className="flex items-center gap-1.5 text-slate-500">
-                    <User size={12} className="opacity-70" />
+                    <MapPin size={12} className="opacity-70" />
                     <span className="text-[13px] font-medium truncate">
-                      {partner.contactName}
+                      {store.city}
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5 text-slate-400">
-                    <Mail size={12} className="opacity-70" />
+                    <Store size={12} className="opacity-70" />
                     <span className="text-[12px] truncate">
-                      {partner.email}
+                      {store.partnerName}
                     </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Footer chứa Doanh thu & Hoa hồng */}
+            {/* Footer chứa Doanh thu & Đơn hàng */}
             <div className="grid grid-cols-2 gap-2 mt-2 pt-4 border-t border-dashed border-slate-200">
               <div className="flex flex-col">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
@@ -144,17 +155,17 @@ function TopPartner() {
                 </span>
                 <div className="flex items-center gap-1">
                   <span className="text-[14px] font-bold text-slate-900">
-                    {partner.totalRevenue.toLocaleString()}đ
+                    {store.totalRevenue.toLocaleString()}đ
                   </span>
                 </div>
               </div>
               <div className="flex flex-col items-end">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  Hoa hồng
+                  Đơn hàng
                 </span>
                 <div className="flex items-center gap-1">
-                  <span className="text-[14px] font-bold text-green-600">
-                    {partner.totalCommission.toLocaleString()}đ
+                  <span className="text-[14px] font-bold text-blue-600">
+                    {store.totalOrders.toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -166,4 +177,4 @@ function TopPartner() {
   );
 }
 
-export default TopPartner;
+export default TopStore;

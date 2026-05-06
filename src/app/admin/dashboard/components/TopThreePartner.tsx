@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -38,16 +38,40 @@ const getTierStyle = (tier: string) => {
 
 const TopThreePartner = () => {
   const router = useRouter();
+
+  const [query, setQuery] = useState({
+    month: "",
+    year: "",
+  });
   const {
     data: topPartners,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["topPartners"],
-    queryFn: () => getDashboardTopPartnerAPI({}),
+    queryKey: ["topPartners", query],
+    queryFn: () => getDashboardTopPartnerAPI(query),
     select: (res) => res.data as Partner[],
   });
 
+  const handleMonthYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    if (!value) {
+      setQuery({ month: "", year: "" });
+      return;
+    }
+
+    const [year, month] = value.split("-");
+    setQuery({
+      year: year,
+      month: parseInt(month).toString(),
+    });
+  };
+
+  const monthYearValue =
+    query.year && query.month
+      ? `${query.year}-${query.month.padStart(2, "0")}`
+      : "";
   return (
     <Card className="border-none shadow-none bg-transparent w-full h-full py-0 gap-2">
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
@@ -55,6 +79,14 @@ const TopThreePartner = () => {
           <Award className="w-5 h-5 text-emerald-500" />
           Xếp hạng đối tác
         </CardTitle>
+        <div className="relative group">
+          <input
+            type="month"
+            value={monthYearValue}
+            onChange={handleMonthYearChange}
+            className="text-[11px] font-bold bg-slate-100 hover:bg-slate-200 transition-colors px-2 py-1 rounded-md outline-none cursor-pointer text-slate-600 focus:ring-2 focus:ring-blue-500/20"
+          />
+        </div>
       </CardHeader>
 
       <CardContent className="p-0 flex flex-1 flex-col gap-3">

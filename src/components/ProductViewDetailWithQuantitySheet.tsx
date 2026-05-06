@@ -217,8 +217,8 @@ function ProductViewDetailWithQuantitySheet({
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-bold truncate capitalize">
                                 {trans.type === "Shipment"
-                                  ? "Giao hàng"
-                                  : "Giao dịch"}
+                                  ? "Đặt hàng"
+                                  : "Bán hàng"}
                               </p>
                               <p className="text-[12px] text-muted-foreground">
                                 {formatDateTime(trans?.date).full || ""}

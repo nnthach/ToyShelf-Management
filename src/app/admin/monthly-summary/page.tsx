@@ -15,6 +15,8 @@ import { getDashboardTopPartnerAPI } from "@/src/services/dashboard.service";
 import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
 import TopPartner from "./components/TopPartner";
 import TotalRevenue from "./components/TotalRevenue";
+import TopStore from "./components/TopStore";
+import TopSelling from "./components/TopSelling";
 
 export default function AdminTotalMonthlyManage() {
   const [isOpenExportModal, setIsOpenExportModal] = useState(false);
@@ -56,6 +58,12 @@ export default function AdminTotalMonthlyManage() {
 
       {/*Top partner*/}
       <TopPartner />
+
+      {/*Top store */}
+      <TopStore />
+
+      {/*Top selling */}
+      <TopSelling />
 
       {/*Table */}
       <div className="container mx-auto py-10">

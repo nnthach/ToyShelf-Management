@@ -8,6 +8,7 @@ import {
   formatOrderStatusColor,
   formatOrderStatusText,
 } from "@/src/utils/formatStatus";
+import { Lock, Unlock } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -34,19 +35,6 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
     },
   },
   {
-    accessorKey: "customer",
-    header: "Khách hàng",
-    cell: ({ row }) => {
-      const { customerName, customerEmail } = row.original;
-      return (
-        <div>
-          <p className="font-semibold">{customerName}</p>
-          <p className="text-xs text-muted-foreground">{customerEmail}</p>
-        </div>
-      );
-    },
-  },
-  {
     accessorKey: "totalAmount",
     header: "Tổng tiền",
     cell: ({ row }) => {
@@ -69,6 +57,27 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
         <span className={`${formatOrderStatusColor(status)}`}>
           {formatOrderStatusText(status)}
         </span>
+      );
+    },
+  },
+
+  {
+    accessorKey: "isLocked",
+    header: "Chốt sổ",
+    cell: ({ row }) => {
+      const isLocked = row.getValue("isLocked") as boolean;
+
+      return isLocked ? (
+        <div
+          className="flex justify-left text-amber-500"
+          title="Đã chốt sổ cuối tháng"
+        >
+          <Lock size={18} />
+        </div>
+      ) : (
+        <div className="flex justify-left text-slate-300">
+          <Unlock size={18} />
+        </div>
       );
     },
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import { useProductDetailSheet } from "@/src/context/ProductDetailSheetContext";
 import { useAuth } from "@/src/hooks/useAuth";
 import { getDashboardTopSellingAPI } from "@/src/services/dashboard.service";
 import { useQuery } from "@tanstack/react-query";
+import { formatColorNameToVN } from "@/src/utils/format";
 
 interface Product {
   id: string;
@@ -32,15 +33,43 @@ const TopThreeProduct = () => {
   const { myStore } = useAuth();
 
   const storeId = myStore?.storeId;
+
+  const [query, setQuery] = useState({
+    storeId: storeId,
+    month: "",
+    year: "",
+  });
+
   const {
     data: topSelling,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["topSelling"],
-    queryFn: () => getDashboardTopSellingAPI({ storeId }),
+    queryKey: ["topSelling", query],
+    queryFn: () => getDashboardTopSellingAPI(query),
     select: (res) => res.data as Product[],
   });
+
+  const handleMonthYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    if (!value) {
+      setQuery({ ...query, month: "", year: "" });
+      return;
+    }
+
+    const [year, month] = value.split("-");
+    setQuery({
+      ...query,
+      year: year,
+      month: parseInt(month).toString(),
+    });
+  };
+
+  const monthYearValue =
+    query.year && query.month
+      ? `${query.year}-${query.month.padStart(2, "0")}`
+      : "";
   return (
     <Card className="border-none shadow-none bg-transparent w-full h-full py-0 gap-2">
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
@@ -48,6 +77,14 @@ const TopThreeProduct = () => {
           <Box className="w-5 h-5 text-blue-500" />
           Xếp hạng sản phẩm
         </CardTitle>
+        <div className="relative group">
+          <input
+            type="month"
+            value={monthYearValue}
+            onChange={handleMonthYearChange}
+            className="text-[11px] font-bold bg-slate-100 hover:bg-slate-200 transition-colors px-2 py-1 rounded-md outline-none cursor-pointer text-slate-600 focus:ring-2 focus:ring-blue-500/20"
+          />
+        </div>
       </CardHeader>
 
       <CardContent className="p-0 flex flex-1 flex-col gap-3">
@@ -97,7 +134,7 @@ const TopThreeProduct = () => {
                     {product.brand}
                   </span>
                   <span className="px-1.5 py-0.5 rounded bg-white border border-gray-100 text-[9px] font-bold text-gray-500 uppercase">
-                    {product.colorName}
+                    {formatColorNameToVN(product?.colorName) || ""}
                   </span>
                 </div>
               </div>

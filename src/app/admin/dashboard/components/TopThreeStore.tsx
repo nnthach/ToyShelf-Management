@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -24,12 +24,36 @@ interface Store {
 const TopThreeStore = () => {
   const router = useRouter();
 
-  const { data: topStores } = useQuery({
-    queryKey: ["topStores"],
-    queryFn: () => getDashboardTopStoreAPI({}),
+  const [query, setQuery] = useState({
+    month: "",
+    year: "",
+  });
+
+  const { data: topStores, isLoading } = useQuery({
+    queryKey: ["topStores", query],
+    queryFn: () => getDashboardTopStoreAPI(query),
     select: (res) => res.data as Store[],
   });
 
+  const handleMonthYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    if (!value) {
+      setQuery({ month: "", year: "" });
+      return;
+    }
+
+    const [year, month] = value.split("-");
+    setQuery({
+      year: year,
+      month: parseInt(month).toString(),
+    });
+  };
+
+  const monthYearValue =
+    query.year && query.month
+      ? `${query.year}-${query.month.padStart(2, "0")}`
+      : "";
   return (
     <Card className="border-none shadow-none bg-transparent w-full h-full py-0 gap-2">
       <CardHeader className="p-0 flex-row items-center justify-between space-y-0">
@@ -37,6 +61,15 @@ const TopThreeStore = () => {
           <Trophy className="w-4 h-4 text-yellow-500" />
           Xếp hạng cửa hàng
         </CardTitle>
+
+        <div className="relative group">
+          <input
+            type="month"
+            value={monthYearValue}
+            onChange={handleMonthYearChange}
+            className="text-[11px] font-bold bg-slate-100 hover:bg-slate-200 transition-colors px-2 py-1 rounded-md outline-none cursor-pointer text-slate-600 focus:ring-2 focus:ring-blue-500/20"
+          />
+        </div>
       </CardHeader>
 
       <CardContent className="p-0 flex flex-1 flex-col overflow-y-auto custom-scrollbar gap-3">
@@ -60,22 +93,6 @@ const TopThreeStore = () => {
             {/* Dòng 1: Rank + Name + City */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div
-                  className={`
-    px-2 py-0.5 rounded-md text-[12px] font-bold
-    ${
-      index === 0
-        ? "bg-yellow-100 text-yellow-700"
-        : index === 1
-          ? "bg-gray-200 text-gray-700"
-          : index === 2
-            ? "bg-orange-100 text-orange-700"
-            : "bg-gray-100 text-gray-500"
-    }
-  `}
-                >
-                  Top {index + 1}
-                </div>
                 <span className="text-[15px] font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
                   {store.storeName}
                 </span>

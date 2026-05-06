@@ -17,7 +17,7 @@ export default function AdminDashboard() {
       </div>
 
       {/*Statistic card */}
-        <AdminStatCard />
+      <AdminStatCard />
 
       {/* Sử dụng hệ 4 cột làm chuẩn */}
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
@@ -30,15 +30,15 @@ export default function AdminDashboard() {
         <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-3 h-[500px] shadow-sm border border-gray-100">
           <TotalOrderChart />
         </div>
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-1  h-[500px] shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-2 2xl:col-span-1 h-[500px] shadow-sm border border-gray-100">
           <TopThreeStore />
         </div>
 
         {/* HÀNG 3: Tổng 1 + 1 + 1 + 1 = 4 (Không bao giờ lệch) */}
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border min-h-[520px] border-gray-100">
           <TopThreeProduct />
         </div>
-        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border border-gray-100">
+        <div className="bg-background p-4 rounded-lg col-span-1 md:col-span-1 2xl:col-span-1 shadow-sm border min-h-[520px] border-gray-100">
           <TopThreePartner />
         </div>
         <div className="bg-background rounded-lg col-span-1 lg:col-span-2 2xl:col-span-2 p-2 w-full border border-gray-100 shadow-sm">
