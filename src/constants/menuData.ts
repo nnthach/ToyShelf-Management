@@ -21,6 +21,7 @@ import {
   Box,
   ShoppingCart,
   History,
+  CalendarDays,
 } from "lucide-react";
 
 // Admin
@@ -29,6 +30,11 @@ export const AdminSidebarGroups = [
     label: "Ứng dụng",
     items: [
       { title: "Tổng quan", url: "/admin/dashboard", icon: LayoutDashboard },
+      {
+        title: "Tổng kết tháng",
+        url: "/admin/monthly-summary",
+        icon: CalendarDays,
+      },
     ],
   },
   {

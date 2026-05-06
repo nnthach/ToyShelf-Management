@@ -5,6 +5,11 @@ export const getAllInventoryAPI = async <T>(params: T) => {
   return res.data;
 };
 
+export const getInventoryOfProductAPI = async <T>(params: T) => {
+  const res = await api.get("/Inventory/audit", { params });
+  return res.data;
+};
+
 export const getInventoryDetailAPI = async (id: string) => {
   const res = await api.get(`/Inventory/${id}`);
   return res.data;

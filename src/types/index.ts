@@ -58,6 +58,13 @@ export interface Partner {
   bankAccountName: string;
 }
 
+export interface ProductAuditTransaction {
+  date: string;
+  type: string;
+  quantity: number;
+  balanceAfter: string;
+}
+
 export interface Store {
   id: string;
   storeAddress: string;
