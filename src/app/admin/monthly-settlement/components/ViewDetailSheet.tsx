@@ -19,8 +19,9 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { Button } from "@/src/styles/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  finalizeMonthlySettlementAPI,
   getMonthlySettlementDetailAPI,
   getMonthlySettlementPendingAmountAPI,
 } from "@/src/services/monthly-settlement.service";
@@ -33,12 +34,15 @@ import {
 import DeductionModal from "./DeductionModal";
 import OrderInDayModal from "./OrderInDayModal";
 import ConfirmPaymentWithImg from "./ConfirmPaymentWithImg";
+import { toast } from "react-toastify";
+import { getErrorMessage } from "@/src/utils/getErrorMessage";
 
 function ViewDetailSheet({
   monthlySettlementId,
 }: {
   monthlySettlementId: string;
 }) {
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [isOpenDeduction, setIsOpenDeduction] = useState(false);
   const [isOpenConfirmPay, setIsOpenConfirmPay] = useState(false);
@@ -62,6 +66,29 @@ function ViewDetailSheet({
     select: (res) => res.data,
     enabled: !!partnerId && open,
   });
+
+  const finalizeMutation = useMutation({
+    mutationFn: finalizeMonthlySettlementAPI,
+    onSuccess: () => {
+      toast.success("Xác nhận chốt sổ thành công");
+
+      // reload danh sách
+      queryClient.invalidateQueries({
+        queryKey: ["monthlySettlement", monthlySettlementId],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["monthlySettlements"],
+      });
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, "Xác nhận chốt sổ thất bại"));
+    },
+  });
+
+  const handleFinalize = (monthlySettlementId: string) => {
+    finalizeMutation.mutate(monthlySettlementId);
+  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -400,6 +427,21 @@ function ViewDetailSheet({
                 </div>
               </div>
               {detail && detail?.status === "PENDING" && (
+                <SheetFooter className="px-8 py-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-transparent flex-none">
+                  <div className="flex items-center gap-3 w-full">
+                    <Button
+                      variant="success"
+                      onClick={() => handleFinalize(detail.id)}
+                      className="flex-[1.5] h-11 font-bold rounded-xl"
+                    >
+                      <CheckCircle2 size={18} strokeWidth={2.5} />
+                      Chốt sổ
+                    </Button>
+                  </div>
+                </SheetFooter>
+              )}
+
+              {detail && detail.status === "FINALIZED" && (
                 <SheetFooter className="px-8 py-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-transparent flex-none">
                   <div className="flex items-center gap-3 w-full">
                     <Button

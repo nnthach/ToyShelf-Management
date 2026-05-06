@@ -24,7 +24,7 @@ import {
   getAllCommissionTableAPI,
   restoreCommissionTableAPI,
 } from "@/src/services/commission-table.service";
-import { CommissionTable } from "@/src/types";
+import { CommissionTable, PartnerTier } from "@/src/types";
 import EditPriceTableModal from "./components/EditCommissionTableModal";
 import CreateCommissionTableModal from "./components/CreateCommisionTableModal";
 import { Card, CardContent, CardHeader } from "@/src/styles/components/ui/card";
@@ -38,6 +38,7 @@ import {
 } from "@/src/styles/components/ui/table";
 import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import { getAllPartnerTierAPI } from "@/src/services/partner-tier.service";
 
 const getTypeConfig = (type: string) => {
   switch (type) {
@@ -87,6 +88,8 @@ export default function AdminCommissionTable() {
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     isActive: undefined,
+    type: "",
+    partnerTierId: "",
   });
 
   const {
@@ -97,6 +100,12 @@ export default function AdminCommissionTable() {
     queryKey: ["commissionTables", query],
     queryFn: () => getAllCommissionTableAPI(query),
     select: (res) => res.data as CommissionTable[],
+  });
+
+  const { data: partnerTierList = [] } = useQuery({
+    queryKey: ["partnerTiers"],
+    queryFn: () => getAllPartnerTierAPI({}),
+    select: (res) => res.data as PartnerTier[],
   });
 
   const handleEdit = (commissionId: string) => {
@@ -191,6 +200,7 @@ export default function AdminCommissionTable() {
             query={query}
             loading={loading}
             resultCount={commissionTableList?.length || 0}
+            partnerTierList={partnerTierList}
             onApplyFilter={(filter) =>
               updateQuery({
                 ...filter,

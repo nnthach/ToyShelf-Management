@@ -265,6 +265,8 @@ export const formatMonthlySettlementStatusText = (status: string) => {
       return "Đã thanh toán";
     case "RECEIVED":
       return "Đã nhận tiền";
+    case "FINALIZED":
+      return "Đã chốt sổ";
     default:
       return "N/A";
   }
@@ -278,6 +280,8 @@ export const formatMonthlySettlementStatusColor = (status: string) => {
       return "bg-blue-100 text-blue-800 px-3 py-1 rounded-2xl";
     case "RECEIVED":
       return "bg-green-100 text-green-800 px-3 py-1 rounded-2xl";
+    case "FINALIZED":
+      return "bg-purple-100 text-purple-800 px-3 py-1 rounded-2xl";
   }
 };
 

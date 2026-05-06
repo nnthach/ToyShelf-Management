@@ -60,11 +60,11 @@ export default function ViewWarehouseDetailPage() {
       />
 
       {/*Content */}
-      {/* <div className="grid grid-cols-1 mb-4">
+      <div className="grid grid-cols-1 mb-4">
         <div className="bg-background rounded-lg lg:col-span-4 min-h-[70vh] p-4 border border-gray-100 shadow-sm">
           <TotalShipOrderBarChart warehouseId={warehouseId} />
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

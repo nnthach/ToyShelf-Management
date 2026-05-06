@@ -1,23 +1,26 @@
-// import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { useDebounce } from "@/src/hooks/useDebounce";
 import { Button } from "@/src/styles/components/ui/button";
-import { Input } from "@/src/styles/components/ui/input";
 import { Label } from "@/src/styles/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/src/styles/components/ui/popover";
+import { PartnerTier } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { Filter, RotateCcw, Search, X, XCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Filter, RotateCcw, XCircle } from "lucide-react";
+import { useState } from "react";
 
 type FilterBarProps = {
   query: QueryParams;
   loading: boolean;
   resultCount?: number;
-  onApplyFilter: (val: { isActive?: boolean }) => void;
+  partnerTierList?: PartnerTier[];
+  onApplyFilter: (val: {
+    isActive?: boolean;
+    type?: string;
+    partnerTierId?: string;
+  }) => void;
   onRefresh?: () => void;
   onReset: () => void;
 };
@@ -28,24 +31,36 @@ export default function FilterSearch({
   onApplyFilter,
   onReset,
   onRefresh,
+  partnerTierList,
 }: FilterBarProps) {
   const [tempFilter, setTempFilter] = useState<{
     isActive?: boolean;
+    type?: string;
+    partnerTierId?: string;
   }>({
     isActive: undefined,
+    type: query.type ?? "",
+    partnerTierId: query.partnerTierId ?? "",
   });
 
-  const isFiltered = query.isActive !== undefined;
+  const isFiltered =
+    query.isActive !== undefined ||
+    query.type !== "" ||
+    query.partnerTierId !== "";
 
   const handleApply = () => {
     onApplyFilter({
       isActive: tempFilter.isActive || undefined,
+      type: tempFilter.type || undefined,
+      partnerTierId: tempFilter.partnerTierId || undefined,
     });
   };
 
   const handleResetAll = () => {
     setTempFilter({
       isActive: undefined,
+      type: "",
+      partnerTierId: "",
     });
     onReset();
   };
@@ -86,6 +101,48 @@ export default function FilterSearch({
                 <option value="all">Tất cả</option>
                 <option value="true">Hoạt động</option>
                 <option value="false">Không hoạt động</option>
+              </select>
+            </div>
+
+            {/* Tier */}
+            <div className="grid gap-2">
+              <Label>Cấp bậc</Label>
+              <select
+                className="border rounded-md h-9 px-2 w-full max-w-full truncate"
+                value={tempFilter.partnerTierId}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    partnerTierId: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {partnerTierList?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Type */}
+            <div className="grid gap-2">
+              <Label>Loại</Label>
+              <select
+                className="border rounded-md h-9 px-2 w-full max-w-full truncate"
+                value={tempFilter.type}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    type: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                <option value="Special">Đặc biệt</option>
+                <option value="Campaign">Chiến dịch</option>
+                <option value="Tier">Thường</option>
               </select>
             </div>
 

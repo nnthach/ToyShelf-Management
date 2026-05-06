@@ -207,7 +207,7 @@ function ProductViewDetailWithQuantitySheet({
                     {/* HÀNG CHỈ SỐ KHO: Hiển thị gọn gàng */}
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">
-                        Kho: {color.quantity || 0}
+                        Kho: {color?.quantity || color?.available || 0}
                       </span>
                       {color.inTransit >= 0 && (
                         <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">

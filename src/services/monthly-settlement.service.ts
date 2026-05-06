@@ -44,6 +44,11 @@ export const receiveMonthlySettlementAPI = async (id: string) => {
   return res.data;
 };
 
+export const finalizeMonthlySettlementAPI = async (id: string) => {
+  const res = await api.post(`/MonthlySettlement/${id}/finalize`);
+  return res.data;
+};
+
 export const updateMonthlySettlementAdditionalFeeAPI = async <T>(
   data: T,
   id: string,

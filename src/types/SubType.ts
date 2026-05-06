@@ -31,6 +31,7 @@ export interface QueryParams {
   warehouseLocationId?: string;
   searchTerm?: string;
   date?: string;
+  partnerTierId?: string;
 }
 
 export interface LoginRes {
