@@ -40,14 +40,8 @@ function ShelfCardWithQuantity({
             </span>
 
             <div className="flex flex-col gap-1 transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0">
-              {/* {shelf?.inUse >= 0 && inventoryList?.type !== "Store" && (
-                <span className="bg-blue-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-blue-700 border border-blue-200/50 w-fit">
-                  Sử dụng: {shelf.inUse}
-                </span>
-              )} */}
-
               {shelf?.reserved >= 0 && inventoryList?.type !== "Store" && (
-                <span className="bg-purple-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-purple-700 border border-purple-200/50 w-fit">
+                <span className="bg-blue-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-blue-700 border border-blue-200/50 w-fit">
                   Được đặt: {shelf.reserved}
                 </span>
               )}
@@ -58,9 +52,14 @@ function ShelfCardWithQuantity({
                 </span>
               )}
 
-              {shelf?.recalled >= 0 && (
+              {shelf?.pendingMaintenance >= 0 && (
+                <span className="bg-orange-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-orange-700 border border-orange-200/50 w-fit">
+                  Chờ thu hồi: {shelf.pendingMaintenance}
+                </span>
+              )}
+              {shelf?.maintenance >= 0 && (
                 <span className="bg-red-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-red-700 border border-red-200/50 w-fit">
-                  Thu hồi: {shelf.recalled}
+                  Thu hồi: {shelf.maintenance}
                 </span>
               )}
             </div>

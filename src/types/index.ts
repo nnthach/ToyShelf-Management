@@ -365,6 +365,8 @@ export interface Shelf {
   inTransit: number;
   inUse: number;
   recalled: number;
+  pendingMaintenance: number;
+  maintenance: number;
   displayGuideline: string;
   isActive: boolean;
   levels: ShelfLevelItem[];
