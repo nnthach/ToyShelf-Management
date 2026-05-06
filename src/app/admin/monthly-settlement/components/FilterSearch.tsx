@@ -191,6 +191,7 @@ export default function FilterSearch({
                   <option value="PENDING">Đang chờ</option>
                   <option value="PAID">Đã thanh toán</option>
                   <option value="RECEIVED">Đã nhận tiền</option>
+                  <option value="FINALIZED">Đã chốt sổ</option>
                 </select>
               </div>
             )}
