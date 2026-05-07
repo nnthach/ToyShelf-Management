@@ -11,8 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllMonthlySettlementAPI } from "@/src/services/monthly-settlement.service";
 import { useState } from "react";
 import ExportMonthlySettlement from "./components/ExportMonthlySettlement";
-import { getDashboardTopPartnerAPI } from "@/src/services/dashboard.service";
-import { formatPartnerTierTextColor } from "@/src/utils/formatStatus";
 import TopPartner from "./components/TopPartner";
 import TotalRevenue from "./components/TotalRevenue";
 import TopStore from "./components/TopStore";
@@ -21,10 +19,14 @@ import TopSelling from "./components/TopSelling";
 export default function AdminTotalMonthlyManage() {
   const [isOpenExportModal, setIsOpenExportModal] = useState(false);
 
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
     status: undefined,
-    year: undefined,
-    month: undefined,
+    year: currentYear,
+    month: currentMonth,
     partnerId: undefined,
   });
 
@@ -81,8 +83,6 @@ export default function AdminTotalMonthlyManage() {
               onApplyFilter={(filter) =>
                 updateQuery({
                   status: filter.status,
-                  year: filter.year,
-                  month: filter.month,
                   partnerId: filter.partnerId,
                 })
               }

@@ -18,12 +18,6 @@ function TotalRevenue() {
     select: (res) => res.data,
   });
 
-  const { data: adminStatCardV2 } = useQuery({
-    queryKey: ["adminStatCardV2"],
-    queryFn: () => getDashboardAdminStatCardV2({}),
-    select: (res) => res.data,
-  });
-
   return (
     <div className="space-y-4 mt-8">
       <FilterStatCard
@@ -49,18 +43,6 @@ function TotalRevenue() {
           icon={ShoppingCart}
           color="bg-orange-100 text-orange-900"
           subTitle={"Cập nhật theo bộ lọc"}
-        />
-        <StatCardWithButton
-          title="Đối tác"
-          value={`${adminStatCardV2?.totalPartners || 0}`}
-          icon={Users}
-          color="bg-blue-100 text-blue-900"
-        />
-        <StatCardWithButton
-          title="Cửa hàng"
-          value={`${adminStatCardV2?.totalStores || 0}`}
-          icon={Store}
-          color="bg-red-100 text-red-900"
         />
       </div>
     </div>

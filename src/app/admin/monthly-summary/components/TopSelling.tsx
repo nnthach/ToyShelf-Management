@@ -60,7 +60,10 @@ function TopSelling() {
   return (
     <div className="mt-8 space-y-4">
       {/* Filter Section - Tối giản, không background */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-row items-center gap-4">
+        <h2 className="text-xl font-bold text-slate-800 tracking-tight">
+          Xếp hạng sản phẩm
+        </h2>
         <div className="flex items-center gap-3">
           <select
             value={query.month}
