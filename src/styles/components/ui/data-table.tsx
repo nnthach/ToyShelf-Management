@@ -23,7 +23,12 @@ import React from "react";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+
   pageSize?: number;
+  pageNumber?: number;
+  totalCount?: number;
+  totalPages?: number;
+
   children?: React.ReactNode;
   isLoading?: boolean;
   onPageChange?: (pageIndex: number) => void; // <--- thêm
@@ -34,9 +39,17 @@ export function DataTable<TData, TValue>({
   data,
   children,
   pageSize = 10,
+  pageNumber,
+  totalCount,
+  totalPages,
   isLoading,
   onPageChange,
 }: DataTableProps<TData, TValue>) {
+  const isServerPagination =
+    totalPages !== undefined &&
+    totalCount !== undefined &&
+    pageNumber !== undefined;
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -50,7 +63,13 @@ export function DataTable<TData, TValue>({
       },
     },
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+
+    ...(isServerPagination
+      ? {}
+      : {
+          getPaginationRowModel: getPaginationRowModel(),
+        }),
+
     // sort
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
@@ -59,6 +78,17 @@ export function DataTable<TData, TValue>({
     },
     // end sort
   });
+
+  // if server có pagesize
+  const currentPage = isServerPagination
+    ? pageNumber
+    : table.getState().pagination.pageIndex + 1;
+
+  const currentTotalPages = isServerPagination
+    ? totalPages
+    : table.getPageCount();
+
+  const currentTotalCount = isServerPagination ? totalCount : data.length;
 
   return (
     <div>
@@ -127,16 +157,13 @@ export function DataTable<TData, TValue>({
           <div className="text-sm text-muted-foreground">
             Hiển thị{" "}
             <span className="font-medium">
-              {table.getState().pagination.pageIndex * pageSize + 1}
+              {(currentPage - 1) * pageSize + 1}
             </span>{" "}
             -{" "}
             <span className="font-medium">
-              {Math.min(
-                (table.getState().pagination.pageIndex + 1) * pageSize,
-                data.length,
-              )}
+              {Math.min(currentPage * pageSize, currentTotalCount)}
             </span>{" "}
-            / {data.length} mục
+            / {currentTotalCount} mục
           </div>
 
           {/* RIGHT: Pagination */}
@@ -146,32 +173,37 @@ export function DataTable<TData, TValue>({
               variant="outline"
               size="icon"
               onClick={() => {
-                table.previousPage();
-                onPageChange?.(table.getState().pagination.pageIndex);
+                if (isServerPagination) {
+                  onPageChange?.(currentPage - 1);
+                } else {
+                  table.previousPage();
+                }
               }}
-              disabled={!table.getCanPreviousPage()}
+              disabled={currentPage <= 1}
             >
               ←
             </Button>
 
             {/* Page numbers */}
-            {Array.from({ length: table.getPageCount() }, (_, i) => {
-              const isActive = i === table.getState().pagination.pageIndex;
+            {Array.from({ length: currentTotalPages }, (_, i) => {
+              const page = i + 1;
+              const isActive = page === currentPage;
 
               return (
                 <Button
-                  key={i}
+                  key={page}
                   variant={isActive ? "default" : "outline"}
                   size="sm"
                   onClick={() => {
-                    table.setPageIndex(i);
-                    onPageChange?.(i); // <--- gọi callback
+                    if (isServerPagination) {
+                      onPageChange?.(page);
+                    } else {
+                      table.setPageIndex(i);
+                      onPageChange?.(page);
+                    }
                   }}
-                  className={`px-3 pb-0.5 ${
-                    isActive ? "bg-blue-500 text-white hover:bg-blue-600" : ""
-                  }`}
                 >
-                  {i + 1}
+                  {page}
                 </Button>
               );
             })}
@@ -181,10 +213,13 @@ export function DataTable<TData, TValue>({
               variant="outline"
               size="icon"
               onClick={() => {
-                table.nextPage();
-                onPageChange?.(table.getState().pagination.pageIndex);
+                if (isServerPagination) {
+                  onPageChange?.(currentPage + 1);
+                } else {
+                  table.nextPage();
+                }
               }}
-              disabled={!table.getCanNextPage()}
+              disabled={currentPage >= currentTotalPages}
             >
               →
             </Button>
