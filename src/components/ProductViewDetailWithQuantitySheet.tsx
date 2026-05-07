@@ -198,7 +198,7 @@ function ProductViewDetailWithQuantitySheet({
 
                   {/* Danh sách giao dịch */}
                   <div className="space-y-3 max-h-[380px] overflow-y-auto custom-scrollbar">
-                    {productInventoryAudit.transactions?.length > 0 ? (
+                    {productInventoryAudit?.transactions?.length > 0 ? (
                       productInventoryAudit.transactions.map(
                         (trans: ProductAuditTransaction, i: number) => (
                           <div
@@ -216,11 +216,19 @@ function ProductViewDetailWithQuantitySheet({
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-bold truncate capitalize">
-                                {trans.type === "Shipment"
-                                  ? "Nhập hàng"
-                                  : trans.type === "DamageReport"
-                                    ? "Thu hồi"
-                                    : "Bán hàng"}
+                                {productInventoryAudit?.locationType === "Store"
+                                  ? trans?.type === "Shipment"
+                                    ? "Nhập hàng"
+                                    : trans?.type === "DamageReport"
+                                      ? "Thu hồi"
+                                      : "Bán hàng"
+                                  : trans?.type === "Shipment"
+                                    ? "Giao hàng"
+                                    : trans?.type === "DamageReport"
+                                      ? "Thu hồi"
+                                      : trans?.type === "Refill"
+                                        ? "Bổ sung hàng"
+                                        : "Bán hàng"}
                               </p>
                               <p className="text-[12px] text-muted-foreground">
                                 {formatDateTime(trans?.date).full || ""}
