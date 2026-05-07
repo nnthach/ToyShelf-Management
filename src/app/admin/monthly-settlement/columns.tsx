@@ -1,13 +1,27 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import ViewDetailSheet from "./components/ViewDetailSheet";
 import { MonthlySettlement } from "@/src/types";
 import { formatDateTime } from "@/src/utils/format";
 import {
   formatMonthlySettlementStatusColor,
   formatMonthlySettlementStatusText,
 } from "@/src/utils/formatStatus";
+import { Eye } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+const ActionCell = ({ id }: { id: string }) => {
+  const router = useRouter();
+
+  return (
+    <span
+      onClick={() => router.push(`/admin/monthly-settlement/${id}`)}
+      className="cursor-pointer text-blue-400"
+    >
+      <Eye />
+    </span>
+  );
+};
 
 export const getMonthlySettlementColumns =
   (): ColumnDef<MonthlySettlement>[] => [
@@ -81,9 +95,6 @@ export const getMonthlySettlementColumns =
     {
       accessorKey: "action",
       header: "Thao tác",
-      cell: ({ row }) => {
-        const monthlySettlement = row.original;
-        return <ViewDetailSheet monthlySettlementId={monthlySettlement.id} />;
-      },
+      cell: ({ row }) => <ActionCell id={row.original.id} />,
     },
   ];

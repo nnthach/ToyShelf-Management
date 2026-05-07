@@ -8,10 +8,23 @@ import {
   formatMonthlySettlementStatusColor,
   formatMonthlySettlementStatusText,
 } from "@/src/utils/formatStatus";
+import { useRouter } from "next/navigation";
+import { Eye } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
+const ActionCell = ({ id }: { id: string }) => {
+  const router = useRouter();
 
+  return (
+    <span
+      onClick={() => router.push(`/partner/monthly-settlement/${id}`)}
+      className="cursor-pointer text-blue-400"
+    >
+      <Eye />
+    </span>
+  );
+};
 export const getMonthlySettlementColumns =
   (): ColumnDef<MonthlySettlement>[] => [
     {
@@ -72,9 +85,6 @@ export const getMonthlySettlementColumns =
     {
       accessorKey: "action",
       header: "Thao tác",
-      cell: ({ row }) => {
-        const monthlySettlement = row.original;
-        return <ViewDetailSheet monthlySettlementId={monthlySettlement.id} />;
-      },
+      cell: ({ row }) => <ActionCell id={row.original.id} />,
     },
   ];

@@ -159,6 +159,8 @@ export interface Order {
   bankReference: string;
   customerEmail: string;
   items: RefillRequestProductColor[];
+  totalCommission: number;
+  orderDate: string;
 }
 
 export interface Warehouse {

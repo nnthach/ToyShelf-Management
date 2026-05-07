@@ -161,7 +161,7 @@ function OrderDetailModal({
                   </div>
                   <div>
                     <p className="text-[10px] text-slate-500 font-bold uppercase">
-                      Mã tham chiếu
+                      Mã giao dịch
                     </p>
                     <p className="text-sm font-bold break-all">
                       {orderDetail?.bankReference || "---"}
