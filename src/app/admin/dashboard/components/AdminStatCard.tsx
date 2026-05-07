@@ -49,7 +49,7 @@ function AdminStatCard() {
         />
 
         <StatCardWithButton
-          title="Đơn hàng"
+          title="Đơn bán hàng"
           value={`${adminStatCard?.totalOrders || 0}`}
           icon={ShoppingCart}
           color="bg-orange-100 text-orange-900"

@@ -59,7 +59,7 @@ function PartnerStatCard() {
           action={() => router.push(`/partner/monthly-settlement`)}
         />
         <StatCardWithButton
-          title="Đơn hàng"
+          title="Đơn bán hàng"
           value={`${partnerStatCard?.orders || 0}`}
           icon={ShoppingCart}
           color="bg-red-100 text-red-900"

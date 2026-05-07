@@ -49,10 +49,10 @@ export default function StoreManageOrders() {
       <div className="">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Giám sát đơn hàng
+            Giám sát đơn bán hàng
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
-            Danh sách đơn hàng của từng cửa hàng
+            Danh sách đơn bán hàng của cửa hàng
           </p>
         </div>
       </div>

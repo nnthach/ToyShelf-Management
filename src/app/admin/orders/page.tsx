@@ -54,10 +54,10 @@ export default function AdminOrderManagement() {
       {/*Header */}
       <div className="flex flex-col">
         <h1 className="text-2xl font-bold dark:text-foreground">
-          Danh sách đơn hàng
+          Danh sách đơn bán hàng
         </h1>
         <p className="text-gray-500 dark:text-gray-200">
-          Bộ lọc thông minh theo đơn hàng của đối tác và cửa hàng
+          Bộ lọc thông minh theo đơn bán hàng từ đối tác và cửa hàng
         </p>
       </div>
       {/*Table */}

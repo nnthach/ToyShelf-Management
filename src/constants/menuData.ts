@@ -21,7 +21,7 @@ import {
   Box,
   ShoppingCart,
   History,
-  CalendarDays,
+  Layers,
 } from "lucide-react";
 
 // Admin
@@ -30,16 +30,13 @@ export const AdminSidebarGroups = [
     label: "Ứng dụng",
     items: [
       { title: "Tổng quan", url: "/admin/dashboard", icon: LayoutDashboard },
-      {
-        title: "Tổng kết tháng",
-        url: "/admin/monthly-summary",
-        icon: CalendarDays,
-      },
     ],
   },
   {
-    label: "Giám sát đơn hàng",
-    items: [{ title: "Đơn hàng", url: "/admin/orders", icon: ShoppingCart }],
+    label: "Giám sát đơn bán hàng",
+    items: [
+      { title: "Đơn bán hàng", url: "/admin/orders", icon: ShoppingCart },
+    ],
   },
 
   {
@@ -122,7 +119,7 @@ export const AdminSidebarNested = [
     ],
   },
   {
-    label: "Quản lý hàng tồn kho",
+    label: "Giám sát hàng và kệ trong kho",
     sub: [
       {
         title: "Giám sát hàng tồn kho",
@@ -133,6 +130,11 @@ export const AdminSidebarNested = [
         title: "Giám sát kệ trưng bày",
         url: "/admin/shelf-inventory",
         icon: Server,
+      },
+      {
+        title: "Danh sách mã kệ trưng bày",
+        url: "/admin/shelf",
+        icon: Layers,
       },
     ],
   },
@@ -186,8 +188,10 @@ export const PartnerAdminSidebarGroups = [
     ],
   },
   {
-    label: "Đơn hàng",
-    items: [{ title: "Đơn hàng", url: "/partner/orders", icon: ShoppingCart }],
+    label: "Đơn bán hàng",
+    items: [
+      { title: "Đơn bán hàng", url: "/partner/orders", icon: ShoppingCart },
+    ],
   },
 
   {
@@ -212,24 +216,29 @@ export const PartnerAdminSidebarGroups = [
       { title: "Tài khoản nhân viên", url: "/partner/staffs", icon: UserStar },
     ],
   },
+];
+
+export const PartnerAdminSidebarNested = [
   {
-    label: "Hàng tồn kho",
-    items: [
+    label: "Giám sát tồn kho",
+    sub: [
       {
-        title: "Danh sách hàng tồn kho",
+        title: "Giám sát hàng tồn kho",
         url: "/partner/inventories",
         icon: Box,
       },
       {
-        title: "Danh sách kệ trưng bày",
+        title: "Giám sát kệ trưng bày",
         url: "/partner/shelf-inventories",
         icon: Server,
       },
+      {
+        title: "Danh sách mã kệ trưng bày",
+        url: "/partner/shelf",
+        icon: Layers,
+      },
     ],
   },
-];
-
-export const PartnerAdminSidebarNested = [
   {
     label: "Quản lý cửa hàng",
     sub: [
@@ -278,7 +287,6 @@ export const WarehouseManagerSidebarGroups = [
         url: "/warehouse/dashboard",
         icon: LayoutDashboard,
       },
-      // { title: "Thông báo", url: "#", icon: Bell, badge: true },
     ],
   },
 
@@ -361,6 +369,11 @@ export const StoreManagerSidebarGroups = [
         url: "/manager/shelf-inventory",
         icon: Server,
       },
+      {
+        title: "Danh sách mã kệ trưng bày",
+        url: "/manager/shelf",
+        icon: Layers,
+      },
     ],
   },
   {
@@ -371,10 +384,10 @@ export const StoreManagerSidebarGroups = [
   },
 
   {
-    label: "Đơn hàng",
+    label: "Đơn bán hàng",
     items: [
       {
-        title: "Danh sách đơn hàng",
+        title: "Danh sách đơn bán hàng",
         url: "/manager/orders",
         icon: ShoppingCart,
       },

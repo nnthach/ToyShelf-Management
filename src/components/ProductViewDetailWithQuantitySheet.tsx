@@ -115,7 +115,7 @@ function ProductViewDetailWithQuantitySheet({
           {/*Left */}
           <div className="w-[450px] border-r bg-slate-50/50 flex flex-col overflow-hidden">
             {/* Filter Section: Đặt ngay dưới Header để người dùng luôn thấy */}
-            <div className="p-4 border-b bg-white/50 space-y-3">
+            <div className="p-4 border-b bg-white/50 space-y-3 shrink-0">
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <input
@@ -143,16 +143,16 @@ function ProductViewDetailWithQuantitySheet({
               </div>
             </div>
 
-            <div className="flex-1 p-4">
+            <div className="flex-1 min-h-0 p-4">
               {isLoading ? (
                 <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
                   <Loader2 className="h-8 w-8 animate-spin" />
                   <p className="text-sm">Đang tải dữ liệu kho...</p>
                 </div>
               ) : productInventoryAudit ? (
-                <div className="space-y-6">
+                <div className="h-full flex flex-col min-h-0 space-y-6">
                   {/* Tóm tắt nhanh */}
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-3 gap-3 shrink-0">
                     <div className="bg-white p-3 rounded-xl border shadow-sm">
                       <p className="text-[10px] text-muted-foreground uppercase font-bold">
                         Đầu kỳ
@@ -179,25 +179,25 @@ function ProductViewDetailWithQuantitySheet({
                       </p>
                     </div>
                   </div>
-
                   {/* Status Check */}
-                  <div
-                    className={`p-3 rounded-xl border flex items-center gap-3 ${productInventoryAudit.isMatched ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-amber-50 border-amber-100 text-amber-800"}`}
-                  >
-                    {productInventoryAudit.isMatched ? (
-                      <CheckCircle2 size={18} />
-                    ) : (
-                      <AlertCircle size={18} />
-                    )}
-                    <span className="text-xs font-medium">
-                      {productInventoryAudit.isMatched
-                        ? "Số liệu kho trùng khớp hệ thống"
-                        : "Phát hiện sai lệch tồn kho"}
-                    </span>
+                  <div className="shrink-0">
+                    <div
+                      className={`p-3 rounded-xl border flex items-center gap-3 ${productInventoryAudit.isMatched ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-amber-50 border-amber-100 text-amber-800"}`}
+                    >
+                      {productInventoryAudit.isMatched ? (
+                        <CheckCircle2 size={18} />
+                      ) : (
+                        <AlertCircle size={18} />
+                      )}
+                      <span className="text-xs font-medium">
+                        {productInventoryAudit.isMatched
+                          ? "Số liệu kho trùng khớp hệ thống"
+                          : "Phát hiện sai lệch tồn kho"}
+                      </span>
+                    </div>
                   </div>
-
                   {/* Danh sách giao dịch */}
-                  <div className="space-y-3 max-h-[380px] overflow-y-auto custom-scrollbar">
+                  <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
                     {productInventoryAudit?.transactions?.length > 0 ? (
                       productInventoryAudit.transactions.map(
                         (trans: ProductAuditTransaction, i: number) => (

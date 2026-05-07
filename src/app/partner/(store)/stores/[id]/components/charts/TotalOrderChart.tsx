@@ -52,7 +52,7 @@ const TotalOrderChart = ({ storeId }: { storeId: string }) => {
       <div className="flex justify-between items-start mb-6">
         <div>
           <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">
-            Tổng đơn hàng theo{" "}
+            Tổng đơn bán hàng theo{" "}
             {filters.viewType === "week"
               ? "tuần này"
               : filters.viewType === "month"

@@ -383,6 +383,52 @@ export const formatOrderStatusColor = (status: string) => {
   }
 };
 
+export const formatShelfStatusText = (status: string) => {
+  switch (status) {
+    case "Available":
+      return "Còn hàng";
+    case "Reserved":
+      return "Đã đặt trước";
+    case "InTransit":
+      return "Đang vận chuyển";
+    case "InUse":
+      return "Đang sử dụng";
+    case "Recalled":
+      return "Đã thu hồi";
+    case "PendingMaintenance":
+      return "Chờ bảo trì";
+    case "Maintenance":
+      return "Đang bảo trì";
+    case "Retired":
+      return "Ngừng sử dụng";
+    default:
+      return "Không xác định";
+  }
+};
+
+export const formatShelfStatusColor = (status: string) => {
+  const baseClass =
+    "px-3 py-1 rounded-2xl font-medium text-xs whitespace-nowrap";
+
+  switch (status) {
+    case "Available":
+      return `${baseClass} bg-green-100 text-green-700 border border-green-200`;
+    case "InUse":
+      return `${baseClass} bg-blue-100 text-blue-700 border border-blue-200`;
+    case "Reserved":
+    case "InTransit":
+      return `${baseClass} bg-cyan-100 text-cyan-700 border border-cyan-200`;
+    case "PendingMaintenance":
+    case "Maintenance":
+      return `${baseClass} bg-yellow-100 text-yellow-700 border border-yellow-200`;
+    case "Recalled":
+    case "Retired":
+      return `${baseClass} bg-red-100 text-red-700 border border-red-200`;
+    default:
+      return `${baseClass} bg-gray-100 text-gray-600 border border-gray-200`;
+  }
+};
+
 export const formatShipmentAssignTypeText = (status: string) => {
   switch (status) {
     case "STORE":

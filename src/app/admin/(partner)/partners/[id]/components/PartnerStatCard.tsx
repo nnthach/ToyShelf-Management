@@ -60,10 +60,10 @@ function PartnerStatCard({ partnerId }: { partnerId: string }) {
           subTitle="Cập nhật theo bộ lọc"
         />
         <StatCardWithButton
-          title="Đơn hàng"
+          title="Đơn bán hàng"
           value={`${partnerStatCard?.orders || 0}`}
           icon={ShoppingCart}
-          color="bg-purple-100 text-purple-900"
+          color="bg-yellow-100 text-yellow-900"
           action={() => router.push(`/admin/orders?partnerId=${partnerId}`)}
           subTitle="Cập nhật theo bộ lọc"
         />

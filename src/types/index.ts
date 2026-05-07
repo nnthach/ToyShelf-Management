@@ -372,6 +372,18 @@ export interface Shelf {
   levels: ShelfLevelItem[];
 }
 
+//shelf api /shelf
+export interface ShelfShelf {
+  id: string;
+  inventoryLocationId: string;
+  shelfTypeId: string;
+  code: string;
+  status: string;
+  assignedAt: string;
+  unassignedAt: string;
+  shelfType: Shelf;
+}
+
 export interface RefillRequestProductColor {
   shipmentItemId?: string;
   storeOrderItemId?: string;
