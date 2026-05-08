@@ -117,6 +117,7 @@ export default function AdminShelfManagement() {
           value={totalShelfCount?.totalShelf || 0}
           icon={Server}
           color="bg-blue-100 text-blue-900"
+          subTitle="Trong toàn hệ thống"
         />
 
         <StatCardWithButton
@@ -124,12 +125,14 @@ export default function AdminShelfManagement() {
           value={totalShelfCountAvailable?.totalShelf || 0}
           icon={CheckCircle2}
           color="bg-green-100 text-green-900"
+          subTitle="Trong toàn hệ thống"
         />
         <StatCardWithButton
           title="Tổng kệ đang sử dụng"
           value={totalShelfCountInUse?.totalShelf || 0}
           icon={ClipboardPen}
           color="bg-purple-100 text-purple-900"
+          subTitle="Trong toàn hệ thống"
         />
 
         <StatCardWithButton
@@ -137,6 +140,7 @@ export default function AdminShelfManagement() {
           value={totalShelfCountMaintenance?.totalShelf || 0}
           icon={ArchiveRestore}
           color="bg-orange-100 text-orange-900"
+          subTitle="Trong toàn hệ thống"
         />
       </div>
 
