@@ -30,7 +30,7 @@ export const ShipmentUrls = ({ mediaUrls }: { mediaUrls?: Medias[] }) => {
       <DialogTrigger asChild>
         <button className="text-[12px] text-left text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 mt-1 transition-all hover:underline">
           <ImageIcon className="h-3 w-3" />
-          Xem hình ảnh giao & trả hàng ({mediaUrls?.length || 0})
+          Xem hình ảnh giao & trả hàng ({validMedias?.length || 0})
         </button>
       </DialogTrigger>
 
