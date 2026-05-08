@@ -33,7 +33,7 @@ function ShipInfoItem({
             "text-slate-700 bg-slate-50 border border-transparent",
         )}
       >
-        {value || "---"}
+        {value && value !== "Unknown" ? value : "---"}
       </div>
     </div>
   );
