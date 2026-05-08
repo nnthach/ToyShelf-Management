@@ -18,6 +18,7 @@ import { ProductColorItem } from "@/src/types";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@/src/hooks/useDebounce";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface ReturnItemProps {
   index: number;
@@ -188,6 +189,7 @@ function ReturnItem({
                 </div>
 
                 <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 h-9 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 bg-white">
+                  {/*Search */}
                   <input
                     className="flex-1 text-sm outline-none bg-transparent placeholder:text-slate-400"
                     placeholder="Nhập mã sản phẩm..."
@@ -219,7 +221,7 @@ function ReturnItem({
                   )}
                 </div>
                 {openDropdown && (
-                  <div className="absolute z-20 top-full mt-1 left-0 right-0 bg-white border border-slate-200 rounded-lg shadow-md overflow-y-auto">
+                  <div className="absolute z-20 top-full mt-1 left-0 right-0 bg-white border border-slate-200 rounded-lg shadow-md max-h-[200px] custom-scrollbar overflow-y-auto">
                     {productColorIdList.length === 0 ? (
                       <p className="text-xs text-slate-400 px-3 py-2">
                         Không tìm thấy
@@ -238,6 +240,15 @@ function ReturnItem({
                             setOpenDropdown(false);
                           }}
                         >
+                          <div className="relative w-10 h-10 overflow-hidden rounded border border-slate-100 flex-shrink-0">
+                            <Image
+                              src={p?.imageUrl || "/placeholder-product.png"}
+                              alt={p?.variantSku}
+                              fill
+                              sizes="40px"
+                              className="object-cover"
+                            />
+                          </div>
                           <span className="font-medium">{p.variantSku}</span>
                         </div>
                       ))
