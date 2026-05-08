@@ -41,15 +41,12 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import OrderDetailModal from "../components/OrderDetailModal";
 import ViewOrderDetailSheet from "./components/ViewOrderDetailSheet";
 
 export default function AdminViewMonthlySettlementDetailPage() {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [isOpenDeduction, setIsOpenDeduction] = useState(false);
-  const [isOpenConfirmPay, setIsOpenConfirmPay] = useState(false);
 
   const [isOpenOrderDetail, setIsOpenOrderDetail] = useState(false);
   const [orderCode, setOrderCode] = useState<number | null>(null);
@@ -75,7 +72,7 @@ export default function AdminViewMonthlySettlementDetailPage() {
 
       // reload danh sách
       queryClient.invalidateQueries({
-        queryKey: ["monthlySettlement", id],
+        queryKey: ["monthlyDetail", id],
       });
 
       queryClient.invalidateQueries({

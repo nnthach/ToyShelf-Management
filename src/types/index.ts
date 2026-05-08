@@ -673,6 +673,7 @@ export interface Shipment {
   storeOrders: [{ id: string; code: string }];
   damageReports: [{ id: string; code: string }];
   mediaUrls: string[];
+  orderType:string;
 }
 
 export interface ChartItem {

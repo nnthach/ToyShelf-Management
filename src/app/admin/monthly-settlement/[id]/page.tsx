@@ -79,7 +79,7 @@ export default function AdminViewMonthlySettlementDetailPage() {
 
       // reload danh sách
       queryClient.invalidateQueries({
-        queryKey: ["monthlySettlement", id],
+        queryKey: ["monthlyDetail", id],
       });
 
       queryClient.invalidateQueries({

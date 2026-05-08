@@ -8,20 +8,22 @@ import {
 import { ImageIcon, ExternalLink } from "lucide-react";
 import Image from "next/image";
 
-export const ShipmentUrls = ({ mediaUrls }: {mediaUrls?: string[]}) => {
-//   if (!mediaUrls || mediaUrls.length === 0) return null;
+export const ShipmentUrls = ({ mediaUrls }: { mediaUrls?: string[] }) => {
+  //   if (!mediaUrls || mediaUrls.length === 0) return null;
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="text-[12px] text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 mt-1 transition-all hover:underline">
+        <button className="text-[12px] text-left text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 mt-1 transition-all hover:underline">
           <ImageIcon className="h-3 w-3" />
           Xem hình ảnh giao & trả hàng ({mediaUrls?.length})
         </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-lg">Hình ảnh giao & trả hàng</DialogTitle>
+          <DialogTitle className="text-lg">
+            Hình ảnh giao & trả hàng
+          </DialogTitle>
         </DialogHeader>
 
         <div className="grid grid-cols-2 gap-4 mt-4">

@@ -54,12 +54,26 @@ function WarehouseShipmentDetailSection({
               </span>
             </div>
 
-            <ShipmentUrls mediaUrls={shipmentDetail.mediaUrls || []} />
+            <div className="col-span-2">
+              <ShipmentUrls mediaUrls={shipmentDetail.mediaUrls || []} />
+            </div>
           </div>
           {/* Time nodes */}
           <div className="grid grid-cols-3 gap-2">
-            <ShipTimeNode label="Lấy hàng" time={shipmentDetail.pickedUpAt} />
-            <ShipTimeNode label="Giao hàng" time={shipmentDetail.deliveredAt} />
+            <ShipTimeNode
+              label={
+                shipmentDetail?.orderType === "RETURN"
+                  ? "Bắt đầu đi"
+                  : "Lấy hàng"
+              }
+              time={shipmentDetail.pickedUpAt}
+            />
+            <ShipTimeNode
+              label={
+                shipmentDetail?.orderType === "RETURN" ? "Tới nơi" : "Giao hàng"
+              }
+              time={shipmentDetail.deliveredAt}
+            />
             <ShipTimeNode
               label="Hoàn tất"
               time={shipmentDetail.storeReceivedAt}

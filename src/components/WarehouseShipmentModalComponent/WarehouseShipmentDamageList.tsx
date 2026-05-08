@@ -57,7 +57,7 @@ function WarehouseShipmentDamageList({
                 </div>
                 <div className="min-w-0">
                   <h5 className="font-bold text-[14px] text-slate-900 leading-tight truncate">
-                    {item.targetName || "N/A"}
+                    {item?.targetName || "N/A"}
                   </h5>
 
                   <div className="flex items-center gap-1 text-[12px] mt-1">
@@ -86,7 +86,7 @@ function WarehouseShipmentDamageList({
                   Số lượng
                 </span>
                 <span className="text-xl font-bold  drop-shadow-sm">
-                  {item.quantity}
+                  {item?.quantity}
                 </span>
               </div>
             </div>
