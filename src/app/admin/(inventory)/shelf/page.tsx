@@ -7,9 +7,20 @@ import { QueryParams } from "@/src/types/SubType";
 import { useQuery } from "@tanstack/react-query";
 import { InventoryLocation } from "@/src/types";
 import { useEffect, useState } from "react";
-import { getAllShelfAPI } from "@/src/services/shelf.service";
+import {
+  getAllShelfAPI,
+  getAllShelfTypeAPI,
+  getTotalShelfCountAPI,
+} from "@/src/services/shelf.service";
 import { getAllInventoryLocationAPI } from "@/src/services/inventory-location.service";
 import FilterSearch from "./components/FilterSearch";
+import StatCardWithButton from "@/src/components/StatCardWithButton";
+import {
+  ArchiveRestore,
+  CheckCircle2,
+  ClipboardPen,
+  Server,
+} from "lucide-react";
 
 export default function AdminShelfManagement() {
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
@@ -17,6 +28,7 @@ export default function AdminShelfManagement() {
       pageNumber: 1,
       pageSize: 10,
       status: "",
+      shelfTypeId: "",
       inventoryLocationId: "",
     },
     {
@@ -33,6 +45,36 @@ export default function AdminShelfManagement() {
     queryFn: () => getAllShelfAPI(query),
     select: (res) => res.data,
     enabled: !!query.inventoryLocationId,
+  });
+
+  const { data: shelfTypeList = [] } = useQuery({
+    queryKey: ["shelfTypes", query],
+    queryFn: () => getAllShelfTypeAPI(query),
+    select: (res) => res.data,
+  });
+
+  const { data: totalShelfCount = [] } = useQuery({
+    queryKey: ["shelfCounts"],
+    queryFn: () => getTotalShelfCountAPI({}),
+    select: (res) => res.data,
+  });
+
+  const { data: totalShelfCountAvailable = [] } = useQuery({
+    queryKey: ["shelfCountAvailable"],
+    queryFn: () => getTotalShelfCountAPI({ status: "Available" }),
+    select: (res) => res.data,
+  });
+
+  const { data: totalShelfCountInUse = [] } = useQuery({
+    queryKey: ["shelfCountInUse"],
+    queryFn: () => getTotalShelfCountAPI({ status: "InUse" }),
+    select: (res) => res.data,
+  });
+
+  const { data: totalShelfCountMaintenance = [] } = useQuery({
+    queryKey: ["shelfCountMaintenance"],
+    queryFn: () => getTotalShelfCountAPI({ status: "Maintenance" }),
+    select: (res) => res.data,
   });
 
   const { data: locationList } = useQuery({
@@ -68,6 +110,36 @@ export default function AdminShelfManagement() {
           Danh sách kệ trưng bày tại cửa hàng và kho
         </p>
       </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-10">
+        <StatCardWithButton
+          title="Tổng kệ trong kệ thống"
+          value={totalShelfCount?.totalShelf || 0}
+          icon={Server}
+          color="bg-blue-100 text-blue-900"
+        />
+
+        <StatCardWithButton
+          title="Tổng kệ sẵn có"
+          value={totalShelfCountAvailable?.totalShelf || 0}
+          icon={CheckCircle2}
+          color="bg-green-100 text-green-900"
+        />
+        <StatCardWithButton
+          title="Tổng kệ đang sử dụng"
+          value={totalShelfCountInUse?.totalShelf || 0}
+          icon={ClipboardPen}
+          color="bg-purple-100 text-purple-900"
+        />
+
+        <StatCardWithButton
+          title="Tổng kệ bảo trì"
+          value={totalShelfCountMaintenance?.totalShelf || 0}
+          icon={ArchiveRestore}
+          color="bg-orange-100 text-orange-900"
+        />
+      </div>
+
       {/*Table */}
       <div className="container mx-auto py-10">
         <DataTable
@@ -89,6 +161,7 @@ export default function AdminShelfManagement() {
               query={query}
               loading={isLoading}
               locationList={locationList}
+              shelfTypeList={shelfTypeList}
               resultCount={shelfList?.items?.length}
               onApplyFilter={(filter) =>
                 updateQuery({

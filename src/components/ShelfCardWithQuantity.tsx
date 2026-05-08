@@ -60,7 +60,8 @@ function ShelfCardWithQuantity({
                 )}
               {shelf?.maintenance >= 0 && (
                 <span className="bg-red-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-red-700 border border-red-200/50 w-fit">
-                  Chờ thu hồi: {shelf.maintenance}
+                  {inventoryList?.type === "Store" ? "Chờ thu hồi" : "Bảo trì"}:{" "}
+                  {shelf.maintenance}
                 </span>
               )}
             </div>

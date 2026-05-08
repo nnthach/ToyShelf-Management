@@ -33,6 +33,7 @@ export interface QueryParams {
   date?: string;
   partnerTierId?: string;
   inventoryLocationId?: string;
+  shelfTypeId?: string;
 }
 
 export interface LoginRes {

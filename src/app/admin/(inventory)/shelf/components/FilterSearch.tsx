@@ -1,5 +1,5 @@
 import { useDebounce } from "@/src/hooks/useDebounce";
-import { InventoryLocation, Partner } from "@/src/types";
+import { InventoryLocation, Partner, Shelf } from "@/src/types";
 import { QueryParams } from "@/src/types/SubType";
 import { useEffect, useState } from "react";
 import {
@@ -17,11 +17,13 @@ type FilterBarProps = {
   loading: boolean;
   resultCount?: number;
   locationList?: InventoryLocation[];
+  shelfTypeList?: Shelf[];
   onApplyFilter: (val: {
     pageSize?: number;
     status?: string;
     pageNumber?: number;
     inventoryLocationId?: string;
+    shelfTypeId?: string;
   }) => void;
   onRefresh?: () => void;
   onReset: () => void;
@@ -31,6 +33,7 @@ export default function FilterSearch({
   query,
   loading,
   locationList,
+  shelfTypeList,
   onApplyFilter,
   onReset,
   onRefresh,
@@ -53,18 +56,22 @@ export default function FilterSearch({
     status: string;
     pageSize: number;
     pageNumber: number;
+    shelfTypeId: string;
   }>({
-    status: query.categoryId ?? "",
+    shelfTypeId: query.shelfTypeId ?? "",
+    status: String(query.status) ?? "",
     pageSize: query.pageSize ?? 10,
     pageNumber: query.pageNumber ?? 1,
   });
 
-  const isFiltered = query.status !== "" || query.pageSize !== 10;
+  const isFiltered =
+    query.status !== "" || query.pageSize !== 10 || query.shelfTypeId !== "";
 
   const handleApply = () => {
     onApplyFilter({
       pageSize: tempFilter.pageSize || 10,
       status: tempFilter.status || undefined,
+      shelfTypeId: tempFilter.shelfTypeId || undefined,
       pageNumber: 1,
     });
   };
@@ -72,6 +79,7 @@ export default function FilterSearch({
   const handleResetAll = () => {
     setTempFilter({
       status: "",
+      shelfTypeId: "",
       pageNumber: 1,
       pageSize: 10,
     });
@@ -89,7 +97,7 @@ export default function FilterSearch({
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent align="start" className="w-64">
+        <PopoverContent align="start">
           <div className="grid gap-4">
             {/* Page Size */}
             <div className="grid gap-2">
@@ -112,6 +120,27 @@ export default function FilterSearch({
               </select>
             </div>
 
+            <div className="grid gap-2">
+              <Label>Loại kệ</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.shelfTypeId}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    shelfTypeId: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                {shelfTypeList?.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Status */}
             <div className="grid gap-2">
               <Label>Trạng thái</Label>
@@ -130,10 +159,8 @@ export default function FilterSearch({
                 <option value="Reserved">Đã đặt trước</option>
                 <option value="InTransit">Đang vận chuyển</option>
                 <option value="InUse">Đang sử dụng</option>
-                <option value="Recalled">Đã thu hồi</option>
                 <option value="PendingMaintenance">Chờ duyệt thu hồi</option>
                 <option value="Maintenance">Chờ thu hồi</option>
-                <option value="Retired">Ngừng sử dụng</option>
               </select>
             </div>
 

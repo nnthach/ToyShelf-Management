@@ -44,3 +44,8 @@ export const getAllShelfAPI = async <T>(params: T) => {
   const res = await api.get("/Shelf", { params });
   return res.data;
 };
+
+export const getTotalShelfCountAPI = async <T>(params: T) => {
+  const res = await api.get("/Shelf/count", { params });
+  return res.data;
+};

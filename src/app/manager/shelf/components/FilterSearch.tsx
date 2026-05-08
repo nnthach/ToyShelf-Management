@@ -128,10 +128,8 @@ export default function FilterSearch({
                 <option value="Reserved">Đã đặt trước</option>
                 <option value="InTransit">Đang vận chuyển</option>
                 <option value="InUse">Đang sử dụng</option>
-                <option value="Recalled">Đã thu hồi</option>
-                <option value="PendingMaintenance">Chờ bảo trì</option>
-                <option value="Maintenance">Đang bảo trì</option>
-                <option value="Retired">Ngừng sử dụng</option>
+                <option value="PendingMaintenance">Chờ duyệt thu hồi</option>
+                <option value="Maintenance">Chờ thu hồi</option>
               </select>
             </div>
 
