@@ -53,7 +53,7 @@ function ShelfCardWithQuantity({
               )}
 
               {shelf?.pendingMaintenance >= 0 &&
-                inventoryList?.type !== "Store" && (
+                inventoryList?.type === "Store" && (
                   <span className="bg-orange-50/90 backdrop-blur-sm text-[10px] font-bold px-2 py-1 rounded-md shadow-sm text-orange-700 border border-orange-200/50 w-fit">
                     Chờ duyệt thu hồi: {shelf.pendingMaintenance}
                   </span>

@@ -5,15 +5,12 @@ import { DataTable } from "@/src/styles/components/ui/data-table";
 import { getShelfColumns } from "./columns";
 import { QueryParams } from "@/src/types/SubType";
 import { useQuery } from "@tanstack/react-query";
-import { Store } from "@/src/types";
-import { useEffect } from "react";
 import { getAllShelfAPI } from "@/src/services/shelf.service";
 import FilterSearch from "./components/FilterSearch";
-import { getAllStoreAPI } from "@/src/services/store.service";
 import { useAuth } from "@/src/hooks/useAuth";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
-export default function AdminShelfManagement() {
+export default function StoreManagerShelfManagement() {
   const { myStore } = useAuth();
 
   const storeLocationId = myStore?.storeLocationId;

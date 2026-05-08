@@ -13,17 +13,17 @@ import { getAllStoreAPI } from "@/src/services/store.service";
 import { useAuth } from "@/src/hooks/useAuth";
 import LoadingPageComponent from "@/src/components/LoadingPageComponent";
 
-export default function PartnerAdminShelfManagement() {
-  const { partner } = useAuth();
+export default function WarehouseManagerShelfManagement() {
+  const { warehouse } = useAuth();
 
-  const partnerId = partner?.partnerId;
+  const warehouseLocationId = warehouse?.warehouseLocationIds[0];
 
   const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
     {
       pageNumber: 1,
       pageSize: 10,
       status: "",
-      inventoryLocationId: "",
+      inventoryLocationId: warehouseLocationId,
     },
     {
       excludeResetKeys: ["inventoryLocationId"],
@@ -41,26 +41,9 @@ export default function PartnerAdminShelfManagement() {
     enabled: !!query.inventoryLocationId,
   });
 
-  const { data: partnerStoreList, isLoading: isPartnerStoreLoading } = useQuery(
-    {
-      queryKey: ["partnerStores"],
-      queryFn: () => getAllStoreAPI({ companyid: partnerId }),
-      select: (res) => res.data as Store[],
-      enabled: !!partnerId,
-    },
-  );
-
-  useEffect(() => {
-    if (partnerStoreList?.length && !query.inventoryLocationId) {
-      updateQuery({
-        inventoryLocationId: partnerStoreList[0].inventoryLocationId,
-      });
-    }
-  }, [partnerStoreList]);
-
   const columns = getShelfColumns();
 
-  if (isPartnerStoreLoading || !query.inventoryLocationId) {
+  if (!query.inventoryLocationId) {
     return <LoadingPageComponent />;
   }
   return (
@@ -94,7 +77,6 @@ export default function PartnerAdminShelfManagement() {
             <FilterSearch
               query={query}
               loading={isLoading}
-              partnerStoreList={partnerStoreList}
               resultCount={shelfList?.items?.length}
               onApplyFilter={(filter) =>
                 updateQuery({

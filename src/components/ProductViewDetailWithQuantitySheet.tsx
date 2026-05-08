@@ -8,7 +8,6 @@ import {
 } from "@/src/styles/components/ui/sheet";
 import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getProductDetailAPI } from "@/src/services/product.service";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Product, ProductAuditTransaction } from "@/src/types";
@@ -17,25 +16,23 @@ import {
   ImageIcon,
   Tag,
   Hash,
-  BadgeDollarSign,
   Ruler,
   Weight,
   Globe2,
   Shapes,
   Baby,
   Info,
-  History,
   Loader2,
   ArrowUpCircle,
   ArrowDownCircle,
   Package,
   CheckCircle2,
   AlertCircle,
-  XCircle,
 } from "lucide-react";
 import { formatColorNameToVN, formatDateTime } from "@/src/utils/format";
 import { useSearchParams } from "next/navigation";
 import { getInventoryOfProductAPI } from "../services/inventory.service";
+import { cn } from "../styles/lib/utils";
 
 const ModelThreeDPreview = dynamic(
   () => import("@/src/styles/components/custom/ModelThreeDPreview"),
@@ -55,6 +52,8 @@ function ProductViewDetailWithQuantitySheet({
 }: ProductViewDetailWithQuantitySheetProps) {
   const searchParams = useSearchParams();
   const locationId = searchParams.get("locationId");
+
+  const [showInventoryAudit, setShowInventoryAudit] = useState(false);
 
   const [query, setQuery] = useState({
     fromDate: "",
@@ -78,7 +77,7 @@ function ProductViewDetailWithQuantitySheet({
     setQuery((prev) => ({ ...prev, ...val }));
   };
 
-  // call api
+  // call api biến động
   const { data: productInventoryAudit, isLoading } = useQuery({
     queryKey: [
       "inventories",
@@ -98,180 +97,199 @@ function ProductViewDetailWithQuantitySheet({
     enabled: !!locationId && !!selectedColor?.productColorId && isOpen,
   });
 
-  console.log("productInventoryAudit", productInventoryAudit);
-
   if (!product) return null;
 
   return (
     <Sheet open={isOpen} onOpenChange={(v) => !v && onClose()}>
-      <SheetContent className="w-full sm:max-w-[1100px] p-0 flex flex-col gap-0 border-l">
-        <SheetHeader className="p-6 pb-4 border-b flex-row justify-between items-center space-y-0">
+      <SheetContent
+        className={cn(
+          "p-0 flex flex-col gap-0 border-l transition-all duration-300",
+          showInventoryAudit
+            ? "w-full sm:max-w-[1100px]"
+            : "w-full sm:max-w-[650px]",
+        )}
+      >
+        <SheetHeader className="p-6 pb-4 border-b flex-col justify-start items-start space-y-0">
           <SheetTitle className="flex items-center gap-2 text-xl font-semibold tracking-tight">
             <Box className="w-5 h-5" />
             Chi tiết sản phẩm và biến động tồn kho
           </SheetTitle>
+
+          <button
+            onClick={() => setShowInventoryAudit((prev) => !prev)}
+            className="px-3 py-2 rounded-lg border text-xs font-medium hover:bg-slate-100 transition"
+          >
+            {showInventoryAudit ? "Ẩn biến động" : "Xem biến động"}
+          </button>
         </SheetHeader>
         <div className="flex flex-1 overflow-hidden">
           {/*Left */}
-          <div className="w-[450px] border-r bg-slate-50/50 flex flex-col overflow-hidden">
-            {/* Filter Section: Đặt ngay dưới Header để người dùng luôn thấy */}
-            <div className="p-4 border-b bg-white/50 space-y-3 shrink-0">
-              <div className="flex items-center gap-2">
-                <div className="relative flex-1">
-                  <input
-                    type="date"
-                    value={query.fromDate}
-                    onChange={(e) => updateQuery({ fromDate: e.target.value })}
-                    className="w-full bg-white border border-slate-200 text-xs font-medium rounded-lg px-2 py-2 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                  />
-                  <span className="absolute -top-2 left-2 bg-white px-1 text-[9px] text-slate-400 font-bold uppercase">
-                    Từ ngày
-                  </span>
-                </div>
+          {showInventoryAudit && (
+            <div className="w-[450px] border-r bg-slate-50/50 flex flex-col overflow-hidden">
+              {/* Filter Section: Đặt ngay dưới Header để người dùng luôn thấy */}
+              <div className="p-4 border-b bg-white/50 space-y-3 shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <input
+                      type="date"
+                      value={query.fromDate}
+                      onChange={(e) =>
+                        updateQuery({ fromDate: e.target.value })
+                      }
+                      className="w-full bg-white border border-slate-200 text-xs font-medium rounded-lg px-2 py-2 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    />
+                    <span className="absolute -top-2 left-2 bg-white px-1 text-[9px] text-slate-400 font-bold uppercase">
+                      Từ ngày
+                    </span>
+                  </div>
 
-                <div className="relative flex-1">
-                  <input
-                    type="date"
-                    value={query.toDate}
-                    onChange={(e) => updateQuery({ toDate: e.target.value })}
-                    className="w-full bg-white border border-slate-200 text-xs font-medium rounded-lg px-2 py-2 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                  />
-                  <span className="absolute -top-2 left-2 bg-white px-1 text-[9px] text-slate-400 font-bold uppercase">
-                    Đến ngày
-                  </span>
+                  <div className="relative flex-1">
+                    <input
+                      type="date"
+                      value={query.toDate}
+                      onChange={(e) => updateQuery({ toDate: e.target.value })}
+                      className="w-full bg-white border border-slate-200 text-xs font-medium rounded-lg px-2 py-2 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    />
+                    <span className="absolute -top-2 left-2 bg-white px-1 text-[9px] text-slate-400 font-bold uppercase">
+                      Đến ngày
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex-1 min-h-0 p-4">
-              {isLoading ? (
-                <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
-                  <Loader2 className="h-8 w-8 animate-spin" />
-                  <p className="text-sm">Đang tải dữ liệu kho...</p>
-                </div>
-              ) : productInventoryAudit ? (
-                <div className="h-full flex flex-col min-h-0 space-y-6">
-                  {/* Tóm tắt nhanh */}
-                  <div className="grid grid-cols-3 gap-3 shrink-0">
-                    <div className="bg-white p-3 rounded-xl border shadow-sm">
-                      <p className="text-[10px] text-muted-foreground uppercase font-bold">
-                        Đầu kỳ
-                      </p>
-                      <p className="text-xl font-bold">
-                        {productInventoryAudit?.openingStock || 0}
-                      </p>
-                    </div>
-                    <div className="bg-white p-3 rounded-xl border shadow-sm">
-                      <p className="text-[10px] text-muted-foreground uppercase font-bold">
-                        Cuối kỳ
-                      </p>
-                      <p className="text-xl font-bold text-blue-600">
-                        {productInventoryAudit?.closingStock || 0}
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3 rounded-xl border shadow-sm">
-                      <p className="text-[10px] text-muted-foreground uppercase font-bold">
-                        Hiện tại
-                      </p>
-                      <p className="text-xl font-bold text-green-600">
-                        {productInventoryAudit?.currentInventory || 0}
-                      </p>
-                    </div>
+              <div className="flex-1 min-h-0 p-4">
+                {isLoading ? (
+                  <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                    <p className="text-sm">Đang tải dữ liệu...</p>
                   </div>
-                  {/* Status Check */}
-                  <div className="shrink-0">
-                    <div
-                      className={`p-3 rounded-xl border flex items-center gap-3 ${productInventoryAudit.isMatched ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-amber-50 border-amber-100 text-amber-800"}`}
-                    >
-                      {productInventoryAudit.isMatched ? (
-                        <CheckCircle2 size={18} />
-                      ) : (
-                        <AlertCircle size={18} />
-                      )}
-                      <span className="text-xs font-medium">
-                        {productInventoryAudit.isMatched
-                          ? "Số liệu kho trùng khớp hệ thống"
-                          : "Phát hiện sai lệch tồn kho"}
-                      </span>
-                    </div>
-                  </div>
-                  {/* Danh sách giao dịch */}
-                  <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
-                    {productInventoryAudit?.transactions?.length > 0 ? (
-                      productInventoryAudit.transactions.map(
-                        (trans: ProductAuditTransaction, i: number) => (
-                          <div
-                            key={i}
-                            className="bg-white p-3 rounded-lg border border-slate-200 flex items-center gap-3"
-                          >
-                            <div
-                              className={`p-2 rounded-full ${trans.quantity >= 0 ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"}`}
-                            >
-                              {trans.quantity >= 0 ? (
-                                <ArrowUpCircle size={18} />
-                              ) : (
-                                <ArrowDownCircle size={18} />
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-bold truncate capitalize">
-                                {productInventoryAudit?.locationType === "Store"
-                                  ? trans?.type === "Shipment"
-                                    ? "Nhập hàng"
-                                    : trans?.type === "DamageReport"
-                                      ? "Thu hồi"
-                                      : "Bán hàng"
-                                  : trans?.type === "Shipment"
-                                    ? "Giao hàng"
-                                    : trans?.type === "DamageReport"
-                                      ? "Thu hồi"
-                                      : trans?.type === "Refill"
-                                        ? "Bổ sung hàng"
-                                        : "Bán hàng"}
-                              </p>
-                              <p className="text-[12px] text-muted-foreground">
-                                {formatDateTime(trans?.date).full || ""}
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p
-                                className={`text-sm font-bold ${trans.quantity >= 0 ? "text-emerald-600" : "text-red-600"}`}
-                              >
-                                {trans.quantity > 0
-                                  ? `+${trans.quantity}`
-                                  : trans.quantity}
-                              </p>
-                              <p className="text-[12px] text-muted-foreground">
-                                Tồn: {trans.balanceAfter}
-                              </p>
-                            </div>
-                          </div>
-                        ),
-                      )
-                    ) : (
-                      <div className="text-center py-10 bg-white rounded-xl border border-dashed">
-                        <Package className="mx-auto h-8 w-8 text-slate-300 mb-2" />
-                        <p className="text-sm text-slate-400">
-                          Không có giao dịch nào
+                ) : productInventoryAudit ? (
+                  <div className="h-full flex flex-col min-h-0 space-y-6">
+                    {/* Tóm tắt nhanh */}
+                    <div className="grid grid-cols-3 gap-3 shrink-0">
+                      <div className="bg-white p-3 rounded-xl border shadow-sm">
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold">
+                          Đầu kỳ
+                        </p>
+                        <p className="text-xl font-bold">
+                          {productInventoryAudit?.openingStock || 0}
                         </p>
                       </div>
-                    )}
+                      <div className="bg-white p-3 rounded-xl border shadow-sm">
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold">
+                          Cuối kỳ
+                        </p>
+                        <p className="text-xl font-bold text-blue-600">
+                          {productInventoryAudit?.closingStock || 0}
+                        </p>
+                      </div>
+
+                      <div className="bg-white p-3 rounded-xl border shadow-sm">
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold">
+                          Hiện tại
+                        </p>
+                        <p className="text-xl font-bold text-green-600">
+                          {productInventoryAudit?.currentInventory || 0}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Status Check */}
+                    <div className="shrink-0">
+                      <div
+                        className={`p-3 rounded-xl border flex items-center gap-3 ${productInventoryAudit.isMatched ? "bg-emerald-50 border-emerald-100 text-emerald-800" : "bg-amber-50 border-amber-100 text-amber-800"}`}
+                      >
+                        {productInventoryAudit.isMatched ? (
+                          <CheckCircle2 size={18} />
+                        ) : (
+                          <AlertCircle size={18} />
+                        )}
+                        <span className="text-xs font-medium">
+                          {productInventoryAudit.isMatched
+                            ? "Số liệu kho trùng khớp hệ thống"
+                            : "Phát hiện sai lệch tồn kho"}
+                        </span>
+                      </div>
+                    </div>
+                    {/* Danh sách giao dịch */}
+                    <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+                      {productInventoryAudit?.transactions?.length > 0 ? (
+                        productInventoryAudit.transactions.map(
+                          (trans: ProductAuditTransaction, i: number) => (
+                            <div
+                              key={i}
+                              className="bg-white p-3 rounded-lg border border-slate-200 flex items-center gap-3"
+                            >
+                              <div
+                                className={`p-2 rounded-full ${trans.quantity >= 0 ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"}`}
+                              >
+                                {trans.quantity >= 0 ? (
+                                  <ArrowUpCircle size={18} />
+                                ) : (
+                                  <ArrowDownCircle size={18} />
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold truncate capitalize">
+                                  {productInventoryAudit?.locationType ===
+                                  "Store"
+                                    ? trans?.type === "Shipment"
+                                      ? "Nhập hàng"
+                                      : trans?.type === "DamageReport"
+                                        ? "Thu hồi"
+                                        : "Bán hàng"
+                                    : trans?.type === "Shipment"
+                                      ? "Giao hàng"
+                                      : trans?.type === "DamageReport"
+                                        ? "Thu hồi"
+                                        : trans?.type === "Refill"
+                                          ? "Bổ sung hàng"
+                                          : "Bán hàng"}
+                                </p>
+                                <p className="text-[12px] text-muted-foreground">
+                                  {formatDateTime(trans?.date).full || ""}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <p
+                                  className={`text-sm font-bold ${trans.quantity >= 0 ? "text-emerald-600" : "text-red-600"}`}
+                                >
+                                  {trans.quantity > 0
+                                    ? `+${trans.quantity}`
+                                    : trans.quantity}
+                                </p>
+                                <p className="text-[12px] text-muted-foreground">
+                                  Tồn: {trans.balanceAfter}
+                                </p>
+                              </div>
+                            </div>
+                          ),
+                        )
+                      ) : (
+                        <div className="text-center py-10 bg-white rounded-xl border border-dashed">
+                          <Package className="mx-auto h-8 w-8 text-slate-300 mb-2" />
+                          <p className="text-sm text-slate-400">
+                            Không có giao dịch nào
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="h-full flex flex-col items-center justify-center text-muted-foreground">
-                  <AlertCircle className="mb-2" />
-                  <p className="text-sm">Không tìm thấy dữ liệu kho</p>
-                </div>
-              )}
+                ) : (
+                  <div className="h-full flex flex-col items-center justify-center text-muted-foreground">
+                    <AlertCircle className="mb-2" />
+                    <p className="text-sm">Không tìm thấy dữ liệu kho</p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/*Right */}
           <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto px-6 py-4 space-y-8 pb-10 scroll-smooth custom-scrollbar"
+            className={`overflow-y-auto px-6 py-4 space-y-8 pb-10 scroll-smooth custom-scrollbar transition-all duration-300 ${
+              showInventoryAudit ? "flex-1" : "w-full"
+            }`}
           >
             {/* Main Preview Section */}
             <div className="relative group">

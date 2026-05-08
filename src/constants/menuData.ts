@@ -302,17 +302,22 @@ export const WarehouseManagerSidebarGroups = [
   },
 
   {
-    label: "Hàng tồn kho",
+    label: "Giám sát hàng và kệ",
     items: [
       {
-        title: "Quản lý hàng tại kho",
+        title: "Giám sát hàng trong kho",
         url: "/warehouse/inventory",
         icon: Box,
       },
       {
-        title: "Quản lý kệ tại kho",
+        title: "Giám sát loại kệ trong kho",
         url: "/warehouse/shelf-inventory",
         icon: Server,
+      },
+      {
+        title: "Danh sách kệ trưng bày",
+        url: "/warehouse/shelf",
+        icon: Layers,
       },
     ],
   },
