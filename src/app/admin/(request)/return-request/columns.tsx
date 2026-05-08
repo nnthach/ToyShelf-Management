@@ -62,20 +62,6 @@ export const getStoreReturnRequestColumn = (
     },
   },
   {
-    accessorKey: "isWarrantyClaim",
-    header: "Bảo hành",
-    cell: ({ row }) => {
-      const isWarranty = row.getValue("isWarrantyClaim") as boolean;
-      return (
-        <span
-          className={`font-medium ${isWarranty ? "text-green-600" : "text-gray-400"}`}
-        >
-          {isWarranty ? "Có bảo hành" : "Không"}
-        </span>
-      );
-    },
-  },
-  {
     accessorKey: "status",
     header: "Trạng thái",
     cell: ({ row }) => {

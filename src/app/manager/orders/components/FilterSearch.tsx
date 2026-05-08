@@ -18,7 +18,13 @@ type FilterBarProps = {
   loading: boolean;
   resultCount?: number;
   onSearch: (val: string) => void;
-  onApplyFilter: (val: { storeId?: string; partnerId?: string }) => void;
+  onApplyFilter: (val: {
+    storeId?: string;
+    partnerId?: string;
+    fromDate?: string;
+    toDate?: string;
+    status?: string;
+  }) => void;
   onReset: () => void;
   onRefresh?: () => void;
 };
@@ -40,28 +46,108 @@ export default function FilterSearch({
 
   const [tempFilter, setTempFilter] = useState<{
     storeId?: string;
+    fromDate?: string;
+    toDate?: string;
+    status?: string;
   }>({
     storeId: query.storeId ?? "",
+    fromDate: query.fromDate ?? "",
+    toDate: query.toDate ?? "",
+    status: String(query.status) ?? "",
   });
 
-  const isFiltered = query.searchTerm;
+  const isFiltered =
+    query.searchTerm ||
+    query.fromDate !== "" ||
+    query.toDate !== "" ||
+    query.status !== "";
 
   const handleApply = () => {
     onApplyFilter({
-      // storeId: tempFilter.storeId || undefined,
+      fromDate: tempFilter.fromDate || undefined,
+      toDate: tempFilter.toDate || undefined,
+      status: tempFilter.status || undefined,
     });
   };
 
   const handleResetAll = () => {
     setSearchInput("");
-    // setTempFilter({
-    //   storeId: "",
-    // });
+    setTempFilter({
+      fromDate: "",
+      toDate: "",
+      status: "",
+    });
     onReset();
   };
 
   return (
     <div className="inline-flex items-center gap-3">
+      {/* FILTER */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline" disabled={loading}>
+            <Filter className="w-4 h-4 mr-1" />
+            Bộ lọc
+          </Button>
+        </PopoverTrigger>
+
+        <PopoverContent align="start" className="w-64">
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label>Trạng thái</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.status}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    status: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                <option value="PAID">Đã thanh toán</option>
+                <option value="CANCELLED">Đã hủy</option>
+                <option value="CREATED">Đã tạo</option>
+              </select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Từ ngày</Label>
+              <input
+                type="date"
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.fromDate || ""}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    fromDate: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Đến ngày</Label>
+              <input
+                type="date"
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.toDate || ""}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    toDate: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <PopoverClose asChild>
+              <Button onClick={handleApply}>Áp dụng</Button>
+            </PopoverClose>
+          </div>
+        </PopoverContent>
+      </Popover>
       {/* SEARCH */}
       <div className="relative w-[250px]">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />

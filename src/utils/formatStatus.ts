@@ -396,9 +396,9 @@ export const formatShelfStatusText = (status: string) => {
     case "Recalled":
       return "Đã thu hồi";
     case "PendingMaintenance":
-      return "Chờ bảo trì";
+      return "Chờ duyệt thu hồi";
     case "Maintenance":
-      return "Đang bảo trì";
+      return "Chờ thu hồi";
     case "Retired":
       return "Ngừng sử dụng";
     default:

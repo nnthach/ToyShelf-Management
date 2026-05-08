@@ -25,6 +25,9 @@ export default function PartnerManageOrders() {
       storeId: "",
       partnerId: partnerId,
       searchTerm: "",
+      fromDate: "",
+      toDate: "",
+      status: "",
     },
     {
       excludeResetKeys: ["partnerId"],

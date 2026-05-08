@@ -146,15 +146,6 @@ function ViewReturnRequestModalDetail({
                       />
                     </div>
                     <ShipInfoItem
-                      label="Loại đơn"
-                      value={
-                        !damageRequestDetail?.isWarrantyClaim
-                          ? "Trả hàng"
-                          : "Bảo hành"
-                      }
-                      icon={<Tag className="h-3 w-3" />}
-                    />
-                    <ShipInfoItem
                       label="Loại hàng"
                       value={
                         damageRequestDetail?.type === "Product"

@@ -55,10 +55,10 @@ export default function StoreManagerViewAllInventoryShelf() {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold dark:text-foreground">
-            Giám sát kệ trưng bày tại {inventoryList?.locationName}
+            Giám sát loại kệ trưng bày tại {inventoryList?.locationName}
           </h1>
           <p className="text-gray-500 dark:text-gray-200">
-            Danh sách kệ trưng bày tại cửa hàng
+            Danh sách loại kệ trưng bày tại cửa hàng
           </p>
         </div>
       </div>

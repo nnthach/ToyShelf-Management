@@ -46,6 +46,7 @@ import { toast } from "react-toastify";
 import DeductionModal from "../components/DeductionModal";
 import ConfirmPaymentWithImg from "../components/ConfirmPaymentWithImg";
 import OrderDetailModal from "../components/OrderDetailModal";
+import ViewOrderDetailSheet from "./components/ViewOrderDetailSheet";
 
 export default function AdminViewMonthlySettlementDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -131,7 +132,7 @@ export default function AdminViewMonthlySettlementDetailPage() {
                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                   Kỳ đối soát
                 </p>
-                <p className="text-md font-bold text-slate-700 dark:text-slate-200 leading-none">
+                <p className="text-sm font-bold text-slate-700 dark:text-slate-200 leading-none">
                   Tháng {monthlyDetail?.month} / {monthlyDetail?.year}
                 </p>
               </div>
@@ -212,8 +213,8 @@ export default function AdminViewMonthlySettlementDetailPage() {
           </div>
 
           {/* HÀNG 2: THỐNG KÊ HIỆU SUẤT TRONG THÁNG */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Tổng đơn hàng */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Tổng sản phẩm */}
             <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm flex items-center justify-between">
               <div className="space-y-1">
                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -225,6 +226,21 @@ export default function AdminViewMonthlySettlementDetailPage() {
               </div>
               <div className="w-10 h-10 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center text-blue-500 shadow-sm">
                 <Box size={20} />
+              </div>
+            </div>
+
+            {/* Tổng đơn hàng */}
+            <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                  Tổng đơn bán hàng
+                </p>
+                <p className="text-2xl font-black dark:text-slate-200">
+                  {monthlyDetail?.totalOrders}{" "}
+                </p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center text-yellow-500 shadow-sm">
+                <ShoppingCart size={20} />
               </div>
             </div>
 
@@ -556,14 +572,22 @@ export default function AdminViewMonthlySettlementDetailPage() {
         onClose={() => setIsOpenConfirmPay(false)}
       />
 
-      <OrderDetailModal
+      {/* <OrderDetailModal
         orderCode={orderCode || 0}
         isOpen={isOpenOrderDetail}
         onClose={() => {
           setIsOpenOrderDetail(false);
           setOrderCode(null);
         }}
-      />
+      /> */}
+
+      {orderCode && (
+        <ViewOrderDetailSheet
+          orderCode={orderCode}
+          open={isOpenOrderDetail}
+          onOpenChange={setIsOpenOrderDetail}
+        />
+      )}
     </>
   );
 }

@@ -54,17 +54,6 @@ function DamageReportDetailSection({
         {/* Nhóm 2: Chi tiết đơn hàng */}
         <div className="grid grid-cols-2 gap-x-4 gap-y-5">
           <ShipInfoItem
-            label="Loại đơn"
-            value={
-              <span
-                className={`font-bold ${damageReportDetail?.isWarrantyClaim ? "text-orange-600" : "text-blue-600"}`}
-              >
-                {!damageReportDetail?.isWarrantyClaim ? "Trả hàng" : "Bảo hành"}
-              </span>
-            }
-            icon={<Tag className="h-3.5 w-3.5 text-slate-400" />}
-          />
-          <ShipInfoItem
             label="Loại hàng"
             value={
               <span className="font-bold text-slate-700">

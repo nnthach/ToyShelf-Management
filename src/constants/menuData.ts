@@ -65,6 +65,18 @@ export const AdminSidebarGroups = [
 
 export const AdminSidebarNested = [
   {
+    label: "Quản lý sản phẩm",
+    sub: [
+      { title: "Sản phẩm", url: "/admin/products", icon: Box },
+      { title: "Màu sắc sản phẩm", url: "/admin/product-color", icon: Palette },
+      {
+        title: "Danh mục sản phẩm",
+        url: "/admin/product-category",
+        icon: Funnel,
+      },
+    ],
+  },
+  {
     label: "Quản lý đối tác",
     sub: [
       { title: "Đối tác", url: "/admin/partners", icon: Users },
@@ -91,18 +103,6 @@ export const AdminSidebarNested = [
     ],
   },
 
-  {
-    label: "Quản lý sản phẩm",
-    sub: [
-      { title: "Sản phẩm", url: "/admin/products", icon: Box },
-      { title: "Màu sắc sản phẩm", url: "/admin/product-color", icon: Palette },
-      {
-        title: "Danh mục sản phẩm",
-        url: "/admin/product-category",
-        icon: Funnel,
-      },
-    ],
-  },
   {
     label: "Quản lý kho",
     sub: [{ title: "Kho", url: "/admin/warehouse", icon: Warehouse }],

@@ -19,7 +19,13 @@ type FilterBarProps = {
   storeList: Store[];
   resultCount?: number;
   onSearch: (val: string) => void;
-  onApplyFilter: (val: { storeId?: string; partnerId?: string }) => void;
+  onApplyFilter: (val: {
+    storeId?: string;
+    partnerId?: string;
+    fromDate?: string;
+    toDate?: string;
+    status?: string;
+  }) => void;
   onReset: () => void;
   onRefresh?: () => void;
 };
@@ -42,15 +48,29 @@ export default function FilterSearch({
 
   const [tempFilter, setTempFilter] = useState<{
     storeId?: string;
+    fromDate?: string;
+    toDate?: string;
+    status?: string;
   }>({
     storeId: query.storeId ?? "",
+    fromDate: query.fromDate ?? "",
+    toDate: query.toDate ?? "",
+    status: String(query.status) ?? "",
   });
 
-  const isFiltered = query.searchTerm || query.storeId !== "";
+  const isFiltered =
+    query.searchTerm ||
+    query.storeId !== "" ||
+    query.fromDate !== "" ||
+    query.toDate !== "" ||
+    query.status !== "";
 
   const handleApply = () => {
     onApplyFilter({
       storeId: tempFilter.storeId || undefined,
+      fromDate: tempFilter.fromDate || undefined,
+      toDate: tempFilter.toDate || undefined,
+      status: tempFilter.status || undefined,
     });
   };
 
@@ -58,6 +78,9 @@ export default function FilterSearch({
     setSearchInput("");
     setTempFilter({
       storeId: "",
+      fromDate: "",
+      toDate: "",
+      status: "",
     });
     onReset();
   };
@@ -94,6 +117,55 @@ export default function FilterSearch({
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Trạng thái</Label>
+              <select
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.status}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    status: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Tất cả</option>
+                <option value="PAID">Đã thanh toán</option>
+                <option value="CANCELLED">Đã hủy</option>
+                <option value="CREATED">Đã tạo</option>
+              </select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Từ ngày</Label>
+              <input
+                type="date"
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.fromDate || ""}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    fromDate: e.target.value,
+                  }))
+                }
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Đến ngày</Label>
+              <input
+                type="date"
+                className="border rounded-md h-9 px-2"
+                value={tempFilter.toDate || ""}
+                onChange={(e) =>
+                  setTempFilter((p) => ({
+                    ...p,
+                    toDate: e.target.value,
+                  }))
+                }
+              />
             </div>
 
             <PopoverClose asChild>

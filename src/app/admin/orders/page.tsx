@@ -21,7 +21,9 @@ export default function AdminOrderManagement() {
     storeId: "",
     partnerId: "",
     searchTerm: "",
-    date: "",
+    fromDate: "",
+    toDate: "",
+    status: "",
   });
 
   const {
