@@ -70,7 +70,7 @@ function UpdateShipmentAssignRefillRequestModal({
   const receiveReturnMutation = useMutation({
     mutationFn: () => warehouseReceiveReturnShipmentAPI(shipmentDetail.id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["shipmentAssigns"] });
+      queryClient.invalidateQueries({ queryKey: ["shipmentAssignRequests"] });
       queryClient.invalidateQueries({
         queryKey: ["shipmentAssign", requestId],
       });
