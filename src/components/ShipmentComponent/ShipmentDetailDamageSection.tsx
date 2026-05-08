@@ -105,7 +105,7 @@ function ShipmentDetailDamageSection({
                   />
                 </div>
                 <div className="mt-1">
-                  <ShipmentUrls mediaUrls={shipment.mediaUrls || []} />
+                  <ShipmentUrls mediaUrls={shipment.medias || []} />
                 </div>
               </div>
             </div>

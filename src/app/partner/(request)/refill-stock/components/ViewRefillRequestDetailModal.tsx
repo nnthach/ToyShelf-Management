@@ -464,7 +464,7 @@ function ViewRefillRequestModalDetail({
                               </div>
 
                               <ShipmentUrls
-                                mediaUrls={shipment.mediaUrls || []}
+                                mediaUrls={shipment.medias || []}
                               />
 
                               {/* Danh sách sản phẩm trong shipment */}

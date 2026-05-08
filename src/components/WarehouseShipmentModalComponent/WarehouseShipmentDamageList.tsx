@@ -35,7 +35,7 @@ function WarehouseShipmentDamageList({
         {damageItemList.map((item, index) => {
           return (
             <div
-              key={item.damageReportId || index}
+              key={index}
               className="bg-white border rounded-xl p-3 shadow-sm hover:shadow-md transition-all flex items-center gap-4"
             >
               {/* BÊN TRÁI: THÔNG TIN SẢN PHẨM (Chiếm phần lớn diện tích) */}

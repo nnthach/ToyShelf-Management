@@ -426,6 +426,7 @@ export interface RefillShelfItem {
   displayExpected?: number;
   displayReceived?: number;
   availableQuantity?: number;
+  shelfOrderId: string;
 }
 
 export interface RefillRequest {
@@ -672,8 +673,18 @@ export interface Shipment {
   shelfOrders: [{ id: string; code: string }];
   storeOrders: [{ id: string; code: string }];
   damageReports: [{ id: string; code: string }];
-  mediaUrls: string[];
-  orderType:string;
+  medias: [
+    {
+      id: string;
+      mediaUrl: string;
+      mediaType: string;
+      purpose: string;
+      createdAt: string;
+      uploadedByUserId: string;
+      uploadedByName: string;
+    },
+  ];
+  orderType: string;
 }
 
 export interface ChartItem {

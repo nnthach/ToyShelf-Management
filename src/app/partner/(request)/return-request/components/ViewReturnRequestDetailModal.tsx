@@ -374,7 +374,7 @@ function ViewReturnRequestModalDetail({
                         />
                       </div>
                       <ShipmentUrls
-                        mediaUrls={shipmentDetail.mediaUrls || []}
+                        mediaUrls={shipmentDetail.medias || []}
                       />
                     </div>
                   ) : (

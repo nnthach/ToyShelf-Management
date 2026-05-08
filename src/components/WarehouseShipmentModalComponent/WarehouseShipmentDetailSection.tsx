@@ -55,7 +55,7 @@ function WarehouseShipmentDetailSection({
             </div>
 
             <div className="col-span-2">
-              <ShipmentUrls mediaUrls={shipmentDetail.mediaUrls || []} />
+              <ShipmentUrls mediaUrls={shipmentDetail.medias || []} />
             </div>
           </div>
           {/* Time nodes */}

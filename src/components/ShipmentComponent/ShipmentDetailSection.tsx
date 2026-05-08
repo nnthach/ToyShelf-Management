@@ -147,7 +147,7 @@ function ShipmentDetailSection({
                 </div>
 
                 <div className="mt-1">
-                  <ShipmentUrls mediaUrls={shipment.mediaUrls || []} />
+                  <ShipmentUrls mediaUrls={shipment.medias || []} />
                 </div>
 
                 {/* Danh sách sản phẩm trong shipment */}

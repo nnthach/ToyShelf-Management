@@ -8,7 +8,12 @@ import {
   DialogTitle,
 } from "@/src/styles/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm } from "react-hook-form";
+import {
+  FormProvider,
+  useFieldArray,
+  useForm,
+  useFormContext,
+} from "react-hook-form";
 import z from "zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormFieldCustom } from "@/src/styles/components/custom/FormFieldCustom";
@@ -25,6 +30,7 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { formatColorNameToVN } from "@/src/utils/format";
 import { getErrorMessage } from "@/src/utils/getErrorMessage";
+import { Input } from "@/src/styles/components/ui/input";
 
 type CreateShipmentModalProps = {
   isOpen: boolean;
@@ -32,6 +38,26 @@ type CreateShipmentModalProps = {
   onClose: () => void;
   onSuccess: () => void;
 };
+
+const formSchema = z.object({
+  shipmentAssignmentId: z.string(),
+  products: z.array(
+    z.object({
+      storeOrderId: z.string(),
+      productColorId: z.string(),
+      expectedQuantity: z.coerce.number().min(1, "Số lượng phải lớn hơn 0"),
+    }),
+  ),
+  shelves: z.array(
+    z.object({
+      shelfOrderId: z.string(),
+      shelfTypeId: z.string(),
+      expectedQuantity: z.coerce.number().min(1, "Số lượng phải lớn hơn 0"),
+    }),
+  ),
+});
+
+type FormValues = z.input<typeof formSchema>;
 
 function CreateShipmentModal({
   shipmentAssignDetail,
@@ -41,25 +67,25 @@ function CreateShipmentModal({
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const formSchema = z.object({
-    shipmentAssignmentId: z.string(),
-    products: z.array(
-      z.object({
-        storeOrderId: z.string(),
-        productColorId: z.string(),
-        expectedQuantity: z.coerce.number().min(1, "Số lượng phải lớn hơn 0"),
-      }),
-    ),
-    shelves: z.array(
-      z.object({
-        shelfOrderId: z.string(),
-        shelfTypeId: z.string(),
-        expectedQuantity: z.coerce.number().min(1, "Số lượng phải lớn hơn 0"),
-      }),
-    ),
-  });
+  // const formSchema = z.object({
+  //   shipmentAssignmentId: z.string(),
+  //   products: z.array(
+  //     z.object({
+  //       storeOrderId: z.string(),
+  //       productColorId: z.string(),
+  //       expectedQuantity: z.coerce.number().min(1, "Số lượng phải lớn hơn 0"),
+  //     }),
+  //   ),
+  //   shelves: z.array(
+  //     z.object({
+  //       shelfOrderId: z.string(),
+  //       shelfTypeId: z.string(),
+  //       expectedQuantity: z.coerce.number().min(1, "Số lượng phải lớn hơn 0"),
+  //     }),
+  //   ),
+  // });
 
-  type FormValues = z.input<typeof formSchema>;
+  // type FormValues = z.input<typeof formSchema>;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -70,40 +96,38 @@ function CreateShipmentModal({
     },
   });
 
+  const productFields = useFieldArray({
+    control: form.control,
+    name: "products",
+  });
+
+  const shelfFields = useFieldArray({
+    control: form.control,
+    name: "shelves",
+  });
+
   useEffect(() => {
     if (isOpen && shipmentAssignDetail) {
       const orderType = shipmentAssignDetail.orderType || "";
-
-      let initialProducts: FormValues["products"] = [];
-      let initialShelves: FormValues["shelves"] = [];
-
-      if (orderType.includes("STORE")) {
-        initialProducts = (shipmentAssignDetail.productItems || []).map(
-          (item: RefillRequestProductColor) => ({
-            storeOrderId: item?.storeOrderId ?? "",
-            productColorId: item?.productColorId ?? "",
-            expectedQuantity: item?.quantity || 0,
-          }),
-        );
-      }
-
-      if (orderType.includes("SHELF")) {
-        initialShelves = (shipmentAssignDetail.shelfItems || []).map(
-          (item: RefillShelfRequestItem) => ({
-            shelfOrderId: item?.shelfOrderId ?? "",
-            shelfTypeId: item?.shelfTypeId ?? "",
-            expectedQuantity: item?.quantity || 0,
-          }),
-        );
-      }
-
       form.reset({
-        shipmentAssignmentId: shipmentAssignDetail?.id || "",
-        products: initialProducts,
-        shelves: initialShelves,
+        shipmentAssignmentId: shipmentAssignDetail.id || "",
+        products: orderType.includes("STORE")
+          ? (shipmentAssignDetail.productItems || []).map((item) => ({
+              storeOrderId: item.storeOrderId ?? "",
+              productColorId: item.productColorId ?? "",
+              expectedQuantity: item.quantity || 0,
+            }))
+          : [],
+        shelves: orderType.includes("SHELF")
+          ? (shipmentAssignDetail.shelfItems || []).map((item) => ({
+              shelfOrderId: item.shelfOrderId ?? "",
+              shelfTypeId: item.shelfTypeId ?? "",
+              expectedQuantity: item.quantity || 0,
+            }))
+          : [],
       });
     }
-  }, [isOpen, shipmentAssignDetail, form]);
+  }, [isOpen, shipmentAssignDetail]);
 
   async function onSubmit(data: z.input<typeof formSchema>) {
     setIsSubmitting(true);
@@ -175,21 +199,21 @@ function CreateShipmentModal({
             <ScrollArea className="max-h-[60vh] px-6 py-4 overflow-y-auto custom-scrollbar">
               <div className="space-y-4">
                 {(shipmentAssignDetail?.productItems?.length ?? 0) > 0 &&
-                  shipmentAssignDetail.productItems.map((item, index) => (
-                    <ProductItem
-                      key={item.productColorId}
-                      item={item}
-                      index={index}
-                    />
-                  ))}
+                  productFields.fields.map((field, index) => {
+                    const item = shipmentAssignDetail.productItems[index];
+
+                    return (
+                      <ProductItem key={field.id} item={item} index={index} />
+                    );
+                  })}
                 {(shipmentAssignDetail?.shelfItems?.length ?? 0) > 0 &&
-                  shipmentAssignDetail.shelfItems.map((item, index) => (
-                    <ShelfItem
-                      key={item.shelfTypeId}
-                      item={item}
-                      index={index}
-                    />
-                  ))}
+                  shelfFields.fields.map((field, index) => {
+                    const item = shipmentAssignDetail.shelfItems[index];
+
+                    return (
+                      <ShelfItem key={field.id} item={item} index={index} />
+                    );
+                  })}
               </div>
             </ScrollArea>
           </form>
@@ -237,6 +261,7 @@ const ProductItem = ({
   item: RefillRequestProductColor;
   index: number;
 }) => {
+  const { register } = useFormContext();
   return (
     <div
       key={item.productColorId}
@@ -278,13 +303,12 @@ const ProductItem = ({
 
       {/* CỘT PHẢI (4/12): Input nhập số lượng */}
       <div className="col-span-4 border-l border-slate-100 pl-4">
-        <FormFieldCustom
-          name={`items.${index}.expectedQuantity`}
+        <input
           type="number"
-          placeholder="0"
-          label="Số lượng"
-          max={item.quantity}
-          className="h-9 text-sm font-bold"
+          className="w-[90%]"
+          {...register(`products.${index}.expectedQuantity`, {
+            valueAsNumber: true,
+          })}
         />
       </div>
     </div>
@@ -298,6 +322,7 @@ const ShelfItem = ({
   item: RefillShelfRequestItem;
   index: number;
 }) => {
+  const { register } = useFormContext();
   return (
     <div
       key={item.shelfTypeId}
@@ -344,17 +369,51 @@ const ShelfItem = ({
 
       {/* CỘT PHẢI (4/12): Input nhập số lượng */}
       <div className="col-span-4 border-l border-slate-100 pl-4">
-        <FormFieldCustom
-          name={`items.${index}.expectedQuantity`}
+        <input
           type="number"
-          placeholder="0"
-          label="Số lượng"
-          max={item.quantity}
-          className="h-9 text-sm font-bold"
+          className="w-[90%]"
+          {...register(`shelves.${index}.expectedQuantity`, {
+            valueAsNumber: true,
+          })}
         />
       </div>
     </div>
   );
 };
 
-export default memo(CreateShipmentModal);
+export default CreateShipmentModal;
+
+// useEffect(() => {
+//   if (isOpen && shipmentAssignDetail) {
+//     const orderType = shipmentAssignDetail.orderType || "";
+
+//     let initialProducts: FormValues["products"] = [];
+//     let initialShelves: FormValues["shelves"] = [];
+
+//     if (orderType.includes("STORE")) {
+//       initialProducts = (shipmentAssignDetail.productItems || []).map(
+//         (item: RefillRequestProductColor) => ({
+//           storeOrderId: item?.storeOrderId ?? "",
+//           productColorId: item?.productColorId ?? "",
+//           expectedQuantity: item?.quantity || 0,
+//         }),
+//       );
+//     }
+
+//     if (orderType.includes("SHELF")) {
+//       initialShelves = (shipmentAssignDetail.shelfItems || []).map(
+//         (item: RefillShelfRequestItem) => ({
+//           shelfOrderId: item?.shelfOrderId ?? "",
+//           shelfTypeId: item?.shelfTypeId ?? "",
+//           expectedQuantity: item?.quantity || 0,
+//         }),
+//       );
+//     }
+
+//     form.reset({
+//       shipmentAssignmentId: shipmentAssignDetail?.id || "",
+//       products: initialProducts,
+//       shelves: initialShelves,
+//     });
+//   }
+// }, [isOpen, shipmentAssignDetail, form]);
