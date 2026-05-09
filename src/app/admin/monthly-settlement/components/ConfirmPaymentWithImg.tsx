@@ -88,7 +88,7 @@ function ConfirmPaymentWithImg({
       );
 
       queryClient.invalidateQueries({
-        queryKey: ["monthlySettlement", monthlySettlementId],
+        queryKey: ["monthlyDetail", monthlySettlementId],
       });
 
       queryClient.invalidateQueries({

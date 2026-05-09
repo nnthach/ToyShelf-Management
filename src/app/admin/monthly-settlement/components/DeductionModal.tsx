@@ -58,7 +58,7 @@ function DeductionModal({
       await updateMonthlySettlementAdditionalFeeAPI(data, monthlySettlementId);
 
       queryClient.invalidateQueries({
-        queryKey: ["monthlySettlement", monthlySettlementId],
+        queryKey: ["monthlyDetail", monthlySettlementId],
       });
 
       queryClient.invalidateQueries({
