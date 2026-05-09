@@ -4,36 +4,54 @@ import FilterSearch from "./components/FilterSearch";
 import { QueryParams } from "@/src/types/SubType";
 import useQueryParams from "@/src/hooks/useQueryParams";
 import { useQuery } from "@tanstack/react-query";
-import { getInventoryOfWarehouseByIdAPI } from "@/src/services/inventory.service";
+import {
+  getInventoryByLocationIdAPI,
+  getInventoryOfWarehouseByIdAPI,
+} from "@/src/services/inventory.service";
 import ProductCardSkeleton from "@/src/components/ProductCardSkeleton";
 import ProductCardWithQuantity from "@/src/components/ProductCardWithQuantity";
 import { Product } from "@/src/types";
 import Pagination from "@/src/components/Pagination";
 import { useAuth } from "@/src/hooks/useAuth";
 import { getAllProductCategoryAPI } from "@/src/services/product-category.service";
+import LoadingPageComponent from "@/src/components/LoadingPageComponent";
+import { useEffect } from "react";
 
 export default function WarehouseInventoryManage() {
   const { warehouse } = useAuth();
+  const warehouseLocationId = warehouse?.warehouseLocationIds[0] || "";
 
-  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>({
-    isActive: undefined,
-    order: "",
-    searchItem: "",
-    categoryId: "",
-    pageNumber: 1,
-    pageSize: 10,
-  });
+  const { query, updateQuery, resetQuery } = useQueryParams<QueryParams>(
+    {
+      isActive: undefined,
+      order: "",
+      searchItem: "",
+      categoryId: "",
+      pageNumber: 1,
+      pageSize: 10,
+      locationId: "",
+    },
+    {
+      excludeResetKeys: ["locationId"],
+    },
+  );
+  useEffect(() => {
+    if (warehouseLocationId && !query.locationId) {
+      updateQuery({
+        locationId: warehouseLocationId,
+      });
+    }
+  }, [warehouseLocationId]);
 
   const {
-    data: productInventoryList = [],
+    data: productInventoryList,
     isLoading,
     refetch,
   } = useQuery({
     queryKey: ["inventories", query],
-    queryFn: () =>
-      getInventoryOfWarehouseByIdAPI(warehouse?.warehouseId as string, query),
+    queryFn: () => getInventoryByLocationIdAPI(warehouseLocationId!, query),
     select: (res) => res.data,
-    enabled: !!warehouse?.warehouseId,
+    enabled: !!query?.locationId,
   });
 
   const { data: categoryList } = useQuery({
@@ -41,6 +59,10 @@ export default function WarehouseInventoryManage() {
     queryFn: () => getAllProductCategoryAPI({}),
     select: (res) => res.data,
   });
+
+  if (!query?.locationId) {
+    return <LoadingPageComponent />;
+  }
 
   return (
     <>
